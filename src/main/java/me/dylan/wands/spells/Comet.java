@@ -31,6 +31,7 @@ public final class Comet extends Spell implements Listener {
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
+    @Override
     public void cast(Player player) {
         Vector velocity = player.getLocation().getDirection().multiply(2.5);
         SmallFireball fireball = player.launchProjectile(SmallFireball.class, velocity);
