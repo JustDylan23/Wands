@@ -20,6 +20,7 @@ public final class Spark extends Spell implements Listener {
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
+    @Override
     public void cast(Player player) {
         Location loc = getSpellLocation(player, 30);
 

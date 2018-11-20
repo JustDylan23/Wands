@@ -23,6 +23,7 @@ public class PoisonWave extends Spell implements Listener {
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
+    @Override
     public void cast(Player player) {
         Location sLoc = getLocationInfrontOf(player, 1);
         sLoc.getWorld().playSound(sLoc, Sound.ENTITY_EVOKER_CAST_SPELL, SoundCategory.MASTER, 4.0F, 1.0F);
