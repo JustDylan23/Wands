@@ -21,11 +21,6 @@ public class SpellManager implements Listener {
 
     private int maxValue;
     private final Map<Player, Integer> spellIndex = new HashMap<>();
-    private final SpellRegistry spellRegistry;
-
-    public SpellManager(SpellRegistry spellRegistry) {
-        this.spellRegistry = spellRegistry;
-    }
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
@@ -47,7 +42,7 @@ public class SpellManager implements Listener {
 
     @EventHandler
     public void playerInteractEvent(PlayerInteractEvent e) {
-        if (!Wands.ACTIVE) return;
+        if (!Wands.ENABLED) return;
         Player player = e.getPlayer();
         ItemStack tool = player.getInventory().getItemInMainHand();
         if (tool.getType().equals(Material.BLAZE_ROD)) {
@@ -74,12 +69,12 @@ public class SpellManager implements Listener {
     private Spell getSelectedSpell(Player player) {
         ensureIndexSet(player);
         int index = spellIndex.get(player);
-        return spellRegistry.getSpell(index);
+        return Wands.getInstance().getSpellRegistery().getSpell(index);
     }
 
     private void onSelect(Player player) {
         ensureIndexSet(player);
-        maxValue = spellRegistry.size();
+        maxValue = Wands.getInstance().getSpellRegistery().size();
         int selectorIndex = spellIndex.get(player);
         if (!player.isSneaking()) {
             selectorIndex = selectorIndex < maxValue ? selectorIndex + 1 : 1;
