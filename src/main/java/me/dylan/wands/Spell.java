@@ -6,9 +6,10 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
 import org.bukkit.util.Vector;
 
-public abstract class Spell {
+public abstract class Spell implements Listener {
     private final String displayName;
 
     public Spell(String displayName) {

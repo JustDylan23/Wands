@@ -6,17 +6,21 @@ import java.util.Map;
 
 public class SpellRegistry {
 
-    private Map<Integer, Spell> spellRegister = new HashMap();
+    private Map<Integer, Spell> spellRegister = new HashMap<>();
 
-    public void registerSpell(int index, Spell spell) {
+    void registerSpell(int index, Spell spell) {
+        if (spellRegister.containsKey(spell)) {
+            throw new IllegalArgumentException("A spell with index: " + index + " has already been registered");
+        }
         spellRegister.put(index, spell);
+        Wands.getInstance().registerListener(spell);
     }
 
-    public Spell getSpell(int index) {
+    Spell getSpell(int index) {
         return spellRegister.get(index);
     }
 
-    public int size() {
+    int size() {
         return spellRegister.size();
     }
 
