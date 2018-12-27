@@ -1,11 +1,11 @@
 package me.dylan.wands;
 
+import me.dylan.wands.commandhandler.CommandArgumentHandler;
+import me.dylan.wands.commandhandler.ConstructTabCompleter;
+import me.dylan.wands.artifacts.TherosDagger;
 import me.dylan.wands.spells.Comet;
-import me.dylan.wands.CommandHandler.CommandArgumentHandler;
-import me.dylan.wands.CommandHandler.ConstructTabCompleter;
 import me.dylan.wands.spells.PoisonWave;
 import me.dylan.wands.spells.Spark;
-import me.dylan.wands.spells.TherosDagger;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.event.Listener;
@@ -54,9 +54,11 @@ public final class Wands extends JavaPlugin {
         }
     }
 
-    public static Wands getInstance(){
+    public static Wands getInstance() {
         return plugin;
     }
+
+
 
     public SpellRegistry getSpellRegistry() {
         return spellRegistry;
