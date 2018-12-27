@@ -3,6 +3,7 @@ package me.dylan.wands.spells;
 import java.util.Collection;
 
 import me.dylan.wands.Spell;
+import me.dylan.wands.Wands;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -22,13 +23,10 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 
-public final class Comet extends Spell implements Listener {
-    private final Plugin plugin;
+public final class Comet extends Spell {
 
-    public Comet(Plugin plugin) {
+    public Comet() {
         super("Comet");
-        this.plugin = plugin;
-        Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
     @Override
@@ -86,7 +84,7 @@ public final class Comet extends Spell implements Listener {
         Collection<Entity> nearby = loc.getWorld().getNearbyEntities(loc, 4, 4, 4);
         for (Entity entity : nearby) {
             if (entity != shooter && entity instanceof Damageable) {
-                this.damageEntity(shooter, (Damageable)entity, 6);
+                damageEntity(shooter, (Damageable)entity, 6);
                 entity.setFireTicks(60);
                 Location point = loc.subtract(0.0, 1.2, 0.0);
                 Location entityPos = entity.getLocation();

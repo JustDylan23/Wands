@@ -1,5 +1,6 @@
 package me.dylan.wands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -10,19 +11,23 @@ import org.bukkit.event.Listener;
 import org.bukkit.util.Vector;
 
 public abstract class Spell implements Listener {
+
+    protected final Wands plugin = Wands.getInstance();
+
     private final String displayName;
 
-    public Spell(String displayName) {
+    protected Spell(String displayName) {
         this.displayName = displayName;
+        Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
-    protected String getName() {
+    String getName() {
         return displayName;
     }
 
     protected abstract void cast(Player player);
 
-    public void damageEntity(Entity attacker, Damageable victim, int damage) {
+    public static void damageEntity(Entity attacker, Damageable victim, int damage) {
         if (victim.isInvulnerable()) {
             attacker.sendMessage("not vulnerable target");
             return;
@@ -40,10 +45,10 @@ public abstract class Spell implements Listener {
         }
     }
 
-    public Location getSpellLocation(Player player, int distance) {
+    protected final Location getSpellLocation(Player player, int distance) {
         Entity entity = player.getTargetEntity(distance);
         if (entity != null) {
-            return player.getTargetEntity(distance).getLocation();
+            return entity.getLocation();
         }
         Block block = player.getTargetBlock(30);
         if (block != null) {
@@ -53,7 +58,7 @@ public abstract class Spell implements Listener {
 
     }
 
-    public Location getLocationInfrontOf(Entity entity, double meters) {
+    protected final Location getLocationInFrontOf(Entity entity, double meters) {
         Location loc = entity.getLocation();
         return loc.getDirection().normalize().multiply(meters).toLocation(loc.getWorld()).add(loc);
     }
