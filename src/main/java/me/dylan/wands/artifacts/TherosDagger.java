@@ -33,8 +33,8 @@ public final class TherosDagger implements Listener {
     }
 
     @EventHandler
-    public void onSpringToggle(PlayerToggleSprintEvent e) {
-        Player player = e.getPlayer();
+    public void onSpringToggle(PlayerToggleSprintEvent event) {
+        Player player = event.getPlayer();
         if (hasDagger(player)) {
             Bukkit.getScheduler().runTaskLater(Wands.getInstance(), () -> {
                 jumpParticles(player);
@@ -44,12 +44,12 @@ public final class TherosDagger implements Listener {
     }
 
     @EventHandler
-    public void onAttack(EntityDamageByEntityEvent e) {
-        if (e.getDamager() instanceof Player) {
-            Player player = (Player) e.getDamager();
-            LivingEntity victim = (LivingEntity) e.getEntity();
+    public void onAttack(EntityDamageByEntityEvent event) {
+        if (event.getDamager() instanceof Player) {
+            Player player = (Player) event.getDamager();
+            LivingEntity victim = (LivingEntity) event.getEntity();
             if (hasDagger(player)) {
-                e.setCancelled(true);
+                event.setCancelled(true);
                 victim.removePotionEffect(PotionEffectType.SPEED);
                 victim.removePotionEffect(PotionEffectType.BLINDNESS);
                 victim.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 100, 1, false), true);
@@ -60,11 +60,11 @@ public final class TherosDagger implements Listener {
     }
 
     @EventHandler
-    public void onRightClick(PlayerInteractEvent e) {
-        Player player = e.getPlayer();
+    public void onRightClick(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
         if (hasDagger(player)) {
-            if (e.getHand().equals(EquipmentSlot.HAND)) {
-                Action a = e.getAction();
+            if (event.getHand().equals(EquipmentSlot.HAND)) {
+                Action a = event.getAction();
                 if (a == Action.LEFT_CLICK_AIR || a == Action.LEFT_CLICK_BLOCK) {
                     Vector direction = player.getLocation().getDirection();
                     direction.normalize().multiply(3).setY(3);

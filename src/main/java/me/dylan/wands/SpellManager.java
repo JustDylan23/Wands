@@ -28,27 +28,27 @@ public final class SpellManager implements Listener {
 
     @EventHandler
     public void onLeave(PlayerQuitEvent event) {
-        Player p = event.getPlayer();
+        Player player = event.getPlayer();
 
         try {
-            spellIndex.remove(p);
+            spellIndex.remove(player);
         } catch (Exception e) {
-            Wands.sendConsole("Could not remove player " + p.getDisplayName() + " from hashmap");
+            Wands.sendConsole("Could not remove player " + player.getDisplayName() + " from hashmap");
         }
 
     }
 
     @EventHandler
-    public void playerInteractEvent(PlayerInteractEvent e) {
+    public void playerInteractEvent(PlayerInteractEvent event) {
         if (!Wands.ENABLED) return;
-        Player player = e.getPlayer();
+        Player player = event.getPlayer();
         ItemStack tool = player.getInventory().getItemInMainHand();
         if (tool.getType().equals(Material.BLAZE_ROD)) {
             if (tool.getItemMeta().hasDisplayName()) {
                 if (tool.getItemMeta().getDisplayName().equals("§cEmpire Wand")) {
-                    e.setCancelled(true);
-                    Action a = e.getAction();
-                    if (e.getHand().equals(EquipmentSlot.HAND)) {
+                    event.setCancelled(true);
+                    Action a = event.getAction();
+                    if (event.getHand().equals(EquipmentSlot.HAND)) {
                         if (a == Action.LEFT_CLICK_AIR || a == Action.LEFT_CLICK_BLOCK) {
                             onCast(player);
                         } else if (a == Action.RIGHT_CLICK_AIR || a == Action.RIGHT_CLICK_BLOCK) {
