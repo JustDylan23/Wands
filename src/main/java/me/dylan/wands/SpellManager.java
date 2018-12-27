@@ -17,9 +17,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
-public class SpellManager implements Listener {
+public final class SpellManager implements Listener {
 
-    private int maxValue;
     private final Map<Player, Integer> spellIndex = new HashMap<>();
 
     @EventHandler
@@ -50,12 +49,12 @@ public class SpellManager implements Listener {
                 if (tool.getItemMeta().getDisplayName().equals("§cEmpire Wand")) {
                     e.setCancelled(true);
                     Action a = e.getAction();
-                    if (a != Action.RIGHT_CLICK_AIR && a != Action.RIGHT_CLICK_BLOCK) {
-                        if (a.equals(Action.LEFT_CLICK_AIR) || a.equals(Action.LEFT_CLICK_BLOCK)) {
+                    if (e.getHand().equals(EquipmentSlot.HAND)) {
+                        if (a == Action.LEFT_CLICK_AIR || a == Action.LEFT_CLICK_BLOCK) {
                             onCast(player);
+                        } else if (a == Action.RIGHT_CLICK_AIR || a == Action.RIGHT_CLICK_BLOCK) {
+                            onSelect(player);
                         }
-                    } else if (e.getHand().equals(EquipmentSlot.HAND)) {
-                        onSelect(player);
                     }
                 }
             }
@@ -69,12 +68,12 @@ public class SpellManager implements Listener {
     private Spell getSelectedSpell(Player player) {
         ensureIndexSet(player);
         int index = spellIndex.get(player);
-        return Wands.getInstance().getSpellRegistery().getSpell(index);
+        return Wands.getInstance().getSpellRegistry().getSpell(index);
     }
 
     private void onSelect(Player player) {
         ensureIndexSet(player);
-        maxValue = Wands.getInstance().getSpellRegistery().size();
+        int maxValue = Wands.getInstance().getSpellRegistry().size();
         int selectorIndex = spellIndex.get(player);
         if (!player.isSneaking()) {
             selectorIndex = selectorIndex < maxValue ? selectorIndex + 1 : 1;

@@ -8,11 +8,12 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-public class GUIs implements Listener {
+public final class GUIs implements Listener {
 
-    private static Inventory MainGUI = Bukkit.createInventory(null, 27, Wands.PREFIX + "menu");
+    private static final Inventory MainGUI;
 
     static {
+        MainGUI = Bukkit.createInventory(null, 27, Wands.PREFIX + "menu");
         AdvancedItemStack wandOption = new AdvancedItemStack(Material.BLAZE_ROD);
         wandOption.setName("&6Available Wands");
         MainGUI.setItem(13, wandOption);
@@ -22,9 +23,10 @@ public class GUIs implements Listener {
         MainGUI.setItem(16, status);
     }
 
-    private static Inventory WandsGUI = Bukkit.createInventory(null, 27, Wands.PREFIX + "wands");
+    private static final Inventory WandsGUI;
 
     static {
+        WandsGUI = Bukkit.createInventory(null, 27, Wands.PREFIX + "wands");
         AdvancedItemStack empireWand = new AdvancedItemStack(Material.BLAZE_ROD);
         empireWand.setName("&cEmpire Wand");
         WandsGUI.setItem(10, empireWand);

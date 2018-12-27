@@ -13,13 +13,18 @@ public class AdvancedItemStack extends ItemStack {
         super(material);
     }
 
-    public void setName(String name) {
+    public AdvancedItemStack(Material material, String name) {
+        super(material);
+        this.setName(name);
+    }
+
+    public final void setName(String name) {
         ItemMeta meta = getItemMeta();
         meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', name));
         setItemMeta(meta);
     }
 
-    public void setLore(String... lore) {
+    public final void setLore(String... lore) {
         ItemMeta meta = getItemMeta();
         meta.setLore(Arrays.asList(lore));
         setItemMeta(meta);

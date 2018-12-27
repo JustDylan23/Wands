@@ -4,19 +4,19 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SpellRegistry {
+public final class SpellRegistry {
 
-    private Map<Integer, Spell> spellRegister = new HashMap<>();
+    private final Map<Integer, Spell> spellRegister = new HashMap<>();
 
-    void registerSpell(int index, Spell spell) {
-        if (spellRegister.containsKey(spell)) {
+    public void registerSpell(int index, Spell spell) {
+        if (spellRegister.containsKey(index)) {
             throw new IllegalArgumentException("A spell with index: " + index + " has already been registered");
         }
         spellRegister.put(index, spell);
         Wands.getInstance().registerListener(spell);
     }
 
-    Spell getSpell(int index) {
+    public Spell getSpell(int index) {
         return spellRegister.get(index);
     }
 

@@ -1,6 +1,7 @@
 package me.dylan.wands.spells;
 
 import me.dylan.wands.Spell;
+import me.dylan.wands.Wands;
 import org.bukkit.*;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
@@ -10,14 +11,10 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.Collection;
 
-public final class Spark extends Spell implements Listener {
+public final class Spark extends Spell {
 
-    private final Plugin plugin;
-
-    public Spark(Plugin plugin) {
+    public Spark() {
         super("Spark");
-        this.plugin = plugin;
-        Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
     @Override

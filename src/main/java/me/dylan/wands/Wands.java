@@ -9,7 +9,6 @@ import me.dylan.wands.spells.TherosDagger;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.event.Listener;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Wands extends JavaPlugin {
@@ -21,7 +20,7 @@ public final class Wands extends JavaPlugin {
 
     public static final String VERSION = "1.0.0";
 
-    private final SpellRegistry spellRegistery = new SpellRegistry();
+    private final SpellRegistry spellRegistry = new SpellRegistry();
 
     private static Wands plugin;
 
@@ -29,16 +28,16 @@ public final class Wands extends JavaPlugin {
         plugin = this;
 
         sendConsole("Up and running!");
-        this.getCommand("wands").setExecutor(new CommandArgumentHandler(this));
+        this.getCommand("wands").setExecutor(new CommandArgumentHandler());
 
-        this.getCommand("wands").setTabCompleter(new ConstructTabCompleter(this));
+        this.getCommand("wands").setTabCompleter(new ConstructTabCompleter());
 
         registerListener(new GUIs(), new SpellManager());
 
         registerListener(new TherosDagger());
-        spellRegistery.registerSpell(1, new Comet(this));
-        spellRegistery.registerSpell(2, new Spark(this));
-        spellRegistery.registerSpell(3, new PoisonWave(this));
+        spellRegistry.registerSpell(1, new Comet());
+        spellRegistry.registerSpell(2, new Spark());
+        spellRegistry.registerSpell(3, new PoisonWave());
     }
 
     public void onDisable() {
@@ -59,7 +58,7 @@ public final class Wands extends JavaPlugin {
         return plugin;
     }
 
-    public SpellRegistry getSpellRegistery() {
-        return spellRegistery;
+    public SpellRegistry getSpellRegistry() {
+        return spellRegistry;
     }
 }
