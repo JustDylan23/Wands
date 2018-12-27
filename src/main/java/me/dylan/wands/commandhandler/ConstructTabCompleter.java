@@ -1,9 +1,8 @@
-package me.dylan.wands.CommandHandler;
+package me.dylan.wands.commandhandler;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
 import java.util.Collections;

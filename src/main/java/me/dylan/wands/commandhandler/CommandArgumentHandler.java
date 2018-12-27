@@ -1,4 +1,4 @@
-package me.dylan.wands.CommandHandler;
+package me.dylan.wands.commandhandler;
 
 import me.dylan.wands.GUIs;
 import me.dylan.wands.Wands;

@@ -1,4 +1,4 @@
-package me.dylan.wands.spells;
+package me.dylan.wands.artifacts;
 
 import me.dylan.wands.Spell;
 import me.dylan.wands.Wands;

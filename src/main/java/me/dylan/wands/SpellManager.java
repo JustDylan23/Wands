@@ -33,8 +33,7 @@ public final class SpellManager implements Listener {
         try {
             spellIndex.remove(p);
         } catch (Exception e) {
-            Wands.sendConsole(" Could not remove player " + p.getDisplayName() + " from hashmap");
-            Bukkit.getConsoleSender().sendMessage(Wands.PREFIX + " Could not remove player " + p.getDisplayName() + " from hashmap");
+            Wands.sendConsole("Could not remove player " + p.getDisplayName() + " from hashmap");
         }
 
     }
@@ -61,18 +60,14 @@ public final class SpellManager implements Listener {
         }
     }
 
-    private void ensureIndexSet(Player player) {
-        spellIndex.putIfAbsent(player, 1);
-    }
-
     private Spell getSelectedSpell(Player player) {
-        ensureIndexSet(player);
+        spellIndex.putIfAbsent(player, 1);
         int index = spellIndex.get(player);
         return Wands.getInstance().getSpellRegistry().getSpell(index);
     }
 
     private void onSelect(Player player) {
-        ensureIndexSet(player);
+        spellIndex.putIfAbsent(player, 1);
         int maxValue = Wands.getInstance().getSpellRegistry().size();
         int selectorIndex = spellIndex.get(player);
         if (!player.isSneaking()) {
