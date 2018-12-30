@@ -8,41 +8,18 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public final class SpellManager implements Listener {
-
-    private final Map<Player, Integer> spellIndex = new HashMap<>();
-
-    @EventHandler
-    public void onJoin(PlayerJoinEvent event) {
-        spellIndex.put(event.getPlayer(), 1);
-    }
-
-    @EventHandler
-    public void onLeave(PlayerQuitEvent event) {
-        Player player = event.getPlayer();
-
-        try {
-            spellIndex.remove(player);
-        } catch (Exception e) {
-            Wands.sendConsole("Could not remove player " + player.getDisplayName() + " from hashmap");
-        }
-
-    }
 
     @EventHandler
     public void playerInteractEvent(PlayerInteractEvent event) {
         if (!Wands.ENABLED) return;
         Player player = event.getPlayer();
-        AdvancedItemStack tool = (AdvancedItemStack) player.getInventory().getItemInMainHand();
-        if (tool != null) {
+        ItemStack r = player.getInventory().getItemInMainHand();
+        if (r != null) {
+        AdvancedItemStack tool = new AdvancedItemStack(player.getInventory().getItemInMainHand());
             if (tool.hasNBTTag("verified")) {
                 event.setCancelled(true);
                 Action a = event.getAction();
@@ -58,22 +35,25 @@ public final class SpellManager implements Listener {
     }
 
     private Spell getSelectedSpell(Player player) {
-        spellIndex.putIfAbsent(player, 1);
-        int index = spellIndex.get(player);
-        return Wands.getInstance().getSpellRegistry().getSpell(index);
+        AdvancedItemStack item = new AdvancedItemStack(player.getInventory().getItemInMainHand());
+        return Wands.getInstance().getSpellRegistry().getSpell(item.getNBTTagInt("SpellIndex", 1));
+    }
+
+    private void setSelectedSpellIndex(Player player, int index) {
+        AdvancedItemStack item = new AdvancedItemStack(player.getInventory().getItemInMainHand());
+        item.setNBTTag("SpellIndex", index);
+        player.getInventory().getItemInMainHand().setItemMeta(item.getItemMeta());
     }
 
     private void onSelect(Player player) {
-        spellIndex.putIfAbsent(player, 1);
         int maxValue = Wands.getInstance().getSpellRegistry().size();
-        int selectorIndex = spellIndex.get(player);
+        AdvancedItemStack item = new AdvancedItemStack(player.getInventory().getItemInMainHand());
+        int selectorIndex = item.getNBTTagInt("SpellIndex", 0);
         if (!player.isSneaking()) {
-            selectorIndex = selectorIndex < maxValue ? selectorIndex + 1 : 1;
+            setSelectedSpellIndex(player, selectorIndex < maxValue ? selectorIndex + 1 : 1);
         } else {
-            selectorIndex = selectorIndex > 1 ? selectorIndex - 1 : maxValue;
+            setSelectedSpellIndex(player, selectorIndex > 1 ? selectorIndex - 1 : maxValue);
         }
-
-        spellIndex.put(player, selectorIndex);
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.5F, 0.5F);
         player.sendActionBar(ChatColor.translateAlternateColorCodes('&', "&6Current spell: &7&l" + getSelectedSpell(player).getName()));
     }

@@ -32,11 +32,11 @@ public final class GUIs implements Listener {
         AdvancedItemStack empireWand = new AdvancedItemStack(Material.BLAZE_ROD);
         empireWand.setName("&cEmpire Wand");
         empireWand.setNBTTag("verified", 1);
-        empireWand.setNBTTag("selectedSpell", 1);
+        empireWand.setNBTTag("SpellIndex", 1);
         WandsGUI.setItem(10, empireWand);
 
         AdvancedItemStack therosDagger = new AdvancedItemStack(Material.MUSIC_DISC_MALL);
-        empireWand.setNBTTag("verified", 1);
+        therosDagger.setNBTTag("therosdagger", 1);
         therosDagger.setName("&8Theros Dagger");
         WandsGUI.setItem(13, therosDagger);
     }

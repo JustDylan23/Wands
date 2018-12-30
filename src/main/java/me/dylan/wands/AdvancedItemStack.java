@@ -40,25 +40,21 @@ public final class AdvancedItemStack extends ItemStack {
         return this;
     }
 
-    public AdvancedItemStack setNBTTag(String key, Integer value) {
+    public AdvancedItemStack setNBTTag(String key, int value) {
         NBTTagCompound compound = getNBTTagCompound();
-        if (value == null) {
-            if (compound.hasKey(key)) {
-                compound.remove(key);
-            }
-        } else {
-            compound.set(key, new NBTTagInt(value));
-        }
+        compound.set(key, new NBTTagInt(value));
         setCompound(compound);
         return this;
     }
 
     public AdvancedItemStack removeNBTTag(String key) {
-        setNBTTag(key, null);
+        NBTTagCompound compound = getNBTTagCompound();
+        if (compound.hasKey(key)) {
+            compound.remove(key);
+        }
         return this;
     }
 
-    @Nullable
     public Integer getNBTTagInt(String key, Integer defaultValue) {
         NBTTagCompound compound = getNBTTagCompound();
         return compound.hasKey(key) ? compound.getInt(key) : defaultValue;
