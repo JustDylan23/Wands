@@ -1,10 +1,6 @@
 package me.dylan.wands;
 
-import java.util.HashMap;
-import java.util.Map;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
@@ -16,6 +12,9 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public final class SpellManager implements Listener {
 
@@ -42,18 +41,16 @@ public final class SpellManager implements Listener {
     public void playerInteractEvent(PlayerInteractEvent event) {
         if (!Wands.ENABLED) return;
         Player player = event.getPlayer();
-        ItemStack tool = player.getInventory().getItemInMainHand();
-        if (tool.getType().equals(Material.BLAZE_ROD)) {
-            if (tool.getItemMeta().hasDisplayName()) {
-                if (tool.getItemMeta().getDisplayName().equals("§cEmpire Wand")) {
-                    event.setCancelled(true);
-                    Action a = event.getAction();
-                    if (event.getHand().equals(EquipmentSlot.HAND)) {
-                        if (a == Action.LEFT_CLICK_AIR || a == Action.LEFT_CLICK_BLOCK) {
-                            onCast(player);
-                        } else if (a == Action.RIGHT_CLICK_AIR || a == Action.RIGHT_CLICK_BLOCK) {
-                            onSelect(player);
-                        }
+        AdvancedItemStack tool = (AdvancedItemStack) player.getInventory().getItemInMainHand();
+        if (tool != null) {
+            if (tool.hasNBTTag("verified")) {
+                event.setCancelled(true);
+                Action a = event.getAction();
+                if (event.getHand().equals(EquipmentSlot.HAND)) {
+                    if (a == Action.LEFT_CLICK_AIR || a == Action.LEFT_CLICK_BLOCK) {
+                        onCast(player);
+                    } else if (a == Action.RIGHT_CLICK_AIR || a == Action.RIGHT_CLICK_BLOCK) {
+                        onSelect(player);
                     }
                 }
             }
