@@ -1,7 +1,7 @@
 package me.dylan.wands;
 
 import me.dylan.wands.artifacts.TherosDagger;
-import me.dylan.wands.commandhandler.CommandArgumentHandler;
+import me.dylan.wands.commandhandler.MainCommandHandler;
 import me.dylan.wands.commandhandler.ConstructTabCompleter;
 import me.dylan.wands.spells.Comet;
 import me.dylan.wands.spells.PoisonWave;
@@ -21,6 +21,9 @@ public final class Wands extends JavaPlugin {
 
     public static final String VERSION = "1.0.0";
 
+    private final MainCommandHandler commandArgumentHandler = new MainCommandHandler();
+    private final ConstructTabCompleter constructTabCompleter = new ConstructTabCompleter();
+
     private final SpellRegistry spellRegistry = new SpellRegistry();
     private final WandsRegistry wandsRegistry = new WandsRegistry();
 
@@ -30,8 +33,8 @@ public final class Wands extends JavaPlugin {
         plugin = this;
 
         sendConsole("Up and running!");
-        this.getCommand("wands").setExecutor(new CommandArgumentHandler());
-        this.getCommand("wands").setTabCompleter(new ConstructTabCompleter());
+        this.getCommand("wands").setExecutor(commandArgumentHandler);
+        this.getCommand("wands").setTabCompleter(constructTabCompleter);
 
         registerListener(new GUIs(), new SpellManager());
 

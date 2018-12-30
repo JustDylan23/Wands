@@ -1,5 +1,6 @@
 package me.dylan.wands.artifacts;
 
+import me.dylan.wands.AdvancedItemStack;
 import me.dylan.wands.Spell;
 import me.dylan.wands.Wands;
 import org.bukkit.Bukkit;
@@ -24,10 +25,9 @@ public final class TherosDagger implements Listener {
 
     private boolean hasDagger(Player player) {
         ItemStack tool = player.getInventory().getItemInMainHand();
-        if (tool.getType().equals(Material.MUSIC_DISC_MALL)) {
-            if (tool.getItemMeta().hasDisplayName()) {
-                return tool.getItemMeta().getDisplayName().equals("§8Theros Dagger");
-            }
+        if (tool != null) {
+            AdvancedItemStack itemStack = new AdvancedItemStack(tool);
+            return itemStack.hasNBTTag("therosdagger");
         }
         return false;
     }
@@ -54,7 +54,6 @@ public final class TherosDagger implements Listener {
                 victim.removePotionEffect(PotionEffectType.BLINDNESS);
                 victim.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 100, 1, false), true);
                 victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 100, 5, true ), true);
-                Spell.damageEntity(player, victim, 3);
             }
         }
     }
@@ -65,9 +64,11 @@ public final class TherosDagger implements Listener {
         if (hasDagger(player)) {
             if (event.getHand().equals(EquipmentSlot.HAND)) {
                 Action a = event.getAction();
-                if (a == Action.LEFT_CLICK_AIR || a == Action.LEFT_CLICK_BLOCK) {
-                    Vector direction = player.getLocation().getDirection();
-                    direction.normalize().multiply(3).setY(3);
+                if (a == Action.RIGHT_CLICK_AIR || a == Action.RIGHT_CLICK_BLOCK) {
+                    Vector direction = player.getLocation().getDirection().normalize();
+                    double y = 1;
+                    direction.multiply(1.5).setY(y);
+                    player.setVelocity(direction);
                 }
             }
         }
