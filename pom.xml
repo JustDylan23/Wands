@@ -71,5 +71,12 @@
             <version>1.13.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.destroystokyo.paper</groupId>
+            <artifactId>paper</artifactId>
+            <systemPath>${basedir}\patched_1.13.2.jar</systemPath>
+            <scope>system</scope>
+            <version>1.13.2-R0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 </project>
