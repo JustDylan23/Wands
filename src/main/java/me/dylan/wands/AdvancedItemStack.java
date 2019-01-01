@@ -1,7 +1,7 @@
 package me.dylan.wands;
 
+import net.minecraft.server.v1_13_R2.NBTBase;
 import net.minecraft.server.v1_13_R2.NBTTagCompound;
-import net.minecraft.server.v1_13_R2.NBTTagInt;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Arrays;
+import java.util.function.Consumer;
 
 public class AdvancedItemStack extends ItemStack {
 
@@ -39,24 +40,33 @@ public class AdvancedItemStack extends ItemStack {
         return this;
     }
 
+    private void applyNBT(Consumer<NBTTagCompound> consumer) {
+        net.minecraft.server.v1_13_R2.ItemStack nmsItem = CraftItemStack.asNMSCopy(this);
+        NBTTagCompound compound = nmsItem.getTag() != null ? nmsItem.getTag() : new NBTTagCompound();
+        consumer.accept(compound);
+        nmsItem.setTag(compound);
+        ItemMeta meta = CraftItemStack.getItemMeta(nmsItem);
+        this.setItemMeta(meta);
+    }
+
+    public AdvancedItemStack setNBTTag(String key, NBTBase nbtBase) {
+        applyNBT(tag -> tag.set(key, nbtBase));
+        return this;
+    }
+
     public AdvancedItemStack setNBTTag(String key, int value) {
-        NBTTagCompound compound = getNBTTagCompound();
-        compound.set(key, new NBTTagInt(value));
-        setCompound(compound);
+        applyNBT(tag -> tag.setInt(key, value));
         return this;
     }
 
     public AdvancedItemStack setNBTTagIntArray(String key, int... values) {
-        NBTTagCompound compound = getNBTTagCompound();
-        compound.setIntArray(key, values);
-        setCompound(compound);
+        applyNBT(tag -> tag.setIntArray(key, values));
         return this;
     }
 
     public AdvancedItemStack removeNBTTag(String key) {
-        NBTTagCompound compound = getNBTTagCompound();
-        if (compound.hasKey(key)) {
-            compound.remove(key);
+        if (hasNBTTag(key)) {
+            applyNBT(tag -> tag.remove(key));
         }
         return this;
     }
@@ -79,12 +89,5 @@ public class AdvancedItemStack extends ItemStack {
     private NBTTagCompound getNBTTagCompound() {
         net.minecraft.server.v1_13_R2.ItemStack nmsItem = CraftItemStack.asNMSCopy(this);
         return nmsItem.getTag() != null ? nmsItem.getTag() : new NBTTagCompound();
-    }
-
-    private void setCompound(NBTTagCompound compound) {
-        net.minecraft.server.v1_13_R2.ItemStack nmsItem = CraftItemStack.asNMSCopy(this);
-        nmsItem.setTag(compound);
-        ItemMeta meta = CraftItemStack.getItemMeta(nmsItem);
-        this.setItemMeta(meta);
     }
 }
