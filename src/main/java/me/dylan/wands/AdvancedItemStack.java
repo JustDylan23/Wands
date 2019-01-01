@@ -8,10 +8,9 @@ import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import javax.annotation.Nullable;
 import java.util.Arrays;
 
-public final class AdvancedItemStack extends ItemStack {
+public class AdvancedItemStack extends ItemStack {
 
     public AdvancedItemStack(ItemStack itemStack) {
         super(itemStack);
@@ -47,6 +46,13 @@ public final class AdvancedItemStack extends ItemStack {
         return this;
     }
 
+    public AdvancedItemStack setNBTTagIntArray(String key, int... values) {
+        NBTTagCompound compound = getNBTTagCompound();
+        compound.setIntArray(key, values);
+        setCompound(compound);
+        return this;
+    }
+
     public AdvancedItemStack removeNBTTag(String key) {
         NBTTagCompound compound = getNBTTagCompound();
         if (compound.hasKey(key)) {
@@ -58,6 +64,11 @@ public final class AdvancedItemStack extends ItemStack {
     public Integer getNBTTagInt(String key, Integer defaultValue) {
         NBTTagCompound compound = getNBTTagCompound();
         return compound.hasKey(key) ? compound.getInt(key) : defaultValue;
+    }
+
+    public int[] getNBTTagIntArray(String key) {
+        NBTTagCompound compound = getNBTTagCompound();
+        return compound.hasKey(key) ? compound.getIntArray(key) : new int[0];
     }
 
     public boolean hasNBTTag(String key) {
