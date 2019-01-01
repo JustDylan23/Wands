@@ -29,10 +29,9 @@ public final class GUIs implements Listener {
 
     static {
         WandsGUI = Bukkit.createInventory(null, 27, Wands.PREFIX + "wands");
-        AdvancedItemStack empireWand = new AdvancedItemStack(Material.BLAZE_ROD);
+        WandItem empireWand = new WandItem(Material.BLAZE_ROD);
         empireWand.setName("&cEmpire Wand");
-        empireWand.setNBTTag("verified", 1);
-        empireWand.setNBTTag("SpellIndex", 1);
+        empireWand.markAsWand().setSpellIndex(1).setSpells(1, 2, 3);
         WandsGUI.setItem(10, empireWand);
 
         AdvancedItemStack therosDagger = new AdvancedItemStack(Material.MUSIC_DISC_MALL);

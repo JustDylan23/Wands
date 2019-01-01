@@ -11,16 +11,18 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Map;
+
 public final class SpellManager implements Listener {
 
     @EventHandler
     public void playerInteractEvent(PlayerInteractEvent event) {
         if (!Wands.ENABLED) return;
         Player player = event.getPlayer();
-        ItemStack r = player.getInventory().getItemInMainHand();
-        if (r != null) {
-        AdvancedItemStack tool = new AdvancedItemStack(player.getInventory().getItemInMainHand());
-            if (tool.hasNBTTag("verified")) {
+        ItemStack handItem = player.getInventory().getItemInMainHand();
+        if (handItem != null) {
+        WandItem tool = new WandItem(handItem);
+            if (tool.isMarkedAsWand()) {
                 event.setCancelled(true);
                 Action a = event.getAction();
                 if (event.getHand().equals(EquipmentSlot.HAND)) {
@@ -34,32 +36,31 @@ public final class SpellManager implements Listener {
         }
     }
 
-    private Spell getSelectedSpell(Player player) {
-        AdvancedItemStack item = new AdvancedItemStack(player.getInventory().getItemInMainHand());
-        return Wands.getInstance().getSpellRegistry().getSpell(item.getNBTTagInt("SpellIndex", 1));
-    }
-
-    private void setSelectedSpellIndex(Player player, int index) {
-        AdvancedItemStack item = new AdvancedItemStack(player.getInventory().getItemInMainHand());
-        item.setNBTTag("SpellIndex", index);
-        player.getInventory().getItemInMainHand().setItemMeta(item.getItemMeta());
-    }
-
     private void onSelect(Player player) {
-        int maxValue = Wands.getInstance().getSpellRegistry().size();
-        AdvancedItemStack item = new AdvancedItemStack(player.getInventory().getItemInMainHand());
-        int selectorIndex = item.getNBTTagInt("SpellIndex", 0);
+        ItemStack hand = player.getInventory().getItemInMainHand();
+
+        WandItem wandItem = new WandItem(hand);
+        int index = wandItem.getSpellIndex();
+        int maxValue = wandItem.getSpellSize();
+
         if (!player.isSneaking()) {
-            setSelectedSpellIndex(player, selectorIndex < maxValue ? selectorIndex + 1 : 1);
+            index = index < maxValue ? index + 1 : 1;
         } else {
-            setSelectedSpellIndex(player, selectorIndex > 1 ? selectorIndex - 1 : maxValue);
+            index = index > 1 ? index - 1 : maxValue;
         }
+
+        wandItem.setSpellIndex(index);
+
+        player.getInventory().getItemInMainHand().setItemMeta(wandItem.getItemMeta());
+
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.5F, 0.5F);
-        player.sendActionBar(ChatColor.translateAlternateColorCodes('&', "&6Current spell: &7&l" + getSelectedSpell(player).getName()));
+        player.sendActionBar(ChatColor.translateAlternateColorCodes('&', "&6Current spell: &7&l"
+                + wandItem.getSelectedSpell().getName()));
     }
 
     private void onCast(Player player) {
-        getSelectedSpell(player).cast(player);
+        WandItem wandItem = new WandItem(player.getInventory().getItemInMainHand());
+        wandItem.getSelectedSpell().cast(player);
     }
 }
 
