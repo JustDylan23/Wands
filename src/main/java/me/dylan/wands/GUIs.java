@@ -1,5 +1,6 @@
 package me.dylan.wands;
 
+import net.minecraft.server.v1_13_R2.NBTTagInt;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -9,39 +10,42 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 public final class GUIs implements Listener {
 
-    private static final Inventory MainGUI;
+    private static final Inventory mainGUI;
 
     static {
-        MainGUI = Bukkit.createInventory(null, 27, Wands.PREFIX + "menu");
-        AdvancedItemStack wandOption = new AdvancedItemStack(Material.BLAZE_ROD);
-        wandOption.setName("&6Available Wands");
-        MainGUI.setItem(13, wandOption);
+        mainGUI = Bukkit.createInventory(null, 27, Wands.PREFIX + "menu");
 
-        AdvancedItemStack status = new AdvancedItemStack(Material.GREEN_TERRACOTTA);
+        ItemBuilder wandOption = new ItemBuilder(new ItemStack(Material.BLAZE_ROD));
+        wandOption.setName("&6Available Wands");
+        mainGUI.setItem(13, wandOption);
+
+        ItemBuilder status = new ItemBuilder(new ItemStack(Material.GREEN_TERRACOTTA));
         status.setName("&6Status: &aEnabled");
-        MainGUI.setItem(16, status);
+        mainGUI.setItem(16, status);
     }
 
-    private static final Inventory WandsGUI;
+    private static final Inventory wandsGUI;
 
     static {
-        WandsGUI = Bukkit.createInventory(null, 27, Wands.PREFIX + "wands");
-        WandItem empireWand = new WandItem(Material.BLAZE_ROD);
-        empireWand.setName("&cEmpire Wand");
-        empireWand.markAsWand().setSpellIndex(1).setSpells(1, 2, 3);
-        WandsGUI.setItem(10, empireWand);
+        wandsGUI = Bukkit.createInventory(null, 27, Wands.PREFIX + "wands");
 
-        AdvancedItemStack therosDagger = new AdvancedItemStack(Material.MUSIC_DISC_MALL);
-        therosDagger.setNBTTag("therosdagger", 1);
+        WandItem empireWand = new WandItem(new ItemStack(Material.BLAZE_ROD));
+        empireWand.setName("&cEmpire Wand");
+        empireWand.markAsWand().setSpells(1, 2, 3);
+        wandsGUI.setItem(10, empireWand);
+
+        ItemBuilder therosDagger = new ItemBuilder(new ItemStack(Material.MUSIC_DISC_MALL));
+        therosDagger.setNbtTag("therosdagger", new NBTTagInt(1));
         therosDagger.setName("&8Theros Dagger");
-        WandsGUI.setItem(13, therosDagger);
+        wandsGUI.setItem(13, therosDagger);
     }
 
     public static void openGUI(Player player) {
-        player.openInventory(MainGUI);
+        player.openInventory(mainGUI);
     }
 
     @EventHandler
@@ -58,7 +62,7 @@ public final class GUIs implements Listener {
         Player player = (Player) event.getWhoClicked();
         int clickedSlot = event.getSlot();
 
-        if (inventory.equals(MainGUI) || inventory.equals(WandsGUI)) {
+        if (inventory.equals(mainGUI) || inventory.equals(wandsGUI)) {
             event.setCancelled(true);
             if (clickedSlot == -999) {
                 player.closeInventory();
@@ -68,29 +72,29 @@ public final class GUIs implements Listener {
             }
         }
 
-        if (inventory.equals(MainGUI)) {
+        if (inventory.equals(mainGUI)) {
             if (clickedSlot == 13) {
-                player.openInventory(WandsGUI);
+                player.openInventory(wandsGUI);
             } else if (clickedSlot == 16) {
                 updateStatus(player);
             }
 
-        } else if (inventory.equals(WandsGUI)) {
+        } else if (inventory.equals(wandsGUI)) {
             player.getInventory().addItem(event.getCurrentItem());
         }
     }
 
     private void updateStatus(Player player) {
         Wands.ENABLED = !Wands.ENABLED;
-        AdvancedItemStack status;
+        ItemBuilder status;
         if (Wands.ENABLED) {
-            status = new AdvancedItemStack(Material.GREEN_TERRACOTTA);
+            status = new ItemBuilder(new ItemStack(Material.GREEN_TERRACOTTA));
             status.setName("&6Status: &aEnabled");
-            MainGUI.setItem(16, status);
+            mainGUI.setItem(16, status);
         } else {
-            status = new AdvancedItemStack(Material.RED_TERRACOTTA);
+            status = new ItemBuilder(new ItemStack(Material.RED_TERRACOTTA));
             status.setName("&6Status: &cDisabled");
-            MainGUI.setItem(16, status);
+            mainGUI.setItem(16, status);
         }
     }
 }

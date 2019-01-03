@@ -1,12 +1,14 @@
 package me.dylan.wands;
 
-import org.bukkit.Material;
+import net.minecraft.server.v1_13_R2.NBTTagInt;
+import net.minecraft.server.v1_13_R2.NBTTagIntArray;
 import org.bukkit.inventory.ItemStack;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
-public final class WandItem extends AdvancedItemStack {
+public final class WandItem extends ItemBuilder {
 
    private String spellIndexTag = "SpellIndex";
    private String spellsListTag= "Spells";
@@ -16,26 +18,26 @@ public final class WandItem extends AdvancedItemStack {
         super(itemStack);
     }
 
-    public WandItem(Material material) {
-        super(material);
-    }
-
     public WandItem setSpellIndex(int index) {
-        setNBTTag(spellIndexTag, index);
+        setNbtTag(spellIndexTag, new NBTTagInt(index));
         return this;
     }
 
     public int getSpellIndex() {
-        return getNBTTagInt(spellIndexTag, null);
+        if (hasNbtTag(spellIndexTag)) {
+            return getNbtTag(tag -> tag.getInt(spellIndexTag));
+        }
+        setSpellIndex(1);
+        return 1;
     }
 
     public WandItem setSpells(int... spells) {
-        setNBTTagIntArray(spellsListTag, spells);
+        setNbtTag(spellsListTag, new NBTTagIntArray(spells));
         return this;
     }
 
     public Map<Integer, Spell> getSpells() {
-        int[] spells = getNBTTagIntArray(spellsListTag);
+        int[] spells = getNbtTag(tag -> tag.getIntArray(spellsListTag));
         Map<Integer, Spell> spellHashMap = new HashMap<>();
         SpellRegistry spellRegistry = Wands.getInstance().getSpellRegistry();
         int i = 0;
@@ -46,19 +48,20 @@ public final class WandItem extends AdvancedItemStack {
     }
 
     public int getSpellSize() {
-        return getNBTTagIntArray(spellsListTag).length;
+        return getNbtTag(tag -> tag.getIntArray(spellsListTag)).length;
     }
 
+    @Nullable
     public Spell getSelectedSpell() {
         return getSpells().get(getSpellIndex());
     }
 
     public WandItem markAsWand() {
-        this.setNBTTag(verifiedTag, 1);
+        this.setNbtTag(verifiedTag, new NBTTagInt(1));
         return this;
     }
 
     public boolean isMarkedAsWand() {
-        return hasNBTTag(verifiedTag);
+        return hasNbtTag(verifiedTag);
     }
 }
