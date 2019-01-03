@@ -16,12 +16,11 @@ import java.util.function.Function;
  * @author Dylan
  */
 
-public class ItemBuilder extends ItemStack {
+public class ItemUtil {
 
     private ItemStack itemStack;
 
-    public ItemBuilder(ItemStack itemStack) {
-        super(itemStack);
+    public ItemUtil(ItemStack itemStack) {
         this.itemStack = itemStack;
     }
 
@@ -32,10 +31,10 @@ public class ItemBuilder extends ItemStack {
      * @return Returns an instance of itself.
      */
 
-    public ItemBuilder setName(String name) {
-        ItemMeta meta = getItemMeta();
+    public ItemUtil setName(String name) {
+        ItemMeta meta = itemStack.getItemMeta();
         meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', name));
-        setItemMeta(meta);
+        itemStack.setItemMeta(meta);
         return this;
     }
 
@@ -46,10 +45,10 @@ public class ItemBuilder extends ItemStack {
      * @return Returns an instance of itself.
      */
 
-    public ItemBuilder setLore(String... lore) {
-        ItemMeta meta = getItemMeta();
+    public ItemUtil setLore(String... lore) {
+        ItemMeta meta = itemStack.getItemMeta();
         meta.setLore(Arrays.asList(lore));
-        setItemMeta(meta);
+        itemStack.setItemMeta(meta);
         return this;
     }
 
@@ -66,7 +65,7 @@ public class ItemBuilder extends ItemStack {
      * </code>
      */
 
-    public ItemBuilder setNbtTag(@Nonnull String key, @Nonnull NBTBase nbtBase) {
+    public ItemUtil setNbtTag(@Nonnull String key, @Nonnull NBTBase nbtBase) {
         modifyNbt(tag -> tag.set(key, nbtBase));
         return this;
     }
@@ -84,7 +83,7 @@ public class ItemBuilder extends ItemStack {
      */
 
     public <T> T getNbtTag(Function<NBTTagCompound, T> converter) {
-        net.minecraft.server.v1_13_R2.ItemStack nmsItem = CraftItemStack.asNMSCopy(this);
+        net.minecraft.server.v1_13_R2.ItemStack nmsItem = CraftItemStack.asNMSCopy(itemStack);
         NBTTagCompound compound = nmsItem.getTag() != null ? nmsItem.getTag() : new NBTTagCompound();
         return converter.apply(compound);
     }
@@ -99,7 +98,7 @@ public class ItemBuilder extends ItemStack {
      *
      */
 
-    public ItemBuilder removeNbtTag(String key) {
+    public ItemUtil removeNbtTag(String key) {
         if (hasNbtTag(key)) {
             modifyNbt(tag -> tag.remove(key));
         }
@@ -135,20 +134,20 @@ public class ItemBuilder extends ItemStack {
      */
 
     private void modifyNbt(@Nonnull Consumer<NBTTagCompound> consumer) {
-        net.minecraft.server.v1_13_R2.ItemStack nmsItem = CraftItemStack.asNMSCopy(this);
+        net.minecraft.server.v1_13_R2.ItemStack nmsItem = CraftItemStack.asNMSCopy(itemStack);
         NBTTagCompound compound = nmsItem.getTag() != null ? nmsItem.getTag() : new NBTTagCompound();
         consumer.accept(compound);
         nmsItem.setTag(compound);
         ItemMeta meta = CraftItemStack.getItemMeta(nmsItem);
-        this.setItemMeta(meta);
+        itemStack.setItemMeta(meta);
     }
 
     /**
-     * This method applies all the changes made in to object to the ItemStack
-     * that was used in the constructor.
+     * This method returns the ItemStack used for this util
+     *
+     * @return Returns the ItemStack used in the constructor.
      */
-
-    public void applyChanges() {
-        itemStack.setItemMeta(getItemMeta());
+    public ItemStack getItemStack() {
+        return itemStack;
     }
 }

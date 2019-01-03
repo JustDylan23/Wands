@@ -39,9 +39,9 @@ public final class Wands extends JavaPlugin {
 
         registerListener(new GUIs(), new SpellManager());
 
-        ItemBuilder empireWand = new ItemBuilder(new ItemStack(Material.BLAZE_ROD));
+        ItemUtil empireWand = new ItemUtil(new ItemStack(Material.BLAZE_ROD));
         empireWand.setName("&eEmpire Wand");
-        wandsRegistry.registerWand(empireWand, 1);
+        wandsRegistry.registerWand(empireWand.getItemStack(), 1);
 
         registerListener(new TherosDagger());
         spellRegistry.registerSpell(1, new Comet());
