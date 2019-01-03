@@ -19,13 +19,13 @@ public final class GUIs implements Listener {
     static {
         mainGUI = Bukkit.createInventory(null, 27, Wands.PREFIX + "menu");
 
-        ItemBuilder wandOption = new ItemBuilder(new ItemStack(Material.BLAZE_ROD));
+        ItemUtil wandOption = new ItemUtil(new ItemStack(Material.BLAZE_ROD));
         wandOption.setName("&6Available Wands");
-        mainGUI.setItem(13, wandOption);
+        mainGUI.setItem(13, wandOption.getItemStack());
 
-        ItemBuilder status = new ItemBuilder(new ItemStack(Material.GREEN_TERRACOTTA));
+        ItemUtil status = new ItemUtil(new ItemStack(Material.GREEN_TERRACOTTA));
         status.setName("&6Status: &aEnabled");
-        mainGUI.setItem(16, status);
+        mainGUI.setItem(16, status.getItemStack());
     }
 
     private static final Inventory wandsGUI;
@@ -36,12 +36,12 @@ public final class GUIs implements Listener {
         WandItem empireWand = new WandItem(new ItemStack(Material.BLAZE_ROD));
         empireWand.setName("&cEmpire Wand");
         empireWand.markAsWand().setSpells(1, 2, 3);
-        wandsGUI.setItem(10, empireWand);
+        wandsGUI.setItem(10, empireWand.getItemStack());
 
-        ItemBuilder therosDagger = new ItemBuilder(new ItemStack(Material.MUSIC_DISC_MALL));
+        ItemUtil therosDagger = new ItemUtil(new ItemStack(Material.MUSIC_DISC_MALL));
         therosDagger.setNbtTag("therosdagger", new NBTTagInt(1));
         therosDagger.setName("&8Theros Dagger");
-        wandsGUI.setItem(13, therosDagger);
+        wandsGUI.setItem(13, therosDagger.getItemStack());
     }
 
     public static void openGUI(Player player) {
@@ -86,15 +86,15 @@ public final class GUIs implements Listener {
 
     private void updateStatus(Player player) {
         Wands.ENABLED = !Wands.ENABLED;
-        ItemBuilder status;
+        ItemUtil status;
         if (Wands.ENABLED) {
-            status = new ItemBuilder(new ItemStack(Material.GREEN_TERRACOTTA));
+            status = new ItemUtil(new ItemStack(Material.GREEN_TERRACOTTA));
             status.setName("&6Status: &aEnabled");
-            mainGUI.setItem(16, status);
+            mainGUI.setItem(16, status.getItemStack());
         } else {
-            status = new ItemBuilder(new ItemStack(Material.RED_TERRACOTTA));
+            status = new ItemUtil(new ItemStack(Material.RED_TERRACOTTA));
             status.setName("&6Status: &cDisabled");
-            mainGUI.setItem(16, status);
+            mainGUI.setItem(16, status.getItemStack());
         }
     }
 }

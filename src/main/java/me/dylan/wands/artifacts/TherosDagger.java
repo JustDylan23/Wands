@@ -1,6 +1,6 @@
 package me.dylan.wands.artifacts;
 
-import me.dylan.wands.ItemBuilder;
+import me.dylan.wands.ItemUtil;
 import me.dylan.wands.Wands;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -24,7 +24,7 @@ public final class TherosDagger implements Listener {
     private boolean hasDagger(Player player) {
         ItemStack tool = player.getInventory().getItemInMainHand();
         if (tool != null) {
-            ItemBuilder itemStack = new ItemBuilder(tool);
+            ItemUtil itemStack = new ItemUtil(tool);
             return itemStack.hasNbtTag("therosdagger");
         }
         return false;

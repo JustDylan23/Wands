@@ -8,7 +8,7 @@ import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
-public final class WandItem extends ItemBuilder {
+public final class WandItem extends ItemUtil {
 
    private String spellIndexTag = "SpellIndex";
    private String spellsListTag= "Spells";

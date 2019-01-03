@@ -49,9 +49,7 @@ public final class SpellManager implements Listener {
             index = index > 1 ? index - 1 : maxValue;
         }
 
-        WandItem wandItem1 = wandItem.setSpellIndex(index);
-
-        wandItem.applyChanges();
+        wandItem.setSpellIndex(index);
 
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.5F, 0.5F);
         player.sendActionBar(ChatColor.translateAlternateColorCodes('&', "&6Current spell: &7&l"
