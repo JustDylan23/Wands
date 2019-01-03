@@ -11,8 +11,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Map;
-
 public final class SpellManager implements Listener {
 
     @EventHandler
@@ -21,7 +19,7 @@ public final class SpellManager implements Listener {
         Player player = event.getPlayer();
         ItemStack handItem = player.getInventory().getItemInMainHand();
         if (handItem != null) {
-        WandItem tool = new WandItem(handItem);
+            WandItem tool = new WandItem(handItem);
             if (tool.isMarkedAsWand()) {
                 event.setCancelled(true);
                 Action a = event.getAction();
@@ -43,15 +41,17 @@ public final class SpellManager implements Listener {
         int index = wandItem.getSpellIndex();
         int maxValue = wandItem.getSpellSize();
 
+        if (maxValue == 0) return;
+
         if (!player.isSneaking()) {
             index = index < maxValue ? index + 1 : 1;
         } else {
             index = index > 1 ? index - 1 : maxValue;
         }
 
-        wandItem.setSpellIndex(index);
+        WandItem wandItem1 = wandItem.setSpellIndex(index);
 
-        player.getInventory().getItemInMainHand().setItemMeta(wandItem.getItemMeta());
+        wandItem.applyChanges();
 
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.5F, 0.5F);
         player.sendActionBar(ChatColor.translateAlternateColorCodes('&', "&6Current spell: &7&l"
@@ -60,7 +60,10 @@ public final class SpellManager implements Listener {
 
     private void onCast(Player player) {
         WandItem wandItem = new WandItem(player.getInventory().getItemInMainHand());
-        wandItem.getSelectedSpell().cast(player);
+        Spell spell = wandItem.getSelectedSpell();
+        if (spell != null) {
+            wandItem.getSelectedSpell().cast(player);
+        }
     }
 }
 

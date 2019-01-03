@@ -1,11 +1,9 @@
 package me.dylan.wands.artifacts;
 
-import me.dylan.wands.AdvancedItemStack;
-import me.dylan.wands.Spell;
+import me.dylan.wands.ItemBuilder;
 import me.dylan.wands.Wands;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -26,8 +24,8 @@ public final class TherosDagger implements Listener {
     private boolean hasDagger(Player player) {
         ItemStack tool = player.getInventory().getItemInMainHand();
         if (tool != null) {
-            AdvancedItemStack itemStack = new AdvancedItemStack(tool);
-            return itemStack.hasNBTTag("therosdagger");
+            ItemBuilder itemStack = new ItemBuilder(tool);
+            return itemStack.hasNbtTag("therosdagger");
         }
         return false;
     }
@@ -40,7 +38,6 @@ public final class TherosDagger implements Listener {
                 jumpParticles(player);
             }, 1);
         }
-
     }
 
     @EventHandler
@@ -49,11 +46,11 @@ public final class TherosDagger implements Listener {
             Player player = (Player) event.getDamager();
             LivingEntity victim = (LivingEntity) event.getEntity();
             if (hasDagger(player)) {
-                event.setCancelled(true);
                 victim.removePotionEffect(PotionEffectType.SPEED);
                 victim.removePotionEffect(PotionEffectType.BLINDNESS);
                 victim.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 100, 1, false), true);
                 victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 100, 5, true ), true);
+                event.setDamage(4);
             }
         }
     }
@@ -62,13 +59,14 @@ public final class TherosDagger implements Listener {
     public void onRightClick(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         if (hasDagger(player)) {
-            if (event.getHand().equals(EquipmentSlot.HAND)) {
-                Action a = event.getAction();
-                if (a == Action.RIGHT_CLICK_AIR || a == Action.RIGHT_CLICK_BLOCK) {
-                    Vector direction = player.getLocation().getDirection().normalize();
-                    double y = 1;
-                    direction.multiply(1.5).setY(y);
-                    player.setVelocity(direction);
+            if (event.getHand() != null) {
+                if (event.getHand().equals(EquipmentSlot.HAND)) {
+                    Action a = event.getAction();
+                    if (a == Action.RIGHT_CLICK_AIR || a == Action.RIGHT_CLICK_BLOCK) {
+                        Vector direction = player.getLocation().getDirection().normalize();
+                        direction.multiply(2);
+                        player.setVelocity(direction);
+                    }
                 }
             }
         }

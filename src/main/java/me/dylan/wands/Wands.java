@@ -1,8 +1,8 @@
 package me.dylan.wands;
 
 import me.dylan.wands.artifacts.TherosDagger;
-import me.dylan.wands.commandhandler.MainCommandHandler;
 import me.dylan.wands.commandhandler.ConstructTabCompleter;
+import me.dylan.wands.commandhandler.MainCommandHandler;
 import me.dylan.wands.spells.Comet;
 import me.dylan.wands.spells.PoisonWave;
 import me.dylan.wands.spells.Spark;
@@ -10,6 +10,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Wands extends JavaPlugin {
@@ -38,7 +39,8 @@ public final class Wands extends JavaPlugin {
 
         registerListener(new GUIs(), new SpellManager());
 
-        AdvancedItemStack empireWand = new AdvancedItemStack(Material.BLAZE_ROD, "&eEmpire Wand");
+        ItemBuilder empireWand = new ItemBuilder(new ItemStack(Material.BLAZE_ROD));
+        empireWand.setName("&eEmpire Wand");
         wandsRegistry.registerWand(empireWand, 1);
 
         registerListener(new TherosDagger());
