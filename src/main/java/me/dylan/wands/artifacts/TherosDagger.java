@@ -24,8 +24,8 @@ public final class TherosDagger implements Listener {
     private boolean hasDagger(Player player) {
         ItemStack tool = player.getInventory().getItemInMainHand();
         if (tool != null) {
-            ItemUtil itemStack = new ItemUtil(tool);
-            return itemStack.hasNbtTag("therosdagger");
+            ItemUtil itemUtil = new ItemUtil(tool);
+            return itemUtil.hasNbtTag("therosdagger");
         }
         return false;
     }
@@ -34,9 +34,7 @@ public final class TherosDagger implements Listener {
     public void onSpringToggle(PlayerToggleSprintEvent event) {
         Player player = event.getPlayer();
         if (hasDagger(player)) {
-            Bukkit.getScheduler().runTaskLater(Wands.getInstance(), () -> {
-                jumpParticles(player);
-            }, 1);
+            Bukkit.getScheduler().runTaskLater(Wands.getInstance(), () -> jumpParticles(player), 1);
         }
     }
 
@@ -49,7 +47,7 @@ public final class TherosDagger implements Listener {
                 victim.removePotionEffect(PotionEffectType.SPEED);
                 victim.removePotionEffect(PotionEffectType.BLINDNESS);
                 victim.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 100, 1, false), true);
-                victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 100, 5, true ), true);
+                victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 100, 5, true), true);
                 event.setDamage(4);
             }
         }

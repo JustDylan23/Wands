@@ -4,7 +4,6 @@ import net.minecraft.server.v1_13_R2.NBTTagInt;
 import net.minecraft.server.v1_13_R2.NBTTagIntArray;
 import org.bukkit.inventory.ItemStack;
 
-import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,7 +52,7 @@ public final class WandItem extends ItemUtil {
         return getNbtTag(tag -> tag.getIntArray(spellsListTag)).length;
     }
 
-    @Nullable
+
     public Spell getSelectedSpell() {
         return getSpells().get(getSpellIndex());
     }

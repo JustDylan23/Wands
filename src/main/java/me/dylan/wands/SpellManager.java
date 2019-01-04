@@ -1,8 +1,12 @@
 package me.dylan.wands;
 
+import net.minecraft.server.v1_13_R2.ChatComponentText;
+import net.minecraft.server.v1_13_R2.ChatMessageType;
+import net.minecraft.server.v1_13_R2.PacketPlayOutChat;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
+import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -48,19 +52,22 @@ public final class SpellManager implements Listener {
         } else {
             index = index > 1 ? index - 1 : maxValue;
         }
-
         wandItem.setSpellIndex(index);
 
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.5F, 0.5F);
-        player.sendActionBar(ChatColor.translateAlternateColorCodes('&', "&6Current spell: &7&l"
-                + wandItem.getSelectedSpell().getName()));
+        sendActionBar((CraftPlayer) player,
+                ChatColor.translateAlternateColorCodes('&',
+                        "&6Current spell: &7&l" + wandItem.getSelectedSpell().getName()));
     }
 
     private void onCast(Player player) {
         WandItem wandItem = new WandItem(player.getInventory().getItemInMainHand());
-        Spell spell = wandItem.getSelectedSpell();
-        if (spell != null) {
-            wandItem.getSelectedSpell().cast(player);
+        wandItem.getSelectedSpell().cast(player);
+    }
+
+    private void sendActionBar(CraftPlayer player, String message) {
+        if (player.getHandle().playerConnection != null && message != null && !message.isEmpty()) {
+            player.getHandle().playerConnection.sendPacket(new PacketPlayOutChat(new ChatComponentText(message), ChatMessageType.GAME_INFO));
         }
     }
 }
