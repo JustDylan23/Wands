@@ -67,8 +67,6 @@ public final class Wands extends JavaPlugin {
         return plugin;
     }
 
-
-
     public SpellRegistry getSpellRegistry() {
         return spellRegistry;
     }
