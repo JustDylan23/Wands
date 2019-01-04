@@ -16,7 +16,7 @@ import java.util.function.Function;
  * Utils for directly modifying {@link ItemStack}
  *
  * @author Dylan
- * @since BETA-1.0
+ * @since BETA-1.0.0
  */
 
 public class ItemUtil {
