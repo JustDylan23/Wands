@@ -13,22 +13,31 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
+ * Utils for directly modifying {@link ItemStack}
+ *
  * @author Dylan
+ * @since BETA-1.0
  */
 
 public class ItemUtil {
 
     private ItemStack itemStack;
 
+    /**
+     * Creates ItemUtil for {@link ItemStack} in the parameter.
+     *
+     * @param itemStack {@link ItemStack}
+     */
+
     public ItemUtil(ItemStack itemStack) {
         this.itemStack = itemStack;
     }
 
     /**
-     * This method is for renaming the itemStack.
+     * Sets name of {@link ItemStack}
      *
-     * @param name The new name of the itemStack.
-     * @return Returns an instance of itself.
+     * @param name Name of {@link ItemStack}
+     * @return Instance of itself.
      */
 
     public ItemUtil setName(String name) {
@@ -39,10 +48,10 @@ public class ItemUtil {
     }
 
     /**
-     * This method is for setting the lore of the itemStack.
+     * Sets lore of {@link ItemStack}
      *
-     * @param lore The new lore of the itemStack.
-     * @return Returns an instance of itself.
+     * @param lore Lore of {@link ItemStack}
+     * @return Instance of itself.
      */
 
     public ItemUtil setLore(String... lore) {
@@ -52,88 +61,13 @@ public class ItemUtil {
         return this;
     }
 
-    /**
-     * This method is for setting nbt with a key and value.
-     *
-     * @param key NBT key.
-     * @param nbtBase The value of the key.
-     * @return Returns an instance of itself.
-     *
-     * Example of usage:
-     * @<code>
-     *     instance.setNbtTag("key", new NBTTagInt(i))
-     * </code>
-     */
-
-    public ItemUtil setNbtTag(@Nonnull String key, @Nonnull NBTBase nbtBase) {
-        modifyNbt(tag -> tag.set(key, nbtBase));
-        return this;
-    }
-
-    /**
-     * This method gives the user access to all the getter methods of the
-     * NBTTagCompound and returns the return value of that method.
-     *
-     * @return Returns value requested in the converter parameter.
-     *
-     * Example of usage:
-     * @<code>
-     *     instance.getTag(tag -> tag.getInt("key"));
-     * </code>
-     */
-
-    public <T> T getNbtTag(Function<NBTTagCompound, T> converter) {
-        net.minecraft.server.v1_13_R2.ItemStack nmsItem = CraftItemStack.asNMSCopy(itemStack);
-        NBTTagCompound compound = nmsItem.getTag() != null ? nmsItem.getTag() : new NBTTagCompound();
-        return converter.apply(compound);
-    }
-
-    /**
-     * This method removes a key from the NBTTagCompound.
-     *
-     * @see NBTTagCompound
-     *
-     * @param key The key that will be removed from the NBTTagCompound.
-     * @return Returns an instance of itself.
-     *
-     */
-
-    public ItemUtil removeNbtTag(String key) {
-        if (hasNbtTag(key)) {
-            modifyNbt(tag -> tag.remove(key));
-        }
-        return this;
-    }
-
-    /**
-     * This method checks if the NBTTagCompound contains a key.
-     *
-     * @see NBTTagCompound
-     *
-     * @param key The key for the NBTTagCompound
-     * @return Returns a boolean based on whether the NBTTagCompound contains
-     * the key or not.
-     */
-
-    public boolean hasNbtTag(String key) {
-        return getNbtTag(tag -> tag.hasKey(key));
-    }
-
-    /**
+    /*
      * This method is for modifying the NBTTagCompound, the Consumer as
      * parameter is supposed to give the user a lot of freedom of which
      * setter method he/she will use.
-     *
-     * @param consumer Consumer interface for modifying the NBTTagCompound
-     *
-     * Example of usage:
-     * @<code>
-     *     instance.modifyNbt(tag -> tag.setInt(key, value));
-     * </code>
-     *
      */
 
-    private void modifyNbt(@Nonnull Consumer<NBTTagCompound> consumer) {
+    private void modifyNbt(Consumer<NBTTagCompound> consumer) {
         net.minecraft.server.v1_13_R2.ItemStack nmsItem = CraftItemStack.asNMSCopy(itemStack);
         NBTTagCompound compound = nmsItem.getTag() != null ? nmsItem.getTag() : new NBTTagCompound();
         consumer.accept(compound);
@@ -143,10 +77,50 @@ public class ItemUtil {
     }
 
     /**
-     * This method returns the ItemStack used for this util
+     * <p>Sets any NBT tag.
      *
-     * @return Returns the ItemStack used in the constructor.
+     * <p><i>Example of usage:</i><br>
+     * {@code
+     * instance.setNbtTag("key", new NBTTagInt(i));}
+     *
+     * @param key     The key the {@link NBTBase} will be stored under.
+     * @param nbtBase The {@link NBTBase} that will be stored under key.
+     * @return Instance of itself
      */
+
+    public ItemUtil setNbtTag(@Nonnull String key, @Nonnull NBTBase nbtBase) {
+        modifyNbt(tag -> tag.set(key, nbtBase));
+        return this;
+    }
+
+    /**
+     * <p>Allows user to use any getter method from {@link NBTTagCompound}.
+     *
+     * <p><i>Example of usage: </i><br>
+     * {@code instance.getTag(tag -> tag.getInt("key"));}
+     *
+     * @param function Function for getter method.
+     * @param <T>      Type of the result of the method in function.
+     * @return Result of getter method in function.
+     */
+
+    public <T> T getNbtTag(Function<NBTTagCompound, T> function) {
+        net.minecraft.server.v1_13_R2.ItemStack nmsItem = CraftItemStack.asNMSCopy(itemStack);
+        NBTTagCompound compound = nmsItem.getTag() != null ? nmsItem.getTag() : new NBTTagCompound();
+        return function.apply(compound);
+    }
+
+    public ItemUtil removeNbtTag(String key) {
+        if (hasNbtTag(key)) {
+            modifyNbt(tag -> tag.remove(key));
+        }
+        return this;
+    }
+
+    public boolean hasNbtTag(String key) {
+        return getNbtTag(tag -> tag.hasKey(key));
+    }
+
     public ItemStack getItemStack() {
         return itemStack;
     }
