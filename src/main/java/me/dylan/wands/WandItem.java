@@ -10,9 +10,11 @@ import java.util.Map;
 
 public final class WandItem extends ItemUtil {
 
-   private String spellIndexTag = "SpellIndex";
-   private String spellsListTag= "Spells";
-   private String verifiedTag = "VerifiedAsWand";
+    private final String spellIndexTag = "SpellIndex";
+    private final String spellsListTag = "Spells";
+    private final String verifiedTag = "VerifiedAsWand";
+
+
 
     public WandItem(ItemStack itemStack) {
         super(itemStack);
