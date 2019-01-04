@@ -62,6 +62,11 @@
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>
         </repository>
+
+        <repository>
+            <id>maven-repository</id>
+            <url>file:///${project.basedir}/maven-repository</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -74,9 +79,8 @@
         <dependency>
             <groupId>com.destroystokyo.paper</groupId>
             <artifactId>paper</artifactId>
-            <systemPath>${basedir}\patched_1.13.2.jar</systemPath>
-            <scope>system</scope>
             <version>1.13.2-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>
