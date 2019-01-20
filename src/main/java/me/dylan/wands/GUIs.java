@@ -1,6 +1,5 @@
 package me.dylan.wands;
 
-import net.minecraft.server.v1_13_R2.NBTTagInt;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -32,22 +31,15 @@ public final class GUIs implements Listener {
 
     static {
         wandsGUI = Bukkit.createInventory(null, 27, Wands.PREFIX + "wands");
-
-        WandItem empireWand = new WandItem(new ItemStack(Material.BLAZE_ROD));
-        empireWand.setName("&cEmpire Wand");
-        empireWand.markAsWand().setSpells(1, 2, 3);
-        wandsGUI.setItem(10, empireWand.getItemStack());
-
-        ItemUtil therosDagger = new ItemUtil(new ItemStack(Material.MUSIC_DISC_MALL));
-        therosDagger.setNbtTag("therosdagger", new NBTTagInt(1));
-        therosDagger.setName("&8Theros Dagger");
-        wandsGUI.setItem(13, therosDagger.getItemStack());
+        wandsGUI.setItem(10, MagicalItems.EMPIRE_WAND.getItemStack());
+        wandsGUI.setItem(13, MagicalItems.THEROS_DAGGER.getItemStack());
     }
 
     public static void openGUI(Player player) {
         player.openInventory(mainGUI);
     }
 
+    @SuppressWarnings("deprecation")
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         if (event.getClickedInventory() == null) {
@@ -85,9 +77,9 @@ public final class GUIs implements Listener {
     }
 
     private void updateStatus(Player player) {
-        Wands.ENABLED = !Wands.ENABLED;
+        Wands.toggleStatus();
         ItemUtil status;
-        if (Wands.ENABLED) {
+        if (Wands.getStatus()) {
             status = new ItemUtil(new ItemStack(Material.GREEN_TERRACOTTA));
             status.setName("&6Status: &aEnabled");
             mainGUI.setItem(16, status.getItemStack());
