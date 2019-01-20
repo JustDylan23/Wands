@@ -1,12 +1,7 @@
 package me.dylan.wands;
 
-import net.minecraft.server.v1_13_R2.ChatComponentText;
-import net.minecraft.server.v1_13_R2.ChatMessageType;
-import net.minecraft.server.v1_13_R2.PacketPlayOutChat;
-import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
-import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,7 +14,7 @@ public final class SpellManager implements Listener {
 
     @EventHandler
     public void playerInteractEvent(PlayerInteractEvent event) {
-        if (!Wands.ENABLED) return;
+        if (!Wands.getStatus()) return;
         Player player = event.getPlayer();
         ItemStack handItem = player.getInventory().getItemInMainHand();
         if (handItem != null) {
@@ -55,20 +50,13 @@ public final class SpellManager implements Listener {
         wandItem.setSpellIndex(index);
 
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.5F, 0.5F);
-        sendActionBar((CraftPlayer) player,
-                ChatColor.translateAlternateColorCodes('&',
-                        "&6Current spell: &7&l" + wandItem.getSelectedSpell().getName()));
+
+        Wands.sendActionBar(player, "§6Current spell: §7§l" + wandItem.getSelectedSpell().getName());
     }
 
     private void onCast(Player player) {
         WandItem wandItem = new WandItem(player.getInventory().getItemInMainHand());
         wandItem.getSelectedSpell().cast(player);
-    }
-
-    private void sendActionBar(CraftPlayer player, String message) {
-        if (player.getHandle().playerConnection != null && message != null && !message.isEmpty()) {
-            player.getHandle().playerConnection.sendPacket(new PacketPlayOutChat(new ChatComponentText(message), ChatMessageType.GAME_INFO));
-        }
     }
 }
 

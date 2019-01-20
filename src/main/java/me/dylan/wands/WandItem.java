@@ -1,12 +1,11 @@
 package me.dylan.wands;
 
-import net.minecraft.server.v1_13_R2.NBTTagInt;
-import net.minecraft.server.v1_13_R2.NBTTagIntArray;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings({"WeakerAccess", "UnusedReturnValue", "RedundantSuppression"})
 public final class WandItem extends ItemUtil {
 
     private final String spellIndexTag = "SpellIndex";
@@ -14,13 +13,12 @@ public final class WandItem extends ItemUtil {
     private final String verifiedTag = "VerifiedAsWand";
 
 
-
     public WandItem(ItemStack itemStack) {
         super(itemStack);
     }
 
     public WandItem setSpellIndex(int index) {
-        setNbtTag(spellIndexTag, new NBTTagInt(index));
+        setNbtTagInt(spellIndexTag, index);
         return this;
     }
 
@@ -33,7 +31,7 @@ public final class WandItem extends ItemUtil {
     }
 
     public WandItem setSpells(int... spells) {
-        setNbtTag(spellsListTag, new NBTTagIntArray(spells));
+        setNbtTagIntArray(spellsListTag, spells);
         return this;
     }
 
@@ -58,7 +56,7 @@ public final class WandItem extends ItemUtil {
     }
 
     public WandItem markAsWand() {
-        this.setNbtTag(verifiedTag, new NBTTagInt(1));
+        this.setNbtTagInt(verifiedTag, 1);
         return this;
     }
 

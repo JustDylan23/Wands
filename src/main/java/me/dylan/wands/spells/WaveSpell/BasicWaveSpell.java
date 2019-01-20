@@ -13,19 +13,19 @@ public abstract class BasicWaveSpell extends Spell {
 
     private final int range;
 
-    public BasicWaveSpell(String spellName, int range) {
+    BasicWaveSpell(String spellName, int range) {
         super(spellName);
         this.range = range;
     }
 
-    protected final void cast(Player player, Consumer<Location> consumer) {
+    final void trigger(Player player, Consumer<Location> consumer) {
         Location pLoc = player.getEyeLocation();
         Vector direction = player.getLocation().getDirection().normalize();
 
         ArrayList<Location> locations = new ArrayList<>();
         for (int i = 1; i <= range; i++) {
             Location location = direction.clone().multiply(i).toLocation(player.getWorld()).add(pLoc);
-            Bukkit.getScheduler().runTaskLater(plugin, () -> consumer.accept(location), 0);
+            Bukkit.getScheduler().runTaskLater(plugin, () -> consumer.accept(location), i);
         }
     }
 }

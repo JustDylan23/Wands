@@ -2,6 +2,8 @@ package me.dylan.wands;
 
 import net.minecraft.server.v1_13_R2.NBTBase;
 import net.minecraft.server.v1_13_R2.NBTTagCompound;
+import net.minecraft.server.v1_13_R2.NBTTagInt;
+import net.minecraft.server.v1_13_R2.NBTTagIntArray;
 import org.bukkit.ChatColor;
 import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
@@ -18,10 +20,10 @@ import java.util.function.Function;
  * @author Dylan
  * @since BETA-1.0.0
  */
-
+@SuppressWarnings({"WeakerAccess", "UnusedReturnValue", "RedundantSuppression"})
 public class ItemUtil {
 
-    private ItemStack itemStack;
+    private final ItemStack itemStack;
 
     /**
      * Creates ItemUtil for {@link ItemStack} in the parameter.
@@ -88,8 +90,18 @@ public class ItemUtil {
      * @return Instance of itself
      */
 
-    public ItemUtil setNbtTag(@Nonnull String key, @Nonnull NBTBase nbtBase) {
+    public ItemUtil setNbtTag(String key, @Nonnull NBTBase nbtBase) {
         modifyNbt(tag -> tag.set(key, nbtBase));
+        return this;
+    }
+
+    public ItemUtil setNbtTagInt(String key, int i) {
+        modifyNbt(tag -> tag.set(key, new NBTTagInt(i)));
+        return this;
+    }
+
+    public ItemUtil setNbtTagIntArray(String key, int... i) {
+        modifyNbt(tag -> tag.set(key, new NBTTagIntArray(i)));
         return this;
     }
 
