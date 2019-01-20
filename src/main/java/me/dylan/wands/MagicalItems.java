@@ -17,7 +17,7 @@ public enum MagicalItems {
         public ItemStack getItemStack() {
             WandItem item = new WandItem(new ItemStack(Material.BLAZE_ROD));
             item.setName("&cEmpire Wand");
-            return item.markAsWand().setSpells(1, 2, 3).getItemStack();
+            return item.markAsWand().setSpells(1, 2, 3, 4).getItemStack();
         }
     };
 

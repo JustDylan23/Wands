@@ -2,10 +2,7 @@ package me.dylan.wands.artifacts;
 
 import me.dylan.wands.ItemUtil;
 import me.dylan.wands.Wands;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -29,6 +26,7 @@ public final class TherosDagger implements Listener {
 
     private final Wands plugin = Wands.getInstance();
     private final String leapKey = "therosJump";
+    private final String sneakKey = "therosInvisable";
 
     private boolean hasDagger(Player player) {
         if (!Wands.getStatus()) return false;
@@ -60,6 +58,8 @@ public final class TherosDagger implements Listener {
                 victim.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 100, 1, false), true);
                 victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 100, 5, true), true);
                 event.setDamage(4);
+                player.getWorld().playSound(player.getLocation(), Sound.ENTITY_GUARDIAN_HURT, SoundCategory.MASTER, 3.0F, 1.0F);
+                player.getWorld().playSound(player.getLocation(), Sound.ENTITY_GUARDIAN_HURT, SoundCategory.MASTER, 3.0F, 0.3F);
             }
         }
     }
@@ -72,9 +72,9 @@ public final class TherosDagger implements Listener {
                 if (event.getHand().equals(EquipmentSlot.HAND)) {
                     Action a = event.getAction();
                     if (a == Action.RIGHT_CLICK_AIR || a == Action.RIGHT_CLICK_BLOCK) {
-                        if (!player.hasMetadata(leapKey)) {
+                        if (!player.hasMetadata(leapKey) && !player.hasMetadata(sneakKey)) {
                             player.setMetadata(leapKey, new FixedMetadataValue(plugin, true));
-
+                            player.getWorld().playSound(player.getLocation(), Sound.ENTITY_LLAMA_SWAG, SoundCategory.MASTER, 3.0F, 1.0F);
                             Vector direction = player.getLocation().getDirection().setY(0).normalize().setY(1.2);
                             player.setVelocity(direction);
                             new BukkitRunnable() {
@@ -82,7 +82,8 @@ public final class TherosDagger implements Listener {
                                 public void run() {
                                     if (player.isOnGround()) {
                                         if (player.hasMetadata(leapKey)) {
-                                            player.removeMetadata(leapKey, plugin);
+                                            Bukkit.getScheduler().runTaskLater(plugin, () ->
+                                                    player.removeMetadata(leapKey, plugin), 2);
                                             cancel();
                                         }
                                     }
@@ -99,7 +100,6 @@ public final class TherosDagger implements Listener {
     public void fallDamage(EntityDamageEvent event) {
         Entity entity = event.getEntity();
         if (entity instanceof Player) {
-            Wands.sendConsole("");
             if (event.getCause() == EntityDamageEvent.DamageCause.FALL) {
                 if (entity.hasMetadata(leapKey)) {
                     event.setCancelled(true);
@@ -114,16 +114,20 @@ public final class TherosDagger implements Listener {
         Player player = event.getPlayer();
         if (hasDagger(player)) {
             if (event.isSneaking() && player.isOnGround()) {
+                player.setMetadata(sneakKey, new FixedMetadataValue(plugin, true));
                 Location location = player.getLocation();
                 location.getWorld().playSound(location, Sound.ENTITY_ZOMBIE_VILLAGER_CURE, 1.0f, 2f);
                 location.getWorld().spawnParticle(Particle.SMOKE_LARGE, location, 15, 0.5, 0.2, 0.5, 0.1, null, true);
                 location.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, location, 20, 0.5, 0.5, 0.5, 0.1, null, true);
                 player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 6000, 0, true), true);
                 Wands.sendActionBar(player, "§6You are §aInvisible");
-            } else {
-                player.removePotionEffect(PotionEffectType.INVISIBILITY);
-                Wands.sendActionBar(player, "§6You are §cVisible");
+                return;
             }
+        }
+        if (player.hasMetadata(sneakKey)){
+            player.removePotionEffect(PotionEffectType.INVISIBILITY);
+            Wands.sendActionBar(player, "§6You are §cVisible");
+            player.removeMetadata(sneakKey, plugin);
         }
     }
 

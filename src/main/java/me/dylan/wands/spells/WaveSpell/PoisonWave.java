@@ -3,7 +3,6 @@ package me.dylan.wands.spells.WaveSpell;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -24,17 +23,10 @@ public final class PoisonWave extends BasicWaveSpell {
 
             getNearbyDamageables(loc, 2.2).forEach(entity -> {
                 if (!entity.equals(player)) {
-                    player.damage(2, entity);
+                    entity.damage(2, player);
                     ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.POISON, 60, 4, false));
                 }
             });
-
-            for (Entity entity : getNearbyDamageables(loc, 2.2)) {
-                if (!entity.equals(player)) {
-                    player.damage(2, entity);
-                    ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.POISON, 60, 4, false));
-                }
-            }
         });
     }
 }
