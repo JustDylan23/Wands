@@ -29,13 +29,15 @@ public class Comet extends BasicProjectileSpell {
         loc.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, loc, 0, 0.0, 0.0, 0.0, 0.0, null, true);
 
         getNearbyDamageables(loc, 4).forEach(entity -> {
-            player.damage(10, entity);
-            entity.setFireTicks(60);
-            Location point = loc.subtract(0.0, 1.2, 0.0);
-            Location entityPos = entity.getLocation();
-            Vector direction = entityPos.subtract(point).toVector().normalize();
-            direction.multiply(1);
-            entity.setVelocity(direction);
+            if (entity != player) {
+                entity.damage(10, player);
+                entity.setFireTicks(60);
+                Location point = loc.subtract(0.0, 1.2, 0.0);
+                Location entityPos = entity.getLocation();
+                Vector direction = entityPos.subtract(point).toVector().normalize();
+                direction.multiply(1);
+                entity.setVelocity(direction);
+            }
         });
 
         for (int i = 0; i < 3; ++i) {

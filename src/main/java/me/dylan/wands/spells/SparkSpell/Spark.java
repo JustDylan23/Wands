@@ -4,7 +4,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -25,12 +24,12 @@ public class Spark extends BasicSparkSpell {
             Bukkit.getScheduler().runTaskLater(plugin, () ->
                     loc.getWorld().playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, SoundCategory.MASTER, 4.0F, 1.0F), 10L);
 
-            for (Entity entity : getNearbyDamageables(loc, 3.2)) {
+            getNearbyDamageables(loc, 2.2).forEach(entity -> {
                 if (!entity.equals(player)) {
-                    player.damage(10, entity);
+                    entity.damage(10, player);
                     entity.setVelocity(new Vector(0, 0, 0));
                 }
-            }
+            });
         });
     }
 }
