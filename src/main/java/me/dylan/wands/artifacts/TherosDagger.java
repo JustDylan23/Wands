@@ -33,7 +33,7 @@ public final class TherosDagger implements Listener {
         ItemStack tool = player.getInventory().getItemInMainHand();
         if (tool != null) {
             ItemUtil itemUtil = new ItemUtil(tool);
-            return itemUtil.hasNbtTag("therosdagger");
+            return itemUtil.hasNbtTag("therosDagger");
         }
         return false;
     }
@@ -124,7 +124,7 @@ public final class TherosDagger implements Listener {
                 return;
             }
         }
-        if (player.hasMetadata(sneakKey)){
+        if (player.hasMetadata(sneakKey)) {
             player.removePotionEffect(PotionEffectType.INVISIBILITY);
             Wands.sendActionBar(player, "§6You are §cVisible");
             player.removeMetadata(sneakKey, plugin);

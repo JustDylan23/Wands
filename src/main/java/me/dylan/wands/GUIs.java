@@ -33,6 +33,7 @@ public final class GUIs implements Listener {
         wandsGUI = Bukkit.createInventory(null, 27, Wands.PREFIX + "wands");
         wandsGUI.setItem(10, MagicalItems.EMPIRE_WAND.getItemStack());
         wandsGUI.setItem(13, MagicalItems.THEROS_DAGGER.getItemStack());
+        wandsGUI.setItem(16, MagicalItems.EMPIRE_BOW.getItemStack());
     }
 
     public static void openGUI(Player player) {

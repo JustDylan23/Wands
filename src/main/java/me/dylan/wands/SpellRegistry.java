@@ -9,12 +9,14 @@ public final class SpellRegistry {
 
     public void registerSpell(int index, Spell spell) {
         if (spellRegister.containsKey(index)) {
-            throw new IllegalArgumentException("A spell with index: " + index + " has already been registered");
+            throw new IllegalArgumentException("Spell with index: " + index + " has already been registered!");
         }
         spellRegister.put(index, spell);
     }
 
     public Spell getSpell(int index) {
-        return spellRegister.get(index);
+        Spell spell = spellRegister.get(index);
+        if (spell == null) throw new NullPointerException("Spell with is index " + index + " not registered!");
+        return spell;
     }
 }
