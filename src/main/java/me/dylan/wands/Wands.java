@@ -1,12 +1,13 @@
 package me.dylan.wands;
 
+import me.dylan.wands.artifacts.EmpireBow;
 import me.dylan.wands.artifacts.TherosDagger;
 import me.dylan.wands.commandhandler.ConstructTabCompleter;
 import me.dylan.wands.commandhandler.MainCommandHandler;
-import me.dylan.wands.spells.ProjectileSpell.Comet;
-import me.dylan.wands.spells.SparkSpell.Launch;
-import me.dylan.wands.spells.SparkSpell.Spark;
-import me.dylan.wands.spells.WaveSpell.PoisonWave;
+import me.dylan.wands.spells.Comet;
+import me.dylan.wands.spells.Launch;
+import me.dylan.wands.spells.PoisonWave;
+import me.dylan.wands.spells.Spark;
 import net.minecraft.server.v1_13_R2.ChatComponentText;
 import net.minecraft.server.v1_13_R2.ChatMessageType;
 import net.minecraft.server.v1_13_R2.PacketPlayOutChat;
@@ -43,12 +44,12 @@ public final class Wands extends JavaPlugin {
 
         registerListener(new GUIs(), new SpellManager());
 
-        registerListener(new TherosDagger());
+        registerListener(new TherosDagger(), new EmpireBow());
 
-        spellRegistry.registerSpell(1, new Comet());
-        spellRegistry.registerSpell(2, new Spark());
-        spellRegistry.registerSpell(3, new PoisonWave());
-        spellRegistry.registerSpell(4, new Launch());
+        spellRegistry.registerSpell(1, Comet.getInstance());
+        spellRegistry.registerSpell(2, Spark.getInstance());
+        spellRegistry.registerSpell(3, Launch.getInstance());
+        spellRegistry.registerSpell(4, PoisonWave.getInstance());
     }
 
     public void onDisable() {
