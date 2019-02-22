@@ -44,4 +44,5 @@ public class Launch extends Spell {
 
     private static class InstanceHolder {
         private final static Launch INSTANCE = new Launch();
-    }}
+    }
+}

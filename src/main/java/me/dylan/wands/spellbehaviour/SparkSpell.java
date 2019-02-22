@@ -13,8 +13,8 @@ public class SparkSpell extends SpellBehaviour {
 
     private final int effectDistance;
 
-    private SparkSpell(int effectDistance, float effectAreaRange, Consumer<Location> castEffects, Consumer<Location> visualEffects, Consumer<Entity> entityEffects, int entityDamage) {
-        super(entityDamage, effectAreaRange, castEffects, visualEffects, entityEffects);
+    private SparkSpell(int entityDamage, float effectAreaRange, float pushSpeed, Consumer<Location> castEffects, Consumer<Location> visualEffects, Consumer<Entity> entityEffects, int effectDistance) {
+        super(entityDamage, effectAreaRange, pushSpeed, castEffects, visualEffects, entityEffects);
         this.effectDistance = effectDistance;
     }
 
@@ -22,13 +22,16 @@ public class SparkSpell extends SpellBehaviour {
     public void executeFrom(Player player) {
         Location loc = getSpellLocation(player);
         Iterable<Damageable> effectedEntities = getNearbyDamageables(player, loc, effectAreaRange);
-
+        castEffects.accept(player.getLocation());
         effectedEntities.forEach(entity -> {
             entity.damage(entityDamage, player);
             entity.setVelocity(new Vector(0, 0, 0));
             entityEffects.accept(entity);
+
+            pushFrom(loc, entity, pushSpeed);
         });
         visualEffects.accept(loc);
+
     }
 
     private Location getSpellLocation(Player player) {
@@ -49,7 +52,7 @@ public class SparkSpell extends SpellBehaviour {
         private int effectDistance = 30;
 
         public SparkSpell build() {
-            return new SparkSpell(effectDistance, effectAreaRange, castEffects, visualEffects, entityEffects, entityDamage);
+            return new SparkSpell(entityDamage, effectAreaRange, pushSpeed, castEffects, visualEffects, entityEffects, effectDistance);
         }
 
         @Override

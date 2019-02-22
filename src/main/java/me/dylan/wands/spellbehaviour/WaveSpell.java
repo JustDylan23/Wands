@@ -13,8 +13,8 @@ public class WaveSpell extends SpellBehaviour {
 
     private final int effectDistance;
 
-    private WaveSpell(int entityDamage, float effectAreaRange, Consumer<Location> castEffects, Consumer<Location> visualEffects, Consumer<Entity> entityEffects, int effectDistance) {
-        super(entityDamage, effectAreaRange, castEffects, visualEffects, entityEffects);
+    private WaveSpell(int entityDamage, float effectAreaRange, float pushSpeed, Consumer<Location> castEffects, Consumer<Location> visualEffects, Consumer<Entity> entityEffects, int effectDistance) {
+        super(entityDamage, effectAreaRange, pushSpeed, castEffects, visualEffects, entityEffects);
         this.effectDistance = effectDistance;
     }
 
@@ -22,18 +22,20 @@ public class WaveSpell extends SpellBehaviour {
     public void executeFrom(Player player) {
         Vector direction = player.getLocation().getDirection().normalize();
         String metaID = System.currentTimeMillis() + "";
+        castEffects.accept(player.getLocation());
         for (int i = 1; i <= effectDistance; i++) {
-            Location location = direction.clone().multiply(i).toLocation(player.getWorld()).add(player.getEyeLocation());
-            if (!location.getBlock().isPassable()) {
+            Location loc = direction.clone().multiply(i).toLocation(player.getWorld()).add(player.getEyeLocation());
+            if (!loc.getBlock().isPassable()) {
                 return;
             }
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                visualEffects.accept(location);
-                getNearbyDamageables(player, location, effectAreaRange).forEach(entity -> {
+                visualEffects.accept(loc);
+                getNearbyDamageables(player, loc, effectAreaRange).forEach(entity -> {
                     if (!entity.hasMetadata(metaID)) {
                         player.setMetadata(metaID, new FixedMetadataValue(plugin, true));
-                        entityEffects.accept(entity);
                         damage(entityDamage, player, entity);
+                        entityEffects.accept(entity);
+                        pushFrom(loc, entity, pushSpeed);
                         Bukkit.getScheduler().runTaskLater(plugin, () -> {
                             if (entity.isValid()) {
                                 entity.removeMetadata(metaID, plugin);
@@ -52,7 +54,7 @@ public class WaveSpell extends SpellBehaviour {
 
         @Override
         public WaveSpell build() {
-            return new WaveSpell(effectDistance, effectAreaRange, castEffects, visualEffects, entityEffects, entityDamage);
+            return new WaveSpell(entityDamage, effectAreaRange, pushSpeed, castEffects, visualEffects, entityEffects, effectDistance);
         }
 
         @Override
