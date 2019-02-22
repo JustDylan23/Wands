@@ -17,6 +17,7 @@ public class Comet extends Spell {
                 .setLifeTime(20)
                 .setEntityDamage(10)
                 .setPushSpeed(1)
+                .setEffectAreaRange(4.5F)
                 .setCastEffects(loc ->
                         loc.getWorld().playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_BLAST, SoundCategory.MASTER, 5F, 1F)
                 )

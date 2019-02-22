@@ -51,15 +51,18 @@ public final class TherosDagger implements Listener {
     public void onAttack(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player) {
             Player player = (Player) event.getDamager();
-            LivingEntity victim = (LivingEntity) event.getEntity();
-            if (hasDagger(player)) {
-                victim.removePotionEffect(PotionEffectType.SPEED);
-                victim.removePotionEffect(PotionEffectType.BLINDNESS);
-                victim.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 100, 1, false), true);
-                victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 100, 5, true), true);
-                event.setDamage(4);
-                player.getWorld().playSound(player.getLocation(), Sound.ENTITY_GUARDIAN_HURT, SoundCategory.MASTER, 3.0F, 1.0F);
-                player.getWorld().playSound(player.getLocation(), Sound.ENTITY_GUARDIAN_HURT, SoundCategory.MASTER, 3.0F, 0.3F);
+            LivingEntity victim;
+            if (event.getEntity() instanceof LivingEntity) {
+                victim = (LivingEntity) event.getEntity();
+                if (hasDagger(player)) {
+                    victim.removePotionEffect(PotionEffectType.SPEED);
+                    victim.removePotionEffect(PotionEffectType.BLINDNESS);
+                    victim.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 100, 1, false), true);
+                    victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 100, 5, true), true);
+                    event.setDamage(4);
+                    player.getWorld().playSound(player.getLocation(), Sound.ENTITY_GUARDIAN_HURT, SoundCategory.MASTER, 3.0F, 1.0F);
+                    player.getWorld().playSound(player.getLocation(), Sound.ENTITY_GUARDIAN_HURT, SoundCategory.MASTER, 3.0F, 0.3F);
+                }
             }
         }
     }
