@@ -7,7 +7,8 @@ import java.util.function.Consumer;
 
 public abstract class SpellBuilder<T extends SpellBuilder, S extends SpellBehaviour> {
 
-    private static final Consumer<?> EMPTY_CONSUMER = e -> {};
+    private static final Consumer<?> EMPTY_CONSUMER = e -> {
+    };
 
     @SuppressWarnings("unchecked")
     <V> Consumer<V> emptyConsumer() {

@@ -22,7 +22,7 @@ public abstract class SpellBehaviour {
     final Consumer<Location> visualEffects;
     final Consumer<Entity> entityEffects;
 
-    protected SpellBehaviour(int entityDamage, float effectAreaRange, float pushSpeed, Consumer<Location> castEffects, Consumer<Location> visualEffects, Consumer<Entity> entityEffects) {
+    SpellBehaviour(int entityDamage, float effectAreaRange, float pushSpeed, Consumer<Location> castEffects, Consumer<Location> visualEffects, Consumer<Entity> entityEffects) {
         this.entityDamage = entityDamage;
         this.effectAreaRange = effectAreaRange;
         this.pushSpeed = pushSpeed;
