@@ -5,7 +5,6 @@ import org.bukkit.Location;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 
 import java.util.function.Consumer;
@@ -14,17 +13,19 @@ import java.util.stream.Collectors;
 @SuppressWarnings("")
 public abstract class SpellBehaviour {
 
-    final static Plugin plugin = Wands.getInstance();
+    final static Wands plugin = Wands.getInstance();
 
     final int entityDamage;
     final float effectAreaRange;
+    final float pushSpeed;
     final Consumer<Location> castEffects;
     final Consumer<Location> visualEffects;
     final Consumer<Entity> entityEffects;
 
-    protected SpellBehaviour(int entityDamage, float effectAreaRange, Consumer<Location> castEffects, Consumer<Location> visualEffects, Consumer<Entity> entityEffects) {
+    protected SpellBehaviour(int entityDamage, float effectAreaRange, float pushSpeed, Consumer<Location> castEffects, Consumer<Location> visualEffects, Consumer<Entity> entityEffects) {
         this.entityDamage = entityDamage;
         this.effectAreaRange = effectAreaRange;
+        this.pushSpeed = pushSpeed;
         this.castEffects = castEffects;
         this.visualEffects = visualEffects;
         this.entityEffects = entityEffects;
@@ -44,5 +45,11 @@ public abstract class SpellBehaviour {
     void damage(int damage, Entity source, Damageable victim) {
         victim.damage(damage, source);
         victim.setVelocity(new Vector(0, 0, 0));
+    }
+
+    void pushFrom(Location sLoc, Entity entity, float speed) {
+        if (speed != 0) {
+            entity.setVelocity(entity.getLocation().subtract(sLoc).toVector().normalize().multiply(speed));
+        }
     }
 }
