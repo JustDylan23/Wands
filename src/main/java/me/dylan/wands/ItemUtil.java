@@ -20,6 +20,7 @@ import java.util.function.Function;
  * @author Dylan
  * @since BETA-1.0.0
  */
+
 @SuppressWarnings({"WeakerAccess", "UnusedReturnValue", "RedundantSuppression"})
 public class ItemUtil<T extends ItemUtil> {
 
@@ -40,39 +41,22 @@ public class ItemUtil<T extends ItemUtil> {
         return (T) this;
     }
 
-    /**
-     * Sets name of {@link ItemStack}
-     *
-     * @param name Name of {@link ItemStack}
-     * @return Instance of itself.
-     */
+    public T setItemMeta(Consumer<ItemMeta> consumer) {
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        consumer.accept(itemMeta);
+        itemStack.setItemMeta(itemMeta);
+        return getInstance();
+    }
 
     public T setName(String name) {
-        ItemMeta meta = itemStack.getItemMeta();
-        meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', name));
-        itemStack.setItemMeta(meta);
+        setItemMeta(meta -> meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', name)));
         return getInstance();
     }
-
-    /**
-     * Sets lore of {@link ItemStack}
-     *
-     * @param lore Lore of {@link ItemStack}
-     * @return Instance of itself.
-     */
 
     public T setLore(String... lore) {
-        ItemMeta meta = itemStack.getItemMeta();
-        meta.setLore(Arrays.asList(lore));
-        itemStack.setItemMeta(meta);
+        setItemMeta(meta -> meta.setLore(Arrays.asList(lore)));
         return getInstance();
     }
-
-    /*
-     * This method is for modifying the NBTTagCompound, the Consumer as
-     * parameter is supposed to give the user a lot of freedom of which
-     * setter method he/she will use.
-     */
 
     private void modifyNbt(Consumer<NBTTagCompound> consumer) {
         net.minecraft.server.v1_13_R2.ItemStack nmsItem = CraftItemStack.asNMSCopy(itemStack);
@@ -84,9 +68,9 @@ public class ItemUtil<T extends ItemUtil> {
     }
 
     /**
-     * <p>Sets any NBT tag.
+     * Sets any NBT tag.
      *
-     * <p><i>Example of usage:</i><br>
+     * Example of usage:
      * {@code
      * instance.setNbtTag("key", new NBTTagInt(i));}
      *
@@ -111,9 +95,9 @@ public class ItemUtil<T extends ItemUtil> {
     }
 
     /**
-     * <p>Allows user to use any getter method from {@link NBTTagCompound}.
+     * Allows user to use any getter method from {@link NBTTagCompound}.
      *
-     * <p><i>Example of usage: </i><br>
+     * Example of usage:
      * {@code instance.getTag(tag -> tag.getInt("key"));}
      *
      * @param function Function for getter method.
