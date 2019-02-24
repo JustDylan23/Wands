@@ -21,24 +21,24 @@ public class WaveSpell extends SpellBehaviour {
     @Override
     public void executeFrom(Player player) {
         Vector direction = player.getLocation().getDirection().normalize();
-        String metaID = System.currentTimeMillis() + "";
+        String metaId = System.currentTimeMillis() + "";
         castEffects.accept(player.getLocation());
         for (int i = 1; i <= effectDistance; i++) {
             Location loc = direction.clone().multiply(i).toLocation(player.getWorld()).add(player.getEyeLocation());
             if (!loc.getBlock().isPassable()) {
                 return;
             }
-            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            Bukkit.getScheduler().runTaskLater(PLUGIN, () -> {
                 visualEffects.accept(loc);
                 getNearbyDamageables(player, loc, effectAreaRange).forEach(entity -> {
-                    if (!entity.hasMetadata(metaID)) {
-                        player.setMetadata(metaID, new FixedMetadataValue(plugin, true));
+                    if (!entity.hasMetadata(metaId)) {
+                        player.setMetadata(metaId, new FixedMetadataValue(PLUGIN, true));
                         damage(entityDamage, player, entity);
                         entityEffects.accept(entity);
                         pushFrom(loc, entity, pushSpeed);
-                        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                        Bukkit.getScheduler().runTaskLater(PLUGIN, () -> {
                             if (entity.isValid()) {
-                                entity.removeMetadata(metaID, plugin);
+                                entity.removeMetadata(metaId, PLUGIN);
                             }
                         }, effectDistance);
                     }
