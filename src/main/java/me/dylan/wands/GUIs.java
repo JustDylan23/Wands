@@ -69,7 +69,7 @@ public final class GUIs implements Listener {
             if (clickedSlot == 13) {
                 player.openInventory(wandsGUI);
             } else if (clickedSlot == 16) {
-                updateStatus(player);
+                updateStatus();
             }
 
         } else if (inventory.equals(wandsGUI)) {
@@ -77,7 +77,7 @@ public final class GUIs implements Listener {
         }
     }
 
-    private void updateStatus(Player player) {
+    private void updateStatus() {
         Wands.getInstance().toggleStatus();
         ItemUtil status;
         if (Wands.getInstance().getStatus()) {

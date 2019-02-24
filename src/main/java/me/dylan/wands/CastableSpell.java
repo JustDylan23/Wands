@@ -8,7 +8,7 @@ public abstract class CastableSpell implements Listener {
 
     protected final Plugin plugin = Wands.getInstance();
     private final String displayName;
-    private int id;
+    private final int id;
     private static int idCount;
 
     protected CastableSpell(String displayName) {
