@@ -1,18 +1,23 @@
 package me.dylan.wands.spells;
 
-import me.dylan.wands.Spell;
+import me.dylan.wands.CastableSpell;
 import me.dylan.wands.spellbehaviour.ProjectileSpell;
 import org.bukkit.*;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
 
-public class Comet extends Spell {
+public class Comet extends CastableSpell {
 
     private final ProjectileSpell spellBehaviour;
 
-    private Comet() {
+    @Override
+    protected void cast(Player player) {
+        spellBehaviour.executeFrom(player);
+    }
+
+    public Comet() {
         super("Comet");
-        spellBehaviour = new ProjectileSpell.Builder<>(Fireball.class, "Comet", 4F)
+        spellBehaviour = new ProjectileSpell.Builder<>(Fireball.class, "Spell", 4F)
                 .setProjectilePropperties(projectile -> projectile.setIsIncendiary(false))
                 .setLifeTime(20)
                 .setEntityDamage(10)
@@ -37,18 +42,5 @@ public class Comet extends Spell {
                     }
                 })
                 .build();
-    }
-
-    @Override
-    protected void cast(Player player) {
-        spellBehaviour.executeFrom(player);
-    }
-
-    public static Comet getInstance() {
-        return InstanceHolder.INSTANCE;
-    }
-
-    private static class InstanceHolder {
-        private static final Comet INSTANCE = new Comet();
     }
 }

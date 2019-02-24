@@ -14,7 +14,7 @@ public final class SpellManager implements Listener {
 
     @EventHandler
     public void playerInteractEvent(PlayerInteractEvent event) {
-        if (!Wands.getStatus()) return;
+        if (!Wands.getInstance().getStatus()) return;
         Player player = event.getPlayer();
         ItemStack handItem = player.getInventory().getItemInMainHand();
         if (handItem != null) {
@@ -51,7 +51,7 @@ public final class SpellManager implements Listener {
 
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.5F, 0.5F);
 
-        Wands.sendActionBar(player, "§6Current spell: §7§l" + wandItem.getSelectedSpell().getName());
+        player.sendActionBar( "§6Current spell: §7§l" + wandItem.getSelectedSpell().getName());
     }
 
     private void onCast(Player player) {

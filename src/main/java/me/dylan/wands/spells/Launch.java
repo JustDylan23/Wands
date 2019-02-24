@@ -1,6 +1,6 @@
 package me.dylan.wands.spells;
 
-import me.dylan.wands.Spell;
+import me.dylan.wands.CastableSpell;
 import me.dylan.wands.spellbehaviour.SparkSpell;
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;
@@ -9,11 +9,16 @@ import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-public class Launch extends Spell {
+public class Launch extends CastableSpell {
 
     private final SparkSpell spellBehaviour;
 
-    private Launch() {
+    @Override
+    protected void cast(Player player) {
+        spellBehaviour.executeFrom(player);
+    }
+
+    public Launch() {
         super("Launch");
         this.spellBehaviour = new SparkSpell.Builder()
                 .setEffectDistance(30)
@@ -30,19 +35,5 @@ public class Launch extends Spell {
                             loc.getWorld().playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, SoundCategory.MASTER, 4.0F, 1.0F), 10L);
                 })
                 .build();
-    }
-
-
-    @Override
-    protected void cast(Player player) {
-        spellBehaviour.executeFrom(player);
-    }
-
-    public static Launch getInstance() {
-        return Launch.InstanceHolder.INSTANCE;
-    }
-
-    private static class InstanceHolder {
-        private final static Launch INSTANCE = new Launch();
     }
 }

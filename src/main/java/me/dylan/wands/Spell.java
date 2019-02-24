@@ -1,24 +1,25 @@
 package me.dylan.wands;
 
-import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
-import org.bukkit.plugin.Plugin;
+import me.dylan.wands.spells.*;
 
-public abstract class Spell implements Listener {
+public enum Spell {
+    COMET(new Comet()),
+    SPARK(new Spark()),
+    LAUNCH(new Launch()),
+    CONFUSE(new Confuse()),
+    POISON_WAVE(new PoisonWave());
 
-    protected final Plugin plugin;
+    private final CastableSpell spell;
 
-    private final String displayName;
-
-    protected Spell(String displayName) {
-        this.displayName = displayName;
-        this.plugin = Wands.getInstance();
-        Wands.getInstance().registerListener(this);
+    Spell(CastableSpell spell) {
+        this.spell = spell;
     }
 
-    String getName() {
-        return displayName;
+    public int getId() {
+        return spell.getId();
     }
 
-    protected abstract void cast(Player player);
+    public CastableSpell getInstance() {
+        return spell;
+    }
 }

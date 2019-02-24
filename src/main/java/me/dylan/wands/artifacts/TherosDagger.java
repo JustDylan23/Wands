@@ -29,7 +29,7 @@ public final class TherosDagger implements Listener {
     private final String sneakKey = "therosInvisable";
 
     private boolean hasDagger(Player player) {
-        if (!Wands.getStatus()) return false;
+        if (!Wands.getInstance().getStatus()) return false;
         ItemStack tool = player.getInventory().getItemInMainHand();
         if (tool != null) {
             ItemUtil itemUtil = new ItemUtil(tool);
@@ -123,13 +123,13 @@ public final class TherosDagger implements Listener {
                 location.getWorld().spawnParticle(Particle.SMOKE_LARGE, location, 15, 0.5, 0.2, 0.5, 0.1, null, true);
                 location.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, location, 20, 0.5, 0.5, 0.5, 0.1, null, true);
                 player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 6000, 0, true), true);
-                Wands.sendActionBar(player, "§6You are §aInvisible");
+                player.sendActionBar("§6You are §aInvisible");
                 return;
             }
         }
         if (player.hasMetadata(sneakKey)) {
             player.removePotionEffect(PotionEffectType.INVISIBILITY);
-            Wands.sendActionBar(player, "§6You are §cVisible");
+            player.sendActionBar("§6You are §cVisible");
             player.removeMetadata(sneakKey, plugin);
         }
     }
