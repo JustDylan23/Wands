@@ -28,7 +28,7 @@ public final class ProjectileSpell<T extends Projectile> extends SpellBehaviour 
 
     private ProjectileSpell(int entityDamage, float effectAreaRange, float pushSpeed, Consumer<Location> castEffects, Consumer<Location> visualEffects, Consumer<Entity> entityEffects, Class<T> projectile, Consumer<T> projectilePropperties, Consumer<Location> hitEffects, float speed, int lifeTime, String tag) {
         super(entityDamage, effectAreaRange, pushSpeed, castEffects, visualEffects, entityEffects);
-        plugin.registerListener(this);
+        PLUGIN.registerListener(this);
         this.projectile = projectile;
         this.projectilePropperties = projectilePropperties;
         this.hitEffects = hitEffects;
@@ -44,7 +44,7 @@ public final class ProjectileSpell<T extends Projectile> extends SpellBehaviour 
         T projectile = player.launchProjectile(this.projectile, velocity);
         projectilePropperties.accept(projectile);
 
-        projectile.setMetadata(metadataTag, new FixedMetadataValue(plugin, true));
+        projectile.setMetadata(metadataTag, new FixedMetadataValue(PLUGIN, true));
         trail(projectile);
         activateLifeTimer(projectile);
         castEffects.accept(player.getLocation());

@@ -2,10 +2,7 @@ package me.dylan.wands;
 
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @SuppressWarnings({"WeakerAccess", "UnusedReturnValue", "RedundantSuppression"})
 public final class WandItem extends ItemUtil<WandItem> {
@@ -42,9 +39,8 @@ public final class WandItem extends ItemUtil<WandItem> {
         return this;
     }
 
-    @SafeVarargs
-    public final WandItem setSpells(Spell... spells) {
-        ArrayList<Integer> ids = new ArrayList<>();
+    public WandItem setSpells(Spell... spells) {
+        List<Integer> ids = new LinkedList<>();
         for (Spell spell : spells) {
             ids.add(spell.getId());
         }
@@ -57,8 +53,8 @@ public final class WandItem extends ItemUtil<WandItem> {
         Map<Integer, CastableSpell> spellHashMap = new HashMap<>();
         SpellRegistry spellRegistry = Wands.getInstance().getSpellRegistry();
         int i = 0;
-        for (int spellID : spells) {
-            spellHashMap.put(++i, spellRegistry.getSpell(spellID));
+        for (int spellId : spells) {
+            spellHashMap.put(++i, spellRegistry.getSpell(spellId));
         }
         return spellHashMap;
     }

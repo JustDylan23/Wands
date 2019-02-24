@@ -25,13 +25,13 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Consumer;
 
 public class EmpireBow implements Listener {
 
     private final String cursedArrow = "cursedArrow";
-
     private final Plugin plugin = Wands.getInstance();
 
     private boolean hasBow(Player player) {
@@ -44,8 +44,8 @@ public class EmpireBow implements Listener {
         return false;
     }
 
-    private final ArrayList<Player> drawing = new ArrayList<>();
-    private final ArrayList<Player> hasDrawn = new ArrayList<>();
+    private final Set<Player> drawing = new HashSet<>();
+    private final Set<Player> hasDrawn = new HashSet<>();
 
     @EventHandler
     public void onDraw(PlayerInteractEvent event) {

@@ -13,31 +13,31 @@ import org.bukkit.inventory.ItemStack;
 
 public final class GUIs implements Listener {
 
-    private static final Inventory mainGUI;
+    private static final Inventory MAIN_GUI;
 
     static {
-        mainGUI = Bukkit.createInventory(null, 27, Wands.PREFIX + "menu");
+        MAIN_GUI = Bukkit.createInventory(null, 27, Wands.PREFIX + "menu");
 
         ItemUtil wandOption = new ItemUtil(new ItemStack(Material.BLAZE_ROD));
         wandOption.setName("&6Available Wands");
-        mainGUI.setItem(13, wandOption.getItemStack());
+        MAIN_GUI.setItem(13, wandOption.getItemStack());
 
         ItemUtil status = new ItemUtil(new ItemStack(Material.GREEN_TERRACOTTA));
         status.setName("&6Status: &aEnabled");
-        mainGUI.setItem(16, status.getItemStack());
+        MAIN_GUI.setItem(16, status.getItemStack());
     }
 
-    private static final Inventory wandsGUI;
+    private static final Inventory WANDS_GUI;
 
     static {
-        wandsGUI = Bukkit.createInventory(null, 27, Wands.PREFIX + "wands");
-        wandsGUI.setItem(10, MagicalItems.EMPIRE_WAND.getItemStack());
-        wandsGUI.setItem(13, MagicalItems.THEROS_DAGGER.getItemStack());
-        wandsGUI.setItem(16, MagicalItems.EMPIRE_BOW.getItemStack());
+        WANDS_GUI = Bukkit.createInventory(null, 27, Wands.PREFIX + "wands");
+        WANDS_GUI.setItem(10, MagicalItems.EMPIRE_WAND.getItemStack());
+        WANDS_GUI.setItem(13, MagicalItems.THEROS_DAGGER.getItemStack());
+        WANDS_GUI.setItem(16, MagicalItems.EMPIRE_BOW.getItemStack());
     }
 
     public static void openGUI(Player player) {
-        player.openInventory(mainGUI);
+        player.openInventory(MAIN_GUI);
     }
 
     @SuppressWarnings("deprecation")
@@ -55,7 +55,7 @@ public final class GUIs implements Listener {
         Player player = (Player) event.getWhoClicked();
         int clickedSlot = event.getSlot();
 
-        if (inventory.equals(mainGUI) || inventory.equals(wandsGUI)) {
+        if (inventory.equals(MAIN_GUI) || inventory.equals(WANDS_GUI)) {
             event.setCancelled(true);
             if (clickedSlot == -999) {
                 player.closeInventory();
@@ -65,14 +65,14 @@ public final class GUIs implements Listener {
             }
         }
 
-        if (inventory.equals(mainGUI)) {
+        if (inventory.equals(MAIN_GUI)) {
             if (clickedSlot == 13) {
-                player.openInventory(wandsGUI);
+                player.openInventory(WANDS_GUI);
             } else if (clickedSlot == 16) {
                 updateStatus();
             }
 
-        } else if (inventory.equals(wandsGUI)) {
+        } else if (inventory.equals(WANDS_GUI)) {
             player.getInventory().addItem(event.getCurrentItem());
         }
     }
@@ -83,11 +83,11 @@ public final class GUIs implements Listener {
         if (Wands.getInstance().getStatus()) {
             status = new ItemUtil(new ItemStack(Material.GREEN_TERRACOTTA));
             status.setName("&6Status: &aEnabled");
-            mainGUI.setItem(16, status.getItemStack());
+            MAIN_GUI.setItem(16, status.getItemStack());
         } else {
             status = new ItemUtil(new ItemStack(Material.RED_TERRACOTTA));
             status.setName("&6Status: &cDisabled");
-            mainGUI.setItem(16, status.getItemStack());
+            MAIN_GUI.setItem(16, status.getItemStack());
         }
     }
 }

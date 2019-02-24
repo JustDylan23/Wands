@@ -13,25 +13,21 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class Wands extends JavaPlugin {
 
     public static final String PREFIX = ChatColor.translateAlternateColorCodes('&', "&8&l[&6&lWands&8&l]&r ");
+    private static Wands plugin;
 
     //if this is false, the wands should all stop with working.
     private boolean STATUS = true;
-
     public static final String VERSION = "1.0.0";
-
-    private final MainCommandHandler commandArgumentHandler = new MainCommandHandler();
-    private final ConstructTabCompleter constructTabCompleter = new ConstructTabCompleter();
 
     private final SpellRegistry spellRegistry = new SpellRegistry();
 
-    private static Wands plugin;
 
     public void onEnable() {
         plugin = this;
 
         sendConsole("Up and running!");
-        this.getCommand("wands").setExecutor(commandArgumentHandler);
-        this.getCommand("wands").setTabCompleter(constructTabCompleter);
+        this.getCommand("wands").setExecutor(new MainCommandHandler());
+        this.getCommand("wands").setTabCompleter(new ConstructTabCompleter());
 
         registerListener(new GUIs(), new SpellManager());
 
