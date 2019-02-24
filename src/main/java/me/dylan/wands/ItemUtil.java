@@ -21,7 +21,7 @@ import java.util.function.Function;
  * @since BETA-1.0.0
  */
 @SuppressWarnings({"WeakerAccess", "UnusedReturnValue", "RedundantSuppression"})
-public class ItemUtil {
+public class ItemUtil<T extends ItemUtil> {
 
     private final ItemStack itemStack;
 
@@ -35,6 +35,11 @@ public class ItemUtil {
         this.itemStack = itemStack;
     }
 
+    @SuppressWarnings("unchecked")
+    public T getInstance() {
+        return (T) this;
+    }
+
     /**
      * Sets name of {@link ItemStack}
      *
@@ -42,11 +47,11 @@ public class ItemUtil {
      * @return Instance of itself.
      */
 
-    public ItemUtil setName(String name) {
+    public T setName(String name) {
         ItemMeta meta = itemStack.getItemMeta();
         meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', name));
         itemStack.setItemMeta(meta);
-        return this;
+        return getInstance();
     }
 
     /**
@@ -56,11 +61,11 @@ public class ItemUtil {
      * @return Instance of itself.
      */
 
-    public ItemUtil setLore(String... lore) {
+    public T setLore(String... lore) {
         ItemMeta meta = itemStack.getItemMeta();
         meta.setLore(Arrays.asList(lore));
         itemStack.setItemMeta(meta);
-        return this;
+        return getInstance();
     }
 
     /*
@@ -90,19 +95,19 @@ public class ItemUtil {
      * @return Instance of itself
      */
 
-    public ItemUtil setNbtTag(String key, @Nonnull NBTBase nbtBase) {
+    public T setNbtTag(String key, @Nonnull NBTBase nbtBase) {
         modifyNbt(tag -> tag.set(key, nbtBase));
-        return this;
+        return getInstance();
     }
 
-    public ItemUtil setNbtTagInt(String key, int i) {
+    public T setNbtTagInt(String key, int i) {
         modifyNbt(tag -> tag.set(key, new NBTTagInt(i)));
-        return this;
+        return getInstance();
     }
 
-    public ItemUtil setNbtTagIntArray(String key, int... i) {
+    public T setNbtTagIntArray(String key, int... i) {
         modifyNbt(tag -> tag.set(key, new NBTTagIntArray(i)));
-        return this;
+        return getInstance();
     }
 
     /**
@@ -116,17 +121,17 @@ public class ItemUtil {
      * @return Result of getter method in function.
      */
 
-    public <T> T getNbtTag(Function<NBTTagCompound, T> function) {
+    public <S> S getNbtTag(Function<NBTTagCompound, S> function) {
         net.minecraft.server.v1_13_R2.ItemStack nmsItem = CraftItemStack.asNMSCopy(itemStack);
         NBTTagCompound compound = nmsItem.getTag() != null ? nmsItem.getTag() : new NBTTagCompound();
         return function.apply(compound);
     }
 
-    public ItemUtil removeNbtTag(String key) {
+    public T removeNbtTag(String key) {
         if (hasNbtTag(key)) {
             modifyNbt(tag -> tag.remove(key));
         }
-        return this;
+        return getInstance();
     }
 
     public boolean hasNbtTag(String key) {

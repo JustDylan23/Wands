@@ -33,7 +33,7 @@ public abstract class SpellBehaviour {
 
     public abstract void executeFrom(Player player);
 
-    Iterable<Damageable> getNearbyDamageables(Player player, Location loc, double radius) {
+    public static Iterable<Damageable> getNearbyDamageables(Player player, Location loc, double radius) {
         return loc.getWorld()
                 .getNearbyEntities(loc, radius, radius, radius).stream()
                 .filter(Damageable.class::isInstance)
@@ -42,7 +42,7 @@ public abstract class SpellBehaviour {
                 .collect(Collectors.toList());
     }
 
-    void damage(int damage, Entity source, Damageable victim) {
+    public static void damage(int damage, Entity source, Damageable victim) {
         victim.damage(damage, source);
         victim.setVelocity(new Vector(0, 0, 0));
     }

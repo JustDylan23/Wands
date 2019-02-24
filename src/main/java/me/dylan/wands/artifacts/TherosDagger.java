@@ -123,15 +123,35 @@ public final class TherosDagger implements Listener {
                 location.getWorld().spawnParticle(Particle.SMOKE_LARGE, location, 15, 0.5, 0.2, 0.5, 0.1, null, true);
                 location.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, location, 20, 0.5, 0.5, 0.5, 0.1, null, true);
                 player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 6000, 0, true), true);
+                player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 6000, 0, true), true);
                 player.sendActionBar("§6You are §aInvisible");
                 return;
             }
         }
         if (player.hasMetadata(sneakKey)) {
-            player.removePotionEffect(PotionEffectType.INVISIBILITY);
-            player.sendActionBar("§6You are §cVisible");
-            player.removeMetadata(sneakKey, plugin);
+            uncover(player, "§6You are §cVisible");
         }
+    }
+
+    @EventHandler
+    public void onTakingDamage(EntityDamageEvent event) {
+        Entity entity = event.getEntity();
+        if (entity instanceof Player) {
+            Player player = (Player) entity;
+            if (player.hasMetadata(sneakKey)) {
+                uncover(player, "§6You have been §cUncovered");
+                Location location = player.getLocation();
+                location.getWorld().spawnParticle(Particle.VILLAGER_ANGRY, location, 5, 1, 1, 1, 1, null, true);
+
+            }
+        }
+    }
+
+    private void uncover(Player player, String message) {
+        player.removeMetadata(sneakKey, plugin);
+        player.removePotionEffect(PotionEffectType.INVISIBILITY);
+        player.removePotionEffect(PotionEffectType.REGENERATION);
+        player.sendActionBar(message);
     }
 
     private void jumpParticles(Player player) {

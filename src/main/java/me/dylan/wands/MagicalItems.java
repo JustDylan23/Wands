@@ -4,7 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 public enum MagicalItems {
-    THEROS_DAGGER(new ItemUtil(new ItemStack(Material.MUSIC_DISC_MALL)).setName("&8Theros Dagger")
+    THEROS_DAGGER(new WandItem(new ItemStack(Material.MUSIC_DISC_MALL)).setName("&8Theros Dagger")
             .setNbtTagInt("therosDagger", 1).getItemStack()),
 
     EMPIRE_BOW(new WandItem(new ItemStack(Material.BOW)).setName("&eEmpire Bow")
