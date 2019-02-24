@@ -4,17 +4,8 @@ import me.dylan.wands.artifacts.EmpireBow;
 import me.dylan.wands.artifacts.TherosDagger;
 import me.dylan.wands.commandhandler.ConstructTabCompleter;
 import me.dylan.wands.commandhandler.MainCommandHandler;
-import me.dylan.wands.spells.Comet;
-import me.dylan.wands.spells.Launch;
-import me.dylan.wands.spells.PoisonWave;
-import me.dylan.wands.spells.Spark;
-import net.minecraft.server.v1_13_R2.ChatComponentText;
-import net.minecraft.server.v1_13_R2.ChatMessageType;
-import net.minecraft.server.v1_13_R2.PacketPlayOutChat;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -46,25 +37,15 @@ public final class Wands extends JavaPlugin {
 
         registerListener(new TherosDagger(), new EmpireBow());
 
-        spellRegistry.registerSpell(1, Comet.getInstance());
-        spellRegistry.registerSpell(2, Spark.getInstance());
-        spellRegistry.registerSpell(3, Launch.getInstance());
-        spellRegistry.registerSpell(4, PoisonWave.getInstance());
+        spellRegistry.registerSpells(Spell.values());
     }
 
     public void onDisable() {
         plugin = null;
     }
 
-    public static void sendConsole(String text) {
+    public void sendConsole(String text) {
         Bukkit.getConsoleSender().sendMessage(PREFIX + text);
-    }
-
-    public static void sendActionBar(Player player, String message) {
-        CraftPlayer craftPlayer = (CraftPlayer) player;
-        if (craftPlayer.getHandle().playerConnection != null && message != null && !message.isEmpty()) {
-            craftPlayer.getHandle().playerConnection.sendPacket(new PacketPlayOutChat(new ChatComponentText(message), ChatMessageType.GAME_INFO));
-        }
     }
 
     public void registerListener(Listener... listeners) {
@@ -81,19 +62,19 @@ public final class Wands extends JavaPlugin {
         return spellRegistry;
     }
 
-    public static void disable() {
+    public void disable() {
         getInstance().STATUS = false;
     }
 
-    public static void enable() {
+    public void enable() {
         getInstance().STATUS = true;
     }
 
-    public static void toggleStatus() {
+    public void toggleStatus() {
         getInstance().STATUS = !getInstance().STATUS;
     }
 
-    public static boolean getStatus() {
+    public boolean getStatus() {
         return getInstance().STATUS;
     }
 }

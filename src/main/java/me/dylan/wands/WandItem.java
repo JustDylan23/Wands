@@ -2,8 +2,10 @@ package me.dylan.wands;
 
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @SuppressWarnings({"WeakerAccess", "UnusedReturnValue", "RedundantSuppression"})
 public final class WandItem extends ItemUtil {
@@ -30,14 +32,25 @@ public final class WandItem extends ItemUtil {
         return 1;
     }
 
+    @Deprecated
     public WandItem setSpells(int... spells) {
         setNbtTagIntArray(spellsListTag, spells);
         return this;
     }
 
-    public Map<Integer, Spell> getSpells() {
+    @SafeVarargs
+    public final WandItem setSpells(Spell... spells) {
+        ArrayList<Integer> ids = new ArrayList<>();
+        for (Spell spell : spells) {
+            ids.add(spell.getId());
+        }
+        setNbtTagIntArray(spellsListTag, ids.stream().filter(Objects::nonNull).mapToInt(Integer::valueOf).toArray());
+        return this;
+    }
+
+    public Map<Integer, CastableSpell> getSpells() {
         int[] spells = getNbtTag(tag -> tag.getIntArray(spellsListTag));
-        Map<Integer, Spell> spellHashMap = new HashMap<>();
+        Map<Integer, CastableSpell> spellHashMap = new HashMap<>();
         SpellRegistry spellRegistry = Wands.getInstance().getSpellRegistry();
         int i = 0;
         for (int spellID : spells) {
@@ -51,7 +64,7 @@ public final class WandItem extends ItemUtil {
     }
 
 
-    public Spell getSelectedSpell() {
+    public CastableSpell getSelectedSpell() {
         return getSpells().get(getSpellIndex());
     }
 

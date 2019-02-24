@@ -1,6 +1,6 @@
 package me.dylan.wands.spells;
 
-import me.dylan.wands.Spell;
+import me.dylan.wands.CastableSpell;
 import me.dylan.wands.spellbehaviour.WaveSpell;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -9,11 +9,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class PoisonWave extends Spell {
+public class PoisonWave extends CastableSpell {
 
     private final WaveSpell spellBehaviour;
 
-    private PoisonWave() {
+    @Override
+    protected void cast(Player player) {
+        spellBehaviour.executeFrom(player);
+    }
+
+    public PoisonWave() {
         super("PoisonWave");
         spellBehaviour = new WaveSpell.Builder()
                 .setEffectDistance(30)
@@ -27,18 +32,5 @@ public class PoisonWave extends Spell {
                     loc.getWorld().spawnParticle(Particle.SMOKE_NORMAL, loc, 5, 1, 1, 1, 0.05, null, true);
                 })
                 .build();
-    }
-
-    public static PoisonWave getInstance() {
-        return InstanceHolder.INSTANCE;
-    }
-
-    private static class InstanceHolder {
-        private final static PoisonWave INSTANCE = new PoisonWave();
-    }
-
-    @Override
-    protected void cast(Player player) {
-        spellBehaviour.executeFrom(player);
     }
 }
