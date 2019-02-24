@@ -60,7 +60,7 @@ public final class GUIs implements Listener {
             if (clickedSlot == -999) {
                 player.closeInventory();
                 return;
-            } else if (event.getCurrentItem() != null) {
+            } else if (event.getCurrentItem().getType() != Material.AIR) {
                 player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 1F, 1F);
             }
         }

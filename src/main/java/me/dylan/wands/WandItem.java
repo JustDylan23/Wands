@@ -8,15 +8,19 @@ import java.util.Map;
 import java.util.Objects;
 
 @SuppressWarnings({"WeakerAccess", "UnusedReturnValue", "RedundantSuppression"})
-public final class WandItem extends ItemUtil {
+public final class WandItem extends ItemUtil<WandItem> {
 
     private final String spellIndexTag = "SpellIndex";
     private final String spellsListTag = "Spells";
     private final String verifiedTag = "VerifiedAsWand";
 
-
     public WandItem(ItemStack itemStack) {
         super(itemStack);
+    }
+
+    @Override
+    public WandItem getInstance() {
+        return this;
     }
 
     public WandItem setSpellIndex(int index) {

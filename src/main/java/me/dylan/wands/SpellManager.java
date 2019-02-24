@@ -56,7 +56,10 @@ public final class SpellManager implements Listener {
 
     private void onCast(Player player) {
         WandItem wandItem = new WandItem(player.getInventory().getItemInMainHand());
-        wandItem.getSelectedSpell().cast(player);
+        CastableSpell spell = wandItem.getSelectedSpell();
+        if (spell != null) {
+            spell.cast(player);
+        }
     }
 }
 
