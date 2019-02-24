@@ -6,6 +6,7 @@ import net.minecraft.server.v1_13_R2.NBTTagInt;
 import net.minecraft.server.v1_13_R2.NBTTagIntArray;
 import org.bukkit.ChatColor;
 import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -58,6 +59,11 @@ public class ItemUtil<T extends ItemUtil> {
         return getInstance();
     }
 
+    public T addEnchant(Enchantment enchantment, int level) {
+        itemStack.addEnchantment(enchantment, level);
+        return getInstance();
+    }
+
     private void modifyNbt(Consumer<NBTTagCompound> consumer) {
         net.minecraft.server.v1_13_R2.ItemStack nmsItem = CraftItemStack.asNMSCopy(itemStack);
         NBTTagCompound compound = nmsItem.getTag() != null ? nmsItem.getTag() : new NBTTagCompound();
@@ -101,7 +107,7 @@ public class ItemUtil<T extends ItemUtil> {
      * {@code instance.getTag(tag -> tag.getInt("key"));}
      *
      * @param function Function for getter method.
-     * @param <T>      Type of the result of the method in function.
+     * @param <S>      Type of the result of the method in function.
      * @return Result of getter method in function.
      */
 

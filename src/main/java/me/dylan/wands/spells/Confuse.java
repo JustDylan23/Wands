@@ -24,7 +24,7 @@ public class Confuse extends CastableSpell {
         super("Confuse");
         this.spellBehaviour = new SparkSpell.Builder()
                 .setEffectDistance(30)
-                .setEffectAreaRange(2.2F)
+                .setEffectAreaRange(4F)
                 .setEntityDamage(5)
                 .setEntityEffects(entity -> ((LivingEntity) entity).addPotionEffect(
                         new PotionEffect(PotionEffectType.CONFUSION, 240, 4, false), true))

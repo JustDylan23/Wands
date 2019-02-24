@@ -3,10 +3,7 @@ package me.dylan.wands.artifacts;
 import me.dylan.wands.ItemUtil;
 import me.dylan.wands.Wands;
 import me.dylan.wands.spellbehaviour.SpellBehaviour;
-import org.bukkit.Location;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
-import org.bukkit.SoundCategory;
+import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -54,27 +51,32 @@ public class EmpireBow implements Listener {
     public void onDraw(PlayerInteractEvent event) {
         if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             Player player = event.getPlayer();
-            if (hasBow(player)){
-                drawing.add(player);
-                player.sendActionBar("§6Charging [§a|§6||]");
-                new BukkitRunnable() {
-                    int count;
-                    @Override
-                    public void run() {
-                        count++;
-                        if (drawing.contains(player)) {
-                            if (count == 10) player.sendActionBar("§6Charging [§a||§6|]");
-                            if (count == 20) player.sendActionBar("§6Charging [§a|||§6]");
-                            if (count == 30) {
-                                player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.MASTER, 1F, 1F);
-                                player.sendActionBar("§aCharged §6[§a|||§6]");
-                                hasDrawn.add(player);
-                                drawing.remove(player);
-                                cancel();
-                            }
-                        } else cancel();
-                    }
-                }.runTaskTimer(Wands.getInstance(), 1, 1);
+            if (hasBow(player)) {
+                if (player.getGameMode() == GameMode.CREATIVE || player.getInventory().contains(Material.ARROW)) {
+                    drawing.add(player);
+                    player.sendActionBar("§6Charging [§a|§6||||]");
+                    new BukkitRunnable() {
+                        int count;
+
+                        @Override
+                        public void run() {
+                            count++;
+                            if (drawing.contains(player)) {
+                                if (count == 10) player.sendActionBar("§6Charging [§a||§6|||]");
+                                if (count == 20) player.sendActionBar("§6Charging [§a|||§6||]");
+                                if (count == 30) player.sendActionBar("§6Charging [§a||||§6|]");
+                                if (count == 40) player.sendActionBar("§6Charging [§a|||||§6]");
+                                if (count == 50) {
+                                    player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.MASTER, 1F, 1F);
+                                    player.sendActionBar("§aCharged §6[§a|||||§6]");
+                                    hasDrawn.add(player);
+                                    drawing.remove(player);
+                                    cancel();
+                                }
+                            } else cancel();
+                        }
+                    }.runTaskTimer(Wands.getInstance(), 1, 1);
+                }
             }
         }
 
@@ -84,7 +86,7 @@ public class EmpireBow implements Listener {
     public void onShoot(EntityShootBowEvent event) {
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
-            if (drawing.contains(player)){
+            if (drawing.contains(player)) {
                 drawing.remove(player);
                 player.sendActionBar("§cCancelled shot");
                 event.setCancelled(true);
@@ -96,6 +98,9 @@ public class EmpireBow implements Listener {
                 projectile.setMetadata(cursedArrow, new FixedMetadataValue(plugin, true));
                 Location location = player.getLocation();
                 location.getWorld().playSound(location, Sound.ENTITY_ENDER_DRAGON_FLAP, SoundCategory.MASTER, 4F, 1F);
+                player.playSound(player.getLocation(), Sound.ENTITY_EVOKER_CAST_SPELL, SoundCategory.MASTER, 1F, 0.1F);
+                location.getWorld().spawnParticle(Particle.SPELL_WITCH, location.add(0, 1, 0), 30, 1, 1, 1, 0F, null, true);
+                location.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, location.add(0, 1, 0), 100, 1, 1, 1, 0F, null, true);
                 trail(projectile, loc -> {
                     loc.getWorld().spawnParticle(Particle.SPELL_WITCH, loc, 10, 0.5, 0.5, 0.5, 0.05, null, true);
                     loc.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, loc, 10, 0.5, 0.5, 0.5, 0.15, null, true);
@@ -106,7 +111,11 @@ public class EmpireBow implements Listener {
 
     @EventHandler
     public void onChangeSlot(PlayerItemHeldEvent event) {
-        drawing.remove(event.getPlayer());
+        Player player = event.getPlayer();
+        if (drawing.contains(player)) {
+            player.sendActionBar(" ");
+        }
+        drawing.remove(player);
     }
 
     @EventHandler
@@ -133,13 +142,13 @@ public class EmpireBow implements Listener {
         if (projectile.getShooter() instanceof Player) {
             if (projectile.hasMetadata(cursedArrow)) {
                 Location location = projectile.getLocation();
-                location.getWorld().playSound(location, Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, SoundCategory.MASTER, 4F, 1F);
+                location.getWorld().playSound(location, Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, SoundCategory.MASTER, 5F, 1F);
                 location.getWorld().spawnParticle(Particle.SMOKE_NORMAL, location, 30, 0.4, 0.4, 0.4, 0.2, null, true);
                 SpellBehaviour.getNearbyDamageables((Player) projectile.getShooter(), location, 3)
-                .forEach(entity -> {
-                    SpellBehaviour.damage(6, (Player) projectile.getShooter(), entity);
-                    ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 80, 3, false), true);
-                });
+                        .forEach(entity -> {
+                            SpellBehaviour.damage(6, (Player) projectile.getShooter(), entity);
+                            ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 80, 3, false), true);
+                        });
                 projectile.remove();
             }
         }
