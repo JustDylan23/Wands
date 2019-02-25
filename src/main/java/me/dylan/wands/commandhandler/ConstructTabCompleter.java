@@ -19,9 +19,10 @@ public class ConstructTabCompleter implements TabCompleter {
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         completions.clear();
         if (command.getName().equalsIgnoreCase("wands")) {
-            if (args.length == 1) {
-                setCompletions(new String[]{"info", "set", "disable", "enable", "dropondeath", "spells", "permission"});
-                return completions;
+            switch (args.length) {
+                case 1:
+                    setCompletions(new String[]{"info", "set", "disable", "enable", "dropondeath", "spells", "permission"});
+                    return completions;
             }
         }
         return completions;

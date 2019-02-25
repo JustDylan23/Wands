@@ -23,4 +23,9 @@ public enum Spell {
     public CastableSpell getInstance() {
         return spell;
     }
+
+    @Override
+    public String toString() {
+        return spell.getName();
+    }
 }
