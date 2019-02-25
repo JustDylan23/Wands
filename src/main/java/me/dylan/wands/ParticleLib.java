@@ -8,8 +8,8 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class ParticleLib {
 
-    private static double randomize(double x) {
-        return ThreadLocalRandom.current().nextDouble() * x * 2 - x;
+    private static double randomize(double i) {
+        return ThreadLocalRandom.current().nextDouble() * i * 2 - i;
     }
 
     private static Location randomizeLoc(Location location, double x, double y, double z) {
@@ -31,7 +31,7 @@ public class ParticleLib {
                 }
                 break;
             default:
-                spawnParticle(particle, location, count, speed, x, y, z);
+                location.getWorld().spawnParticle(particle, location, count, x, y, z, speed, null);
         }
     }
 
@@ -43,7 +43,7 @@ public class ParticleLib {
                 location.getWorld().spawnParticle(particle, location, count, x, y, z, speed, material.createBlockData());
                 break;
             default:
-                spawnParticle(particle, location, count, speed, x, y, z);
+                location.getWorld().spawnParticle(particle, location, count, x, y, z, speed, null);
         }
     }
 

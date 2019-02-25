@@ -65,8 +65,7 @@ public class EmpireBow implements Listener {
                                 if (count == 10) player.sendActionBar("§6Charging [§a||§6|||]");
                                 if (count == 20) player.sendActionBar("§6Charging [§a|||§6||]");
                                 if (count == 30) player.sendActionBar("§6Charging [§a||||§6|]");
-                                if (count == 40) player.sendActionBar("§6Charging [§a|||||§6]");
-                                if (count == 50) {
+                                if (count == 40) {
                                     player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.MASTER, 1F, 1F);
                                     player.sendActionBar("§aCharged §6[§a|||||§6]");
                                     hasDrawn.add(player);
