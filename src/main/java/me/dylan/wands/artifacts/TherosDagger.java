@@ -12,6 +12,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.inventory.EquipmentSlot;
@@ -117,14 +118,7 @@ public final class TherosDagger implements Listener {
         Player player = event.getPlayer();
         if (hasDagger(player)) {
             if (event.isSneaking() && player.isOnGround()) {
-                player.setMetadata(sneakKey, new FixedMetadataValue(plugin, true));
-                Location location = player.getLocation();
-                location.getWorld().playSound(location, Sound.ENTITY_ZOMBIE_VILLAGER_CURE, 1.0f, 2f);
-                location.getWorld().spawnParticle(Particle.SMOKE_LARGE, location, 15, 0.5, 0.2, 0.5, 0.1, null, true);
-                location.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, location, 20, 0.5, 0.5, 0.5, 0.1, null, true);
-                player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 6000, 0, true), true);
-                player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 6000, 0, true), true);
-                player.sendActionBar("§6You are §aInvisible");
+                cover(player);
                 return;
             }
         }
@@ -147,11 +141,36 @@ public final class TherosDagger implements Listener {
         }
     }
 
+    private void cover(Player player) {
+        if (!player.hasMetadata(sneakKey)) {
+            player.setMetadata(sneakKey, new FixedMetadataValue(plugin, true));
+            Location location = player.getLocation();
+            location.getWorld().playSound(location, Sound.ENTITY_ZOMBIE_VILLAGER_CURE, 1.0f, 2f);
+            location.getWorld().spawnParticle(Particle.SMOKE_LARGE, location, 15, 0.5, 0.2, 0.5, 0.1, null, true);
+            location.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, location, 20, 0.5, 0.5, 0.5, 0.1, null, true);
+            player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 6000, 0, true), true);
+            player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 6000, 0, true), true);
+            player.sendActionBar("§6You are §aInvisible");
+        }
+    }
+
     private void uncover(Player player, String message) {
         player.removeMetadata(sneakKey, plugin);
         player.removePotionEffect(PotionEffectType.INVISIBILITY);
         player.removePotionEffect(PotionEffectType.REGENERATION);
+        Location location = player.getLocation();
+        location.getWorld().playSound(location, Sound.ITEM_ARMOR_EQUIP_ELYTRA, 1.0f, 0.8f);
         player.sendActionBar(message);
+    }
+
+    @EventHandler
+    public void onChangeSlot(PlayerItemHeldEvent event) {
+        Player player = event.getPlayer();
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            if (player.isSneaking() && hasDagger(player)) {
+                cover(player);
+            }
+        }, 2L);
     }
 
     private void jumpParticles(Player player) {

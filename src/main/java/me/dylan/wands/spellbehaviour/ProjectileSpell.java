@@ -42,10 +42,9 @@ public final class ProjectileSpell<T extends Projectile> extends SpellBehaviour 
     public void executeFrom(Player player) {
         Vector velocity = player.getLocation().getDirection().multiply(speed);
         T projectile = player.launchProjectile(this.projectile, velocity);
-        projectilePropperties.accept(projectile);
-
-        projectile.setMetadata(metadataTag, new FixedMetadataValue(PLUGIN, true));
         trail(projectile);
+        projectilePropperties.accept(projectile);
+        projectile.setMetadata(metadataTag, new FixedMetadataValue(PLUGIN, true));
         activateLifeTimer(projectile);
         castEffects.accept(player.getLocation());
     }
@@ -61,8 +60,6 @@ public final class ProjectileSpell<T extends Projectile> extends SpellBehaviour 
             pushFrom(loc, entity, pushSpeed);
         });
         hitEffects.accept(loc);
-
-
     }
 
     @EventHandler
@@ -97,7 +94,7 @@ public final class ProjectileSpell<T extends Projectile> extends SpellBehaviour 
 
                 } else cancel();
             }
-        }.runTaskTimer(Wands.getInstance(), 1, 1);
+        }.runTaskTimer(Wands.getInstance(), 0, 1);
     }
 
     public static class Builder<T extends Projectile> extends SpellBuilder<Builder<T>, ProjectileSpell> {
