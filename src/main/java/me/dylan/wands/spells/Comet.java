@@ -18,7 +18,10 @@ public class Comet extends CastableSpell {
     public Comet() {
         super("Comet");
         spellBehaviour = new ProjectileSpell.Builder<>(Fireball.class, "Spell", 4F)
-                .setProjectilePropperties(projectile -> projectile.setIsIncendiary(false))
+                .setProjectilePropperties(projectile -> {
+                    projectile.setIsIncendiary(false);
+                    projectile.setYield(0);
+                })
                 .setLifeTime(20)
                 .setEntityDamage(10)
                 .setPushSpeed(1)
@@ -36,6 +39,8 @@ public class Comet extends CastableSpell {
                 .setHitEffects(loc -> {
                     loc.getWorld().playSound(loc, Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, SoundCategory.MASTER, 5F, 1F);
                     loc.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, loc, 0, 0.0, 0.0, 0.0, 0.0, null, true);
+                    loc.getWorld().spawnParticle(Particle.SMOKE_LARGE, loc, 50, 2, 2, 2, 0.05, null, true);
+
                     for (int i = 0; i < 3; ++i) {
                         Bukkit.getScheduler().runTaskLater(plugin, () ->
                                 loc.getWorld().playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, SoundCategory.MASTER, 5F, 1F), (i * 5));

@@ -97,7 +97,7 @@ public class EmpireBow implements Listener {
                 projectile.setMetadata(cursedArrow, new FixedMetadataValue(plugin, true));
                 Location location = player.getLocation();
                 location.getWorld().playSound(location, Sound.ENTITY_ENDER_DRAGON_FLAP, SoundCategory.MASTER, 4F, 1F);
-                player.playSound(player.getLocation(), Sound.ENTITY_EVOKER_CAST_SPELL, SoundCategory.MASTER, 1F, 0.1F);
+                location.getWorld().playSound(player.getLocation(), Sound.ENTITY_EVOKER_CAST_SPELL, SoundCategory.MASTER, 4F, 0.1F);
                 location.getWorld().spawnParticle(Particle.SPELL_WITCH, location.add(0, 1, 0), 30, 1, 1, 1, 0F, null, true);
                 location.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, location.add(0, 1, 0), 100, 1, 1, 1, 0F, null, true);
                 trail(projectile, loc -> {
@@ -142,6 +142,7 @@ public class EmpireBow implements Listener {
             if (projectile.hasMetadata(cursedArrow)) {
                 Location location = projectile.getLocation();
                 location.getWorld().playSound(location, Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, SoundCategory.MASTER, 5F, 1F);
+                location.getWorld().playSound(location, Sound.ITEM_TRIDENT_RETURN, SoundCategory.MASTER, 5F, 1F);
                 location.getWorld().spawnParticle(Particle.SMOKE_NORMAL, location, 30, 0.4, 0.4, 0.4, 0.2, null, true);
                 SpellBehaviour.getNearbyDamageables((Player) projectile.getShooter(), location, 3)
                         .forEach(entity -> {
