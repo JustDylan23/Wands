@@ -8,7 +8,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class ParticleLib {
 
-    public static double randomize(double x) {
+    private static double randomize(double x) {
         return ThreadLocalRandom.current().nextDouble() * x * 2 - x;
     }
 
