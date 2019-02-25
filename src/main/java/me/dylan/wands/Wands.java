@@ -23,6 +23,11 @@ public final class Wands extends JavaPlugin {
 
 
     public void onEnable() {
+        if(!Bukkit.getVersion().contains("Paper")) {
+            this.getPluginLoader().disablePlugin(this);
+            sendConsole("§cThis plugin only works on Paper, an improved version of spigot.");
+            return;
+        }
         plugin = this;
 
         sendConsole("Up and running!");
