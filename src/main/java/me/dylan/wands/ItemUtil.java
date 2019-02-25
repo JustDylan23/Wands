@@ -21,7 +21,6 @@ import java.util.function.Function;
  * @author Dylan
  * @since BETA-1.0.0
  */
-
 @SuppressWarnings({"WeakerAccess", "UnusedReturnValue", "RedundantSuppression"})
 public class ItemUtil<T extends ItemUtil> {
 
