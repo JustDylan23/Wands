@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 @SuppressWarnings("")
 public abstract class SpellBehaviour {
 
-    final static Wands PLUGIN = Wands.getInstance();
+    final static Wands plugin = Wands.getPlugin();
 
     final int entityDamage;
     final float effectAreaRange;

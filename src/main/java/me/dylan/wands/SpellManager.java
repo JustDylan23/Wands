@@ -14,19 +14,21 @@ public final class SpellManager implements Listener {
 
     @EventHandler
     public void playerInteractEvent(PlayerInteractEvent event) {
-        if (!Wands.getInstance().getStatus()) return;
-        Player player = event.getPlayer();
-        ItemStack handItem = player.getInventory().getItemInMainHand();
-        if (handItem != null) {
-            WandItem tool = new WandItem(handItem);
-            if (tool.isMarkedAsWand()) {
-                event.setCancelled(true);
-                Action a = event.getAction();
-                if (event.getHand().equals(EquipmentSlot.HAND)) {
-                    if (a == Action.LEFT_CLICK_AIR || a == Action.LEFT_CLICK_BLOCK) {
-                        onCast(player);
-                    } else if (a == Action.RIGHT_CLICK_AIR || a == Action.RIGHT_CLICK_BLOCK) {
-                        onSelect(player);
+        if (!Wands.getPlugin().getStatus()) return;
+        if (event.getHand() != null) {
+            Player player = event.getPlayer();
+            ItemStack handItem = player.getInventory().getItemInMainHand();
+            if (handItem != null) {
+                WandItem tool = new WandItem(handItem);
+                if (tool.isMarkedAsWand()) {
+                    event.setCancelled(true);
+                    Action a = event.getAction();
+                    if (event.getHand().equals(EquipmentSlot.HAND)) {
+                        if (a == Action.LEFT_CLICK_AIR || a == Action.LEFT_CLICK_BLOCK) {
+                            onCast(player);
+                        } else if (a == Action.RIGHT_CLICK_AIR || a == Action.RIGHT_CLICK_BLOCK) {
+                            onSelect(player);
+                        }
                     }
                 }
             }

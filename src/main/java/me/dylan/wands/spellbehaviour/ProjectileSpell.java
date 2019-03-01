@@ -10,6 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -28,7 +29,7 @@ public final class ProjectileSpell<T extends Projectile> extends SpellBehaviour 
 
     private ProjectileSpell(int entityDamage, float effectAreaRange, float pushSpeed, Consumer<Location> castEffects, Consumer<Location> visualEffects, Consumer<Entity> entityEffects, Class<T> projectile, Consumer<T> projectilePropperties, Consumer<Location> hitEffects, float speed, int lifeTime, String tag) {
         super(entityDamage, effectAreaRange, pushSpeed, castEffects, visualEffects, entityEffects);
-        PLUGIN.registerListener(this);
+        plugin.registerListener(this);
         this.projectile = projectile;
         this.projectilePropperties = projectilePropperties;
         this.hitEffects = hitEffects;
@@ -37,14 +38,13 @@ public final class ProjectileSpell<T extends Projectile> extends SpellBehaviour 
         this.metadataTag = tag;
     }
 
-
     @Override
     public void executeFrom(Player player) {
         Vector velocity = player.getLocation().getDirection().multiply(speed);
         T projectile = player.launchProjectile(this.projectile, velocity);
         trail(projectile);
         projectilePropperties.accept(projectile);
-        projectile.setMetadata(metadataTag, new FixedMetadataValue(PLUGIN, true));
+        projectile.setMetadata(metadataTag, new FixedMetadataValue(plugin, true));
         activateLifeTimer(projectile);
         castEffects.accept(player.getLocation());
     }
@@ -78,7 +78,7 @@ public final class ProjectileSpell<T extends Projectile> extends SpellBehaviour 
     }
 
     private void activateLifeTimer(Projectile projectile) {
-        Bukkit.getScheduler().runTaskLater(Wands.getInstance(), () -> {
+        Bukkit.getScheduler().runTaskLater(Wands.getPlugin(), () -> {
             if (projectile.isValid()) {
                 hit((Player) projectile.getShooter(), projectile);
             }
@@ -94,7 +94,14 @@ public final class ProjectileSpell<T extends Projectile> extends SpellBehaviour 
 
                 } else cancel();
             }
-        }.runTaskTimer(Wands.getInstance(), 0, 1);
+        }.runTaskTimer(Wands.getPlugin(), 0, 1);
+    }
+
+    @EventHandler
+    public void onEntityExplode(EntityExplodeEvent event) {
+        if (event.getEntity().hasMetadata(metadataTag)) {
+            event.setCancelled(true);
+        }
     }
 
     public static class Builder<T extends Projectile> extends SpellBuilder<Builder<T>, ProjectileSpell> {

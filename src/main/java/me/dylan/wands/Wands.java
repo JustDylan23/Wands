@@ -5,42 +5,46 @@ import me.dylan.wands.artifacts.TherosDagger;
 import me.dylan.wands.commandhandler.ConstructTabCompleter;
 import me.dylan.wands.commandhandler.MainCommandHandler;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 @SuppressWarnings("WeakerAccess")
 public final class Wands extends JavaPlugin {
 
-    public static final String PREFIX = ChatColor.translateAlternateColorCodes('&', "&8&l[&6&lWands&8&l]&r ");
     private static Wands plugin;
 
-    //if this is false, the wands should all stop with working.
-    private boolean STATUS = true;
+    public static final String PREFIX = "§8§l[§6§lWands§8§l]§r ";
     public static final String VERSION = "1.0.0";
+
+    //if this is false, the wands should all stop with working.
+    private boolean status = true;
 
     private final SpellRegistry spellRegistry = new SpellRegistry();
 
-
+    @Override
     public void onEnable() {
         if(!Bukkit.getVersion().contains("Paper")) {
             this.getPluginLoader().disablePlugin(this);
             sendConsole("§cThis plugin only works on Paper, an improved version of spigot.");
-            return;
+            sendConsole("§cDisabling plugin...");
+        } else {
+            plugin = this;
+
+            this.getCommand("wands").setExecutor(new MainCommandHandler());
+            this.getCommand("wands").setTabCompleter(new ConstructTabCompleter());
+
+            registerListener(
+                    new GUIs(),
+                    new SpellManager(),
+                    new TherosDagger(),
+                    new EmpireBow()
+            );
+
+            spellRegistry.registerSpells(Spell.values());
         }
-        plugin = this;
-
-        sendConsole("Up and running!");
-        this.getCommand("wands").setExecutor(new MainCommandHandler());
-        this.getCommand("wands").setTabCompleter(new ConstructTabCompleter());
-
-        registerListener(new GUIs(), new SpellManager());
-
-        registerListener(new TherosDagger(), new EmpireBow());
-
-        spellRegistry.registerSpells(Spell.values());
     }
 
+    @Override
     public void onDisable() {
         plugin = null;
     }
@@ -55,7 +59,7 @@ public final class Wands extends JavaPlugin {
         }
     }
 
-    public static Wands getInstance() {
+    public static Wands getPlugin() {
         return plugin;
     }
 
@@ -64,18 +68,22 @@ public final class Wands extends JavaPlugin {
     }
 
     public void disable() {
-        getInstance().STATUS = false;
+        getPlugin().status = false;
     }
 
     public void enable() {
-        getInstance().STATUS = true;
+        getPlugin().status = true;
+    }
+
+    public boolean setStatus(boolean status) {
+        return getPlugin().status = status;
     }
 
     public void toggleStatus() {
-        getInstance().STATUS = !getInstance().STATUS;
+        getPlugin().status = !getPlugin().status;
     }
 
     public boolean getStatus() {
-        return getInstance().STATUS;
+        return getPlugin().status;
     }
 }
