@@ -5,14 +5,23 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
 public enum MagicalItems {
-    THEROS_DAGGER(new WandItem(new ItemStack(Material.MUSIC_DISC_MALL)).setName("&8Theros Dagger")
-            .setNbtTagInt("therosDagger", 1).getItemStack()),
+    THEROS_DAGGER(new ItemUtil(Material.MUSIC_DISC_MALL).builder(builder -> {
+        builder.setName("&8Theros Dagger");
+        builder.setNbtTagInt("therosDagger", 1);
+    }).getItemStack()),
 
-    EMPIRE_BOW(new WandItem(new ItemStack(Material.BOW)).setName("&cEmpire Bow")
-            .setNbtTagInt("empireBow", 1).setItemMeta(meta -> meta.setUnbreakable(true)).addEnchant(Enchantment.ARROW_INFINITE, 1).getItemStack()),
+    EMPIRE_BOW(new ItemUtil(Material.BOW).builder(builder -> {
+        builder.setName("&cEmpire Bow");
+        builder.setNbtTagInt("empireBow", 1);
+        builder.setItemMeta(meta -> {
+            meta.setUnbreakable(true);
+            meta.addEnchant(Enchantment.ARROW_INFINITE, 1, true);
+        });
+    }).getItemStack()),
 
-    EMPIRE_WAND(new WandItem(new ItemStack(Material.BLAZE_ROD)).markAsWand().setSpells(Spell.values())
-            .setName("&cEmpire Wand").getItemStack());
+    EMPIRE_WAND(new WandItemStack.Builder(Material.BLAZE_ROD).builder(builder -> {
+        builder.setName("&cEmpire Wand");
+    }).setSpells(Spell.values()).getItemStack());
 
     private final ItemStack itemStack;
 

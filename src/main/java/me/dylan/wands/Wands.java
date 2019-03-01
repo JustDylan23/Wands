@@ -51,11 +51,6 @@ public final class Wands extends JavaPlugin {
         }
     }
 
-    @Override
-    public void onDisable() {
-        plugin = null;
-    }
-
     public static Wands getPlugin() {
         return plugin;
     }
