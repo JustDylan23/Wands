@@ -30,7 +30,7 @@ public class MainCommandHandler implements CommandExecutor {
             } else if (args[0].equalsIgnoreCase("info")) {
                 sender.sendMessage("§e ---- §6Wands§e ----");
                 sender.sendMessage("§6Created by: §e_JustDylan_");
-                sender.sendMessage("§6Current version:§e " + Wands.VERSION);
+                sender.sendMessage("§6Current version:§e " + Wands.getPlugin().getDescription().getVersion());
             }
             return true;
         }
