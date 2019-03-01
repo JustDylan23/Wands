@@ -11,17 +11,23 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 @SuppressWarnings({"WeakerAccess", "UnusedReturnValue", "RedundantSuppression"})
-public final class WandItemStack extends ItemUtil {
+public final class WandItem extends ItemUtil {
 
     private static final String TAG_SPELL_INDEX = "SpellIndex";
     private static final String TAG_SPELLS_LIST = "Spells";
     private static final String TAG_VERIFIED = "IsWand";
 
-    private WandItemStack(ItemStack itemStack) {
+    private WandItem(ItemStack itemStack) {
         super(itemStack);
     }
 
-    public WandItemStack setSpellIndex(int index) {
+    public static WandItem wrapIfWand(ItemStack itemStack) {
+        WandItem wandItem = new WandItem(itemStack);
+        if (wandItem.isMarkedAsWand()) return wandItem;
+        return null;
+    }
+
+    public WandItem setSpellIndex(int index) {
         setNbtTagInt(TAG_SPELL_INDEX, index);
         return this;
     }
@@ -105,8 +111,8 @@ public final class WandItemStack extends ItemUtil {
             return this;
         }
 
-        public WandItemStack build() {
-            return new WandItemStack(getItemStack());
+        public WandItem build() {
+            return new WandItem(getItemStack());
         }
     }
 }

@@ -15,22 +15,10 @@ import java.util.Arrays;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-/**
- * Utils for directly modifying {@link ItemStack}
- *
- * @author Dylan
- * @since BETA-1.0.0
- */
 @SuppressWarnings({"WeakerAccess", "RedundantSuppression"})
 public class ItemUtil {
 
     private final ItemStack itemStack;
-
-    /**
-     * Creates ItemUtil for {@link ItemStack} in the parameter.
-     *
-     * @param itemStack {@link ItemStack}
-     */
 
     public ItemUtil(ItemStack itemStack) {
         this.itemStack = itemStack;
@@ -73,11 +61,11 @@ public class ItemUtil {
     }
 
     public void setNbtTagInt(String key, int i) {
-        modifyNbt(tag -> tag.set(key, new NBTTagInt(i)));
+        setNbtTag(key, new NBTTagInt(i));
     }
 
     public void setNbtTagIntArray(String key, int... i) {
-        modifyNbt(tag -> tag.set(key, new NBTTagIntArray(i)));
+        setNbtTag(key, new NBTTagIntArray(i));
     }
 
     public <T> T getNbtTag(Function<NBTTagCompound, T> function) {

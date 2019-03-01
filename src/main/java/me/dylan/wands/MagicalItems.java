@@ -19,7 +19,7 @@ public enum MagicalItems {
         });
     }).getItemStack()),
 
-    EMPIRE_WAND(new WandItemStack.Builder(Material.BLAZE_ROD).builder(builder -> {
+    EMPIRE_WAND(new WandItem.Builder(Material.BLAZE_ROD).builder(builder -> {
         builder.setName("&cEmpire Wand");
     }).setSpells(Spell.values()).getItemStack());
 
