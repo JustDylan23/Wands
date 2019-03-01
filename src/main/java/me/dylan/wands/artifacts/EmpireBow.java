@@ -35,7 +35,6 @@ public class EmpireBow implements Listener {
     private final Plugin plugin = Wands.getPlugin();
 
     private boolean hasBow(Player player) {
-        if (!Wands.getPlugin().getStatus()) return false;
         ItemStack tool = player.getInventory().getItemInMainHand();
         if (tool != null) {
             ItemUtil itemUtil = new ItemUtil(tool);

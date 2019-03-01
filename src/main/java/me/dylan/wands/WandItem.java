@@ -1,5 +1,8 @@
 package me.dylan.wands;
 
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
@@ -75,5 +78,29 @@ public final class WandItem extends ItemUtil<WandItem> {
 
     public boolean isMarkedAsWand() {
         return hasNbtTag(verifiedTag);
+    }
+
+    public void castSpell(Player player) {
+        CastableSpell spell = getSelectedSpell();
+        if (spell != null) {
+            spell.cast(player);
+        }
+    }
+
+    public void nextSpell(Player player) {
+        int index = getSpellIndex();
+        int maxValue = getSpellSize();
+
+        if (maxValue == 0) return;
+
+        if (!player.isSneaking()) {
+            index = index < maxValue ? index + 1 : 1;
+        } else {
+            index = index > 1 ? index - 1 : maxValue;
+        }
+        setSpellIndex(index);
+
+        player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.5F, 0.5F);
+        player.sendActionBar("§6Current spell: §7§l" + getSelectedSpell().getName());
     }
 }

@@ -5,8 +5,13 @@ import me.dylan.wands.artifacts.TherosDagger;
 import me.dylan.wands.commandhandler.ConstructTabCompleter;
 import me.dylan.wands.commandhandler.MainCommandHandler;
 import org.bukkit.Bukkit;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 @SuppressWarnings("WeakerAccess")
 public final class Wands extends JavaPlugin {
@@ -16,13 +21,15 @@ public final class Wands extends JavaPlugin {
     public static final String PREFIX = "§8§l[§6§lWands§8§l]§r ";
 
     //if this is false, the wands should all stop with working.
-    private boolean status = true;
+    private boolean wandsEnabled = true;
+    private final Set<Listener> toggleableListeners = new HashSet<>();
 
     private final SpellRegistry spellRegistry = new SpellRegistry();
 
+
     @Override
     public void onEnable() {
-        if(!Bukkit.getVersion().contains("Paper")) {
+        if (!Bukkit.getVersion().contains("Paper")) {
             this.getPluginLoader().disablePlugin(this);
             sendConsole("§cThis plugin only works on Paper, an improved version of spigot.");
             sendConsole("§cDisabling plugin...");
@@ -32,9 +39,10 @@ public final class Wands extends JavaPlugin {
             this.getCommand("wands").setExecutor(new MainCommandHandler());
             this.getCommand("wands").setTabCompleter(new ConstructTabCompleter());
 
-            registerListener(
-                    new GUIs(),
-                    new SpellManager(),
+            addListener(new GUIs());
+
+            addToggleableListener(
+                    new PlayerInteractionListener(),
                     new TherosDagger(),
                     new EmpireBow()
             );
@@ -48,16 +56,6 @@ public final class Wands extends JavaPlugin {
         plugin = null;
     }
 
-    public void sendConsole(String text) {
-        Bukkit.getConsoleSender().sendMessage(PREFIX + text);
-    }
-
-    public void registerListener(Listener... listeners) {
-        for (Listener listener : listeners) {
-            Bukkit.getServer().getPluginManager().registerEvents(listener, this);
-        }
-    }
-
     public static Wands getPlugin() {
         return plugin;
     }
@@ -66,23 +64,42 @@ public final class Wands extends JavaPlugin {
         return spellRegistry;
     }
 
-    public void disable() {
-        getPlugin().status = false;
+    public void sendConsole(String text) {
+        Bukkit.getConsoleSender().sendMessage(PREFIX + text);
     }
 
-    public void enable() {
-        getPlugin().status = true;
+    public void addListener(Listener... listeners) {
+        for (Listener listener : listeners) {
+            Bukkit.getServer().getPluginManager().registerEvents(listener, this);
+        }
     }
 
-    public boolean setStatus(boolean status) {
-        return getPlugin().status = status;
+    public void addToggleableListener(Listener... listeners) {
+        toggleableListeners.addAll(Arrays.asList(listeners));
+        addListener(listeners);
     }
 
-    public void toggleStatus() {
-        getPlugin().status = !getPlugin().status;
+    private void disableListeners() {
+        toggleableListeners.forEach(HandlerList::unregisterAll);
     }
 
-    public boolean getStatus() {
-        return getPlugin().status;
+    private void enableListeners() {
+        toggleableListeners.forEach(listener -> Bukkit.getServer().getPluginManager().registerEvents(listener, this));
+    }
+
+    public void setWandsEnabled(boolean enabled) {
+        if (wandsEnabled != enabled) {
+            wandsEnabled = enabled;
+            if (enabled) enableListeners();
+            else disableListeners();
+        }
+    }
+
+    public void toggleWandsEnabled() {
+        setWandsEnabled(!wandsEnabled);
+    }
+
+    public boolean getWandsEnabled() {
+        return getPlugin().wandsEnabled;
     }
 }

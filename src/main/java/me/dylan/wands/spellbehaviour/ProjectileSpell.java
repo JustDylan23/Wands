@@ -29,7 +29,7 @@ public final class ProjectileSpell<T extends Projectile> extends SpellBehaviour 
 
     private ProjectileSpell(int entityDamage, float effectAreaRange, float pushSpeed, Consumer<Location> castEffects, Consumer<Location> visualEffects, Consumer<Entity> entityEffects, Class<T> projectile, Consumer<T> projectilePropperties, Consumer<Location> hitEffects, float speed, int lifeTime, String tag) {
         super(entityDamage, effectAreaRange, pushSpeed, castEffects, visualEffects, entityEffects);
-        plugin.registerListener(this);
+        plugin.addListener(this);
         this.projectile = projectile;
         this.projectilePropperties = projectilePropperties;
         this.hitEffects = hitEffects;

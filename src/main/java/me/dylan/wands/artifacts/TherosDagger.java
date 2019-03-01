@@ -30,7 +30,6 @@ public final class TherosDagger implements Listener {
     private final String sneakKey = "therosInvisable";
 
     private boolean hasDagger(Player player) {
-        if (!Wands.getPlugin().getStatus()) return false;
         ItemStack tool = player.getInventory().getItemInMainHand();
         if (tool != null) {
             ItemUtil itemUtil = new ItemUtil(tool);

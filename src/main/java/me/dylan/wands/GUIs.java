@@ -78,9 +78,9 @@ public final class GUIs implements Listener {
     }
 
     private void updateStatus() {
-        Wands.getPlugin().toggleStatus();
+        Wands.getPlugin().toggleWandsEnabled();
         ItemUtil status;
-        if (Wands.getPlugin().getStatus()) {
+        if (Wands.getPlugin().getWandsEnabled()) {
             status = new ItemUtil(new ItemStack(Material.GREEN_TERRACOTTA));
             status.setName("&6Status: &aEnabled");
             MAIN_GUI.setItem(16, status.getItemStack());
