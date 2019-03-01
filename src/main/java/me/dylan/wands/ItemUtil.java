@@ -5,8 +5,8 @@ import net.minecraft.server.v1_13_R2.NBTTagCompound;
 import net.minecraft.server.v1_13_R2.NBTTagInt;
 import net.minecraft.server.v1_13_R2.NBTTagIntArray;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -21,8 +21,8 @@ import java.util.function.Function;
  * @author Dylan
  * @since BETA-1.0.0
  */
-@SuppressWarnings({"WeakerAccess", "UnusedReturnValue", "RedundantSuppression"})
-public class ItemUtil<T extends ItemUtil> {
+@SuppressWarnings({"WeakerAccess", "RedundantSuppression"})
+public class ItemUtil {
 
     private final ItemStack itemStack;
 
@@ -36,31 +36,19 @@ public class ItemUtil<T extends ItemUtil> {
         this.itemStack = itemStack;
     }
 
-    @SuppressWarnings("unchecked")
-    public T getInstance() {
-        return (T) this;
+    public ItemUtil(Material material) {
+        this(new ItemStack(material));
     }
 
-    public T setItemMeta(Consumer<ItemMeta> consumer) {
+    public ItemUtil builder(Consumer<ItemUtil> consumer) {
+        consumer.accept(this);
+        return this;
+    }
+
+    public void setItemMeta(Consumer<ItemMeta> consumer) {
         ItemMeta itemMeta = itemStack.getItemMeta();
         consumer.accept(itemMeta);
         itemStack.setItemMeta(itemMeta);
-        return getInstance();
-    }
-
-    public T setName(String name) {
-        setItemMeta(meta -> meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', name)));
-        return getInstance();
-    }
-
-    public T setLore(String... lore) {
-        setItemMeta(meta -> meta.setLore(Arrays.asList(lore)));
-        return getInstance();
-    }
-
-    public T addEnchant(Enchantment enchantment, int level) {
-        itemStack.addEnchantment(enchantment, level);
-        return getInstance();
     }
 
     private void modifyNbt(Consumer<NBTTagCompound> consumer) {
@@ -72,55 +60,34 @@ public class ItemUtil<T extends ItemUtil> {
         itemStack.setItemMeta(meta);
     }
 
-    /**
-     * Sets any NBT tag.
-     *
-     * Example of usage:
-     * {@code
-     * instance.setNbtTag("key", new NBTTagInt(i));}
-     *
-     * @param key     The key the {@link NBTBase} will be stored under.
-     * @param nbtBase The {@link NBTBase} that will be stored under key.
-     * @return Instance of itself
-     */
+    public void setName(String name) {
+        setItemMeta(meta -> meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', name)));
+    }
 
-    public T setNbtTag(String key, @Nonnull NBTBase nbtBase) {
+    public void setLore(String... lore) {
+        setItemMeta(meta -> meta.setLore(Arrays.asList(lore)));
+    }
+
+    public void setNbtTag(String key, @Nonnull NBTBase nbtBase) {
         modifyNbt(tag -> tag.set(key, nbtBase));
-        return getInstance();
     }
 
-    public T setNbtTagInt(String key, int i) {
+    public void setNbtTagInt(String key, int i) {
         modifyNbt(tag -> tag.set(key, new NBTTagInt(i)));
-        return getInstance();
     }
 
-    public T setNbtTagIntArray(String key, int... i) {
+    public void setNbtTagIntArray(String key, int... i) {
         modifyNbt(tag -> tag.set(key, new NBTTagIntArray(i)));
-        return getInstance();
     }
 
-    /**
-     * Allows user to use any getter method from {@link NBTTagCompound}.
-     *
-     * Example of usage:
-     * {@code instance.getTag(tag -> tag.getInt("key"));}
-     *
-     * @param function Function for getter method.
-     * @param <S>      Type of the result of the method in function.
-     * @return Result of getter method in function.
-     */
-
-    public <S> S getNbtTag(Function<NBTTagCompound, S> function) {
+    public <T> T getNbtTag(Function<NBTTagCompound, T> function) {
         net.minecraft.server.v1_13_R2.ItemStack nmsItem = CraftItemStack.asNMSCopy(itemStack);
         NBTTagCompound compound = nmsItem.getTag() != null ? nmsItem.getTag() : new NBTTagCompound();
         return function.apply(compound);
     }
 
-    public T removeNbtTag(String key) {
-        if (hasNbtTag(key)) {
-            modifyNbt(tag -> tag.remove(key));
-        }
-        return getInstance();
+    public void removeNbtTag(String key) {
+        modifyNbt(tag -> tag.remove(key));
     }
 
     public boolean hasNbtTag(String key) {
