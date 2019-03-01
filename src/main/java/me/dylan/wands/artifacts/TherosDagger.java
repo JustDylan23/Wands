@@ -25,12 +25,12 @@ import org.bukkit.util.Vector;
 
 public final class TherosDagger implements Listener {
 
-    private final Wands plugin = Wands.getInstance();
+    private final Wands plugin = Wands.getPlugin();
     private final String leapKey = "therosJump";
     private final String sneakKey = "therosInvisable";
 
     private boolean hasDagger(Player player) {
-        if (!Wands.getInstance().getStatus()) return false;
+        if (!Wands.getPlugin().getStatus()) return false;
         ItemStack tool = player.getInventory().getItemInMainHand();
         if (tool != null) {
             ItemUtil itemUtil = new ItemUtil(tool);
@@ -43,7 +43,7 @@ public final class TherosDagger implements Listener {
     public void onSpringToggle(PlayerToggleSprintEvent event) {
         Player player = event.getPlayer();
         if (hasDagger(player)) {
-            Bukkit.getScheduler().runTaskLater(Wands.getInstance(), () -> jumpParticles(player), 1);
+            Bukkit.getScheduler().runTaskLater(Wands.getPlugin(), () -> jumpParticles(player), 1);
         }
     }
 
@@ -92,7 +92,7 @@ public final class TherosDagger implements Listener {
                                         }
                                     }
                                 }
-                            }.runTaskTimer(Wands.getInstance(), 3, 3);
+                            }.runTaskTimer(Wands.getPlugin(), 3, 3);
                         }
                     }
                 }
@@ -175,7 +175,7 @@ public final class TherosDagger implements Listener {
 
     private void jumpParticles(Player player) {
         if (player.isSprinting()) {
-            Bukkit.getScheduler().runTaskLater(Wands.getInstance(), () -> {
+            Bukkit.getScheduler().runTaskLater(Wands.getPlugin(), () -> {
                 Location loc = player.getLocation();
                 loc.getWorld().spawnParticle(Particle.SMOKE_LARGE, loc, 1, 0.1, 0.1, 0.1, 0.1, null, true);
                 loc.getWorld().spawnParticle(Particle.SMOKE_NORMAL, loc, 1, 0.1, 0.1, 0.1, 0.1, null, true);

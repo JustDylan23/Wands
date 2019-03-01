@@ -6,7 +6,7 @@ import org.bukkit.plugin.Plugin;
 
 public abstract class CastableSpell implements Listener {
 
-    protected final Plugin plugin = Wands.getInstance();
+    protected final Plugin plugin = Wands.getPlugin();
     private final String displayName;
     private final int id;
     private static int idCount;

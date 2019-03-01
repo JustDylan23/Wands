@@ -32,10 +32,10 @@ import java.util.function.Consumer;
 public class EmpireBow implements Listener {
 
     private final String cursedArrow = "cursedArrow";
-    private final Plugin plugin = Wands.getInstance();
+    private final Plugin plugin = Wands.getPlugin();
 
     private boolean hasBow(Player player) {
-        if (!Wands.getInstance().getStatus()) return false;
+        if (!Wands.getPlugin().getStatus()) return false;
         ItemStack tool = player.getInventory().getItemInMainHand();
         if (tool != null) {
             ItemUtil itemUtil = new ItemUtil(tool);
@@ -74,7 +74,7 @@ public class EmpireBow implements Listener {
                                 }
                             } else cancel();
                         }
-                    }.runTaskTimer(Wands.getInstance(), 1, 1);
+                    }.runTaskTimer(Wands.getPlugin(), 1, 1);
                 }
             }
         }
@@ -132,7 +132,7 @@ public class EmpireBow implements Listener {
                     consumer.accept(entity.getLocation());
                 } else cancel();
             }
-        }.runTaskTimer(Wands.getInstance(), 1, 1);
+        }.runTaskTimer(Wands.getPlugin(), 1, 1);
     }
 
     @EventHandler

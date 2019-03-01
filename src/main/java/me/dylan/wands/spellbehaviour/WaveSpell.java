@@ -28,17 +28,17 @@ public class WaveSpell extends SpellBehaviour {
             if (!loc.getBlock().isPassable()) {
                 return;
             }
-            Bukkit.getScheduler().runTaskLater(PLUGIN, () -> {
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 visualEffects.accept(loc);
                 getNearbyDamageables(player, loc, effectAreaRange).forEach(entity -> {
                     if (!entity.hasMetadata(metaId)) {
-                        player.setMetadata(metaId, new FixedMetadataValue(PLUGIN, true));
+                        player.setMetadata(metaId, new FixedMetadataValue(plugin, true));
                         damage(entityDamage, player, entity);
                         entityEffects.accept(entity);
                         pushFrom(loc, entity, pushSpeed);
-                        Bukkit.getScheduler().runTaskLater(PLUGIN, () -> {
+                        Bukkit.getScheduler().runTaskLater(plugin, () -> {
                             if (entity.isValid()) {
-                                entity.removeMetadata(metaId, PLUGIN);
+                                entity.removeMetadata(metaId, plugin);
                             }
                         }, effectDistance);
                     }

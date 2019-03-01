@@ -51,7 +51,7 @@ public final class WandItem extends ItemUtil<WandItem> {
     public Map<Integer, CastableSpell> getSpells() {
         int[] spells = getNbtTag(tag -> tag.getIntArray(spellsListTag));
         Map<Integer, CastableSpell> spellHashMap = new HashMap<>();
-        SpellRegistry spellRegistry = Wands.getInstance().getSpellRegistry();
+        SpellRegistry spellRegistry = Wands.getPlugin().getSpellRegistry();
         int i = 0;
         for (int spellId : spells) {
             spellHashMap.put(++i, spellRegistry.getSpell(spellId));
