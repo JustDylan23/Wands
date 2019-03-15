@@ -47,9 +47,14 @@ public abstract class SpellBehaviour {
         victim.setVelocity(new Vector(0, 0, 0));
     }
 
-    void pushFrom(Location sLoc, Entity entity, float speed) {
+    void pushFrom(Location origin, Entity entity, float speed) {
         if (speed != 0) {
-            entity.setVelocity(entity.getLocation().subtract(sLoc).toVector().normalize().multiply(speed));
+            Location location = entity.getLocation().subtract(origin);
+            Vector vector = location.toVector().normalize().multiply(speed);
+            if (!Double.isFinite(vector.getX()) || !Double.isFinite(vector.getY()) || !Double.isFinite(vector.getZ())) {
+                vector = new Vector(0, 0.2, 0);
+            }
+            entity.setVelocity(vector);
         }
     }
 }

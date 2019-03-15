@@ -8,7 +8,8 @@ public enum Spell {
     LAUNCH(new Launch()),
     CONFUSE(new Confuse()),
     POISON_WAVE(new PoisonWave()),
-    SPARK_BLOOD(new BloodSpark());
+    SPARK_BLOOD(new BloodSpark()),
+    WAVE_POISON(new BloodWave());
 
     private final CastableSpell spell;
 

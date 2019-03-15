@@ -3,8 +3,8 @@ package me.dylan.wands.spells;
 import me.dylan.wands.CastableSpell;
 import me.dylan.wands.spellbehaviour.ProjectileSpell;
 import org.bukkit.*;
-import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.SmallFireball;
 
 public class Comet extends CastableSpell {
 
@@ -17,7 +17,7 @@ public class Comet extends CastableSpell {
 
     public Comet() {
         super("Comet");
-        spellBehaviour = new ProjectileSpell.Builder<>(Fireball.class, "Spell", 4F)
+        spellBehaviour = new ProjectileSpell.Builder<>(SmallFireball.class, "Spell", 4F)
                 .setProjectilePropperties(projectile -> {
                     projectile.setIsIncendiary(false);
                     projectile.setYield(0);
