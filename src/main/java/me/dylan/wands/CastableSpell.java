@@ -1,5 +1,6 @@
 package me.dylan.wands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
@@ -25,4 +26,12 @@ public abstract class CastableSpell implements Listener {
     }
 
     protected abstract void cast(Player player);
+
+    protected void runTaskLater(Runnable runnable, int... delays) {
+        int delay = 0;
+        for (int d : delays) {
+            delay += d;
+            Bukkit.getScheduler().runTaskLater(plugin, runnable, delay);
+        }
+    }
 }

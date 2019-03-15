@@ -53,7 +53,7 @@ public class EmpireBow implements Listener {
             if (hasBow(player)) {
                 if (player.getGameMode() == GameMode.CREATIVE || player.getInventory().contains(Material.ARROW)) {
                     drawing.add(player);
-                    player.sendActionBar("§6Charging [§a|§6||||]");
+                    player.sendActionBar("§6Charging [§a|§6|||]");
                     new BukkitRunnable() {
                         int count;
 
@@ -61,12 +61,11 @@ public class EmpireBow implements Listener {
                         public void run() {
                             count++;
                             if (drawing.contains(player)) {
-                                if (count == 10) player.sendActionBar("§6Charging [§a||§6|||]");
-                                if (count == 20) player.sendActionBar("§6Charging [§a|||§6||]");
-                                if (count == 30) player.sendActionBar("§6Charging [§a||||§6|]");
-                                if (count == 40) {
+                                if (count == 10) player.sendActionBar("§6Charging [§a||§6||]");
+                                if (count == 20) player.sendActionBar("§6Charging [§a|||§6|]");
+                                if (count == 30) {
                                     player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.MASTER, 1F, 1F);
-                                    player.sendActionBar("§aCharged §6[§a|||||§6]");
+                                    player.sendActionBar("§aCharged §6[§a||||§6]");
                                     hasDrawn.add(player);
                                     drawing.remove(player);
                                     cancel();
@@ -145,7 +144,7 @@ public class EmpireBow implements Listener {
                 location.getWorld().spawnParticle(Particle.SMOKE_NORMAL, location, 30, 0.4, 0.4, 0.4, 0.2, null, true);
                 SpellBehaviour.getNearbyDamageables((Player) projectile.getShooter(), location, 3)
                         .forEach(entity -> {
-                            SpellBehaviour.damage(6, (Player) projectile.getShooter(), entity);
+                            SpellBehaviour.damage(7, (Player) projectile.getShooter(), entity);
                             ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 80, 3, false), true);
                         });
                 projectile.remove();

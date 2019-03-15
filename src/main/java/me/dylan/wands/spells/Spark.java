@@ -23,6 +23,7 @@ public class Spark extends CastableSpell {
                 .setEffectDistance(30)
                 .setEffectAreaRange(2.2F)
                 .setEntityDamage(5)
+                .setPushSpeed(0.2F)
                 .setVisualEffects(loc -> {
                     loc.add(0, 1, 0);
                     loc.getWorld().spawnParticle(Particle.SPELL_WITCH, loc, 30, 0.6, 0.7, 0.6, 0.2, null, true);

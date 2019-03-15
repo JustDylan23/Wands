@@ -27,7 +27,6 @@ public class SparkSpell extends SpellBehaviour {
             entity.damage(entityDamage, player);
             entity.setVelocity(new Vector(0, 0, 0));
             entityEffects.accept(entity);
-
             pushFrom(loc, entity, pushSpeed);
         });
         visualEffects.accept(loc);

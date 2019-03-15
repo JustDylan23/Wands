@@ -22,7 +22,7 @@ public class WaveSpell extends SpellBehaviour {
     public void executeFrom(Player player) {
         Vector direction = player.getLocation().getDirection().normalize();
         String metaId = System.currentTimeMillis() + "";
-        castEffects.accept(player.getLocation());
+        castEffects.accept(direction.clone().multiply(10).toLocation(player.getWorld()).add(player.getEyeLocation()));
         for (int i = 1; i <= effectDistance; i++) {
             Location loc = direction.clone().multiply(i).toLocation(player.getWorld()).add(player.getEyeLocation());
             if (!loc.getBlock().isPassable()) {
