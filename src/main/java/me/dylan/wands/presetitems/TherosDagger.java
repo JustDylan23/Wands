@@ -1,4 +1,4 @@
-package me.dylan.wands.artifacts;
+package me.dylan.wands.presetitems;
 
 import me.dylan.wands.ItemUtil;
 import me.dylan.wands.Wands;

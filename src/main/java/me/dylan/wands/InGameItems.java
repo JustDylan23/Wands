@@ -1,13 +1,14 @@
 package me.dylan.wands;
 
+import me.dylan.wands.SpellFoundation.Spell;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 
-public enum MagicalItems {
+public enum InGameItems {
     THEROS_DAGGER(new ItemUtil(Material.MUSIC_DISC_MALL).builder(builder -> {
-        builder.setName("&8Theros Dagger");
+        builder.setName("&dAssasin's &8Dagger");
         builder.setNbtTagInt("therosDagger", 1);
         builder.setItemMeta(meta -> meta.addItemFlags(ItemFlag.values()));
     }).getItemStack()),
@@ -22,13 +23,15 @@ public enum MagicalItems {
         });
     }).getItemStack()),
 
-    EMPIRE_WAND(new WandItem.Builder(Material.BLAZE_ROD).builder(builder -> {
-        builder.setName("&cGod Wand");
-    }).setSpells(Spell.values()).getItemStack());
+    EMPIRE_WAND(new WandItem.Builder(Material.BLAZE_ROD).builder(builder -> builder.setName("&eGod Wand"))
+            .setSpells(Spell.values()).getItemStack()),
+
+    BLOOD_WAND(new WandItem.Builder(Material.NETHER_WART).builder(builder -> builder.setName("&cBlood Wand"))
+    .setSpells(Spell.BLOOD_WAVE, Spell.BLOOD_SPARK).getItemStack());
 
     private final ItemStack itemStack;
 
-    MagicalItems(ItemStack itemStack) {
+    InGameItems(ItemStack itemStack) {
         this.itemStack = itemStack;
     }
 

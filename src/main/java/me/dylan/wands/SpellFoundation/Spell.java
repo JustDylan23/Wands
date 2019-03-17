@@ -1,4 +1,4 @@
-package me.dylan.wands;
+package me.dylan.wands.SpellFoundation;
 
 import me.dylan.wands.spells.*;
 
@@ -8,8 +8,8 @@ public enum Spell {
     LAUNCH(new Launch()),
     CONFUSE(new Confuse()),
     POISON_WAVE(new PoisonWave()),
-    SPARK_BLOOD(new BloodSpark()),
-    WAVE_POISON(new BloodWave());
+    BLOOD_SPARK(new BloodSpark()),
+    BLOOD_WAVE(new BloodWave());
 
     private final CastableSpell spell;
 

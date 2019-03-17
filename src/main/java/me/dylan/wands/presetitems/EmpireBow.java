@@ -1,8 +1,8 @@
-package me.dylan.wands.artifacts;
+package me.dylan.wands.presetitems;
 
 import me.dylan.wands.ItemUtil;
+import me.dylan.wands.SpellFoundation.SpellBehaviour;
 import me.dylan.wands.Wands;
-import me.dylan.wands.spellbehaviour.SpellBehaviour;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -33,6 +33,8 @@ public class EmpireBow implements Listener {
 
     private final String cursedArrow = "cursedArrow";
     private final Plugin plugin = Wands.getPlugin();
+    private final Set<Player> drawing = new HashSet<>();
+    private final Set<Player> hasDrawn = new HashSet<>();
 
     private boolean hasBow(Player player) {
         ItemStack tool = player.getInventory().getItemInMainHand();
@@ -42,9 +44,6 @@ public class EmpireBow implements Listener {
         }
         return false;
     }
-
-    private final Set<Player> drawing = new HashSet<>();
-    private final Set<Player> hasDrawn = new HashSet<>();
 
     @EventHandler
     public void onDraw(PlayerInteractEvent event) {
@@ -144,7 +143,7 @@ public class EmpireBow implements Listener {
                 location.getWorld().spawnParticle(Particle.SMOKE_NORMAL, location, 30, 0.4, 0.4, 0.4, 0.2, null, true);
                 SpellBehaviour.getNearbyDamageables((Player) projectile.getShooter(), location, 3)
                         .forEach(entity -> {
-                            SpellBehaviour.damage(7, (Player) projectile.getShooter(), entity);
+                            SpellBehaviour.damage(8, (Player) projectile.getShooter(), entity);
                             ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 80, 3, false), true);
                         });
                 projectile.remove();

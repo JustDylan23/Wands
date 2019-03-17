@@ -1,31 +1,27 @@
 package me.dylan.wands.spells;
 
-import me.dylan.wands.CastableSpell;
-import me.dylan.wands.spellbehaviour.SparkSpell;
+import me.dylan.wands.SpellFoundation.CastableSpell;
+import me.dylan.wands.SpellFoundation.SpellBehaviour;
+import me.dylan.wands.SpellFoundation.SpellBehaviour.BaseProperties;
+import me.dylan.wands.SpellFoundation.SpellBehaviour.SparkSpell.Builder;
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class Confuse extends CastableSpell {
-
-    private final SparkSpell spellBehaviour;
-
-    @Override
-    protected void cast(Player player) {
-        spellBehaviour.executeFrom(player);
-    }
-
     public Confuse() {
         super("Confuse");
-        this.spellBehaviour = new SparkSpell.Builder()
-                .setEffectDistance(30)
+    }
+
+    @Override
+    public SpellBehaviour getSpellBehaviour() {
+        BaseProperties baseProperties = SpellBehaviour.createEmptyBaseProperties()
                 .setEffectAreaRange(4F)
-                .setEntityDamage(5)
+                .setEntityDamage(6)
                 .setEntityEffects(entity -> ((LivingEntity) entity).addPotionEffect(
                         new PotionEffect(PotionEffectType.CONFUSION, 240, 4, false), true))
                 .setVisualEffects(loc -> {
@@ -36,7 +32,8 @@ public class Confuse extends CastableSpell {
                     Bukkit.getScheduler().runTaskLater(plugin, () ->
                             loc.getWorld().playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, SoundCategory.MASTER, 4.0F, 1.0F), 10L);
                 })
-                .setCastEffects(loc -> loc.getWorld().playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_BLAST, SoundCategory.MASTER, 4.0F, 1.0F))
-                .build();
+                .setCastEffects(loc -> loc.getWorld().playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_BLAST, SoundCategory.MASTER, 4.0F, 1.0F));
+
+        return new Builder(baseProperties).setEffectDistance(30).build();
     }
 }

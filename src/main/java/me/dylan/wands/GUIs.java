@@ -14,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
 public final class GUIs implements Listener {
 
     private static final Inventory MAIN_GUI;
+    private static final Inventory WANDS_GUI;
 
     static {
         MAIN_GUI = Bukkit.createInventory(null, 27, Wands.PREFIX + "menu");
@@ -27,13 +28,12 @@ public final class GUIs implements Listener {
         MAIN_GUI.setItem(16, status.getItemStack());
     }
 
-    private static final Inventory WANDS_GUI;
-
     static {
         WANDS_GUI = Bukkit.createInventory(null, 27, Wands.PREFIX + "wands");
-        WANDS_GUI.setItem(10, MagicalItems.EMPIRE_WAND.getItemStack());
-        WANDS_GUI.setItem(13, MagicalItems.THEROS_DAGGER.getItemStack());
-        WANDS_GUI.setItem(16, MagicalItems.EMPIRE_BOW.getItemStack());
+        WANDS_GUI.setItem(0, InGameItems.EMPIRE_WAND.getItemStack());
+        WANDS_GUI.setItem(1, InGameItems.BLOOD_WAND.getItemStack());
+        WANDS_GUI.setItem(2, InGameItems.THEROS_DAGGER.getItemStack());
+        WANDS_GUI.setItem(3, InGameItems.EMPIRE_BOW.getItemStack());
     }
 
     public static void openGUI(Player player) {
