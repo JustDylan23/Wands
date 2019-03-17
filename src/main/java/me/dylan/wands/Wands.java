@@ -1,9 +1,10 @@
 package me.dylan.wands;
 
-import me.dylan.wands.artifacts.EmpireBow;
-import me.dylan.wands.artifacts.TherosDagger;
+import me.dylan.wands.SpellFoundation.SpellRegistry;
 import me.dylan.wands.commandhandler.ConstructTabCompleter;
 import me.dylan.wands.commandhandler.MainCommandHandler;
+import me.dylan.wands.presetitems.EmpireBow;
+import me.dylan.wands.presetitems.TherosDagger;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
@@ -16,16 +17,16 @@ import java.util.Set;
 @SuppressWarnings("WeakerAccess")
 public final class Wands extends JavaPlugin {
 
-    private static Wands plugin;
-
     public static final String PREFIX = "§8§l[§6§lWands§8§l]§r ";
-
+    private static Wands plugin;
+    private final Set<Listener> toggleableListeners = new HashSet<>();
+    private final SpellRegistry spellRegistry = new SpellRegistry();
     //if this is false, the wands should all stop with working.
     private boolean wandsEnabled = true;
-    private final Set<Listener> toggleableListeners = new HashSet<>();
 
-    private final SpellRegistry spellRegistry = new SpellRegistry();
-
+    public static Wands getPlugin() {
+        return plugin;
+    }
 
     @Override
     public void onEnable() {
@@ -47,12 +48,8 @@ public final class Wands extends JavaPlugin {
                     new EmpireBow()
             );
 
-            spellRegistry.registerSpells(Spell.values());
+            spellRegistry.loadSpells();
         }
-    }
-
-    public static Wands getPlugin() {
-        return plugin;
     }
 
     public SpellRegistry getSpellRegistry() {
@@ -79,15 +76,8 @@ public final class Wands extends JavaPlugin {
     }
 
     private void enableListeners() {
+        toggleableListeners.forEach(HandlerList::unregisterAll);
         toggleableListeners.forEach(listener -> Bukkit.getServer().getPluginManager().registerEvents(listener, this));
-    }
-
-    public void setWandsEnabled(boolean enabled) {
-        if (wandsEnabled != enabled) {
-            wandsEnabled = enabled;
-            if (enabled) enableListeners();
-            else disableListeners();
-        }
     }
 
     public void toggleWandsEnabled() {
@@ -96,5 +86,13 @@ public final class Wands extends JavaPlugin {
 
     public boolean getWandsEnabled() {
         return getPlugin().wandsEnabled;
+    }
+
+    public void setWandsEnabled(boolean enabled) {
+        if (wandsEnabled != enabled) {
+            wandsEnabled = enabled;
+            if (enabled) enableListeners();
+            else disableListeners();
+        }
     }
 }

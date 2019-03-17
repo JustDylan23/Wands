@@ -20,7 +20,7 @@ public class ConstructTabCompleter implements TabCompleter {
         completions.clear();
         if (command.getName().equalsIgnoreCase("wands")) {
             if (args.length == 1) {
-                setCompletions(new String[]{"info", "set", "disable", "enable", "dropondeath", "spells", "permission"});
+                setCompletions(new String[]{"info", "set", "disable", "enable", "dropOnDeath", "spells", "permission"});
                 return completions;
             }
         }

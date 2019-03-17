@@ -1,7 +1,7 @@
 package me.dylan.wands.commandhandler;
 
 import me.dylan.wands.GUIs;
-import me.dylan.wands.Spell;
+import me.dylan.wands.SpellFoundation.Spell;
 import me.dylan.wands.Wands;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -26,7 +26,7 @@ public class MainCommandHandler implements CommandExecutor {
                 for (Spell spell : spells) {
                     sj.add(spell.toString());
                 }
-                sender.sendMessage("§6Spells ("+ spells.length +"): §r" + sj.toString());
+                sender.sendMessage("§6Spells (" + spells.length + "): §r" + sj.toString());
             } else if (args[0].equalsIgnoreCase("info")) {
                 sender.sendMessage("§e ---- §6Wands§e ----");
                 sender.sendMessage("§6Created by: §e_JustDylan_");

@@ -1,5 +1,8 @@
 package me.dylan.wands;
 
+import me.dylan.wands.SpellFoundation.CastableSpell;
+import me.dylan.wands.SpellFoundation.Spell;
+import me.dylan.wands.SpellFoundation.SpellRegistry;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
@@ -29,17 +32,17 @@ public final class WandItem extends ItemUtil {
         return null;
     }
 
-    public WandItem setSpellIndex(int index) {
-        setNbtTagInt(TAG_SPELL_INDEX, index);
-        return this;
-    }
-
     public int getSpellIndex() {
         if (hasNbtTag(TAG_SPELL_INDEX)) {
             return getNbtTag(tag -> tag.getInt(TAG_SPELL_INDEX));
         }
         setSpellIndex(1);
         return 1;
+    }
+
+    public WandItem setSpellIndex(int index) {
+        setNbtTagInt(TAG_SPELL_INDEX, index);
+        return this;
     }
 
     public Map<Integer, CastableSpell> getSpells() {
