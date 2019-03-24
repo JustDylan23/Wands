@@ -28,7 +28,7 @@ public class Comet extends CastableSpell {
                     world.spawnParticle(Particle.SMOKE_LARGE, loc, 10, 0.6, 0.6, 0.6, 0.1, null, true);
                     world.spawnParticle(Particle.SMOKE_LARGE, loc, 10, 1.0, 1.0, 1.0, 0.1, null, true);
                 });
-        return new Builder<>(SmallFireball.class, 4F, baseProperties)
+        return new Builder<>(SmallFireball.class, 3F, baseProperties)
                 .setProjectilePropperties(projectile -> {
                     projectile.setIsIncendiary(false);
                     projectile.setYield(0);

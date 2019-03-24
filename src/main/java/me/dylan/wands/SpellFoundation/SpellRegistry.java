@@ -6,32 +6,29 @@ import java.util.NoSuchElementException;
 
 public final class SpellRegistry {
 
-    private static boolean isLoaded = false;
     private final Map<Integer, CastableSpell> spellRegister = new HashMap<>();
 
     public void loadSpells() {
-        if (isLoaded) {
+        if (!spellRegister.isEmpty()) {
             throw new AlreadyLoadedException();
         }
-        isLoaded = true;
         Spell[] spells = Spell.values();
         for (Spell spell : spells) {
             spellRegister.put(spell.getId(), spell.getInstance());
         }
     }
 
-    public CastableSpell getSpell(int index) {
+    private static class AlreadyLoadedException extends RuntimeException {
+        private AlreadyLoadedException() {
+            super("The plugin executed loadSpells twice");
+        }
+    }
+
+    public CastableSpell getSpell(int index) throws NoSuchElementException{
         CastableSpell castableSpell = spellRegister.get(index);
         if (castableSpell == null) {
             throw new NoSuchElementException("CastableSpell with is index " + index + " not registered!");
         }
         return castableSpell;
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    public static class AlreadyLoadedException extends RuntimeException {
-        private AlreadyLoadedException() {
-            super("The plugin executed loadSpells twice");
-        }
     }
 }

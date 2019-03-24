@@ -23,7 +23,7 @@ public final class Wands extends JavaPlugin {
     private final SpellRegistry spellRegistry = new SpellRegistry();
     //if this is false, the wands should all stop with working.
     private boolean wandsEnabled = true;
-
+    private int coolDownTime = 5;
     public static Wands getPlugin() {
         return plugin;
     }
@@ -40,7 +40,7 @@ public final class Wands extends JavaPlugin {
             this.getCommand("wands").setExecutor(new MainCommandHandler());
             this.getCommand("wands").setTabCompleter(new ConstructTabCompleter());
 
-            addListener(new GUIs());
+            //addListener(new GUIs());
 
             addToggleableListener(
                     new PlayerInteractionListener(),
@@ -94,5 +94,13 @@ public final class Wands extends JavaPlugin {
             if (enabled) enableListeners();
             else disableListeners();
         }
+    }
+
+    public void setCoolDownTime(int i) {
+        coolDownTime = i;
+    }
+
+    public int getCoolDownTime() {
+        return coolDownTime;
     }
 }

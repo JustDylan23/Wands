@@ -7,13 +7,13 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 
 public enum InGameItems {
-    THEROS_DAGGER(new ItemUtil(Material.MUSIC_DISC_MALL).builder(builder -> {
-        builder.setName("&dAssasin's &8Dagger");
+    ASSASSINS_DAGGER(new ItemUtil(Material.MUSIC_DISC_MALL).builder(builder -> {
+        builder.setName("&dAssassin's &8Dagger");
         builder.setNbtTagInt("therosDagger", 1);
         builder.setItemMeta(meta -> meta.addItemFlags(ItemFlag.values()));
     }).getItemStack()),
 
-    EMPIRE_BOW(new ItemUtil(Material.BOW).builder(builder -> {
+    CURSED_BOW(new ItemUtil(Material.BOW).builder(builder -> {
         builder.setName("&cCursed Bow");
         builder.setNbtTagInt("empireBow", 1);
         builder.setItemMeta(meta -> {
@@ -23,7 +23,7 @@ public enum InGameItems {
         });
     }).getItemStack()),
 
-    EMPIRE_WAND(new WandItem.Builder(Material.BLAZE_ROD).builder(builder -> builder.setName("&eGod Wand"))
+    GOD_WAND(new WandItem.Builder(Material.BLAZE_ROD).builder(builder -> builder.setName("&eGod Wand"))
             .setSpells(Spell.values()).getItemStack()),
 
     BLOOD_WAND(new WandItem.Builder(Material.NETHER_WART).builder(builder -> builder.setName("&cBlood Wand"))
@@ -37,5 +37,10 @@ public enum InGameItems {
 
     public ItemStack getItemStack() {
         return itemStack;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString().toLowerCase();
     }
 }

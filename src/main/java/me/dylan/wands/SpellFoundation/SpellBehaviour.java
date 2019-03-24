@@ -3,6 +3,7 @@ package me.dylan.wands.SpellFoundation;
 import me.dylan.wands.Wands;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
@@ -14,10 +15,13 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -29,6 +33,8 @@ public abstract class SpellBehaviour {
     final Consumer<Location> castEffects;
     final Consumer<Location> visualEffects;
     final Consumer<Entity> entityEffects;
+
+    private static final Map<Player, Long> lastUsed = new HashMap<>();
 
     private SpellBehaviour(BaseProperties basePropperties) {
         this.entityDamage = basePropperties.entityDamage;
@@ -56,7 +62,36 @@ public abstract class SpellBehaviour {
         return new BaseProperties();
     }
 
-    public abstract void executeFrom(Player player);
+    protected abstract void executeFrom(Player player);
+
+    void executeWithCoolDownFrom(Player player) {
+        if (handleCoolDown(player)) {
+            executeFrom(player);
+        }
+    }
+
+    private boolean handleCoolDown(Player player) {
+        Long previous = lastUsed.get(player);
+        long now = System.currentTimeMillis();
+        int coolDownTime = Wands.getPlugin().getCoolDownTime();
+        if (previous == null) {
+            lastUsed.put(player, now);
+            return true;
+        } else if (now - previous > coolDownTime * 1000) {
+            lastUsed.put(player, now);
+            return true;
+        } else {
+            long i = coolDownTime - ((now - previous) / 1000);
+            player.sendActionBar("§6Wait §7" + i + " §6second" + ((i != 1) ? "s" : ""));
+            player.playSound(player.getLocation(), Sound.ENTITY_BLAZE_AMBIENT, 0.3F, 1);
+            return false;
+        }
+    }
+
+    @EventHandler
+    public static void onQuit(PlayerQuitEvent event) {
+        lastUsed.remove(event.getPlayer());
+    }
 
     private interface Buildable<T extends SpellBehaviour> {
         T build();
