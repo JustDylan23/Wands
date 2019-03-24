@@ -7,6 +7,7 @@ description: Adds a set of awesome magic wands to your server
 api-version: 1.13
 commands:
   wands:
+    aliases: [wd]
     description: The main command for the wands plugin.
     usage: /<command> <arguments>
     permission: wands.command

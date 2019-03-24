@@ -11,6 +11,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+@Deprecated
 public final class GUIs implements Listener {
 
     private static final Inventory MAIN_GUI;
@@ -30,10 +31,10 @@ public final class GUIs implements Listener {
 
     static {
         WANDS_GUI = Bukkit.createInventory(null, 27, Wands.PREFIX + "wands");
-        WANDS_GUI.setItem(0, InGameItems.EMPIRE_WAND.getItemStack());
+        WANDS_GUI.setItem(0, InGameItems.GOD_WAND.getItemStack());
         WANDS_GUI.setItem(1, InGameItems.BLOOD_WAND.getItemStack());
-        WANDS_GUI.setItem(2, InGameItems.THEROS_DAGGER.getItemStack());
-        WANDS_GUI.setItem(3, InGameItems.EMPIRE_BOW.getItemStack());
+        WANDS_GUI.setItem(2, InGameItems.ASSASSINS_DAGGER.getItemStack());
+        WANDS_GUI.setItem(3, InGameItems.CURSED_BOW.getItemStack());
     }
 
     public static void openGUI(Player player) {

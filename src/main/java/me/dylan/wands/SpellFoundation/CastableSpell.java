@@ -23,14 +23,14 @@ public abstract class CastableSpell {
         return displayName;
     }
 
-    public int getId() {
+    int getId() {
         return id;
     }
 
     protected abstract SpellBehaviour getSpellBehaviour();
 
     public final void cast(Player player) {
-        spellBehaviour.executeFrom(player);
+        spellBehaviour.executeWithCoolDownFrom(player);
     }
 
     protected void runTaskLater(Runnable runnable, int... delays) {
