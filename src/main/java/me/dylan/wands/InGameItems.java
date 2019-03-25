@@ -1,6 +1,6 @@
 package me.dylan.wands;
 
-import me.dylan.wands.SpellFoundation.Spell;
+import me.dylan.wands.spellfoundation.Spell;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;

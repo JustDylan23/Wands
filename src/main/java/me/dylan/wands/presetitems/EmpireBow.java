@@ -1,8 +1,8 @@
 package me.dylan.wands.presetitems;
 
 import me.dylan.wands.ItemUtil;
-import me.dylan.wands.SpellFoundation.SpellBehaviour;
 import me.dylan.wands.Wands;
+import me.dylan.wands.spellfoundation.SpellBehaviour;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;

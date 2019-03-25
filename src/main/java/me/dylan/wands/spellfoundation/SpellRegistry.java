@@ -1,4 +1,4 @@
-package me.dylan.wands.SpellFoundation;
+package me.dylan.wands.spellfoundation;
 
 import java.util.HashMap;
 import java.util.Map;

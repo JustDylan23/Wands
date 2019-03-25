@@ -1,4 +1,4 @@
-package me.dylan.wands.SpellFoundation;
+package me.dylan.wands.spellfoundation;
 
 import me.dylan.wands.Wands;
 import org.bukkit.Bukkit;
