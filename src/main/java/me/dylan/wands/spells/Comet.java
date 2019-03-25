@@ -1,9 +1,9 @@
 package me.dylan.wands.spells;
 
-import me.dylan.wands.SpellFoundation.CastableSpell;
-import me.dylan.wands.SpellFoundation.SpellBehaviour;
-import me.dylan.wands.SpellFoundation.SpellBehaviour.BaseProperties;
-import me.dylan.wands.SpellFoundation.SpellBehaviour.ProjectileSpell.Builder;
+import me.dylan.wands.spellfoundation.CastableSpell;
+import me.dylan.wands.spellfoundation.SpellBehaviour;
+import me.dylan.wands.spellfoundation.SpellBehaviour.BaseProperties;
+import me.dylan.wands.spellfoundation.SpellBehaviour.ProjectileSpell.Builder;
 import org.bukkit.*;
 import org.bukkit.entity.SmallFireball;
 

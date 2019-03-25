@@ -1,10 +1,10 @@
 package me.dylan.wands;
 
-import me.dylan.wands.SpellFoundation.SpellRegistry;
 import me.dylan.wands.commandhandler.ConstructTabCompleter;
 import me.dylan.wands.commandhandler.MainCommandHandler;
 import me.dylan.wands.presetitems.EmpireBow;
 import me.dylan.wands.presetitems.TherosDagger;
+import me.dylan.wands.spellfoundation.SpellRegistry;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;

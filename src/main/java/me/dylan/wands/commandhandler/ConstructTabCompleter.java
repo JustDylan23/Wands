@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,11 +32,11 @@ public class ConstructTabCompleter implements TabCompleter {
                         return validCompletions(value, Completions.SET.completions);
                 }
         }
-        return null;
+        return Collections.emptyList();
     }
 
     private enum Completions {
-        DEFAULT("reload", "enable", "disable", "update", "help", "get", "set"),
+        DEFAULT("enable", "disable", "get", "set", "info"),
         SET("cooldown");
 
         final String[] completions;

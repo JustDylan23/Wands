@@ -1,8 +1,8 @@
 package me.dylan.wands.commandhandler;
 
 import me.dylan.wands.InGameItems;
-import me.dylan.wands.SpellFoundation.Spell;
 import me.dylan.wands.Wands;
+import me.dylan.wands.spellfoundation.Spell;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

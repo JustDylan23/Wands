@@ -1,10 +1,10 @@
 package me.dylan.wands.spells;
 
 import me.dylan.wands.ParticleUtil;
-import me.dylan.wands.SpellFoundation.CastableSpell;
-import me.dylan.wands.SpellFoundation.SpellBehaviour;
-import me.dylan.wands.SpellFoundation.SpellBehaviour.BaseProperties;
-import me.dylan.wands.SpellFoundation.SpellBehaviour.WaveSpell.Builder;
+import me.dylan.wands.spellfoundation.CastableSpell;
+import me.dylan.wands.spellfoundation.SpellBehaviour;
+import me.dylan.wands.spellfoundation.SpellBehaviour.BaseProperties;
+import me.dylan.wands.spellfoundation.SpellBehaviour.WaveSpell.Builder;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.LivingEntity;

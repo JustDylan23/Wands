@@ -1,8 +1,8 @@
 package me.dylan.wands;
 
-import me.dylan.wands.SpellFoundation.CastableSpell;
-import me.dylan.wands.SpellFoundation.Spell;
-import me.dylan.wands.SpellFoundation.SpellRegistry;
+import me.dylan.wands.spellfoundation.CastableSpell;
+import me.dylan.wands.spellfoundation.Spell;
+import me.dylan.wands.spellfoundation.SpellRegistry;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
