@@ -1,8 +1,8 @@
 package me.dylan.wands.presetitems;
 
 import me.dylan.wands.ItemUtil;
+import me.dylan.wands.WandUtils;
 import me.dylan.wands.Wands;
-import me.dylan.wands.spellfoundation.SpellBehaviour;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -46,7 +46,7 @@ public class EmpireBow implements Listener {
     }
 
     @EventHandler
-    public void onDraw(PlayerInteractEvent event) {
+    private void onDraw(PlayerInteractEvent event) {
         if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             Player player = event.getPlayer();
             if (hasBow(player)) {
@@ -79,7 +79,7 @@ public class EmpireBow implements Listener {
     }
 
     @EventHandler
-    public void onShoot(EntityShootBowEvent event) {
+    private void onShoot(EntityShootBowEvent event) {
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
             if (drawing.contains(player)) {
@@ -106,7 +106,7 @@ public class EmpireBow implements Listener {
     }
 
     @EventHandler
-    public void onChangeSlot(PlayerItemHeldEvent event) {
+    private void onChangeSlot(PlayerItemHeldEvent event) {
         Player player = event.getPlayer();
         if (drawing.contains(player)) {
             player.sendActionBar(" ");
@@ -115,7 +115,7 @@ public class EmpireBow implements Listener {
     }
 
     @EventHandler
-    public void leave(PlayerQuitEvent event) {
+    private void leave(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         drawing.remove(player);
         hasDrawn.remove(player);
@@ -133,7 +133,7 @@ public class EmpireBow implements Listener {
     }
 
     @EventHandler
-    public void projectileHit(ProjectileHitEvent event) {
+    private void projectileHit(ProjectileHitEvent event) {
         Projectile projectile = event.getEntity();
         if (projectile.getShooter() instanceof Player) {
             if (projectile.hasMetadata(cursedArrow)) {
@@ -141,9 +141,9 @@ public class EmpireBow implements Listener {
                 location.getWorld().playSound(location, Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, SoundCategory.MASTER, 5F, 1F);
                 location.getWorld().playSound(location, Sound.ITEM_TRIDENT_RETURN, SoundCategory.MASTER, 5F, 1F);
                 location.getWorld().spawnParticle(Particle.SMOKE_NORMAL, location, 30, 0.4, 0.4, 0.4, 0.2, null, true);
-                SpellBehaviour.getNearbyDamageables((Player) projectile.getShooter(), location, 3)
+                WandUtils.getNearbyDamageables((Player) projectile.getShooter(), location, 3)
                         .forEach(entity -> {
-                            SpellBehaviour.damage(8, (Player) projectile.getShooter(), entity);
+                            WandUtils.damage(8, (Player) projectile.getShooter(), entity);
                             ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 80, 3, false), true);
                         });
                 projectile.remove();
@@ -152,7 +152,7 @@ public class EmpireBow implements Listener {
     }
 
     @EventHandler
-    public void onDamage(EntityDamageByEntityEvent event) {
+    private void onDamage(EntityDamageByEntityEvent event) {
         if (event.getCause() == EntityDamageEvent.DamageCause.PROJECTILE) {
             if (event.getDamager().hasMetadata(cursedArrow)) {
                 event.setCancelled(true);

@@ -1,5 +1,6 @@
 package me.dylan.wands.spellfoundation;
 
+import me.dylan.wands.WandUtils;
 import me.dylan.wands.Wands;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -23,18 +24,15 @@ import org.bukkit.util.Vector;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
-public abstract class SpellBehaviour {
+public abstract class SpellBehaviour implements Listener {
     private final static Wands plugin = Wands.getPlugin();
-
+    private static final Map<Player, Long> lastUsed = new HashMap<>();
     final int entityDamage;
     final float effectAreaRange;
     final Consumer<Location> castEffects;
     final Consumer<Location> visualEffects;
     final Consumer<Entity> entityEffects;
-
-    private static final Map<Player, Long> lastUsed = new HashMap<>();
 
     private SpellBehaviour(BaseProperties basePropperties) {
         this.entityDamage = basePropperties.entityDamage;
@@ -44,22 +42,13 @@ public abstract class SpellBehaviour {
         this.entityEffects = basePropperties.entityEffects;
     }
 
-    public static Iterable<Damageable> getNearbyDamageables(Player player, Location loc, double radius) {
-        return loc.getWorld()
-                .getNearbyEntities(loc, radius, radius, radius).stream()
-                .filter(Damageable.class::isInstance)
-                .filter(entity -> !entity.equals(player))
-                .map(Damageable.class::cast)
-                .collect(Collectors.toList());
-    }
-
-    public static void damage(int damage, Entity source, Damageable victim) {
-        victim.damage(damage, source);
-        victim.setVelocity(new Vector(0, 0, 0));
-    }
-
     public static BaseProperties createEmptyBaseProperties() {
         return new BaseProperties();
+    }
+
+    @EventHandler
+    public static void onQuit(PlayerQuitEvent event) {
+        lastUsed.remove(event.getPlayer());
     }
 
     protected abstract void executeFrom(Player player);
@@ -86,11 +75,6 @@ public abstract class SpellBehaviour {
             player.playSound(player.getLocation(), Sound.ENTITY_BLAZE_AMBIENT, 0.3F, 1);
             return false;
         }
-    }
-
-    @EventHandler
-    public static void onQuit(PlayerQuitEvent event) {
-        lastUsed.remove(event.getPlayer());
     }
 
     private interface Buildable<T extends SpellBehaviour> {
@@ -157,10 +141,10 @@ public abstract class SpellBehaviour {
         @Override
         public void executeFrom(Player player) {
             Location loc = getSpellLocation(player);
-            Iterable<Damageable> effectedEntities = getNearbyDamageables(player, loc, effectAreaRange);
+            Iterable<Damageable> effectedEntities = WandUtils.getNearbyDamageables(player, loc, effectAreaRange);
             castEffects.accept(player.getLocation());
             effectedEntities.forEach(entity -> {
-                entity.damage(entityDamage, player);
+                WandUtils.damage(entityDamage, player, entity);
                 entity.setVelocity(new Vector(0, 0, 0));
                 entityEffects.accept(entity);
             });
@@ -226,10 +210,10 @@ public abstract class SpellBehaviour {
                 }
                 Bukkit.getScheduler().runTaskLater(plugin, () -> {
                     visualEffects.accept(loc);
-                    getNearbyDamageables(player, loc, effectAreaRange).forEach(entity -> {
+                    WandUtils.getNearbyDamageables(player, loc, effectAreaRange).forEach(entity -> {
                         if (!entity.hasMetadata(metaId)) {
                             player.setMetadata(metaId, new FixedMetadataValue(plugin, true));
-                            damage(entityDamage, player, entity);
+                            WandUtils.damage(entityDamage, player, entity);
                             entityEffects.accept(entity);
                             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                                 if (entity.isValid()) {
@@ -306,10 +290,9 @@ public abstract class SpellBehaviour {
         private void hit(Player player, Projectile projectile) {
             projectile.remove();
             Location loc = projectile.getLocation();
-            getNearbyDamageables(player, loc, effectAreaRange).forEach(entity -> {
+            WandUtils.getNearbyDamageables(player, loc, effectAreaRange).forEach(entity -> {
                 entityEffects.accept(entity);
-
-                entity.damage(entityDamage, player);
+                WandUtils.damage(entityDamage, player, entity);
                 entity.setVelocity(new Vector(0, 0, 0));
                 pushFrom(loc, entity, pushSpeed);
             });
