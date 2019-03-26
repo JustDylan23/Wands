@@ -24,6 +24,7 @@ public final class Wands extends JavaPlugin {
     //if this is false, the wands should all stop with working.
     private boolean wandsEnabled = true;
     private int coolDownTime = 5;
+
     public static Wands getPlugin() {
         return plugin;
     }
@@ -96,11 +97,11 @@ public final class Wands extends JavaPlugin {
         }
     }
 
-    public void setCoolDownTime(int i) {
-        coolDownTime = i;
-    }
-
     public int getCoolDownTime() {
         return coolDownTime;
+    }
+
+    public void setCoolDownTime(int i) {
+        coolDownTime = i;
     }
 }

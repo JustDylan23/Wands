@@ -18,17 +18,17 @@ public final class SpellRegistry {
         }
     }
 
-    private static class AlreadyLoadedException extends RuntimeException {
-        private AlreadyLoadedException() {
-            super("The plugin executed loadSpells twice");
-        }
-    }
-
-    public CastableSpell getSpell(int index) throws NoSuchElementException{
+    public CastableSpell getSpell(int index) throws NoSuchElementException {
         CastableSpell castableSpell = spellRegister.get(index);
         if (castableSpell == null) {
             throw new NoSuchElementException("CastableSpell with is index " + index + " not registered!");
         }
         return castableSpell;
+    }
+
+    private static class AlreadyLoadedException extends RuntimeException {
+        private AlreadyLoadedException() {
+            super("The plugin executed loadSpells twice");
+        }
     }
 }
