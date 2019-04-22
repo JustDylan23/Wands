@@ -1,9 +1,9 @@
 package me.dylan.wands.spells;
 
+import me.dylan.wands.spellbehaviour.ProjectileSpell;
+import me.dylan.wands.spellbehaviour.SpellBehaviour;
+import me.dylan.wands.spellbehaviour.SpellBehaviour.BaseProperties;
 import me.dylan.wands.spellfoundation.CastableSpell;
-import me.dylan.wands.spellfoundation.SpellBehaviour;
-import me.dylan.wands.spellfoundation.SpellBehaviour.BaseProperties;
-import me.dylan.wands.spellfoundation.SpellBehaviour.ProjectileSpell.Builder;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
@@ -26,7 +26,7 @@ public class Comet extends CastableSpell {
                     world.spawnParticle(Particle.SMOKE_LARGE, loc, 10, 0.6, 0.6, 0.6, 0.1, null, true);
                     world.spawnParticle(Particle.SMOKE_LARGE, loc, 10, 1.0, 1.0, 1.0, 0.1, null, true);
                 });
-        return new Builder<>(SmallFireball.class, 3F, baseProperties)
+        return ProjectileSpell.getBuilder(SmallFireball.class, 3F, baseProperties)
                 .setProjectilePropperties(projectile -> {
                     projectile.setIsIncendiary(false);
                     projectile.setYield(0);

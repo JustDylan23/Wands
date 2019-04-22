@@ -1,10 +1,10 @@
 package me.dylan.wands.spells;
 
 import me.dylan.wands.ParticleUtil;
+import me.dylan.wands.spellbehaviour.SpellBehaviour;
+import me.dylan.wands.spellbehaviour.SpellBehaviour.BaseProperties;
+import me.dylan.wands.spellbehaviour.WaveSpell;
 import me.dylan.wands.spellfoundation.CastableSpell;
-import me.dylan.wands.spellfoundation.SpellBehaviour;
-import me.dylan.wands.spellfoundation.SpellBehaviour.BaseProperties;
-import me.dylan.wands.spellfoundation.SpellBehaviour.WaveSpell.Builder;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.LivingEntity;
@@ -24,6 +24,6 @@ public class PoisonWave extends CastableSpell {
                     ParticleUtil.spawnColoredParticle(Particle.SPELL_MOB, loc, 18, 1, 1.2, 1.2, 1.2, 75, 140, 50, false);
                     loc.getWorld().spawnParticle(Particle.SMOKE_NORMAL, loc, 5, 1, 1, 1, 0.05, null, true);
                 });
-        return new Builder(baseProperties).setEffectDistance(30).build();
-    }
+        return WaveSpell.getBuilder(baseProperties).setEffectDistance(30).build();
+}
 }
