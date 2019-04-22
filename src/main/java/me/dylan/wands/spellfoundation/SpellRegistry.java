@@ -1,16 +1,22 @@
 package me.dylan.wands.spellfoundation;
 
+import me.dylan.wands.Wands;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-public final class SpellRegistry {
+public class SpellRegistry {
 
     private final Map<Integer, CastableSpell> spellRegister = new HashMap<>();
 
+    public SpellRegistry() {
+        Wands.getPlugin().sendConsole("trying to create instance of registry");
+    }
+
     public void loadSpells() {
         if (!spellRegister.isEmpty()) {
-            throw new AlreadyLoadedException();
+            throw new IllegalStateException("The plugin executed loadSpells twice");
         }
         Spell[] spells = Spell.values();
         for (Spell spell : spells) {
@@ -24,11 +30,5 @@ public final class SpellRegistry {
             throw new NoSuchElementException("CastableSpell with is index " + index + " not registered!");
         }
         return castableSpell;
-    }
-
-    private static class AlreadyLoadedException extends RuntimeException {
-        private AlreadyLoadedException() {
-            super("The plugin executed loadSpells twice");
-        }
     }
 }

@@ -1,6 +1,6 @@
 package me.dylan.wands.commandhandler;
 
-import me.dylan.wands.InGameItems;
+import me.dylan.wands.ObtainableItem;
 import me.dylan.wands.Wands;
 import me.dylan.wands.spellfoundation.Spell;
 import org.bukkit.command.Command;
@@ -8,12 +8,12 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import javax.annotation.Nonnull;
 import java.util.StringJoiner;
 
 public class MainCommandHandler implements CommandExecutor {
-
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+    public boolean onCommand(@Nonnull CommandSender sender, @Nonnull Command cmd, @Nonnull  String label, String[] args) {
         switch (args.length) {
             case 1:
                 switch (args[0]) {
@@ -43,7 +43,7 @@ public class MainCommandHandler implements CommandExecutor {
             case 2:
                 if (args[0].equalsIgnoreCase("get")) {
                     try {
-                        InGameItems value = InGameItems.valueOf(args[1].toUpperCase());
+                        ObtainableItem value = ObtainableItem.valueOf(args[1].toUpperCase());
                         if (sender instanceof Player)
                             ((Player) sender).getInventory().addItem(value.getItemStack());
                         else {

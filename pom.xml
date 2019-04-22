@@ -69,6 +69,10 @@
             <id>maven-repository</id>
             <url>file:///${project.basedir}/maven-repository</url>
         </repository>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -76,14 +80,14 @@
             <groupId>com.destroystokyo.paper</groupId>
             <artifactId>paper-api</artifactId>
             <version>1.13.2-R0.1-SNAPSHOT</version>
+<!--            <version>1.12.2-R0.1-SNAPSHOT</version>-->
             <scope>provided</scope>
         </dependency>
 
         <dependency>
-            <groupId>com.destroystokyo.paper</groupId>
-            <artifactId>paper</artifactId>
-            <version>1.13.2-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
+            <groupId>com.github.I-Al-Istannen</groupId>
+            <artifactId>MiniNBT</artifactId>
+            <version>master</version>
         </dependency>
     </dependencies>
 </project>

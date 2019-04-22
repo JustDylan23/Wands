@@ -51,11 +51,11 @@ public abstract class SpellBehaviour implements Listener {
         lastUsed.remove(event.getPlayer());
     }
 
-    protected abstract void executeFrom(Player player);
+    protected abstract void castFrom(Player player);
 
-    void executeWithCoolDownFrom(Player player) {
+    void castWithCoolDownFrom(Player player) {
         if (handleCoolDown(player)) {
-            executeFrom(player);
+            castFrom(player);
         }
     }
 
@@ -77,10 +77,6 @@ public abstract class SpellBehaviour implements Listener {
         }
     }
 
-    private interface Buildable<T extends SpellBehaviour> {
-        T build();
-    }
-
     public static class BaseProperties {
         private final static Consumer<?> EMPTY_CONSUMER = e -> {
         };
@@ -94,19 +90,37 @@ public abstract class SpellBehaviour implements Listener {
         }
 
         @SuppressWarnings("unchecked")
-        <V> Consumer<V> emptyConsumer() {
-            return (Consumer<V>) EMPTY_CONSUMER;
+        <T> Consumer<T> emptyConsumer() {
+            return (Consumer<T>) EMPTY_CONSUMER;
         }
+
+        /**
+         * Sets the damage that is applied to the Damageable effected by the spell
+         * @param damage The amount of damage
+         * @return this
+         */
 
         public BaseProperties setEntityDamage(int damage) {
             this.entityDamage = damage;
             return this;
         }
 
-        public BaseProperties setEffectAreaRange(float range) {
-            this.effectAreaRange = range;
+        /**
+         * Sets the radius of the affected Damageables after the spell concludes
+         * @param radius The radius
+         * @return this
+         */
+
+        public BaseProperties setEffectRadius(float radius) {
+            this.effectAreaRange = radius;
             return this;
         }
+
+        /**
+         * Sets the effect that will be executed relative to the player
+         * @param castEffects
+         * @return this
+         */
 
         public BaseProperties setCastEffects(Consumer<Location> castEffects) {
             this.castEffects = castEffects;
@@ -139,7 +153,7 @@ public abstract class SpellBehaviour implements Listener {
         }
 
         @Override
-        public void executeFrom(Player player) {
+        public void castFrom(Player player) {
             Location loc = getSpellLocation(player);
             Iterable<Damageable> effectedEntities = WandUtils.getNearbyDamageables(player, loc, effectAreaRange);
             castEffects.accept(player.getLocation());
@@ -164,7 +178,7 @@ public abstract class SpellBehaviour implements Listener {
             return player.getLocation().getDirection().normalize().multiply(effectDistance).toLocation(player.getWorld()).add(player.getLocation());
         }
 
-        public static class Builder implements Buildable {
+        public static class Builder {
             private final BaseProperties baseProperties;
             private int effectDistance;
 
@@ -177,7 +191,6 @@ public abstract class SpellBehaviour implements Listener {
                 return this;
             }
 
-            @Override
             public SparkSpell build() {
                 return new SparkSpell(baseProperties, effectDistance);
             }
@@ -199,7 +212,7 @@ public abstract class SpellBehaviour implements Listener {
         }
 
         @Override
-        public void executeFrom(Player player) {
+        public void castFrom(Player player) {
             Vector direction = player.getLocation().getDirection().normalize();
             String metaId = System.currentTimeMillis() + "";
             castEffects.accept(direction.clone().multiply(10).toLocation(player.getWorld()).add(player.getEyeLocation()));
@@ -226,7 +239,7 @@ public abstract class SpellBehaviour implements Listener {
             }
         }
 
-        public static class Builder implements Buildable {
+        public static class Builder {
             private final BaseProperties baseProperties;
             private int effectDistance;
 
@@ -239,7 +252,6 @@ public abstract class SpellBehaviour implements Listener {
                 return this;
             }
 
-            @Override
             public WaveSpell build() {
                 return new WaveSpell(baseProperties, effectDistance);
             }
@@ -277,7 +289,7 @@ public abstract class SpellBehaviour implements Listener {
         }
 
         @Override
-        public void executeFrom(Player player) {
+        public void castFrom(Player player) {
             Vector velocity = player.getLocation().getDirection().multiply(speed);
             T projectile = player.launchProjectile(this.projectile, velocity);
             trail(projectile);
@@ -352,7 +364,7 @@ public abstract class SpellBehaviour implements Listener {
             }
         }
 
-        public static class Builder<T extends Projectile> implements Buildable {
+        public static class Builder<T extends Projectile> {
 
             private final Class<T> projectile;
             private final BaseProperties baseProperties;
@@ -389,7 +401,6 @@ public abstract class SpellBehaviour implements Listener {
                 return this;
             }
 
-            @Override
             public ProjectileSpell build() {
                 return new ProjectileSpell<>(baseProperties, projectile, projectilePropperties, hitEffects, speed, lifeTime, pushSpeed);
             }

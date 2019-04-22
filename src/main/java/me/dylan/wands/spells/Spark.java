@@ -10,15 +10,10 @@ import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 
 public class Spark extends CastableSpell {
-
-    public Spark() {
-        super("Spark");
-    }
-
     @Override
     public SpellBehaviour getSpellBehaviour() {
         BaseProperties baseProperties = SpellBehaviour.createEmptyBaseProperties()
-                .setEffectAreaRange(2.2F)
+                .setEffectRadius(2.2F)
                 .setEntityDamage(10)
                 .setVisualEffects(loc -> {
                     loc.add(0, 1, 0);
