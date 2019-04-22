@@ -19,7 +19,6 @@
     <build>
         <defaultGoal>clean package</defaultGoal>
         <finalName>wands</finalName>
-
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -80,10 +79,8 @@
             <groupId>com.destroystokyo.paper</groupId>
             <artifactId>paper-api</artifactId>
             <version>1.13.2-R0.1-SNAPSHOT</version>
-<!--            <version>1.12.2-R0.1-SNAPSHOT</version>-->
             <scope>provided</scope>
         </dependency>
-
         <dependency>
             <groupId>com.github.I-Al-Istannen</groupId>
             <artifactId>MiniNBT</artifactId>

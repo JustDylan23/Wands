@@ -6,6 +6,7 @@ import me.dylan.wands.presetitems.EmpireBow;
 import me.dylan.wands.presetitems.TherosDagger;
 import me.dylan.wands.spellfoundation.SpellRegistry;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -31,29 +32,26 @@ public final class Wands extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        if (!Bukkit.getVersion().contains("Paper")) {
+        try {
+            Player.class.getMethod("sendActionBar", String.class);
+        } catch (NoSuchMethodException e) {
             this.getPluginLoader().disablePlugin(this);
             sendConsole("§cThis plugin only works on Paper, an improved version of spigot.");
             sendConsole("§cDisabling plugin...");
-        } else {
-            plugin = this;
-            try {
-                this.getCommand("wands").setExecutor(new MainCommandHandler());
-                this.getCommand("wands").setTabCompleter(new ConstructTabCompleter());
-            } catch (NullPointerException e) {
-                sendConsole("could not register command or tab completer");
-            }
-
-            //addListener(new GUIs());
-
-            addToggleableListener(
-                    new PlayerInteractionListener(),
-                    new TherosDagger(),
-                    new EmpireBow()
-            );
-            spellRegistry = new SpellRegistry();
-            spellRegistry.loadSpells();
+            return;
         }
+        plugin = this;
+        this.getCommand("wands").setExecutor(new MainCommandHandler());
+        this.getCommand("wands").setTabCompleter(new ConstructTabCompleter());
+
+        addToggleableListener(
+                new PlayerInteractionListener(),
+                new TherosDagger(),
+                new EmpireBow()
+        );
+        spellRegistry = new SpellRegistry();
+        spellRegistry.loadSpells();
+
     }
 
     public SpellRegistry getSpellRegistry() {

@@ -38,7 +38,7 @@ public abstract class CastableSpell {
     protected abstract SpellBehaviour getSpellBehaviour();
 
     public final void cast(Player player) {
-        spellBehaviour.castWithCoolDownFrom(player);
+        spellBehaviour.executeSpellFrom(player);
     }
 
     protected void runTaskLater(Runnable runnable, int... delays) {
