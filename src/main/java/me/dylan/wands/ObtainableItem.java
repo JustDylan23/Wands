@@ -6,7 +6,9 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 
-public enum InGameItems {
+import java.util.Arrays;
+
+public enum ObtainableItem {
     ASSASSINS_DAGGER(new ItemUtil(Material.MUSIC_DISC_MALL).builder(builder -> {
         builder.setName("&dAssassin's &8Dagger");
         builder.setNbtTagInt("therosDagger", 1);
@@ -30,13 +32,22 @@ public enum InGameItems {
             .setSpells(Spell.BLOOD_WAVE, Spell.BLOOD_SPARK).getItemStack());
 
     private final ItemStack itemStack;
+    private static String[] names;
 
-    InGameItems(ItemStack itemStack) {
+    static {
+        names = Arrays.stream(values()).map(Enum::toString).toArray(String[]::new);
+    }
+
+    ObtainableItem(ItemStack itemStack) {
         this.itemStack = itemStack;
     }
 
     public ItemStack getItemStack() {
         return itemStack;
+    }
+
+    public static String[] getNames() {
+        return names;
     }
 
     @Override

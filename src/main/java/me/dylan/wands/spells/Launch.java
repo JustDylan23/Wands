@@ -11,15 +11,10 @@ import org.bukkit.SoundCategory;
 import org.bukkit.util.Vector;
 
 public class Launch extends CastableSpell {
-
-    public Launch() {
-        super("Launch");
-    }
-
     @Override
     public SpellBehaviour getSpellBehaviour() {
         BaseProperties baseProperties = SpellBehaviour.createEmptyBaseProperties()
-                .setEffectAreaRange(2.2F)
+                .setEffectRadius(2.2F)
                 .setEntityDamage(3)
                 .setEntityEffects(entity -> entity.setVelocity(new Vector(0, 1.2, 0)))
                 .setVisualEffects(loc -> {

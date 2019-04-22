@@ -4,22 +4,20 @@ import me.dylan.wands.spellfoundation.CastableSpell;
 import me.dylan.wands.spellfoundation.SpellBehaviour;
 import me.dylan.wands.spellfoundation.SpellBehaviour.BaseProperties;
 import me.dylan.wands.spellfoundation.SpellBehaviour.ProjectileSpell.Builder;
-import org.bukkit.*;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
+import org.bukkit.World;
 import org.bukkit.entity.SmallFireball;
 
 public class Comet extends CastableSpell {
-
-    public Comet() {
-        super("Comet");
-    }
-
     @Override
     public SpellBehaviour getSpellBehaviour() {
         BaseProperties baseProperties = SpellBehaviour.createEmptyBaseProperties()
                 .setCastEffects(loc ->
                         loc.getWorld().playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_BLAST, SoundCategory.MASTER, 5F, 1F)
                 )
-                .setEffectAreaRange(4.5F)
+                .setEffectRadius(4.5F)
                 .setEntityDamage(10)
                 .setEntityEffects(entity -> entity.setFireTicks(60))
                 .setVisualEffects(loc -> {
@@ -39,11 +37,9 @@ public class Comet extends CastableSpell {
                     loc.getWorld().playSound(loc, Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, SoundCategory.MASTER, 5F, 1F);
                     loc.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, loc, 0, 0.0, 0.0, 0.0, 0.0, null, true);
                     loc.getWorld().spawnParticle(Particle.SMOKE_LARGE, loc, 50, 2, 2, 2, 0.05, null, true);
-
-                    for (int i = 0; i < 3; ++i) {
-                        Bukkit.getScheduler().runTaskLater(plugin, () ->
-                                loc.getWorld().playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, SoundCategory.MASTER, 5F, 1F), (i * 5));
-                    }
+                    runTaskLater(() ->
+                        loc.getWorld().playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, SoundCategory.MASTER, 5F, 1F)
+                    , 0, 3, 3);
                 })
                 .build();
     }

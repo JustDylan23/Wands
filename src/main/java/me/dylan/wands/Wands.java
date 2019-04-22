@@ -20,7 +20,7 @@ public final class Wands extends JavaPlugin {
     public static final String PREFIX = "§8§l[§6§lWands§8§l]§r ";
     private static Wands plugin;
     private final Set<Listener> toggleableListeners = new HashSet<>();
-    private final SpellRegistry spellRegistry = new SpellRegistry();
+    private SpellRegistry spellRegistry;
     //if this is false, the wands should all stop with working.
     private boolean wandsEnabled = true;
     private int coolDownTime = 5;
@@ -37,9 +37,12 @@ public final class Wands extends JavaPlugin {
             sendConsole("§cDisabling plugin...");
         } else {
             plugin = this;
-
-            this.getCommand("wands").setExecutor(new MainCommandHandler());
-            this.getCommand("wands").setTabCompleter(new ConstructTabCompleter());
+            try {
+                this.getCommand("wands").setExecutor(new MainCommandHandler());
+                this.getCommand("wands").setTabCompleter(new ConstructTabCompleter());
+            } catch (NullPointerException e) {
+                sendConsole("could not register command or tab completer");
+            }
 
             //addListener(new GUIs());
 
@@ -48,7 +51,7 @@ public final class Wands extends JavaPlugin {
                     new TherosDagger(),
                     new EmpireBow()
             );
-
+            spellRegistry = new SpellRegistry();
             spellRegistry.loadSpells();
         }
     }

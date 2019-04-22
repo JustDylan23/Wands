@@ -12,15 +12,10 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class PoisonWave extends CastableSpell {
-
-    public PoisonWave() {
-        super("PoisonWave");
-    }
-
     @Override
     public SpellBehaviour getSpellBehaviour() {
         BaseProperties baseProperties = SpellBehaviour.createEmptyBaseProperties()
-                .setEffectAreaRange(2.2F)
+                .setEffectRadius(2.2F)
                 .setEntityDamage(1)
                 .setCastEffects(location -> location.getWorld().playSound(location, Sound.ENTITY_EVOKER_CAST_SPELL, 3, 1))
                 .setEntityEffects(entity -> ((LivingEntity) entity).addPotionEffect(

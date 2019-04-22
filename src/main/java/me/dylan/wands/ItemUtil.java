@@ -1,16 +1,12 @@
 package me.dylan.wands;
 
-import net.minecraft.server.v1_13_R2.NBTBase;
-import net.minecraft.server.v1_13_R2.NBTTagCompound;
-import net.minecraft.server.v1_13_R2.NBTTagInt;
-import net.minecraft.server.v1_13_R2.NBTTagIntArray;
+import me.ialistannen.mininbt.ItemNBTUtil;
+import me.ialistannen.mininbt.NBTWrappers;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -39,12 +35,11 @@ public class ItemUtil {
         itemStack.setItemMeta(itemMeta);
     }
 
-    private void modifyNbt(Consumer<NBTTagCompound> consumer) {
-        net.minecraft.server.v1_13_R2.ItemStack nmsItem = CraftItemStack.asNMSCopy(itemStack);
-        NBTTagCompound compound = nmsItem.getTag() != null ? nmsItem.getTag() : new NBTTagCompound();
+    private void modifyNbt(Consumer<NBTWrappers.NBTTagCompound> consumer) {
+        NBTWrappers.NBTTagCompound compound = ItemNBTUtil.getTag(itemStack);
         consumer.accept(compound);
-        nmsItem.setTag(compound);
-        ItemMeta meta = CraftItemStack.getItemMeta(nmsItem);
+
+        ItemMeta meta = ItemNBTUtil.setNBTTag(compound, itemStack).getItemMeta();
         itemStack.setItemMeta(meta);
     }
 
@@ -56,22 +51,16 @@ public class ItemUtil {
         setItemMeta(meta -> meta.setLore(Arrays.asList(lore)));
     }
 
-    public void setNbtTag(String key, @Nonnull NBTBase nbtBase) {
-        modifyNbt(tag -> tag.set(key, nbtBase));
-    }
-
     public void setNbtTagInt(String key, int i) {
-        setNbtTag(key, new NBTTagInt(i));
+        modifyNbt(tag -> tag.setInt(key, i));
     }
 
     public void setNbtTagIntArray(String key, int... i) {
-        setNbtTag(key, new NBTTagIntArray(i));
+        modifyNbt(tag -> tag.setIntArray(key, i));
     }
 
-    public <T> T getNbtTag(Function<NBTTagCompound, T> function) {
-        net.minecraft.server.v1_13_R2.ItemStack nmsItem = CraftItemStack.asNMSCopy(itemStack);
-        NBTTagCompound compound = nmsItem.getTag() != null ? nmsItem.getTag() : new NBTTagCompound();
-        return function.apply(compound);
+    public <T> T getNbtTag(Function<NBTWrappers.NBTTagCompound, T> function) {
+        return function.apply(ItemNBTUtil.getTag(itemStack));
     }
 
     public void removeNbtTag(String key) {

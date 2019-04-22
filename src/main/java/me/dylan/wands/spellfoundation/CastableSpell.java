@@ -13,6 +13,13 @@ public abstract class CastableSpell {
     private final int id;
     private final SpellBehaviour spellBehaviour;
 
+    protected CastableSpell() {
+        this.spellBehaviour = getSpellBehaviour();
+        this.displayName = getClass().getSimpleName();
+        this.id = ++idCount;
+    }
+
+    @Deprecated
     protected CastableSpell(String displayName) {
         this.spellBehaviour = getSpellBehaviour();
         this.displayName = displayName;
@@ -30,7 +37,7 @@ public abstract class CastableSpell {
     protected abstract SpellBehaviour getSpellBehaviour();
 
     public final void cast(Player player) {
-        spellBehaviour.executeWithCoolDownFrom(player);
+        spellBehaviour.castWithCoolDownFrom(player);
     }
 
     protected void runTaskLater(Runnable runnable, int... delays) {

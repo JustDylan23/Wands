@@ -13,14 +13,10 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class Confuse extends CastableSpell {
-    public Confuse() {
-        super("Confuse");
-    }
-
     @Override
     public SpellBehaviour getSpellBehaviour() {
         BaseProperties baseProperties = SpellBehaviour.createEmptyBaseProperties()
-                .setEffectAreaRange(4F)
+                .setEffectRadius(4F)
                 .setEntityDamage(6)
                 .setEntityEffects(entity -> ((LivingEntity) entity).addPotionEffect(
                         new PotionEffect(PotionEffectType.CONFUSION, 240, 4, false), true))

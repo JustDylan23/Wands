@@ -38,11 +38,8 @@ public class EmpireBow implements Listener {
 
     private boolean hasBow(Player player) {
         ItemStack tool = player.getInventory().getItemInMainHand();
-        if (tool != null) {
-            ItemUtil itemUtil = new ItemUtil(tool);
-            return itemUtil.hasNbtTag("empireBow");
-        }
-        return false;
+        ItemUtil itemUtil = new ItemUtil(tool);
+        return itemUtil.hasNbtTag("empireBow");
     }
 
     @EventHandler
@@ -55,7 +52,6 @@ public class EmpireBow implements Listener {
                     player.sendActionBar("§6Charging [§a|§6|||]");
                     new BukkitRunnable() {
                         int count;
-
                         @Override
                         public void run() {
                             count++;
@@ -75,7 +71,6 @@ public class EmpireBow implements Listener {
                 }
             }
         }
-
     }
 
     @EventHandler
