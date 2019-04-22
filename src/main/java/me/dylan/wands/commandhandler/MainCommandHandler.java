@@ -64,7 +64,7 @@ public class MainCommandHandler implements CommandExecutor {
                                 sender.sendMessage(Wands.PREFIX + "Cooldown can't be a negative number!");
                                 return true;
                             }
-                            Wands.getPlugin().setCoolDownTime(i);
+                            Wands.getPlugin().setCoolDownTime(i * 1000);
                             String message = Wands.PREFIX + "Cooldown has been set to " + i + " second" + ((i != 1) ? "s" : "");
                             sender.sendMessage(message);
                         } catch (NumberFormatException e) {

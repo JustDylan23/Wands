@@ -16,7 +16,6 @@ import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -30,22 +29,16 @@ public final class TherosDagger implements Listener {
     private final String sneakKey = "therosInvisable";
 
     private boolean hasDagger(Player player) {
-        ItemStack tool = player.getInventory().getItemInMainHand();
-        if (tool != null) {
-            ItemUtil itemUtil = new ItemUtil(tool);
-            return itemUtil.hasNbtTag("therosDagger");
-        }
-        return false;
+        return new ItemUtil(player.getInventory().getItemInMainHand()).hasNbtTag("therosDagger");
     }
 
     @EventHandler
     public void onSpringToggle(PlayerToggleSprintEvent event) {
         Player player = event.getPlayer();
-        if (hasDagger(player)) {
-            Bukkit.getScheduler().runTaskLater(Wands.getPlugin(), () -> jumpParticles(player), 1);
+        if (hasDagger(player) && event.isSprinting()) {
+            Bukkit.getScheduler().runTaskLater(Wands.getPlugin(), () -> sprintParticles(player), 1);
         }
     }
-
 
     @EventHandler
     public void onAttack(EntityDamageByEntityEvent event) {
@@ -165,24 +158,22 @@ public final class TherosDagger implements Listener {
     @EventHandler
     public void onChangeSlot(PlayerItemHeldEvent event) {
         Player player = event.getPlayer();
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            if (player.isSneaking() && hasDagger(player)) {
-                cover(player);
-            }
-        }, 2L);
+        if (player.isSneaking() && hasDagger(player)) {
+            cover(player);
+        }
     }
 
-    private void jumpParticles(Player player) {
-        if (player.isSprinting()) {
-            Bukkit.getScheduler().runTaskLater(Wands.getPlugin(), () -> {
-                Location loc = player.getLocation();
-                loc.getWorld().spawnParticle(Particle.SMOKE_LARGE, loc, 1, 0.1, 0.1, 0.1, 0.1, null, true);
-                loc.getWorld().spawnParticle(Particle.SMOKE_NORMAL, loc, 1, 0.1, 0.1, 0.1, 0.1, null, true);
-                jumpParticles(player);
-                player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20, 4, true), true);
-            }, 1);
-        } else {
-            player.removePotionEffect(PotionEffectType.SPEED);
-        }
+    private void sprintParticles(Player player) {
+        PotionEffect speed = new PotionEffect(PotionEffectType.SPEED, 20, 4, true);
+        Bukkit.getScheduler().runTaskLater(Wands.getPlugin(), () -> {
+            Location loc = player.getLocation();
+            loc.getWorld().spawnParticle(Particle.SMOKE_LARGE, loc, 1, 0.1, 0.1, 0.1, 0.1, null, true);
+            loc.getWorld().spawnParticle(Particle.SMOKE_NORMAL, loc, 1, 0.1, 0.1, 0.1, 0.1, null, true);
+            player.addPotionEffect(speed, true);
+            if (player.isSprinting()) {
+                sprintParticles(player);
+            }
+        }, 1);
+
     }
 }

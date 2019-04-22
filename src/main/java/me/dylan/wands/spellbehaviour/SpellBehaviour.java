@@ -41,28 +41,26 @@ public abstract class SpellBehaviour implements Listener {
         lastUsed.remove(event.getPlayer());
     }
 
-    public void castWithCoolDownFrom(Player player) {
-        if (handleCoolDown(player)) {
+    public void executeSpellFrom(Player player) {
+        int remainingTime = getRemainingTime(player);
+        if (remainingTime != 0) {
             cast(player);
+        } else {
+            notifyOfCooldown(player, remainingTime);
         }
     }
 
-    private boolean handleCoolDown(Player player) {
-        Long previous = lastUsed.get(player);
+    private int getRemainingTime(Player player) {
+        int cooldown = Wands.getPlugin().getCoolDownTime();
         long now = System.currentTimeMillis();
-        int coolDownTime = Wands.getPlugin().getCoolDownTime();
-        if (previous == null) {
-            lastUsed.put(player, now);
-            return true;
-        } else if (now - previous > coolDownTime * 1000) {
-            lastUsed.put(player, now);
-            return true;
-        } else {
-            long i = coolDownTime - ((now - previous) / 1000);
-            player.sendActionBar("§6Wait §7" + i + " §6second" + ((i != 1) ? "s" : ""));
-            player.playSound(player.getLocation(), Sound.ENTITY_BLAZE_AMBIENT, 0.3F, 1);
-            return false;
-        }
+        long previous = lastUsed.getOrDefault(player, now);
+        long elapsed = now - previous;
+        return (elapsed >= cooldown) ? 0 : (int) Math.ceil(cooldown - (elapsed / 1000.0));
+    }
+
+    private void notifyOfCooldown(Player player, int remaining) {
+        player.sendActionBar("§6Wait §7" + remaining + " §6second" + ((remaining != 1) ? "s" : ""));
+        player.playSound(player.getLocation(), Sound.ENTITY_BLAZE_AMBIENT, 0.3F, 1);
     }
 
     public static class BaseProperties {
@@ -84,6 +82,7 @@ public abstract class SpellBehaviour implements Listener {
 
         /**
          * Sets the damage that is applied to the Damageable effected by the spell.
+         *
          * @param damage The amount of damage
          * @return this
          */
@@ -95,6 +94,7 @@ public abstract class SpellBehaviour implements Listener {
 
         /**
          * Sets the radius of the affected Damageables after the spell concludes.
+         *
          * @param radius The radius
          * @return this
          */
@@ -106,6 +106,7 @@ public abstract class SpellBehaviour implements Listener {
 
         /**
          * Sets the effect that will be executed relative to the player.
+         *
          * @param castEffects Effects relative to the player
          * @return this
          */
@@ -118,6 +119,7 @@ public abstract class SpellBehaviour implements Listener {
         /**
          * Sets the visual effects that the spell shows, whether it is a trail of particles
          * or is executed relative to where you look is up to the spell type BasePropperties is used in.
+         *
          * @param effects Effects relative to the spell
          * @return this
          */
@@ -129,6 +131,7 @@ public abstract class SpellBehaviour implements Listener {
 
         /**
          * Sets the effects which will effect the Damageables in the spell's effect range.
+         *
          * @param effects Effects applied to the affected Damageables
          * @return this
          */
