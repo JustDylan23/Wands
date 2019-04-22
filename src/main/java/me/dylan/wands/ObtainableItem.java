@@ -32,7 +32,7 @@ public enum ObtainableItem {
             .setSpells(Spell.BLOOD_WAVE, Spell.BLOOD_SPARK).getItemStack());
 
     private final ItemStack itemStack;
-    private static String[] names;
+    private static final String[] names;
 
     static {
         names = Arrays.stream(values()).map(Enum::toString).toArray(String[]::new);

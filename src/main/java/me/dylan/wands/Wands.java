@@ -13,6 +13,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @SuppressWarnings("WeakerAccess")
@@ -41,8 +42,8 @@ public final class Wands extends JavaPlugin {
             return;
         }
         plugin = this;
-        this.getCommand("wands").setExecutor(new MainCommandHandler());
-        this.getCommand("wands").setTabCompleter(new ConstructTabCompleter());
+        Objects.requireNonNull(this.getCommand("wands")).setExecutor(new MainCommandHandler());
+        Objects.requireNonNull(this.getCommand("wands")).setTabCompleter(new ConstructTabCompleter());
 
         addToggleableListener(
                 new PlayerInteractionListener(),
@@ -80,14 +81,6 @@ public final class Wands extends JavaPlugin {
     private void enableListeners() {
         toggleableListeners.forEach(HandlerList::unregisterAll);
         toggleableListeners.forEach(listener -> Bukkit.getServer().getPluginManager().registerEvents(listener, this));
-    }
-
-    public void toggleWandsEnabled() {
-        setWandsEnabled(!wandsEnabled);
-    }
-
-    public boolean getWandsEnabled() {
-        return getPlugin().wandsEnabled;
     }
 
     public void setWandsEnabled(boolean enabled) {
