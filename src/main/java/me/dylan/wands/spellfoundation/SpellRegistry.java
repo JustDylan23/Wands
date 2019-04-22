@@ -1,7 +1,5 @@
 package me.dylan.wands.spellfoundation;
 
-import me.dylan.wands.Wands;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -9,10 +7,6 @@ import java.util.NoSuchElementException;
 public class SpellRegistry {
 
     private final Map<Integer, CastableSpell> spellRegister = new HashMap<>();
-
-    public SpellRegistry() {
-        Wands.getPlugin().sendConsole("trying to create instance of registry");
-    }
 
     public void loadSpells() {
         if (!spellRegister.isEmpty()) {

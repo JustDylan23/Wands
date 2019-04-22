@@ -1,9 +1,9 @@
 package me.dylan.wands.spells;
 
+import me.dylan.wands.spellbehaviour.SparkSpell;
+import me.dylan.wands.spellbehaviour.SpellBehaviour;
+import me.dylan.wands.spellbehaviour.SpellBehaviour.BaseProperties;
 import me.dylan.wands.spellfoundation.CastableSpell;
-import me.dylan.wands.spellfoundation.SpellBehaviour;
-import me.dylan.wands.spellfoundation.SpellBehaviour.BaseProperties;
-import me.dylan.wands.spellfoundation.SpellBehaviour.SparkSpell.Builder;
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -25,6 +25,6 @@ public class Spark extends CastableSpell {
                 })
                 .setCastEffects(loc -> loc.getWorld().playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_BLAST, SoundCategory.MASTER, 4.0F, 1.0F));
 
-        return new Builder(baseProperties).setEffectDistance(25).build();
+        return SparkSpell.getBuilder(baseProperties).setEffectDistance(25).build();
     }
 }

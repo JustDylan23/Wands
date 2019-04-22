@@ -1,6 +1,7 @@
 package me.dylan.wands.spellfoundation;
 
 import me.dylan.wands.Wands;
+import me.dylan.wands.spellbehaviour.SpellBehaviour;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;

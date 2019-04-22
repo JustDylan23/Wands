@@ -1,9 +1,9 @@
 package me.dylan.wands.spells;
 
+import me.dylan.wands.spellbehaviour.SpellBehaviour;
+import me.dylan.wands.spellbehaviour.SpellBehaviour.BaseProperties;
+import me.dylan.wands.spellbehaviour.WaveSpell;
 import me.dylan.wands.spellfoundation.CastableSpell;
-import me.dylan.wands.spellfoundation.SpellBehaviour;
-import me.dylan.wands.spellfoundation.SpellBehaviour.BaseProperties;
-import me.dylan.wands.spellfoundation.SpellBehaviour.WaveSpell.Builder;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -29,6 +29,6 @@ public class BloodWave extends CastableSpell {
                     loc.getWorld().spawnParticle(Particle.BLOCK_CRACK, loc, 12, 0.6, 0.6, 0.6, 0.15, Material.REDSTONE_BLOCK.createBlockData(), true);
                 });
 
-        return new Builder(baseProperties).setEffectDistance(30).build();
+        return WaveSpell.getBuilder(baseProperties).setEffectDistance(30).build();
     }
 }
