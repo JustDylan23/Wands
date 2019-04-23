@@ -18,7 +18,6 @@ public class Launch extends CastableSpell {
                 .setEntityDamage(3)
                 .setEntityEffects(entity -> entity.setVelocity(new Vector(0, 1.2, 0)))
                 .setVisualEffects(loc -> {
-                    loc.add(0, 1, 0);
                     loc.getWorld().spawnParticle(Particle.SPELL_WITCH, loc, 30, 0.6, 0.7, 0.6, 0.3, null, true);
                     loc.getWorld().spawnParticle(Particle.SMOKE_LARGE, loc, 50, 0.2, 0.2, 0.2, 0.1, null, true);
 

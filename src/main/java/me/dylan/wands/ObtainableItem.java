@@ -29,7 +29,7 @@ public enum ObtainableItem {
             .setSpells(Spell.values()).getItemStack()),
 
     BLOOD_WAND(new WandItem.Builder(Material.NETHER_WART).builder(builder -> builder.setName("&cBlood Wand"))
-            .setSpells(Spell.BLOOD_WAVE, Spell.BLOOD_SPARK).getItemStack());
+            .setSpells(Spell.BLOOD_WAVE, Spell.BLOOD_SPARK, Spell.BLOOD_EXPLODE).getItemStack());
 
     private final ItemStack itemStack;
     private static final String[] names;
