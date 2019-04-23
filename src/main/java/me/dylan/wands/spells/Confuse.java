@@ -21,7 +21,6 @@ public class Confuse extends CastableSpell {
                 .setEntityEffects(entity -> ((LivingEntity) entity).addPotionEffect(
                         new PotionEffect(PotionEffectType.CONFUSION, 240, 4, false), true))
                 .setVisualEffects(loc -> {
-                    loc.add(0, 1, 0);
                     loc.getWorld().spawnParticle(Particle.SMOKE_LARGE, loc, 30, 1, 1, 1, 0.08, null, true);
                     loc.getWorld().spawnParticle(Particle.SMOKE_NORMAL, loc, 30, 1, 1, 1, 0.08, null, true);
                     loc.getWorld().spawnParticle(Particle.SPELL_WITCH, loc, 30, 1, 1, 1, 0.15, null, true);

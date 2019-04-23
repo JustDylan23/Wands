@@ -34,11 +34,11 @@ public class SparkSpell extends SpellBehaviour {
     private Location getSpellLocation(Player player) {
         Entity entity = player.getTargetEntity(effectDistance);
         if (entity != null) {
-            return entity.getLocation();
+            return entity.getLocation().add(0, 0.5, 0);
         }
         Block block = player.getTargetBlock(effectDistance);
         if (block != null) {
-            return block.getLocation().toCenterLocation();
+            return block.getLocation().toCenterLocation().subtract(player.getLocation().getDirection().normalize());
         }
         return player.getLocation().getDirection().normalize().multiply(effectDistance).toLocation(player.getWorld()).add(player.getLocation());
     }

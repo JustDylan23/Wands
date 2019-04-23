@@ -1,5 +1,6 @@
 package me.dylan.wands.spells;
 
+import me.dylan.wands.WandUtils;
 import me.dylan.wands.spellbehaviour.SpellBehaviour;
 import me.dylan.wands.spellbehaviour.SpellBehaviour.BaseProperties;
 import me.dylan.wands.spellbehaviour.WaveSpell;
@@ -19,7 +20,7 @@ public class BloodWave extends CastableSpell {
                 .setEntityDamage(4)
                 .setCastEffects(loc -> {
                     loc.getWorld().playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_BLAST, 4.0F, 1.0F);
-                    runTaskLater(() -> loc.getWorld().playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, 4.0F, 1.0F), 20, 5, 3);
+                    WandUtils.runTaskLater(() -> loc.getWorld().playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, 4.0F, 1.0F), 20, 5, 3);
                 })
                 .setEntityEffects(entity -> ((LivingEntity) entity).addPotionEffect(
                         new PotionEffect(PotionEffectType.WITHER, 60, 4, false), true))

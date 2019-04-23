@@ -25,5 +25,5 @@ public class PoisonWave extends CastableSpell {
                     loc.getWorld().spawnParticle(Particle.SMOKE_NORMAL, loc, 5, 1, 1, 1, 0.05, null, true);
                 });
         return WaveSpell.getBuilder(baseProperties).setEffectDistance(30).build();
-}
+    }
 }

@@ -28,6 +28,7 @@ public final class ParticleUtil {
 
     private static Location randomizeLoc(Location location, double x, double y, double z) {
         return location.clone().add(randomize(x), randomize(y), randomize(z));
+
     }
 
     private static double randomize(double i) {

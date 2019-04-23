@@ -36,6 +36,7 @@ public class MainCommandHandler implements CommandExecutor {
                     case "info":
                         sender.sendMessage("§e ---- §6Wands§e ----");
                         sender.sendMessage("§6Created by: §e_JustDylan_");
+                        sender.sendMessage("§6Uses MiniNBT from: §eI Al Istannen");
                         sender.sendMessage("§6Current version:§e " + Wands.getPlugin().getDescription().getVersion());
                         return true;
                 }
@@ -68,7 +69,7 @@ public class MainCommandHandler implements CommandExecutor {
                             String message = Wands.PREFIX + "Cooldown has been set to " + i + " second" + ((i != 1) ? "s" : "");
                             sender.sendMessage(message);
                         } catch (NumberFormatException e) {
-                            sender.sendMessage();
+                            sender.sendMessage(Wands.PREFIX + "Cooldown can only be set to a full number!");
                         }
                         return true;
                     }

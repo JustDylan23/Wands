@@ -43,8 +43,9 @@ public abstract class SpellBehaviour implements Listener {
 
     public void executeSpellFrom(Player player) {
         int remainingTime = getRemainingTime(player);
-        if (remainingTime != 0) {
+        if (remainingTime <= 0) {
             cast(player);
+            lastUsed.put(player, System.currentTimeMillis());
         } else {
             notifyOfCooldown(player, remainingTime);
         }
@@ -53,9 +54,12 @@ public abstract class SpellBehaviour implements Listener {
     private int getRemainingTime(Player player) {
         int cooldown = Wands.getPlugin().getCoolDownTime();
         long now = System.currentTimeMillis();
-        long previous = lastUsed.getOrDefault(player, now);
+        Long previous = lastUsed.get(player);
+        if (previous == null) {
+            return 0;
+        }
         long elapsed = now - previous;
-        return (elapsed >= cooldown) ? 0 : (int) Math.ceil(cooldown - (elapsed / 1000.0));
+        return (int) Math.ceil(cooldown - elapsed) / 1000;
     }
 
     private void notifyOfCooldown(Player player, int remaining) {

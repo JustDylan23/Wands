@@ -2,7 +2,6 @@ package me.dylan.wands.spellfoundation;
 
 import me.dylan.wands.Wands;
 import me.dylan.wands.spellbehaviour.SpellBehaviour;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -41,11 +40,4 @@ public abstract class CastableSpell {
         spellBehaviour.executeSpellFrom(player);
     }
 
-    protected void runTaskLater(Runnable runnable, int... delays) {
-        int delay = 0;
-        for (int d : delays) {
-            delay += d;
-            Bukkit.getScheduler().runTaskLater(plugin, runnable, delay);
-        }
-    }
 }
