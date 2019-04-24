@@ -30,8 +30,6 @@ public abstract class SpellBehaviour implements Listener {
         this.entityEffects = basePropperties.entityEffects;
     }
 
-    abstract void cast(Player player);
-
     public static BaseProperties createEmptyBaseProperties() {
         return new BaseProperties();
     }
@@ -40,6 +38,8 @@ public abstract class SpellBehaviour implements Listener {
     public static void onQuit(PlayerQuitEvent event) {
         lastUsed.remove(event.getPlayer());
     }
+
+    abstract void cast(Player player);
 
     public void executeSpellFrom(Player player) {
         int remainingTime = getRemainingTime(player);

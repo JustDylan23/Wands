@@ -17,6 +17,10 @@ public class SparkSpell extends SpellBehaviour {
         this.effectDistance = effectDistance;
     }
 
+    public static Builder getBuilder(BaseProperties baseProperties) {
+        return new Builder(baseProperties);
+    }
+
     @Override
     public void cast(Player player) {
         Location loc = getSpellLocation(player);
@@ -41,10 +45,6 @@ public class SparkSpell extends SpellBehaviour {
             return block.getLocation().toCenterLocation().subtract(player.getLocation().getDirection().normalize());
         }
         return player.getLocation().getDirection().normalize().multiply(effectDistance).toLocation(player.getWorld()).add(player.getLocation());
-    }
-
-    public static Builder getBuilder(BaseProperties baseProperties) {
-        return new Builder(baseProperties);
     }
 
     public static class Builder {

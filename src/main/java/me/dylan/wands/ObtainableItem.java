@@ -29,25 +29,26 @@ public enum ObtainableItem {
             .setSpells(Spell.values()).getItemStack()),
 
     BLOOD_WAND(new WandItem.Builder(Material.NETHER_WART).builder(builder -> builder.setName("&cBlood Wand"))
-            .setSpells(Spell.BLOOD_WAVE, Spell.BLOOD_SPARK, Spell.BLOOD_EXPLODE).getItemStack());
+            .setSpells(Spell.BLOOD_WAVE, Spell.BLOOD_SPARK, Spell.BLOOD_EXPLODE, Spell.BLOOD_STUN).getItemStack());
 
-    private final ItemStack itemStack;
     private static final String[] names;
 
     static {
         names = Arrays.stream(values()).map(Enum::toString).toArray(String[]::new);
     }
 
+    private final ItemStack itemStack;
+
     ObtainableItem(ItemStack itemStack) {
         this.itemStack = itemStack;
     }
 
-    public ItemStack getItemStack() {
-        return itemStack;
-    }
-
     public static String[] getNames() {
         return names;
+    }
+
+    public ItemStack getItemStack() {
+        return itemStack;
     }
 
     @Override

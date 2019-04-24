@@ -42,6 +42,10 @@ public class ProjectileSpell<T extends Projectile> extends SpellBehaviour implem
         this.metadataTag = "ProjectileSpell_" + ++idCount;
     }
 
+    public static <T extends Projectile> Builder<T> getBuilder(Class<T> projectileClass, float speed, BaseProperties basePropertiess) {
+        return new Builder<>(projectileClass, speed, basePropertiess);
+    }
+
     @Override
     public void cast(Player player) {
         Vector velocity = player.getLocation().getDirection().multiply(speed);
@@ -116,10 +120,6 @@ public class ProjectileSpell<T extends Projectile> extends SpellBehaviour implem
             }
             entity.setVelocity(vector);
         }
-    }
-
-    public static <T extends Projectile> Builder<T> getBuilder(Class<T> projectileClass, float speed, BaseProperties basePropertiess) {
-        return new Builder<>(projectileClass, speed, basePropertiess);
     }
 
     public static class Builder<T extends Projectile> {

@@ -20,7 +20,7 @@ public class ConstructTabCompleter implements TabCompleter {
     }
 
     @Override
-    public List<String> onTabComplete(@Nonnull CommandSender sender,@Nonnull Command command,@Nonnull String alias, @Nonnull String[] args) {
+    public List<String> onTabComplete(@Nonnull CommandSender sender, @Nonnull Command command, @Nonnull String alias, @Nonnull String[] args) {
         String value = args[args.length - 1];
         if (args.length == 1)
             return validCompletions(value, "enable", "disable", "get", "set", "info");

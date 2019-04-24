@@ -1,11 +1,14 @@
 package me.dylan.wands.spellbehaviour;
 
 import me.dylan.wands.WandUtils;
+import me.dylan.wands.Wands;
 import org.apache.commons.lang.RandomStringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 public class WaveSpell extends SpellBehaviour {
@@ -19,6 +22,10 @@ public class WaveSpell extends SpellBehaviour {
         this.stopAtEntity = stopAtEntity;
     }
 
+    public static Builder getBuilder(BaseProperties baseProperties) {
+        return new Builder(baseProperties);
+    }
+
     @Override
     public void cast(Player player) {
         Vector direction = player.getLocation().getDirection().normalize();
@@ -26,15 +33,16 @@ public class WaveSpell extends SpellBehaviour {
         String randomID = RandomStringUtils.random(5, true, false);
         castEffects.accept(direction.clone().multiply(10).toLocation(player.getWorld()).add(player.getEyeLocation()));
         Location currentLoc = player.getEyeLocation();
-        for (int i = 1; i <= effectDistance; i++) {
-            int index = i - 1;
-            Location loc = currentLoc.add(direction).clone();
-            if (!currentLoc.getBlock().isPassable()) {
-                return;
-            }
-            WandUtils.runTaskLater(() -> {
+
+        new BukkitRunnable() {
+            int count = 0;
+
+            @Override
+            public void run() {
+                if (count++ >= effectDistance) cancel();
+                Location loc = currentLoc.add(direction).clone();
                 visualEffects.accept(loc);
-                WandUtils.getNearbyDamageables(player, loc, effectAreaRange).forEach(entity -> {
+                for (Damageable entity : WandUtils.getNearbyDamageables(player, loc, effectAreaRange)) {
                     if (!entity.hasMetadata(randomID)) {
                         player.setMetadata(randomID, new FixedMetadataValue(plugin, true));
                         WandUtils.damage(entityDamage, player, entity);
@@ -43,15 +51,15 @@ public class WaveSpell extends SpellBehaviour {
                             if (entity.isValid()) {
                                 entity.removeMetadata(randomID, plugin);
                             }
-                        }, effectDistance - index);
+                        }, effectDistance - count);
+                        if (stopAtEntity) {
+                            cancel();
+                            break;
+                        }
                     }
-                });
-            }, i);
-        }
-    }
-
-    public static Builder getBuilder(BaseProperties baseProperties) {
-        return new Builder(baseProperties);
+                }
+            }
+        }.runTaskTimer(Wands.getPlugin(), 1, 1);
     }
 
     public static class Builder {
