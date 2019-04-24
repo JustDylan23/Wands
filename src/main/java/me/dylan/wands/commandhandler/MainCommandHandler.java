@@ -13,7 +13,7 @@ import java.util.StringJoiner;
 
 public class MainCommandHandler implements CommandExecutor {
     @Override
-    public boolean onCommand(@Nonnull CommandSender sender, @Nonnull Command cmd, @Nonnull  String label, String[] args) {
+    public boolean onCommand(@Nonnull CommandSender sender, @Nonnull Command cmd, @Nonnull String label, String[] args) {
         switch (args.length) {
             case 1:
                 switch (args[0]) {

@@ -52,6 +52,7 @@ public class EmpireBow implements Listener {
                     player.sendActionBar("§6Charging [§a|§6|||]");
                     new BukkitRunnable() {
                         int count;
+
                         @Override
                         public void run() {
                             count++;
