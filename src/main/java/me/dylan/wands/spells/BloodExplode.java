@@ -9,9 +9,10 @@ import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 
 public class BloodExplode extends CastableSpell {
+
     @Override
     public SpellBehaviour getSpellBehaviour() {
-        SpellBehaviour.BaseProperties baseProperties = SpellBehaviour.createEmptyBaseProperties()
+        return SparkSpell.newBuilder()
                 .setEffectRadius(4.5F)
                 .setEntityDamage(7)
                 .setEntityEffects(entity -> entity.setFireTicks(40))
@@ -20,9 +21,9 @@ public class BloodExplode extends CastableSpell {
                     loc.getWorld().spawnParticle(Particle.BLOCK_CRACK, loc, 15, 1, 1, 1, 0.15, Material.REDSTONE_BLOCK.createBlockData(), true);
                     loc.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, loc, 0, 0.0, 0.0, 0.0, 0.0, null, true);
                     loc.getWorld().playSound(loc, Sound.ENTITY_GENERIC_EXPLODE, SoundCategory.MASTER, 4.0F, 1.0F);
-
                 })
-                .setCastEffects(loc -> loc.getWorld().playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_BLAST, SoundCategory.MASTER, 4.0F, 1.0F));
-        return SparkSpell.getBuilder(baseProperties).setEffectDistance(30).build();
+                .setCastEffects(loc -> loc.getWorld().playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_BLAST, SoundCategory.MASTER, 4.0F, 1.0F))
+                .setEffectDistance(30)
+                .build();
     }
 }

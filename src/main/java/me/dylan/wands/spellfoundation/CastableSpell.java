@@ -19,13 +19,6 @@ public abstract class CastableSpell {
         this.id = ++idCount;
     }
 
-    @Deprecated
-    protected CastableSpell(String displayName) {
-        this.spellBehaviour = getSpellBehaviour();
-        this.displayName = displayName;
-        this.id = ++idCount;
-    }
-
     public String getName() {
         return displayName;
     }
@@ -39,5 +32,4 @@ public abstract class CastableSpell {
     public final void cast(Player player) {
         spellBehaviour.executeSpellFrom(player);
     }
-
 }

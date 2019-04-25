@@ -16,14 +16,14 @@ public class WaveSpell extends SpellBehaviour {
     private final boolean stopAtEntity;
 
     //can be accessed via builder
-    private WaveSpell(SpellBehaviour.BaseProperties baseProperties, int effectDistance, boolean stopAtEntity) {
-        super(baseProperties);
+    private WaveSpell(SpellBehaviour.Builder.BuilderWrapper builderWrapper, int effectDistance, boolean stopAtEntity) {
+        super(builderWrapper);
         this.effectDistance = effectDistance;
         this.stopAtEntity = stopAtEntity;
     }
 
-    public static Builder getBuilder(BaseProperties baseProperties) {
-        return new Builder(baseProperties);
+    public static Builder newBuilder() {
+        return new Builder();
     }
 
     @Override
@@ -62,27 +62,30 @@ public class WaveSpell extends SpellBehaviour {
         }.runTaskTimer(Wands.getPlugin(), 1, 1);
     }
 
-    public static class Builder {
-        private final SpellBehaviour.BaseProperties baseProperties;
+    public static class Builder extends SpellBehaviour.Builder<Builder> {
         private int effectDistance;
         private boolean stopAtEntity = false;
 
-        private Builder(SpellBehaviour.BaseProperties basePropperties) {
-            this.baseProperties = basePropperties;
+        private Builder() {
+        }
+
+        @Override
+        Builder self() {
+            return this;
         }
 
         public Builder setEffectDistance(int effectDistance) {
             this.effectDistance = effectDistance;
-            return this;
+            return self();
         }
 
         public Builder stopAtEntity(boolean stopAtEntity) {
             this.stopAtEntity = stopAtEntity;
-            return this;
+            return self();
         }
 
         public WaveSpell build() {
-            return new WaveSpell(baseProperties, effectDistance, stopAtEntity);
+            return new WaveSpell(createBuilderWrapper(), effectDistance, stopAtEntity);
         }
     }
 }

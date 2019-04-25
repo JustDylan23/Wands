@@ -15,19 +15,19 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 @SuppressWarnings({"WeakerAccess", "UnusedReturnValue", "RedundantSuppression"})
-public final class WandItem extends ItemUtil {
+public final class WandWrapper extends ItemWrapper {
 
     private static final String TAG_SPELL_INDEX = "SpellIndex";
     private static final String TAG_SPELLS_LIST = "Spells";
     private static final String TAG_VERIFIED = "IsWand";
 
-    private WandItem(ItemStack itemStack) {
+    private WandWrapper(ItemStack itemStack) {
         super(itemStack);
     }
 
-    public static Optional<WandItem> wrapIfWand(ItemStack itemStack) {
-        WandItem wandItem = new WandItem(itemStack);
-        if (wandItem.isMarkedAsWand()) return Optional.of(wandItem);
+    public static Optional<WandWrapper> wrapIfWand(ItemStack itemStack) {
+        WandWrapper wandWrapper = new WandWrapper(itemStack);
+        if (wandWrapper.isMarkedAsWand()) return Optional.of(wandWrapper);
         return Optional.empty();
     }
 
@@ -39,7 +39,7 @@ public final class WandItem extends ItemUtil {
         return 1;
     }
 
-    public WandItem setSpellIndex(int index) {
+    public WandWrapper setSpellIndex(int index) {
         setNbtTagInt(TAG_SPELL_INDEX, index);
         return this;
     }
@@ -59,8 +59,8 @@ public final class WandItem extends ItemUtil {
         return getNbtTag(tag -> tag.getIntArray(TAG_SPELLS_LIST)).length;
     }
 
-    public CastableSpell getSelectedSpell() {
-        return getSpells().get(getSpellIndex());
+    public Optional<CastableSpell> getSelectedSpell() {
+        return Optional.ofNullable(getSpells().get(getSpellIndex()));
     }
 
     public boolean isMarkedAsWand() {
@@ -68,10 +68,7 @@ public final class WandItem extends ItemUtil {
     }
 
     public void castSpell(Player player) {
-        CastableSpell spell = getSelectedSpell();
-        if (spell != null) {
-            spell.cast(player);
-        }
+        getSelectedSpell().ifPresent(spell -> spell.cast(player));
     }
 
     public void nextSpell(Player player) {
@@ -88,10 +85,12 @@ public final class WandItem extends ItemUtil {
         setSpellIndex(index);
 
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.5F, 0.5F);
-        player.sendActionBar("§6Current spell: §7§l" + getSelectedSpell().getName());
+        Optional<CastableSpell> selectedSpell = getSelectedSpell();
+        String spellName = selectedSpell.isPresent() ? selectedSpell.get().getName() : "";
+        player.sendActionBar("§6Current spell: §7§l" + spellName);
     }
 
-    public static class Builder extends ItemUtil {
+    public static class Builder extends ItemWrapper {
         public Builder(ItemStack itemStack) {
             super(itemStack);
             setNbtTagInt(TAG_VERIFIED, 1);
@@ -110,13 +109,13 @@ public final class WandItem extends ItemUtil {
         }
 
         @Override
-        public Builder builder(Consumer<ItemUtil> consumer) {
+        public Builder builder(Consumer<ItemWrapper> consumer) {
             consumer.accept(this);
             return this;
         }
 
-        public WandItem build() {
-            return new WandItem(getItemStack());
+        public WandWrapper build() {
+            return new WandWrapper(getItemStack());
         }
     }
 }

@@ -22,16 +22,12 @@ public abstract class SpellBehaviour implements Listener {
     final Consumer<Location> visualEffects;
     final Consumer<Entity> entityEffects;
 
-    SpellBehaviour(BaseProperties basePropperties) {
-        this.entityDamage = basePropperties.entityDamage;
-        this.effectAreaRange = basePropperties.effectAreaRange;
-        this.castEffects = basePropperties.castEffects;
-        this.visualEffects = basePropperties.visualEffects;
-        this.entityEffects = basePropperties.entityEffects;
-    }
-
-    public static BaseProperties createEmptyBaseProperties() {
-        return new BaseProperties();
+    SpellBehaviour(Builder.BuilderWrapper builderWrapper) {
+        this.entityDamage = builderWrapper.getEntityDamage();
+        this.effectAreaRange = builderWrapper.getEffectAreaRange();
+        this.castEffects = builderWrapper.getCastEffects();
+        this.visualEffects = builderWrapper.getVisualEffects();
+        this.entityEffects = builderWrapper.getEntityEffects();
     }
 
     @EventHandler
@@ -67,7 +63,7 @@ public abstract class SpellBehaviour implements Listener {
         player.playSound(player.getLocation(), Sound.ENTITY_BLAZE_AMBIENT, 0.3F, 1);
     }
 
-    public static class BaseProperties {
+    public abstract static class Builder<T extends Builder<T>> {
         private final static Consumer<?> EMPTY_CONSUMER = e -> {
         };
         private int entityDamage = 3;
@@ -76,13 +72,12 @@ public abstract class SpellBehaviour implements Listener {
         private Consumer<Location> visualEffects = emptyConsumer();
         private Consumer<Entity> entityEffects = emptyConsumer();
 
-        private BaseProperties() {
+        @SuppressWarnings("unchecked")
+        <S> Consumer<S> emptyConsumer() {
+            return (Consumer<S>) EMPTY_CONSUMER;
         }
 
-        @SuppressWarnings("unchecked")
-        <T> Consumer<T> emptyConsumer() {
-            return (Consumer<T>) EMPTY_CONSUMER;
-        }
+        abstract T self();
 
         /**
          * Sets the damage that is applied to the Damageable effected by the spell.
@@ -91,9 +86,9 @@ public abstract class SpellBehaviour implements Listener {
          * @return this
          */
 
-        public BaseProperties setEntityDamage(int damage) {
+        public T setEntityDamage(int damage) {
             this.entityDamage = damage;
-            return this;
+            return self();
         }
 
         /**
@@ -103,9 +98,9 @@ public abstract class SpellBehaviour implements Listener {
          * @return this
          */
 
-        public BaseProperties setEffectRadius(float radius) {
+        public T setEffectRadius(float radius) {
             this.effectAreaRange = radius;
-            return this;
+            return self();
         }
 
         /**
@@ -115,9 +110,9 @@ public abstract class SpellBehaviour implements Listener {
          * @return this
          */
 
-        public BaseProperties setCastEffects(Consumer<Location> castEffects) {
+        public T setCastEffects(Consumer<Location> castEffects) {
             this.castEffects = castEffects;
-            return this;
+            return self();
         }
 
         /**
@@ -128,9 +123,9 @@ public abstract class SpellBehaviour implements Listener {
          * @return this
          */
 
-        public BaseProperties setVisualEffects(Consumer<Location> effects) {
+        public T setVisualEffects(Consumer<Location> effects) {
             this.visualEffects = effects;
-            return this;
+            return self();
         }
 
         /**
@@ -140,9 +135,52 @@ public abstract class SpellBehaviour implements Listener {
          * @return this
          */
 
-        public BaseProperties setEntityEffects(Consumer<Entity> effects) {
+        public T setEntityEffects(Consumer<Entity> effects) {
             this.entityEffects = effects;
-            return this;
+            return self();
+        }
+
+        BuilderWrapper createBuilderWrapper() {
+            Builder<T> that = this;
+            return new BuilderWrapper() {
+                @Override
+                public int getEntityDamage() {
+                    return that.entityDamage;
+                }
+
+                @Override
+                public float getEffectAreaRange() {
+                    return that.effectAreaRange;
+                }
+
+                @Override
+                public Consumer<Location> getCastEffects() {
+                    return that.castEffects;
+                }
+
+                @Override
+                public Consumer<Location> getVisualEffects() {
+                    return that.castEffects;
+                }
+
+                @Override
+                public Consumer<Entity> getEntityEffects() {
+                    return that.entityEffects;
+                }
+
+            };
+        }
+
+        public interface BuilderWrapper {
+            int getEntityDamage();
+
+            float getEffectAreaRange();
+
+            Consumer<Location> getCastEffects();
+
+            Consumer<Location> getVisualEffects();
+
+            Consumer<Entity> getEntityEffects();
         }
     }
 }

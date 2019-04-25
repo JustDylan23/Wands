@@ -9,13 +9,13 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Arrays;
 
 public enum ObtainableItem {
-    ASSASSINS_DAGGER(new ItemUtil(Material.MUSIC_DISC_MALL).builder(builder -> {
+    ASSASSINS_DAGGER(new ItemWrapper(Material.MUSIC_DISC_MALL).builder(builder -> {
         builder.setName("&dAssassin's &8Dagger");
         builder.setNbtTagInt("therosDagger", 1);
         builder.setItemMeta(meta -> meta.addItemFlags(ItemFlag.values()));
     }).getItemStack()),
 
-    CURSED_BOW(new ItemUtil(Material.BOW).builder(builder -> {
+    CURSED_BOW(new ItemWrapper(Material.BOW).builder(builder -> {
         builder.setName("&cCursed Bow");
         builder.setNbtTagInt("empireBow", 1);
         builder.setItemMeta(meta -> {
@@ -25,10 +25,10 @@ public enum ObtainableItem {
         });
     }).getItemStack()),
 
-    GOD_WAND(new WandItem.Builder(Material.BLAZE_ROD).builder(builder -> builder.setName("&eGod Wand"))
+    GOD_WAND(new WandWrapper.Builder(Material.BLAZE_ROD).builder(builder -> builder.setName("&eGod Wand"))
             .setSpells(Spell.values()).getItemStack()),
 
-    BLOOD_WAND(new WandItem.Builder(Material.NETHER_WART).builder(builder -> builder.setName("&cBlood Wand"))
+    BLOOD_WAND(new WandWrapper.Builder(Material.NETHER_WART).builder(builder -> builder.setName("&cBlood Wand"))
             .setSpells(Spell.BLOOD_WAVE, Spell.BLOOD_SPARK, Spell.BLOOD_EXPLODE, Spell.BLOOD_STUN).getItemStack());
 
     private static final String[] names;

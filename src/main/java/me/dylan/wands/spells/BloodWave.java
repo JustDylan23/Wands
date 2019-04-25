@@ -2,7 +2,6 @@ package me.dylan.wands.spells;
 
 import me.dylan.wands.WandUtils;
 import me.dylan.wands.spellbehaviour.SpellBehaviour;
-import me.dylan.wands.spellbehaviour.SpellBehaviour.BaseProperties;
 import me.dylan.wands.spellbehaviour.WaveSpell;
 import me.dylan.wands.spellfoundation.CastableSpell;
 import org.bukkit.Material;
@@ -15,7 +14,7 @@ import org.bukkit.potion.PotionEffectType;
 public class BloodWave extends CastableSpell {
     @Override
     public SpellBehaviour getSpellBehaviour() {
-        BaseProperties baseProperties = SpellBehaviour.createEmptyBaseProperties()
+        return WaveSpell.newBuilder()
                 .setEffectRadius(1.8F)
                 .setEntityDamage(4)
                 .setCastEffects(loc -> {
@@ -28,8 +27,7 @@ public class BloodWave extends CastableSpell {
                     loc.getWorld().spawnParticle(Particle.SMOKE_NORMAL, loc, 10, 0.2, 0.2, 0.2, 0.1, null, true);
                     loc.getWorld().spawnParticle(Particle.SMOKE_LARGE, loc, 10, 1, 1, 1, 0.1, null, true);
                     loc.getWorld().spawnParticle(Particle.BLOCK_CRACK, loc, 12, 0.6, 0.6, 0.6, 0.15, Material.REDSTONE_BLOCK.createBlockData(), true);
-                });
-
-        return WaveSpell.getBuilder(baseProperties).setEffectDistance(30).build();
+                }).setEffectDistance(30)
+                .build();
     }
 }

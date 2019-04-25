@@ -7,6 +7,10 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public final class ParticleUtil {
 
+    private ParticleUtil() {
+        throw new UnsupportedOperationException();
+    }
+
     public static void spawnColoredParticle(Particle particle, Location location, int count, double speed, double x, double y, double z, int r, int g, int b, boolean rainbow) {
         switch (particle) {
             case REDSTONE:
