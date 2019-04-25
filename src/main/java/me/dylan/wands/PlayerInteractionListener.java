@@ -16,13 +16,13 @@ public final class PlayerInteractionListener implements Listener {
 
         Player player = event.getPlayer();
         ItemStack handItem = player.getInventory().getItemInMainHand();
-        WandItem.wrapIfWand(handItem).ifPresent(wandItem -> {
+        WandWrapper.wrapIfWand(handItem).ifPresent(wandWrapper -> {
             if (event.getHand() == EquipmentSlot.HAND) {
                 event.setCancelled(true);
                 if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK) {
-                    wandItem.castSpell(player);
+                    wandWrapper.castSpell(player);
                 } else if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) {
-                    wandItem.nextSpell(player);
+                    wandWrapper.nextSpell(player);
                 }
             }
         });

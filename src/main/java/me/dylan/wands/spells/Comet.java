@@ -3,7 +3,6 @@ package me.dylan.wands.spells;
 import me.dylan.wands.WandUtils;
 import me.dylan.wands.spellbehaviour.ProjectileSpell;
 import me.dylan.wands.spellbehaviour.SpellBehaviour;
-import me.dylan.wands.spellbehaviour.SpellBehaviour.BaseProperties;
 import me.dylan.wands.spellfoundation.CastableSpell;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -14,7 +13,7 @@ import org.bukkit.entity.SmallFireball;
 public class Comet extends CastableSpell {
     @Override
     public SpellBehaviour getSpellBehaviour() {
-        BaseProperties baseProperties = SpellBehaviour.createEmptyBaseProperties()
+        return ProjectileSpell.newBuilder(SmallFireball.class, 3F)
                 .setCastEffects(loc ->
                         loc.getWorld().playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_BLAST, SoundCategory.MASTER, 5F, 1F)
                 )
@@ -26,8 +25,7 @@ public class Comet extends CastableSpell {
                     world.spawnParticle(Particle.SPELL_WITCH, loc, 40, 0.8, 0.8, 0.8, 0.15, null, true);
                     world.spawnParticle(Particle.SMOKE_LARGE, loc, 10, 0.6, 0.6, 0.6, 0.1, null, true);
                     world.spawnParticle(Particle.SMOKE_LARGE, loc, 10, 1.0, 1.0, 1.0, 0.1, null, true);
-                });
-        return ProjectileSpell.getBuilder(SmallFireball.class, 3F, baseProperties)
+                })
                 .setProjectilePropperties(projectile -> {
                     projectile.setIsIncendiary(false);
                     projectile.setYield(0);

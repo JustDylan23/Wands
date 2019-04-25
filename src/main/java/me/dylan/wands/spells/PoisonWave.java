@@ -2,7 +2,6 @@ package me.dylan.wands.spells;
 
 import me.dylan.wands.ParticleUtil;
 import me.dylan.wands.spellbehaviour.SpellBehaviour;
-import me.dylan.wands.spellbehaviour.SpellBehaviour.BaseProperties;
 import me.dylan.wands.spellbehaviour.WaveSpell;
 import me.dylan.wands.spellfoundation.CastableSpell;
 import org.bukkit.Particle;
@@ -14,7 +13,7 @@ import org.bukkit.potion.PotionEffectType;
 public class PoisonWave extends CastableSpell {
     @Override
     public SpellBehaviour getSpellBehaviour() {
-        BaseProperties baseProperties = SpellBehaviour.createEmptyBaseProperties()
+        return WaveSpell.newBuilder()
                 .setEffectRadius(2.2F)
                 .setEntityDamage(1)
                 .setCastEffects(location -> location.getWorld().playSound(location, Sound.ENTITY_EVOKER_CAST_SPELL, 3, 1))
@@ -23,7 +22,7 @@ public class PoisonWave extends CastableSpell {
                 .setVisualEffects(loc -> {
                     ParticleUtil.spawnColoredParticle(Particle.SPELL_MOB, loc, 18, 1, 1.2, 1.2, 1.2, 75, 140, 50, false);
                     loc.getWorld().spawnParticle(Particle.SMOKE_NORMAL, loc, 5, 1, 1, 1, 0.05, null, true);
-                });
-        return WaveSpell.getBuilder(baseProperties).setEffectDistance(30).build();
+                }).setEffectDistance(30)
+                .build();
     }
 }

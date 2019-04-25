@@ -3,7 +3,6 @@ package me.dylan.wands.spells;
 import me.dylan.wands.WandUtils;
 import me.dylan.wands.spellbehaviour.SparkSpell;
 import me.dylan.wands.spellbehaviour.SpellBehaviour;
-import me.dylan.wands.spellbehaviour.SpellBehaviour.BaseProperties;
 import me.dylan.wands.spellfoundation.CastableSpell;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -13,7 +12,7 @@ import org.bukkit.SoundCategory;
 public class BloodSpark extends CastableSpell {
     @Override
     public SpellBehaviour getSpellBehaviour() {
-        BaseProperties baseProperties = SpellBehaviour.createEmptyBaseProperties()
+        return SparkSpell.newBuilder()
                 .setEffectRadius(2.2F)
                 .setEntityDamage(10)
                 .setVisualEffects(loc -> {
@@ -23,7 +22,8 @@ public class BloodSpark extends CastableSpell {
                     WandUtils.runTaskLater(() ->
                             loc.getWorld().playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, SoundCategory.MASTER, 4.0F, 1.0F), 10);
                 })
-                .setCastEffects(loc -> loc.getWorld().playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_BLAST, SoundCategory.MASTER, 4.0F, 1.0F));
-        return SparkSpell.getBuilder(baseProperties).setEffectDistance(30).build();
+                .setCastEffects(loc -> loc.getWorld().playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_BLAST, SoundCategory.MASTER, 4.0F, 1.0F))
+                .setEffectDistance(30)
+                .build();
     }
 }

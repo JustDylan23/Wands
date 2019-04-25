@@ -2,7 +2,6 @@ package me.dylan.wands.spells;
 
 import me.dylan.wands.spellbehaviour.SparkSpell;
 import me.dylan.wands.spellbehaviour.SpellBehaviour;
-import me.dylan.wands.spellbehaviour.SpellBehaviour.BaseProperties;
 import me.dylan.wands.spellfoundation.CastableSpell;
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;
@@ -13,7 +12,7 @@ import org.bukkit.util.Vector;
 public class Launch extends CastableSpell {
     @Override
     public SpellBehaviour getSpellBehaviour() {
-        BaseProperties baseProperties = SpellBehaviour.createEmptyBaseProperties()
+        return SparkSpell.newBuilder()
                 .setEffectRadius(2.2F)
                 .setEntityDamage(3)
                 .setEntityEffects(entity -> entity.setVelocity(new Vector(0, 1.2, 0)))
@@ -24,7 +23,7 @@ public class Launch extends CastableSpell {
                     loc.getWorld().playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_BLAST, SoundCategory.MASTER, 4.0F, 1.0F);
                     Bukkit.getScheduler().runTaskLater(plugin, () ->
                             loc.getWorld().playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, SoundCategory.MASTER, 4.0F, 1.0F), 10L);
-                });
-        return SparkSpell.getBuilder(baseProperties).setEffectDistance(30).build();
+                }).setEffectDistance(30)
+                .build();
     }
 }

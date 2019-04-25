@@ -12,19 +12,19 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 @SuppressWarnings({"WeakerAccess", "RedundantSuppression"})
-public class ItemUtil {
+public class ItemWrapper {
 
     private final ItemStack itemStack;
 
-    public ItemUtil(ItemStack itemStack) {
+    public ItemWrapper(ItemStack itemStack) {
         this.itemStack = itemStack;
     }
 
-    public ItemUtil(Material material) {
+    public ItemWrapper(Material material) {
         this(new ItemStack(material));
     }
 
-    public ItemUtil builder(Consumer<ItemUtil> consumer) {
+    public ItemWrapper builder(Consumer<ItemWrapper> consumer) {
         consumer.accept(this);
         return this;
     }

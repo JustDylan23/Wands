@@ -14,6 +14,7 @@ public class WandUtils {
     private static final Wands plugin = Wands.getPlugin();
 
     private WandUtils() {
+        throw new UnsupportedOperationException();
     }
 
     public static Iterable<Damageable> getNearbyDamageables(Player player, Location loc, double radius) {

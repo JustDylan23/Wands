@@ -1,6 +1,6 @@
 package me.dylan.wands.presetitems;
 
-import me.dylan.wands.ItemUtil;
+import me.dylan.wands.ItemWrapper;
 import me.dylan.wands.Wands;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
@@ -29,7 +29,7 @@ public final class TherosDagger implements Listener {
     private final String sneakKey = "therosInvisable";
 
     private boolean hasDagger(Player player) {
-        return new ItemUtil(player.getInventory().getItemInMainHand()).hasNbtTag("therosDagger");
+        return new ItemWrapper(player.getInventory().getItemInMainHand()).hasNbtTag("therosDagger");
     }
 
     @EventHandler

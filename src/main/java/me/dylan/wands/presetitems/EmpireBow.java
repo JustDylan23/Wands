@@ -1,6 +1,6 @@
 package me.dylan.wands.presetitems;
 
-import me.dylan.wands.ItemUtil;
+import me.dylan.wands.ItemWrapper;
 import me.dylan.wands.WandUtils;
 import me.dylan.wands.Wands;
 import org.bukkit.*;
@@ -38,7 +38,7 @@ public class EmpireBow implements Listener {
 
     private boolean hasBow(Player player) {
         ItemStack tool = player.getInventory().getItemInMainHand();
-        ItemUtil itemUtil = new ItemUtil(tool);
+        ItemWrapper itemUtil = new ItemWrapper(tool);
         return itemUtil.hasNbtTag("empireBow");
     }
 

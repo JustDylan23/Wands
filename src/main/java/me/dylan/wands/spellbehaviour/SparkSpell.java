@@ -12,13 +12,13 @@ public class SparkSpell extends SpellBehaviour {
     private final int effectDistance;
 
     //can be accessed via builder
-    private SparkSpell(SpellBehaviour.BaseProperties basePropperties, int effectDistance) {
-        super(basePropperties);
+    private SparkSpell(SpellBehaviour.Builder.BuilderWrapper builderWrapper, int effectDistance) {
+        super(builderWrapper);
         this.effectDistance = effectDistance;
     }
 
-    public static Builder getBuilder(BaseProperties baseProperties) {
-        return new Builder(baseProperties);
+    public static Builder newBuilder() {
+        return new Builder();
     }
 
     @Override
@@ -32,7 +32,6 @@ public class SparkSpell extends SpellBehaviour {
             entityEffects.accept(entity);
         });
         visualEffects.accept(loc);
-
     }
 
     private Location getSpellLocation(Player player) {
@@ -47,21 +46,24 @@ public class SparkSpell extends SpellBehaviour {
         return player.getLocation().getDirection().normalize().multiply(effectDistance).toLocation(player.getWorld()).add(player.getLocation());
     }
 
-    public static class Builder {
-        private final SpellBehaviour.BaseProperties baseProperties;
+    public static class Builder extends SpellBehaviour.Builder<Builder> {
         private int effectDistance;
 
-        private Builder(SpellBehaviour.BaseProperties basePropperties) {
-            this.baseProperties = basePropperties;
+        private Builder() {
+        }
+
+        @Override
+        Builder self() {
+            return this;
         }
 
         public Builder setEffectDistance(int effectDistance) {
             this.effectDistance = effectDistance;
-            return this;
+            return self();
         }
 
         public SparkSpell build() {
-            return new SparkSpell(baseProperties, effectDistance);
+            return new SparkSpell(createBuilderWrapper(), effectDistance);
         }
     }
 }

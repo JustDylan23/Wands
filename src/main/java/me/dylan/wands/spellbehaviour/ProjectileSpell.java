@@ -30,8 +30,8 @@ public class ProjectileSpell<T extends Projectile> extends SpellBehaviour implem
     private final String metadataTag;
 
     //can be accessed via builder
-    private ProjectileSpell(BaseProperties baseProperties, Class<T> projectile, Consumer<T> projectilePropperties, Consumer<Location> hitEffects, float speed, int lifeTime, int pushSpeed) {
-        super(baseProperties);
+    private ProjectileSpell(SpellBehaviour.Builder.BuilderWrapper builderWrapper, Class<T> projectile, Consumer<T> projectilePropperties, Consumer<Location> hitEffects, float speed, int lifeTime, int pushSpeed) {
+        super(builderWrapper);
         plugin.addListener(this);
         this.projectile = projectile;
         this.projectilePropperties = projectilePropperties;
@@ -40,10 +40,6 @@ public class ProjectileSpell<T extends Projectile> extends SpellBehaviour implem
         this.lifeTime = lifeTime;
         this.pushSpeed = pushSpeed;
         this.metadataTag = "ProjectileSpell_" + ++idCount;
-    }
-
-    public static <T extends Projectile> Builder<T> getBuilder(Class<T> projectileClass, float speed, BaseProperties basePropertiess) {
-        return new Builder<>(projectileClass, speed, basePropertiess);
     }
 
     @Override
@@ -122,10 +118,13 @@ public class ProjectileSpell<T extends Projectile> extends SpellBehaviour implem
         }
     }
 
-    public static class Builder<T extends Projectile> {
+    public static <T extends Projectile> Builder<T> newBuilder(Class<T> projectileClass, float speed) {
+        return new Builder<>(projectileClass, speed);
+    }
+
+    public static class Builder<T extends Projectile> extends SpellBehaviour.Builder<Builder<T>> {
 
         private final Class<T> projectile;
-        private final BaseProperties baseProperties;
         private final float speed;
 
         private Consumer<T> projectilePropperties;
@@ -133,34 +132,38 @@ public class ProjectileSpell<T extends Projectile> extends SpellBehaviour implem
         private int lifeTime;
         private int pushSpeed;
 
-        private Builder(Class<T> projectileClass, float speed, BaseProperties baseProperties) {
+        private Builder(Class<T> projectileClass, float speed) throws NullPointerException {
             this.projectile = projectileClass;
             this.speed = speed;
-            this.baseProperties = baseProperties;
+        }
+
+        @Override
+        Builder<T> self() {
+            return this;
         }
 
         public Builder<T> setProjectilePropperties(Consumer<T> projectilePropperties) {
             this.projectilePropperties = projectilePropperties;
-            return this;
+            return self();
         }
 
         public Builder<T> setHitEffects(Consumer<Location> hitEffects) {
             this.hitEffects = hitEffects;
-            return this;
+            return self();
         }
 
         public Builder<T> setLifeTime(int lifeTime) {
             this.lifeTime = lifeTime;
-            return this;
+            return self();
         }
 
         public Builder<T> setPushSpeed(int pushSpeed) {
             this.pushSpeed = pushSpeed;
-            return this;
+            return self();
         }
 
         public ProjectileSpell<T> build() {
-            return new ProjectileSpell<>(baseProperties, projectile, projectilePropperties, hitEffects, speed, lifeTime, pushSpeed);
+            return new ProjectileSpell<>(createBuilderWrapper(), projectile, projectilePropperties, hitEffects, speed, lifeTime, pushSpeed);
         }
     }
 }
