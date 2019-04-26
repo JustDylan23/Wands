@@ -12,8 +12,6 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.Optional;
-
 @SuppressWarnings("WeakerAccess")
 public final class Wands extends JavaPlugin {
 
@@ -41,11 +39,10 @@ public final class Wands extends JavaPlugin {
             return;
         }
 
-        Optional<PluginCommand> command =  Optional.ofNullable(this.getCommand("wands"));
-        command.ifPresent(cmd -> {
-            cmd.setExecutor(new MainCommandHandler());
-            cmd.setTabCompleter(new ConstructTabCompleter());
-        });
+        PluginCommand cmd =  this.getCommand("wands");
+        assert (cmd != null): "Command \"wands\" was not set up correctly in the plugin.yml";
+        cmd.setExecutor(new MainCommandHandler());
+        cmd.setTabCompleter(new ConstructTabCompleter());
 
         plugin = this;
         listenerRegister = new ListenerRegister();
