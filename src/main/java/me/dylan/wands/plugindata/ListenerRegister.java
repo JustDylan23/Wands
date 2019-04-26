@@ -14,7 +14,7 @@ public class ListenerRegister {
     private static final Wands plugin = Wands.getPlugin();
     private final Set<Listener> toggleableListeners = new HashSet<>();
 
-    public void addListener(Listener... listeners) {
+    public static void addListener(Listener... listeners) {
         for (Listener listener : listeners) {
             Bukkit.getServer().getPluginManager().registerEvents(listener, plugin);
         }
