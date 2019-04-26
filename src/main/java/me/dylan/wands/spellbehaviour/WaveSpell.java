@@ -44,7 +44,7 @@ public class WaveSpell extends SpellBehaviour {
                 visualEffects.accept(loc);
                 for (Damageable entity : WandUtils.getNearbyDamageables(player, loc, effectAreaRange)) {
                     if (!entity.hasMetadata(randomID)) {
-                        player.setMetadata(randomID, new FixedMetadataValue(plugin, true));
+                        entity.setMetadata(randomID, new FixedMetadataValue(plugin, true));
                         WandUtils.damage(entityDamage, player, entity);
                         entityEffects.accept(entity);
                         Bukkit.getScheduler().runTaskLater(plugin, () -> {
