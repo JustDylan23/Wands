@@ -1,6 +1,7 @@
 package me.dylan.wands.spellbehaviour;
 
 import me.dylan.wands.Wands;
+import me.dylan.wands.plugindata.ListenerRegister;
 import me.dylan.wands.utils.EffectUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -32,7 +33,7 @@ public class ProjectileSpell<T extends Projectile> extends SpellBehaviour implem
     //can be accessed via builder
     private ProjectileSpell(SpellBehaviour.Builder.BuilderWrapper builderWrapper, Class<T> projectile, Consumer<T> projectilePropperties, Consumer<Location> hitEffects, float speed, int lifeTime, int pushSpeed) {
         super(builderWrapper);
-        plugin.getListenerRegister().addListener(this);
+        ListenerRegister.addListener(this);
         this.projectile = projectile;
         this.projectilePropperties = projectilePropperties;
         this.hitEffects = hitEffects;
