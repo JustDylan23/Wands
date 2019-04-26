@@ -62,6 +62,7 @@ public class SparkSpell extends SpellBehaviour {
             return self();
         }
 
+
         public SparkSpell build() {
             return new SparkSpell(createBuilderWrapper(), effectDistance);
         }
