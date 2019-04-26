@@ -1,7 +1,7 @@
 package me.dylan.wands.spellbehaviour;
 
-import me.dylan.wands.WandUtils;
 import me.dylan.wands.Wands;
+import me.dylan.wands.utils.EffectUtil;
 import org.apache.commons.lang.RandomStringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -22,10 +22,6 @@ public class WaveSpell extends SpellBehaviour {
         this.stopAtEntity = stopAtEntity;
     }
 
-    public static Builder newBuilder() {
-        return new Builder();
-    }
-
     @Override
     public void cast(Player player) {
         Vector direction = player.getLocation().getDirection().normalize();
@@ -33,7 +29,6 @@ public class WaveSpell extends SpellBehaviour {
         String randomID = RandomStringUtils.random(5, true, false);
         castEffects.accept(direction.clone().multiply(10).toLocation(player.getWorld()).add(player.getEyeLocation()));
         Location currentLoc = player.getEyeLocation();
-
         new BukkitRunnable() {
             int count = 0;
 
@@ -42,10 +37,10 @@ public class WaveSpell extends SpellBehaviour {
                 if (count++ >= effectDistance) cancel();
                 Location loc = currentLoc.add(direction).clone();
                 visualEffects.accept(loc);
-                for (Damageable entity : WandUtils.getNearbyDamageables(player, loc, effectAreaRange)) {
+                for (Damageable entity : EffectUtil.getNearbyDamageables(player, loc, effectAreaRange)) {
                     if (!entity.hasMetadata(randomID)) {
                         entity.setMetadata(randomID, new FixedMetadataValue(plugin, true));
-                        WandUtils.damage(entityDamage, player, entity);
+                        EffectUtil.damage(entityDamage, player, entity);
                         entityEffects.accept(entity);
                         Bukkit.getScheduler().runTaskLater(plugin, () -> {
                             if (entity.isValid()) {
@@ -60,6 +55,10 @@ public class WaveSpell extends SpellBehaviour {
                 }
             }
         }.runTaskTimer(Wands.getPlugin(), 1, 1);
+    }
+
+    public static Builder newBuilder() {
+        return new Builder();
     }
 
     public static class Builder extends SpellBehaviour.Builder<Builder> {

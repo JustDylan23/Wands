@@ -1,9 +1,9 @@
 package me.dylan.wands.spells;
 
-import me.dylan.wands.WandUtils;
 import me.dylan.wands.spellbehaviour.SpellBehaviour;
 import me.dylan.wands.spellbehaviour.WaveSpell;
 import me.dylan.wands.spellfoundation.CastableSpell;
+import me.dylan.wands.utils.EffectUtil;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -19,7 +19,7 @@ public class BloodWave extends CastableSpell {
                 .setEntityDamage(4)
                 .setCastEffects(loc -> {
                     loc.getWorld().playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_BLAST, 4.0F, 1.0F);
-                    WandUtils.runTaskLater(() -> loc.getWorld().playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, 4.0F, 1.0F), 20, 5, 3);
+                    EffectUtil.runTaskLater(() -> loc.getWorld().playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, 4.0F, 1.0F), 20, 5, 3);
                 })
                 .setEntityEffects(entity -> ((LivingEntity) entity).addPotionEffect(
                         new PotionEffect(PotionEffectType.WITHER, 60, 4, false), true))

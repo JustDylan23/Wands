@@ -1,7 +1,8 @@
-package me.dylan.wands;
+package me.dylan.wands.wrappers;
 
+import me.dylan.wands.Wands;
+import me.dylan.wands.enums.Spell;
 import me.dylan.wands.spellfoundation.CastableSpell;
-import me.dylan.wands.spellfoundation.Spell;
 import me.dylan.wands.spellfoundation.SpellRegistry;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -12,7 +13,6 @@ import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 @SuppressWarnings({"WeakerAccess", "UnusedReturnValue", "RedundantSuppression"})
 public final class WandWrapper extends ItemWrapper {
@@ -90,7 +90,7 @@ public final class WandWrapper extends ItemWrapper {
         player.sendActionBar("§6Current spell: §7§l" + spellName);
     }
 
-    public static class Builder extends ItemWrapper {
+    public static final class Builder extends ItemWrapper {
         public Builder(ItemStack itemStack) {
             super(itemStack);
             setNbtTagInt(TAG_VERIFIED, 1);
@@ -106,16 +106,6 @@ public final class WandWrapper extends ItemWrapper {
                 ids[i] = spells[i].getId();
             setNbtTagIntArray(TAG_SPELLS_LIST, ids);
             return this;
-        }
-
-        @Override
-        public Builder builder(Consumer<ItemWrapper> consumer) {
-            consumer.accept(this);
-            return this;
-        }
-
-        public WandWrapper build() {
-            return new WandWrapper(getItemStack());
         }
     }
 }

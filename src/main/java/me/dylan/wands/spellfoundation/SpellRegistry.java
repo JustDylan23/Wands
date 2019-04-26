@@ -1,5 +1,7 @@
 package me.dylan.wands.spellfoundation;
 
+import me.dylan.wands.enums.Spell;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -8,7 +10,7 @@ public class SpellRegistry {
 
     private final Map<Integer, CastableSpell> spellRegister = new HashMap<>();
 
-    public void loadSpells() {
+    public SpellRegistry loadSpells() {
         if (!spellRegister.isEmpty()) {
             throw new IllegalStateException("The plugin executed loadSpells twice");
         }
@@ -16,6 +18,7 @@ public class SpellRegistry {
         for (Spell spell : spells) {
             spellRegister.put(spell.getId(), spell.getInstance());
         }
+        return this;
     }
 
     public CastableSpell getSpell(int index) throws NoSuchElementException {

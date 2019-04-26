@@ -1,7 +1,7 @@
 package me.dylan.wands.presetitems;
 
-import me.dylan.wands.ItemWrapper;
 import me.dylan.wands.Wands;
+import me.dylan.wands.wrappers.ItemWrapper;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
