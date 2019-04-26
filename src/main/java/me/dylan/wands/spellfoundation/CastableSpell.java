@@ -23,7 +23,7 @@ public abstract class CastableSpell {
         return displayName;
     }
 
-    int getId() {
+    public int getId() {
         return id;
     }
 

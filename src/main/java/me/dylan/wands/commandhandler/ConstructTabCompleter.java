@@ -1,6 +1,6 @@
 package me.dylan.wands.commandhandler;
 
-import me.dylan.wands.ObtainableItem;
+import me.dylan.wands.enums.ObtainableItem;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -23,7 +23,7 @@ public class ConstructTabCompleter implements TabCompleter {
     public List<String> onTabComplete(@Nonnull CommandSender sender, @Nonnull Command command, @Nonnull String alias, @Nonnull String[] args) {
         String value = args[args.length - 1];
         if (args.length == 1)
-            return validCompletions(value, "enable", "disable", "get", "set", "info");
+            return validCompletions(value, "enable", "disable", "get", "set", "info", "spells");
         if (args.length == 2) {
             if (args[0].equalsIgnoreCase("get"))
                 return validCompletions(value, ObtainableItem.getNames());

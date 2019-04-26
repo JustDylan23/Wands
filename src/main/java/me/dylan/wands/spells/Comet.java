@@ -1,9 +1,9 @@
 package me.dylan.wands.spells;
 
-import me.dylan.wands.WandUtils;
 import me.dylan.wands.spellbehaviour.ProjectileSpell;
 import me.dylan.wands.spellbehaviour.SpellBehaviour;
 import me.dylan.wands.spellfoundation.CastableSpell;
+import me.dylan.wands.utils.EffectUtil;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
@@ -36,7 +36,7 @@ public class Comet extends CastableSpell {
                     loc.getWorld().playSound(loc, Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, SoundCategory.MASTER, 5F, 1F);
                     loc.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, loc, 0, 0.0, 0.0, 0.0, 0.0, null, true);
                     loc.getWorld().spawnParticle(Particle.SMOKE_LARGE, loc, 50, 2, 2, 2, 0.05, null, true);
-                    WandUtils.runTaskLater(() ->
+                    EffectUtil.runTaskLater(() ->
                                     loc.getWorld().playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, SoundCategory.MASTER, 5F, 1F)
                             , 0, 3, 3);
                 })

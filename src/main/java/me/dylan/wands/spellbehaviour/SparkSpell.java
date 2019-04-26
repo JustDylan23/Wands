@@ -1,6 +1,6 @@
 package me.dylan.wands.spellbehaviour;
 
-import me.dylan.wands.WandUtils;
+import me.dylan.wands.utils.EffectUtil;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Damageable;
@@ -17,17 +17,13 @@ public class SparkSpell extends SpellBehaviour {
         this.effectDistance = effectDistance;
     }
 
-    public static Builder newBuilder() {
-        return new Builder();
-    }
-
     @Override
     public void cast(Player player) {
         Location loc = getSpellLocation(player);
-        Iterable<Damageable> effectedEntities = WandUtils.getNearbyDamageables(player, loc, effectAreaRange);
+        Iterable<Damageable> effectedEntities = EffectUtil.getNearbyDamageables(player, loc, effectAreaRange);
         castEffects.accept(player.getLocation());
         effectedEntities.forEach(entity -> {
-            WandUtils.damage(entityDamage, player, entity);
+            EffectUtil.damage(entityDamage, player, entity);
             entity.setVelocity(new Vector(0, 0, 0));
             entityEffects.accept(entity);
         });
@@ -46,7 +42,12 @@ public class SparkSpell extends SpellBehaviour {
         return player.getLocation().getDirection().normalize().multiply(effectDistance).toLocation(player.getWorld()).add(player.getLocation());
     }
 
+    public static Builder newBuilder() {
+        return new Builder();
+    }
+
     public static class Builder extends SpellBehaviour.Builder<Builder> {
+
         private int effectDistance;
 
         private Builder() {

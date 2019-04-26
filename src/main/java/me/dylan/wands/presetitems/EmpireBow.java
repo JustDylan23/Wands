@@ -1,8 +1,8 @@
 package me.dylan.wands.presetitems;
 
-import me.dylan.wands.ItemWrapper;
-import me.dylan.wands.WandUtils;
 import me.dylan.wands.Wands;
+import me.dylan.wands.utils.EffectUtil;
+import me.dylan.wands.wrappers.ItemWrapper;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -137,9 +137,9 @@ public class EmpireBow implements Listener {
                 location.getWorld().playSound(location, Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, SoundCategory.MASTER, 5F, 1F);
                 location.getWorld().playSound(location, Sound.ITEM_TRIDENT_RETURN, SoundCategory.MASTER, 5F, 1F);
                 location.getWorld().spawnParticle(Particle.SMOKE_NORMAL, location, 30, 0.4, 0.4, 0.4, 0.2, null, true);
-                WandUtils.getNearbyDamageables((Player) projectile.getShooter(), location, 3)
+                EffectUtil.getNearbyDamageables((Player) projectile.getShooter(), location, 3)
                         .forEach(entity -> {
-                            WandUtils.damage(8, (Player) projectile.getShooter(), entity);
+                            EffectUtil.damage(8, (Player) projectile.getShooter(), entity);
                             ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 80, 3, false), true);
                         });
                 projectile.remove();

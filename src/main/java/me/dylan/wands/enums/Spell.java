@@ -1,5 +1,6 @@
-package me.dylan.wands.spellfoundation;
+package me.dylan.wands.enums;
 
+import me.dylan.wands.spellfoundation.CastableSpell;
 import me.dylan.wands.spells.*;
 
 public enum Spell {

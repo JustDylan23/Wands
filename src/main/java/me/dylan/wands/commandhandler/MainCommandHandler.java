@@ -1,8 +1,8 @@
 package me.dylan.wands.commandhandler;
 
-import me.dylan.wands.ObtainableItem;
 import me.dylan.wands.Wands;
-import me.dylan.wands.spellfoundation.Spell;
+import me.dylan.wands.enums.ObtainableItem;
+import me.dylan.wands.enums.Spell;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -18,11 +18,11 @@ public class MainCommandHandler implements CommandExecutor {
             case 1:
                 switch (args[0]) {
                     case "disable":
-                        Wands.getPlugin().setWandsEnabled(false);
+                        Wands.getPlugin().getPluginData().allowMagicUse(false);
                         sender.sendMessage(Wands.PREFIX + "All wands are now disabled.");
                         return true;
                     case "enable":
-                        Wands.getPlugin().setWandsEnabled(true);
+                        Wands.getPlugin().getPluginData().allowMagicUse(true);
                         sender.sendMessage(Wands.PREFIX + "All wands are now enabled.");
                         return true;
                     case "spells":
@@ -36,7 +36,7 @@ public class MainCommandHandler implements CommandExecutor {
                     case "info":
                         sender.sendMessage("§e ---- §6Wands§e ----");
                         sender.sendMessage("§6Created by: §e_JustDylan_");
-                        sender.sendMessage("§6Uses MiniNBT from: §eI Al Istannen");
+                        sender.sendMessage("§6Uses MiniNBT from : §eI Al Istannen");
                         sender.sendMessage("§6Current version:§e " + Wands.getPlugin().getDescription().getVersion());
                         return true;
                 }
@@ -65,7 +65,7 @@ public class MainCommandHandler implements CommandExecutor {
                                 sender.sendMessage(Wands.PREFIX + "Cooldown can't be a negative number!");
                                 return true;
                             }
-                            Wands.getPlugin().setCoolDownTime(i * 1000);
+                            Wands.getPlugin().getPluginData().setMagicCooldownTime(i);
                             String message = Wands.PREFIX + "Cooldown has been set to " + i + " second" + ((i != 1) ? "s" : "");
                             sender.sendMessage(message);
                         } catch (NumberFormatException e) {

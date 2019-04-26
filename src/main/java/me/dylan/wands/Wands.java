@@ -2,30 +2,29 @@ package me.dylan.wands;
 
 import me.dylan.wands.commandhandler.ConstructTabCompleter;
 import me.dylan.wands.commandhandler.MainCommandHandler;
+import me.dylan.wands.plugindata.ListenerRegister;
+import me.dylan.wands.plugindata.PluginData;
 import me.dylan.wands.presetitems.EmpireBow;
 import me.dylan.wands.presetitems.TherosDagger;
 import me.dylan.wands.spellfoundation.SpellRegistry;
 import org.bukkit.Bukkit;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.Optional;
 
 @SuppressWarnings("WeakerAccess")
 public final class Wands extends JavaPlugin {
 
-    public static final String PREFIX = "§8§l[§6§lWands§8§l]§r ";
     private static Wands plugin;
-    private final Set<Listener> toggleableListeners = new HashSet<>();
+
+    public static final String PREFIX = "§8§l[§6§lWands§8§l]§r ";
+
+    //instances of classes accessible via main class
     private SpellRegistry spellRegistry;
-    //if this is false, the wands should all stop with working.
-    private boolean wandsEnabled = true;
-    private int coolDownTime = 5;
+    private PluginData pluginData;
+    private ListenerRegister listenerRegister;
 
     public static Wands getPlugin() {
         return plugin;
@@ -41,61 +40,43 @@ public final class Wands extends JavaPlugin {
             sendConsole("§cDisabling plugin...");
             return;
         }
-        plugin = this;
-        Objects.requireNonNull(this.getCommand("wands")).setExecutor(new MainCommandHandler());
-        Objects.requireNonNull(this.getCommand("wands")).setTabCompleter(new ConstructTabCompleter());
 
-        addToggleableListener(
+        Optional<PluginCommand> command =  Optional.ofNullable(this.getCommand("wands"));
+        command.ifPresent(cmd -> {
+            cmd.setExecutor(new MainCommandHandler());
+            cmd.setTabCompleter(new ConstructTabCompleter());
+        });
+
+        plugin = this;
+        listenerRegister = new ListenerRegister();
+        spellRegistry = new SpellRegistry().loadSpells();
+        pluginData = new PluginData();
+
+        listenerRegister.addToggleableListener(
                 new PlayerInteractionListener(),
                 new TherosDagger(),
                 new EmpireBow()
         );
-        spellRegistry = new SpellRegistry();
-        spellRegistry.loadSpells();
+    }
 
+    @Override
+    public void onDisable() {
+        saveConfig();
     }
 
     public SpellRegistry getSpellRegistry() {
         return spellRegistry;
     }
 
+    public PluginData getPluginData() {
+        return pluginData;
+    }
+
+    public ListenerRegister getListenerRegister() {
+        return listenerRegister;
+    }
+
     public void sendConsole(String text) {
         Bukkit.getConsoleSender().sendMessage(PREFIX + text);
-    }
-
-    public void addListener(Listener... listeners) {
-        for (Listener listener : listeners) {
-            Bukkit.getServer().getPluginManager().registerEvents(listener, this);
-        }
-    }
-
-    public void addToggleableListener(Listener... listeners) {
-        toggleableListeners.addAll(Arrays.asList(listeners));
-        addListener(listeners);
-    }
-
-    private void disableListeners() {
-        toggleableListeners.forEach(HandlerList::unregisterAll);
-    }
-
-    private void enableListeners() {
-        toggleableListeners.forEach(HandlerList::unregisterAll);
-        toggleableListeners.forEach(listener -> Bukkit.getServer().getPluginManager().registerEvents(listener, this));
-    }
-
-    public void setWandsEnabled(boolean enabled) {
-        if (wandsEnabled != enabled) {
-            wandsEnabled = enabled;
-            if (enabled) enableListeners();
-            else disableListeners();
-        }
-    }
-
-    public int getCoolDownTime() {
-        return coolDownTime;
-    }
-
-    public void setCoolDownTime(int i) {
-        coolDownTime = i;
     }
 }

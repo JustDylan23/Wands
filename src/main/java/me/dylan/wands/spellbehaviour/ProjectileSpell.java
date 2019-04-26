@@ -1,7 +1,7 @@
 package me.dylan.wands.spellbehaviour;
 
-import me.dylan.wands.WandUtils;
 import me.dylan.wands.Wands;
+import me.dylan.wands.utils.EffectUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -32,7 +32,7 @@ public class ProjectileSpell<T extends Projectile> extends SpellBehaviour implem
     //can be accessed via builder
     private ProjectileSpell(SpellBehaviour.Builder.BuilderWrapper builderWrapper, Class<T> projectile, Consumer<T> projectilePropperties, Consumer<Location> hitEffects, float speed, int lifeTime, int pushSpeed) {
         super(builderWrapper);
-        plugin.addListener(this);
+        plugin.getListenerRegister().addListener(this);
         this.projectile = projectile;
         this.projectilePropperties = projectilePropperties;
         this.hitEffects = hitEffects;
@@ -56,9 +56,9 @@ public class ProjectileSpell<T extends Projectile> extends SpellBehaviour implem
     private void hit(Player player, Projectile projectile) {
         projectile.remove();
         Location loc = projectile.getLocation();
-        WandUtils.getNearbyDamageables(player, loc, effectAreaRange).forEach(entity -> {
+        EffectUtil.getNearbyDamageables(player, loc, effectAreaRange).forEach(entity -> {
             entityEffects.accept(entity);
-            WandUtils.damage(entityDamage, player, entity);
+            EffectUtil.damage(entityDamage, player, entity);
             entity.setVelocity(new Vector(0, 0, 0));
             pushFrom(loc, entity, pushSpeed);
         });

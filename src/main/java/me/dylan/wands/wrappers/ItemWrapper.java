@@ -1,4 +1,4 @@
-package me.dylan.wands;
+package me.dylan.wands.wrappers;
 
 import me.ialistannen.mininbt.ItemNBTUtil;
 import me.ialistannen.mininbt.NBTWrappers;
@@ -24,15 +24,11 @@ public class ItemWrapper {
         this(new ItemStack(material));
     }
 
-    public ItemWrapper builder(Consumer<ItemWrapper> consumer) {
-        consumer.accept(this);
-        return this;
-    }
-
-    public void setItemMeta(Consumer<ItemMeta> consumer) {
+    public ItemWrapper setItemMeta(Consumer<ItemMeta> consumer) {
         ItemMeta itemMeta = itemStack.getItemMeta();
         consumer.accept(itemMeta);
         itemStack.setItemMeta(itemMeta);
+        return this;
     }
 
     private void modifyNbt(Consumer<NBTWrappers.NBTTagCompound> consumer) {
@@ -43,16 +39,19 @@ public class ItemWrapper {
         itemStack.setItemMeta(meta);
     }
 
-    public void setName(String name) {
+    public ItemWrapper setName(String name) {
         setItemMeta(meta -> meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', name)));
+        return this;
     }
 
-    public void setLore(String... lore) {
+    public ItemWrapper setLore(String... lore) {
         setItemMeta(meta -> meta.setLore(Arrays.asList(lore)));
+        return this;
     }
 
-    public void setNbtTagInt(String key, int i) {
+    public ItemWrapper setNbtTagInt(String key, int i) {
         modifyNbt(tag -> tag.setInt(key, i));
+        return this;
     }
 
     public void setNbtTagIntArray(String key, int... i) {
@@ -63,8 +62,9 @@ public class ItemWrapper {
         return function.apply(ItemNBTUtil.getTag(itemStack));
     }
 
-    public void removeNbtTag(String key) {
+    public ItemWrapper removeNbtTag(String key) {
         modifyNbt(tag -> tag.remove(key));
+        return this;
     }
 
     public boolean hasNbtTag(String key) {

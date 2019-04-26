@@ -48,7 +48,7 @@ public abstract class SpellBehaviour implements Listener {
     }
 
     private int getRemainingTime(Player player) {
-        int cooldown = Wands.getPlugin().getCoolDownTime();
+        int cooldown = Wands.getPlugin().getPluginData().getMagicCooldownTime() * 1000;
         long now = System.currentTimeMillis();
         Long previous = lastUsed.get(player);
         if (previous == null) {
@@ -65,7 +65,7 @@ public abstract class SpellBehaviour implements Listener {
 
     public abstract static class Builder<T extends Builder<T>> {
 
-        BuilderWrapper builderWrapper = new BuilderWrapper();
+        final BuilderWrapper builderWrapper = new BuilderWrapper();
 
         abstract T self();
 
