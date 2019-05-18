@@ -7,7 +7,8 @@ import org.bukkit.Particle;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.util.Vector;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
@@ -29,9 +30,10 @@ public class EffectUtil {
                 .collect(Collectors.toList());
     }
 
-    public static void damage(int damage, Entity source, Damageable victim) {
-        victim.damage(damage, source);
-        victim.setVelocity(new Vector(0, 0, 0));
+    public static void damage(int damage, Entity attacker, Damageable victim) {
+        victim.damage(damage);
+        EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(attacker, victim, EntityDamageEvent.DamageCause.ENTITY_ATTACK, damage);
+        victim.setLastDamageCause(event);
     }
 
     public static void runTaskLater(Runnable runnable, int... delays) {

@@ -14,7 +14,7 @@ import java.util.function.Function;
 @SuppressWarnings({"WeakerAccess", "RedundantSuppression"})
 public class ItemWrapper {
 
-    private final ItemStack itemStack;
+    protected final ItemStack itemStack;
 
     public ItemWrapper(ItemStack itemStack) {
         this.itemStack = itemStack;

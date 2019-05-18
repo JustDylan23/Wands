@@ -1,10 +1,12 @@
 package me.dylan.wands;
 
-import me.dylan.wands.wrappers.WandWrapper;
+import me.dylan.wands.utils.WandUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -16,17 +18,22 @@ public final class PlayerInteractionListener implements Listener {
         if (action == Action.PHYSICAL) return;
 
         Player player = event.getPlayer();
-        ItemStack handItem = player.getInventory().getItemInMainHand();
-        WandWrapper.wrapIfWand(handItem).ifPresent(wandWrapper -> {
-            if (event.getHand() == EquipmentSlot.HAND) {
-                event.setCancelled(true);
-                if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK) {
-                    wandWrapper.castSpell(player);
-                } else if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) {
-                    wandWrapper.nextSpell(player);
-                }
+        ItemStack itemStack = player.getInventory().getItemInMainHand();
+        if (event.getHand() == EquipmentSlot.HAND && WandUtil.isWand(itemStack)) {
+            event.setCancelled(true);
+            if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK) {
+                WandUtil.castSpell(player, itemStack);
+            } else if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) {
+                WandUtil.nextSpell(player, itemStack);
             }
-        });
+
+        }
+    }
+
+    @EventHandler
+    private void onPlayerDeath(PlayerDeathEvent event) {
+        Player player = event.getEntity();
+        player.setLastDamageCause(new EntityDamageEvent(player, EntityDamageEvent.DamageCause.MAGIC, 0));
     }
 }
 

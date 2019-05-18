@@ -1,7 +1,7 @@
 package me.dylan.wands.enums;
 
+import me.dylan.wands.utils.WandUtil;
 import me.dylan.wands.wrappers.ItemWrapper;
-import me.dylan.wands.wrappers.WandWrapper;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
@@ -28,14 +28,14 @@ public enum ObtainableItem {
             .getItemStack()
     ),
 
-    GOD_WAND(new WandWrapper.Builder(Material.BLAZE_ROD)
-            .setSpells(Spell.COMET, Spell.SPARK, Spell.CONFUSE, Spell.LAUNCH, Spell.POISON_WAVE)
+    GOD_WAND(new WandUtil.Builder(Material.BLAZE_ROD,
+            Spell.COMET, Spell.SPARK, Spell.CONFUSE, Spell.LAUNCH, Spell.POISON_WAVE)
             .setName("&eGod Wand")
             .getItemStack()
     ),
 
-    BLOOD_WAND(new WandWrapper.Builder(Material.NETHER_WART)
-            .setSpells(Spell.BLOOD_WAVE, Spell.BLOOD_SPARK, Spell.BLOOD_EXPLODE, Spell.BLOOD_STUN)
+    BLOOD_WAND(new WandUtil.Builder(Material.NETHER_WART,
+            Spell.BLOOD_WAVE, Spell.BLOOD_SPARK, Spell.BLOOD_EXPLODE, Spell.BLOOD_STUN)
             .setName("&cBlood Wand")
             .getItemStack()
     );
