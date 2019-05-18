@@ -37,7 +37,7 @@ public abstract class SpellBehaviour implements Listener {
 
     abstract void cast(Player player);
 
-    public void executeSpellFrom(Player player) {
+    public final void executeSpellFrom(Player player) {
         int remainingTime = getRemainingTime(player);
         if (remainingTime <= 0) {
             cast(player);

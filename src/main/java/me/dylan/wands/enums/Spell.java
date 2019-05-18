@@ -3,6 +3,8 @@ package me.dylan.wands.enums;
 import me.dylan.wands.spellfoundation.CastableSpell;
 import me.dylan.wands.spells.*;
 
+import java.lang.reflect.InvocationTargetException;
+
 public enum Spell {
     COMET(new Comet()),
     SPARK(new Spark()),
@@ -31,5 +33,26 @@ public enum Spell {
     @Override
     public String toString() {
         return spell.getName();
+    }
+
+    public static CastableSpell spell(String className) {
+        Class<?> clazz;
+        try {
+            clazz = Class.forName("me.dylan.wands.spells." + className);
+        } catch (ClassNotFoundException e) {
+            throw new NoSuchSpellException("Spell does not exist");
+        }
+        try {
+            return (CastableSpell) clazz.getConstructor((Class<?>) null).newInstance((Object[]) null);
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        throw new NoSuchSpellException("Spell does not exist");
+    }
+
+    public static class NoSuchSpellException extends RuntimeException {
+        public NoSuchSpellException(String message) {
+            super(message);
+        }
     }
 }
