@@ -9,6 +9,7 @@ import org.bukkit.persistence.PersistentDataType;
 
 import java.util.Optional;
 
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class PersistentDataUtil {
     private static final Wands plugin = Wands.getPlugin();
 
