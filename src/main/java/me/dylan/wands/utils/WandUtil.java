@@ -23,6 +23,10 @@ public class WandUtil {
 
     private static final SpellRegistry SPELL_REGISTRY = Wands.getPlugin().getSpellRegistry();
 
+    private WandUtil() {
+        throw new UnsupportedOperationException();
+    }
+
     public static void prepareItemStack(ItemStack itemStack) {
         PersistentDataUtil.setPersistentData(itemStack, TAG_VERIFIED, PersistentDataType.BYTE, (byte) 0);
         PersistentDataUtil.setPersistentData(itemStack, TAG_SPELL_INDEX, PersistentDataType.INTEGER, 1);
