@@ -1,4 +1,4 @@
-package me.dylan.wands.spellbehaviour;
+package me.dylan.wands.spelltemplates;
 
 import me.dylan.wands.plugindata.ListenerRegistry;
 import org.bukkit.entity.Player;
