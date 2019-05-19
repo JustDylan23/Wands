@@ -1,7 +1,7 @@
-package me.dylan.wands.enums;
+package me.dylan.wands.spells.meta;
 
-import me.dylan.wands.model.CastableSpell;
 import me.dylan.wands.spells.*;
+import me.dylan.wands.spells.model.CastableSpell;
 
 import java.lang.reflect.InvocationTargetException;
 

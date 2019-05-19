@@ -1,7 +1,8 @@
-package me.dylan.wands.enums;
+package me.dylan.wands.plugindata;
 
 import me.dylan.wands.customitems.ArtifactBow;
 import me.dylan.wands.customitems.ArtifactDagger;
+import me.dylan.wands.spells.meta.Spell;
 import me.dylan.wands.utils.ItemUtil;
 import me.dylan.wands.utils.WandUtil;
 import org.bukkit.Material;
