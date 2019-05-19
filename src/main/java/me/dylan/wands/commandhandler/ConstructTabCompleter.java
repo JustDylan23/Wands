@@ -1,6 +1,6 @@
 package me.dylan.wands.commandhandler;
 
-import me.dylan.wands.enums.ObtainableItem;
+import me.dylan.wands.plugindata.ObtainableItem;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;

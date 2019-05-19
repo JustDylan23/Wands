@@ -1,8 +1,8 @@
 package me.dylan.wands.commandhandler;
 
 import me.dylan.wands.Wands;
-import me.dylan.wands.enums.ObtainableItem;
-import me.dylan.wands.enums.Spell;
+import me.dylan.wands.plugindata.ObtainableItem;
+import me.dylan.wands.spells.meta.Spell;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

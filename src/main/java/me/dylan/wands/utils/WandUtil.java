@@ -1,9 +1,9 @@
 package me.dylan.wands.utils;
 
 import me.dylan.wands.Wands;
-import me.dylan.wands.enums.Spell;
-import me.dylan.wands.model.CastableSpell;
-import me.dylan.wands.plugindata.SpellRegistry;
+import me.dylan.wands.spells.meta.Spell;
+import me.dylan.wands.spells.meta.SpellRegistry;
+import me.dylan.wands.spells.model.CastableSpell;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;

@@ -1,4 +1,4 @@
-package me.dylan.wands.spelltemplates;
+package me.dylan.wands.spells.spelltemplates;
 
 import me.dylan.wands.Wands;
 import me.dylan.wands.plugindata.ListenerRegistry;

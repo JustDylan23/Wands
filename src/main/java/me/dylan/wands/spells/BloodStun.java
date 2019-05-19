@@ -1,8 +1,8 @@
 package me.dylan.wands.spells;
 
-import me.dylan.wands.model.CastableSpell;
-import me.dylan.wands.spelltemplates.SpellBehaviour;
-import me.dylan.wands.spelltemplates.WaveSpell;
+import me.dylan.wands.spells.model.CastableSpell;
+import me.dylan.wands.spells.spelltemplates.SpellBehaviour;
+import me.dylan.wands.spells.spelltemplates.WaveSpell;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
