@@ -2,11 +2,12 @@ package me.dylan.wands;
 
 import me.dylan.wands.commandhandler.ConstructTabCompleter;
 import me.dylan.wands.commandhandler.MainCommandHandler;
-import me.dylan.wands.plugindata.ListenerRegister;
+import me.dylan.wands.customitems.ArtifactBow;
+import me.dylan.wands.customitems.ArtifactDagger;
+import me.dylan.wands.listeners.PlayerInteractionListener;
+import me.dylan.wands.plugindata.ListenerRegistry;
 import me.dylan.wands.plugindata.PluginData;
-import me.dylan.wands.presetitems.EmpireBow;
-import me.dylan.wands.presetitems.TherosDagger;
-import me.dylan.wands.spellfoundation.SpellRegistry;
+import me.dylan.wands.plugindata.SpellRegistry;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
@@ -22,7 +23,7 @@ public final class Wands extends JavaPlugin {
     //instances of classes accessible via main class
     private SpellRegistry spellRegistry;
     private PluginData pluginData;
-    private ListenerRegister listenerRegister;
+    private ListenerRegistry listenerRegistry;
 
     public static Wands getPlugin() {
         return plugin;
@@ -45,14 +46,14 @@ public final class Wands extends JavaPlugin {
         cmd.setTabCompleter(new ConstructTabCompleter());
 
         plugin = this;
-        listenerRegister = new ListenerRegister();
+        listenerRegistry = new ListenerRegistry();
         spellRegistry = new SpellRegistry().loadSpells();
         pluginData = new PluginData();
 
-        listenerRegister.addToggleableListener(
+        listenerRegistry.addToggleableListener(
                 new PlayerInteractionListener(),
-                new TherosDagger(),
-                new EmpireBow()
+                new ArtifactDagger(),
+                new ArtifactBow()
         );
     }
 
@@ -69,8 +70,8 @@ public final class Wands extends JavaPlugin {
         return pluginData;
     }
 
-    public ListenerRegister getListenerRegister() {
-        return listenerRegister;
+    public ListenerRegistry getListenerRegistry() {
+        return listenerRegistry;
     }
 
     public void sendConsole(String text) {

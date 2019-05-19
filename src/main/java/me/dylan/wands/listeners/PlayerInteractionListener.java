@@ -1,4 +1,4 @@
-package me.dylan.wands;
+package me.dylan.wands.listeners;
 
 import me.dylan.wands.utils.WandUtil;
 import org.bukkit.entity.Player;

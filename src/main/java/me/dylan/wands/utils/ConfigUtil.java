@@ -10,6 +10,8 @@ public class ConfigUtil {
         throw new UnsupportedOperationException();
     }
 
+    //FIXME Make config working
+
     public static int getInt(String key) {
         return config.getInt(key);
     }

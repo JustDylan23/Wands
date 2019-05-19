@@ -27,7 +27,7 @@ public class PluginData {
     public void allowMagicUse(boolean allowMagicUse) {
         if (this.allowMagicUse != allowMagicUse) {
             this.allowMagicUse = allowMagicUse;
-            ListenerRegister lg = Wands.getPlugin().getListenerRegister();
+            ListenerRegistry lg = Wands.getPlugin().getListenerRegistry();
             if (allowMagicUse) {
                 lg.enableListeners();
             } else {
