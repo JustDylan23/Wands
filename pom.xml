@@ -68,10 +68,6 @@
             <id>maven-repository</id>
             <url>file:///${project.basedir}/maven-repository</url>
         </repository>
-<!--        <repository>-->
-<!--            <id>jitpack.io</id>-->
-<!--            <url>https://jitpack.io</url>-->
-<!--        </repository>-->
     </repositories>
 
     <dependencies>
@@ -86,11 +82,6 @@
 <!--            <artifactId>spigot-api</artifactId>-->
 <!--            <version>1.14-R0.1-SNAPSHOT</version>-->
 <!--            <scope>provided</scope>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>com.github.I-Al-Istannen</groupId>-->
-<!--            <artifactId>MiniNBT</artifactId>-->
-<!--            <version>master</version>-->
 <!--        </dependency>-->
     </dependencies>
 </project>

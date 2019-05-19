@@ -50,8 +50,8 @@ public enum Spell {
         throw new NoSuchSpellException("Spell does not exist");
     }
 
-    public static class NoSuchSpellException extends RuntimeException {
-        public NoSuchSpellException(String message) {
+    static class NoSuchSpellException extends RuntimeException {
+        NoSuchSpellException(String message) {
             super(message);
         }
     }

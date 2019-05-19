@@ -7,6 +7,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.util.Vector;
 
+//TODO Finish base template for spells that allow the caster to leap
+
 public class LeapSpell extends SpellBehaviour implements Listener {
 
     private final float forwardsSpeed;

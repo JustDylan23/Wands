@@ -36,7 +36,6 @@ public class MainCommandHandler implements CommandExecutor {
                     case "info":
                         sender.sendMessage("§e ---- §6Wands§e ----");
                         sender.sendMessage("§6Created by: §e_JustDylan_");
-                        sender.sendMessage("§6Uses MiniNBT from : §eI Al Istannen");
                         sender.sendMessage("§6Current version:§e " + Wands.getPlugin().getDescription().getVersion());
                         return true;
                 }
