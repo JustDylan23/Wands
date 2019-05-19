@@ -34,32 +34,27 @@ public class WandUtil {
         return ItemUtil.hasPersistentData(itemStack, TAG_VERIFIED, PersistentDataType.BYTE);
     }
 
-    public static int getIndex(ItemStack itemStack) {
-        return ItemUtil.getPersistentData(itemStack, TAG_SPELL_INDEX, PersistentDataType.INTEGER)
-                .orElse(0);
-    }
-
-    public static void setIndex(ItemStack itemStack, int index) {
-        ItemUtil.setPersistentData(itemStack, TAG_SPELL_INDEX, PersistentDataType.INTEGER, index);
-    }
-
     public static void setSpells(ItemStack itemStack, Spell... spells) {
         int[] ids = Arrays.stream(spells).mapToInt(Spell::getId).toArray();
         ItemUtil.setPersistentData(itemStack, TAG_SPELLS_LIST, PersistentDataType.INTEGER_ARRAY, ids);
     }
 
-    public static CastableSpell[] getSpells(ItemStack itemStack) {
+    private static int getIndex(ItemStack itemStack) {
+        return ItemUtil.getPersistentData(itemStack, TAG_SPELL_INDEX, PersistentDataType.INTEGER)
+                .orElse(0);
+    }
+
+    private static void setIndex(ItemStack itemStack, int index) {
+        ItemUtil.setPersistentData(itemStack, TAG_SPELL_INDEX, PersistentDataType.INTEGER, index);
+    }
+
+    private static CastableSpell[] getSpells(ItemStack itemStack) {
         int[] spells = ItemUtil.getPersistentData(itemStack, TAG_SPELLS_LIST, PersistentDataType.INTEGER_ARRAY)
                 .orElse(new int[]{});
         return Arrays.stream(spells).mapToObj(SPELL_REGISTRY::getSpell).toArray(CastableSpell[]::new);
     }
 
-    public static int getAmountOfSpells(ItemStack itemStack) {
-        return ItemUtil.getPersistentData(itemStack, TAG_SPELLS_LIST, PersistentDataType.INTEGER_ARRAY)
-                .orElse(new int[]{}).length;
-    }
-
-    public static Optional<CastableSpell> getSelectedSpell(ItemStack itemStack) {
+    private static Optional<CastableSpell> getSelectedSpell(ItemStack itemStack) {
         CastableSpell[] spells = getSpells(itemStack);
         int index = getIndex(itemStack);
         if (index < spells.length) return Optional.of(spells[index]);
