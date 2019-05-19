@@ -1,4 +1,4 @@
-package me.dylan.wands.spellfoundation;
+package me.dylan.wands.model;
 
 import me.dylan.wands.Wands;
 import me.dylan.wands.spellbehaviour.SpellBehaviour;

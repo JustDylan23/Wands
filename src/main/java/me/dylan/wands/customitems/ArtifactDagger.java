@@ -1,7 +1,7 @@
-package me.dylan.wands.presetitems;
+package me.dylan.wands.customitems;
 
 import me.dylan.wands.Wands;
-import me.dylan.wands.wrappers.ItemWrapper;
+import me.dylan.wands.utils.ItemUtil;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -17,19 +17,22 @@ import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-public final class TherosDagger implements Listener {
+public final class ArtifactDagger implements Listener {
 
     private final Wands plugin = Wands.getPlugin();
     private final String leapKey = "therosJump";
     private final String sneakKey = "therosInvisable";
 
+    public static final String ID_TAG = "artifact-dagger";
+
     private boolean hasDagger(Player player) {
-        return new ItemWrapper(player.getInventory().getItemInMainHand()).hasNbtTag("therosDagger");
+        return ItemUtil.hasPersistentData(player.getInventory().getItemInMainHand(), ID_TAG, PersistentDataType.BYTE);
     }
 
     @EventHandler

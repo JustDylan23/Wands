@@ -1,6 +1,7 @@
-package me.dylan.wands.spellfoundation;
+package me.dylan.wands.plugindata;
 
 import me.dylan.wands.enums.Spell;
+import me.dylan.wands.model.CastableSpell;
 
 import java.util.HashMap;
 import java.util.Map;

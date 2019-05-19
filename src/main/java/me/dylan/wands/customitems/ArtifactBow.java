@@ -1,8 +1,8 @@
-package me.dylan.wands.presetitems;
+package me.dylan.wands.customitems;
 
 import me.dylan.wands.Wands;
 import me.dylan.wands.utils.EffectUtil;
-import me.dylan.wands.wrappers.ItemWrapper;
+import me.dylan.wands.utils.ItemUtil;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -18,8 +18,8 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -29,17 +29,17 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
 
-public class EmpireBow implements Listener {
+public class ArtifactBow implements Listener {
 
     private final String cursedArrow = "cursedArrow";
     private final Plugin plugin = Wands.getPlugin();
     private final Set<Player> drawing = new HashSet<>();
     private final Set<Player> hasDrawn = new HashSet<>();
 
+    public static final String ID_TAG = "artifact-bow";
+
     private boolean hasBow(Player player) {
-        ItemStack tool = player.getInventory().getItemInMainHand();
-        ItemWrapper itemUtil = new ItemWrapper(tool);
-        return itemUtil.hasNbtTag("empireBow");
+        return ItemUtil.hasPersistentData(player.getInventory().getItemInMainHand(), ID_TAG, PersistentDataType.BYTE);
     }
 
     @EventHandler
