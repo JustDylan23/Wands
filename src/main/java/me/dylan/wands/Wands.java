@@ -1,13 +1,13 @@
 package me.dylan.wands;
 
-import me.dylan.wands.commandhandler.ConstructTabCompleter;
 import me.dylan.wands.commandhandler.MainCommandHandler;
-import me.dylan.wands.customitems.ArtifactBow;
-import me.dylan.wands.customitems.ArtifactDagger;
-import me.dylan.wands.listeners.PlayerInteractionListener;
-import me.dylan.wands.plugindata.ListenerRegistry;
-import me.dylan.wands.plugindata.PluginData;
-import me.dylan.wands.spells.meta.SpellRegistry;
+import me.dylan.wands.commandhandler.MainTabCompleter;
+import me.dylan.wands.customitem.CustomBow;
+import me.dylan.wands.customitem.CustomDagger;
+import me.dylan.wands.pluginmeta.ListenerRegistry;
+import me.dylan.wands.pluginmeta.PluginData;
+import me.dylan.wands.spell.dedicatedlisteners.PlayerInteractionListener;
+import me.dylan.wands.spell.meta.SpellRegistry;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
@@ -40,21 +40,24 @@ public final class Wands extends JavaPlugin {
             return;
         }
 
-        PluginCommand cmd =  this.getCommand("wands");
-        assert (cmd != null): "Command \"wands\" was not set up correctly in the plugin.yml";
+        PluginCommand cmd = this.getCommand("wands");
+        assert (cmd != null) : "Command \"wands\" was not set up correctly in the plugin.yml";
         cmd.setExecutor(new MainCommandHandler());
-        cmd.setTabCompleter(new ConstructTabCompleter());
+        cmd.setTabCompleter(new MainTabCompleter());
 
         plugin = this;
         listenerRegistry = new ListenerRegistry();
-        spellRegistry = new SpellRegistry().loadSpells();
+        spellRegistry = new SpellRegistry();
         pluginData = new PluginData();
+
+        spellRegistry.loadSpells();
 
         listenerRegistry.addToggleableListener(
                 new PlayerInteractionListener(),
-                new ArtifactDagger(),
-                new ArtifactBow()
+                new CustomDagger(),
+                new CustomBow()
         );
+
     }
 
     @Override
