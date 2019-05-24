@@ -1,0 +1,35 @@
+package me.dylan.wands.spell.meta;
+
+import me.dylan.wands.spell.*;
+import me.dylan.wands.spell.model.CastableSpell;
+
+public enum Spell {
+    COMET(new Comet()),
+    SPARK(new Spark()),
+    LAUNCH(new Launch()),
+    CONFUSE(new Confuse()),
+    POISON_WAVE(new PoisonWave()),
+    BLOOD_SPARK(new BloodSpark()),
+    BLOOD_WAVE(new BloodWave()),
+    BLOOD_EXPLODE(new BloodExplode()),
+    BLOOD_STUN(new BloodStun());
+
+    private final CastableSpell spell;
+
+    Spell(CastableSpell spell) {
+        this.spell = spell;
+    }
+
+    public int getId() {
+        return spell.getId();
+    }
+
+    public CastableSpell getInstance() {
+        return spell;
+    }
+
+    @Override
+    public String toString() {
+        return spell.getName();
+    }
+}

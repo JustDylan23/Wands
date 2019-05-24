@@ -1,8 +1,8 @@
 package me.dylan.wands.commandhandler;
 
 import me.dylan.wands.Wands;
-import me.dylan.wands.plugindata.ObtainableItem;
-import me.dylan.wands.spells.meta.Spell;
+import me.dylan.wands.pluginmeta.ObtainableItem;
+import me.dylan.wands.spell.meta.Spell;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -31,7 +31,7 @@ public class MainCommandHandler implements CommandExecutor {
                         for (Spell spell : spells) {
                             sj.add(spell.toString());
                         }
-                        sender.sendMessage("§6Spells (" + spells.length + "): §r" + sj.toString());
+                        sender.sendMessage("§6Spells (" + spells.length + "): §r" + sj);
                         return true;
                     case "info":
                         sender.sendMessage("§e ---- §6Wands§e ----");
