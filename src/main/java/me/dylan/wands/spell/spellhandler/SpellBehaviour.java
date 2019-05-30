@@ -1,4 +1,4 @@
-package me.dylan.wands.spell.spelltemplates;
+package me.dylan.wands.spell.spellhandler;
 
 import me.dylan.wands.Wands;
 import org.bukkit.Location;
@@ -22,7 +22,7 @@ public abstract class SpellBehaviour implements Listener {
     final Consumer<Location> visualEffects;
     final Consumer<Entity> entityEffects;
 
-    SpellBehaviour(Builder.BuilderWrapper builderWrapper) {
+    SpellBehaviour(AbstractBuilder.BuilderWrapper builderWrapper) {
         this.entityDamage = builderWrapper.entityDamage;
         this.effectAreaRange = builderWrapper.effectAreaRange;
         this.castEffects = builderWrapper.castEffects;
@@ -63,7 +63,7 @@ public abstract class SpellBehaviour implements Listener {
         player.playSound(player.getLocation(), Sound.ENTITY_BLAZE_AMBIENT, 0.3F, 1);
     }
 
-    public abstract static class Builder<T extends Builder<T>> {
+    public abstract static class AbstractBuilder<T extends AbstractBuilder<T>> {
 
         final BuilderWrapper builderWrapper = new BuilderWrapper();
 

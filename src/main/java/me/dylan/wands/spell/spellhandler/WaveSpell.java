@@ -1,4 +1,4 @@
-package me.dylan.wands.spell.spelltemplates;
+package me.dylan.wands.spell.spellhandler;
 
 import me.dylan.wands.Wands;
 import me.dylan.wands.util.EffectUtil;
@@ -16,7 +16,7 @@ public class WaveSpell extends SpellBehaviour {
     private final boolean stopAtEntity;
 
     //can be accessed via builder
-    private WaveSpell(SpellBehaviour.Builder.BuilderWrapper builderWrapper, int effectDistance, boolean stopAtEntity) {
+    private WaveSpell(AbstractBuilder.BuilderWrapper builderWrapper, int effectDistance, boolean stopAtEntity) {
         super(builderWrapper);
         this.effectDistance = effectDistance;
         this.stopAtEntity = stopAtEntity;
@@ -61,7 +61,7 @@ public class WaveSpell extends SpellBehaviour {
         return new Builder();
     }
 
-    public static class Builder extends SpellBehaviour.Builder<Builder> {
+    public static class Builder extends AbstractBuilder<Builder> {
         private int effectDistance;
         private boolean stopAtEntity = false;
 

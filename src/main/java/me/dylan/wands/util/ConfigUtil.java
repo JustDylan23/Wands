@@ -24,7 +24,7 @@ public class ConfigUtil {
         return config.getBoolean(key);
     }
 
-    public static void setBoolean(String key, boolean boolean_) {
-        config.set(key, boolean_);
+    public static void setBoolean(String key, boolean v) {
+        config.set(key, v);
     }
 }
