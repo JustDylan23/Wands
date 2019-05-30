@@ -36,14 +36,13 @@ public enum Spell {
         }
     }
 
-    public static CastableSpell[] getSpells(String unparsedArray) {
+    public static CastableSpell[] getSpells(String unparsedArray) throws NoSuchElementException {
         String[] parsedKeys = unparsedArray.split(",");
         CastableSpell[] spells = new CastableSpell[parsedKeys.length];
         for (int i = 0; i < parsedKeys.length; i++) {
             String spellName = parsedKeys[i];
-            spells[i] = getSpell(spellName).orElseThrow(() -> {
-                throw new NoSuchElementException("CastableSpell with identifier " + spellName + " is not registered!");
-            });
+            spells[i] = getSpell(spellName).orElseThrow(() ->
+                    new NoSuchElementException("CastableSpell with identifier " + spellName + " is not registered!"));
         }
         return spells;
     }
