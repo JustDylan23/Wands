@@ -4,24 +4,24 @@ import me.dylan.wands.Wands;
 import me.dylan.wands.util.ConfigUtil;
 
 public class PluginData {
-    private boolean allowMagicUse;
-    private final String ALLOW_MAGIC_USE_KEY = "allow-magic-use";
 
+    private static final String ALLOW_MAGIC_USE_KEY = "allow-magic-use";
+    private static final String MAGIC_COOLDOWN_TIME_KEY = "magic-cooldown-time";
+    private boolean allowMagicUse;
     private int magicCooldownTime;
-    private final String MAGIC_COOLDOWN_TIME_KEY = "magic-cooldown-time";
 
     public PluginData() {
         allowMagicUse = ConfigUtil.getBoolean(ALLOW_MAGIC_USE_KEY);
         magicCooldownTime = ConfigUtil.getInt(MAGIC_COOLDOWN_TIME_KEY);
     }
 
+    public int getMagicCooldownTime() {
+        return magicCooldownTime;
+    }
+
     public void setMagicCooldownTime(int magicCooldownTime) {
         this.magicCooldownTime = magicCooldownTime;
         ConfigUtil.setInt(MAGIC_COOLDOWN_TIME_KEY, magicCooldownTime);
-    }
-
-    public int getMagicCooldownTime() {
-        return magicCooldownTime;
     }
 
     public void allowMagicUse(boolean allowMagicUse) {
@@ -37,3 +37,4 @@ public class PluginData {
         ConfigUtil.setBoolean(ALLOW_MAGIC_USE_KEY, allowMagicUse);
     }
 }
+

@@ -29,7 +29,7 @@ public class MainCommandHandler implements CommandExecutor {
                         Spell[] spells = Spell.values();
                         StringJoiner sj = new StringJoiner(", ");
                         for (Spell spell : spells) {
-                            sj.add(spell.toString());
+                            sj.add(spell.getName());
                         }
                         sender.sendMessage("§6Spells (" + spells.length + "): §r" + sj);
                         return true;

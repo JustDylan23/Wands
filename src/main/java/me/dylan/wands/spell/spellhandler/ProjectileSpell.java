@@ -1,4 +1,4 @@
-package me.dylan.wands.spell.spelltemplates;
+package me.dylan.wands.spell.spellhandler;
 
 import me.dylan.wands.Wands;
 import me.dylan.wands.pluginmeta.ListenerRegistry;
@@ -31,11 +31,11 @@ public class ProjectileSpell<T extends Projectile> extends SpellBehaviour implem
     private final String metadataTag;
 
     //can be accessed via builder
-    private ProjectileSpell(SpellBehaviour.Builder.BuilderWrapper builderWrapper, Class<T> projectile, Consumer<T> projectilePropperties, Consumer<Location> hitEffects, float speed, int lifeTime, int pushSpeed) {
+    private ProjectileSpell(AbstractBuilder.BuilderWrapper builderWrapper, Class<T> projectile, Consumer<T> projectileProps, Consumer<Location> hitEffects, float speed, int lifeTime, int pushSpeed) {
         super(builderWrapper);
         ListenerRegistry.addListener(this);
         this.projectile = projectile;
-        this.projectilePropperties = projectilePropperties;
+        this.projectilePropperties = projectileProps;
         this.hitEffects = hitEffects;
         this.speed = speed;
         this.lifeTime = lifeTime;
@@ -123,7 +123,7 @@ public class ProjectileSpell<T extends Projectile> extends SpellBehaviour implem
         return new Builder<>(projectileClass, speed);
     }
 
-    public static class Builder<T extends Projectile> extends SpellBehaviour.Builder<Builder<T>> {
+    public static class Builder<T extends Projectile> extends AbstractBuilder<Builder<T>> {
 
         private final Class<T> projectile;
         private final float speed;
@@ -143,8 +143,8 @@ public class ProjectileSpell<T extends Projectile> extends SpellBehaviour implem
             return this;
         }
 
-        public Builder<T> setProjectilePropperties(Consumer<T> projectilePropperties) {
-            this.projectilePropperties = projectilePropperties;
+        public Builder<T> setProjectilePropperties(Consumer<T> projectileProps) {
+            this.projectilePropperties = projectileProps;
             return self();
         }
 

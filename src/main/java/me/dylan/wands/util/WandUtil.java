@@ -2,7 +2,6 @@ package me.dylan.wands.util;
 
 import me.dylan.wands.Wands;
 import me.dylan.wands.spell.meta.Spell;
-import me.dylan.wands.spell.meta.SpellRegistry;
 import me.dylan.wands.spell.model.CastableSpell;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
@@ -18,8 +17,6 @@ public class WandUtil {
     private static final String TAG_SPELL_INDEX = "SpellIndex";
     private static final String TAG_SPELLS_LIST = "Spells";
     private static final String TAG_VERIFIED = "IsWand";
-
-    private static final SpellRegistry SPELL_REGISTRY = Wands.getPlugin().getSpellRegistry();
 
     private WandUtil() {
         throw new UnsupportedOperationException();
@@ -54,7 +51,7 @@ public class WandUtil {
     private static CastableSpell[] getSpells(ItemStack itemStack) {
         Optional<String> spells = ItemUtil.getPersistentData(itemStack, TAG_SPELLS_LIST, PersistentDataType.STRING);
         if (spells.isPresent()) {
-            return SPELL_REGISTRY.getSpells(spells.get());
+            return Spell.getSpells(spells.get());
         }
         return new CastableSpell[]{};
     }

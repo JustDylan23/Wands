@@ -6,8 +6,7 @@ import me.dylan.wands.customitem.CustomBow;
 import me.dylan.wands.customitem.CustomDagger;
 import me.dylan.wands.pluginmeta.ListenerRegistry;
 import me.dylan.wands.pluginmeta.PluginData;
-import me.dylan.wands.spell.dedicatedlisteners.PlayerInteractionListener;
-import me.dylan.wands.spell.meta.SpellRegistry;
+import me.dylan.wands.spell.dedicatedlistener.PlayerInteractionListener;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
@@ -21,7 +20,6 @@ public final class Wands extends JavaPlugin {
     public static final String PREFIX = "§8§l[§6§lWands§8§l]§r ";
 
     //instances of classes accessible via main class
-    private SpellRegistry spellRegistry;
     private PluginData pluginData;
     private ListenerRegistry listenerRegistry;
 
@@ -47,10 +45,7 @@ public final class Wands extends JavaPlugin {
 
         plugin = this;
         listenerRegistry = new ListenerRegistry();
-        spellRegistry = new SpellRegistry();
         pluginData = new PluginData();
-
-        spellRegistry.loadSpells();
 
         listenerRegistry.addToggleableListener(
                 new PlayerInteractionListener(),
@@ -63,10 +58,6 @@ public final class Wands extends JavaPlugin {
     @Override
     public void onDisable() {
         saveConfig();
-    }
-
-    public SpellRegistry getSpellRegistry() {
-        return spellRegistry;
     }
 
     public PluginData getPluginData() {

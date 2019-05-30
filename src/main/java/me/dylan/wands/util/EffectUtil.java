@@ -38,8 +38,8 @@ public class EffectUtil {
 
     public static void runTaskLater(Runnable runnable, int... delays) {
         int delay = 0;
-        for (int d : delays) {
-            delay += d;
+        for (int i : delays) {
+            delay += i;
             Bukkit.getScheduler().runTaskLater(plugin, runnable, delay);
         }
     }
@@ -50,8 +50,8 @@ public class EffectUtil {
             case SPELL_MOB:
             case SPELL_MOB_AMBIENT:
                 if (rainbow) {
-                    int c = (count > 0) ? count : 1; //if the count is 0 it will color
-                    location.getWorld().spawnParticle(particle, location, c, x, y, z, 1, null);
+                    count = (count > 0) ? count : 1; //if the count is 0 it will color
+                    location.getWorld().spawnParticle(particle, location, count, x, y, z, 1, null);
                 } else {
                     float red = (r <= 0) ? Float.MIN_NORMAL : (r / 255.0f);
                     float green = (g <= 0) ? 0 : (g / 255.0f);
@@ -67,7 +67,7 @@ public class EffectUtil {
         return location.clone().add(randomize(x), randomize(y), randomize(z));
     }
 
-    private static double randomize(double i) {
-        return ThreadLocalRandom.current().nextDouble() * i * 2.0 - i;
+    private static double randomize(double d) {
+        return ThreadLocalRandom.current().nextDouble() * d * 2.0 - d;
     }
 }

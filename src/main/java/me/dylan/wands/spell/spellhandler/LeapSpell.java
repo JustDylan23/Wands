@@ -1,4 +1,4 @@
-package me.dylan.wands.spell.spelltemplates;
+package me.dylan.wands.spell.spellhandler;
 
 import me.dylan.wands.pluginmeta.ListenerRegistry;
 import org.bukkit.entity.Player;
@@ -14,7 +14,7 @@ public class LeapSpell extends SpellBehaviour implements Listener {
     private final float forwardsSpeed;
     private final float upwardsSpeed;
 
-    private LeapSpell(Builder.BuilderWrapper builderWrapper, float forwardsSpeed, float upwardsSpeed) {
+    private LeapSpell(AbstractBuilder.BuilderWrapper builderWrapper, float forwardsSpeed, float upwardsSpeed) {
         super(builderWrapper);
         ListenerRegistry.addListener(this);
         this.forwardsSpeed = forwardsSpeed;

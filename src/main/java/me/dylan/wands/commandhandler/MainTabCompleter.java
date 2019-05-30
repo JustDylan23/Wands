@@ -15,7 +15,7 @@ public class MainTabCompleter implements TabCompleter {
 
     private List<String> validCompletions(String value, String... values) {
         return Arrays.stream(values)
-                .filter(c -> c.startsWith(value))
+                .filter(s -> s.startsWith(value))
                 .collect(Collectors.toList());
     }
 
