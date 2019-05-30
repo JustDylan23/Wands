@@ -6,7 +6,7 @@ import me.dylan.wands.customitem.CustomBow;
 import me.dylan.wands.customitem.CustomDagger;
 import me.dylan.wands.pluginmeta.ListenerRegistry;
 import me.dylan.wands.pluginmeta.PluginData;
-import me.dylan.wands.spell.dedicatedlistener.PlayerInteractionListener;
+import me.dylan.wands.spell.PlayerListener;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
@@ -48,7 +48,7 @@ public final class Wands extends JavaPlugin {
         pluginData = new PluginData();
 
         listenerRegistry.addToggleableListener(
-                new PlayerInteractionListener(),
+                new PlayerListener(),
                 new CustomDagger(),
                 new CustomBow()
         );

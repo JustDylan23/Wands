@@ -2,7 +2,7 @@ package me.dylan.wands.pluginmeta;
 
 import me.dylan.wands.customitem.CustomBow;
 import me.dylan.wands.customitem.CustomDagger;
-import me.dylan.wands.spell.meta.Spell;
+import me.dylan.wands.spell.Spell;
 import me.dylan.wands.util.ItemUtil;
 import me.dylan.wands.util.WandUtil;
 import org.bukkit.Material;

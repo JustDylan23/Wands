@@ -2,7 +2,7 @@ package me.dylan.wands.commandhandler;
 
 import me.dylan.wands.Wands;
 import me.dylan.wands.pluginmeta.ObtainableItem;
-import me.dylan.wands.spell.meta.Spell;
+import me.dylan.wands.spell.Spell;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

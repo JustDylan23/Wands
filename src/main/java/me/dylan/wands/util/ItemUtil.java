@@ -46,9 +46,9 @@ public class ItemUtil {
             return;
         }
         PersistentDataContainer container = meta.getPersistentDataContainer();
-        NamespacedKey key_ = new NamespacedKey(plugin, key);
+        NamespacedKey namespacedKey = new NamespacedKey(plugin, key);
 
-        container.set(key_, type, t);
+        container.set(namespacedKey, type, t);
         itemStack.setItemMeta(meta);
     }
 
@@ -58,9 +58,9 @@ public class ItemUtil {
             return Optional.empty();
         }
         PersistentDataContainer container = meta.getPersistentDataContainer();
-        NamespacedKey key_ = new NamespacedKey(plugin, key);
+        NamespacedKey namespacedKey = new NamespacedKey(plugin, key);
 
-        return container.has(key_, type) ? Optional.ofNullable(container.get(key_, type)) : Optional.empty();
+        return container.has(namespacedKey, type) ? Optional.ofNullable(container.get(namespacedKey, type)) : Optional.empty();
     }
 
     public static <T> boolean hasPersistentData(ItemStack itemStack, String key, PersistentDataType<T, T> type) {
@@ -69,9 +69,9 @@ public class ItemUtil {
             return false;
         }
         PersistentDataContainer container = meta.getPersistentDataContainer();
-        NamespacedKey key_ = new NamespacedKey(plugin, key);
+        NamespacedKey namespacedKey = new NamespacedKey(plugin, key);
 
-        return container.has(key_, type);
+        return container.has(namespacedKey, type);
     }
 
     public static void removePersistentData(ItemStack itemStack, String key) {
@@ -80,9 +80,9 @@ public class ItemUtil {
             return;
         }
         PersistentDataContainer container = meta.getPersistentDataContainer();
-        NamespacedKey key_ = new NamespacedKey(plugin, key);
+        NamespacedKey namespacedKey = new NamespacedKey(plugin, key);
 
-        container.remove(key_);
+        container.remove(namespacedKey);
         itemStack.setItemMeta(meta);
     }
 }

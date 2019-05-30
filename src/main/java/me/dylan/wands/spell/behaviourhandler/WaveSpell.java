@@ -1,4 +1,4 @@
-package me.dylan.wands.spell.spellhandler;
+package me.dylan.wands.spell.behaviourhandler;
 
 import me.dylan.wands.Wands;
 import me.dylan.wands.util.EffectUtil;
@@ -11,13 +11,13 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-public class WaveSpell extends SpellBehaviour {
+public class WaveSpell extends BaseBehaviour {
     private final int effectDistance;
     private final boolean stopAtEntity;
 
     //can be accessed via builder
-    private WaveSpell(AbstractBuilder.BuilderWrapper builderWrapper, int effectDistance, boolean stopAtEntity) {
-        super(builderWrapper);
+    private WaveSpell(AbstractBuilder.BaseMeta baseMeta, int effectDistance, boolean stopAtEntity) {
+        super(baseMeta);
         this.effectDistance = effectDistance;
         this.stopAtEntity = stopAtEntity;
     }
@@ -84,7 +84,7 @@ public class WaveSpell extends SpellBehaviour {
         }
 
         public WaveSpell build() {
-            return new WaveSpell(createBuilderWrapper(), effectDistance, stopAtEntity);
+            return new WaveSpell(getMeta(), effectDistance, stopAtEntity);
         }
     }
 }
