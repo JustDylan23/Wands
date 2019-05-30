@@ -1,17 +1,17 @@
 package me.dylan.wands.spell.implementation;
 
-import me.dylan.wands.spell.model.CastableSpell;
-import me.dylan.wands.spell.spellhandler.SparkSpell;
-import me.dylan.wands.spell.spellhandler.SpellBehaviour;
+import me.dylan.wands.spell.BaseSpell;
+import me.dylan.wands.spell.behaviourhandler.BaseBehaviour;
+import me.dylan.wands.spell.behaviourhandler.SparkSpell;
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 
-public class Spark extends CastableSpell {
+public class Spark extends BaseSpell {
 
     @Override
-    public SpellBehaviour getSpellBehaviour() {
+    public BaseBehaviour getBaseBehaviour() {
         return SparkSpell.newBuilder()
                 .setEffectRadius(2.2F)
                 .setEntityDamage(10)

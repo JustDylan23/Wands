@@ -1,71 +1,35 @@
-package me.dylan.wands.spell.spellhandler;
+package me.dylan.wands.spell.behaviourhandler;
 
 import me.dylan.wands.Wands;
 import org.bukkit.Location;
-import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerQuitEvent;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Consumer;
 
-public abstract class SpellBehaviour implements Listener {
+public abstract class BaseBehaviour implements Listener {
     final static Wands plugin = Wands.getPlugin();
-    private static final Map<Player, Long> lastUsed = new HashMap<>();
     final int entityDamage;
     final float effectAreaRange;
     final Consumer<Location> castEffects;
     final Consumer<Location> visualEffects;
     final Consumer<Entity> entityEffects;
 
-    SpellBehaviour(AbstractBuilder.BuilderWrapper builderWrapper) {
-        this.entityDamage = builderWrapper.entityDamage;
-        this.effectAreaRange = builderWrapper.effectAreaRange;
-        this.castEffects = builderWrapper.castEffects;
-        this.visualEffects = builderWrapper.visualEffects;
-        this.entityEffects = builderWrapper.entityEffects;
+    BaseBehaviour(AbstractBuilder.BaseMeta baseMeta) {
+        this.entityDamage = baseMeta.entityDamage;
+        this.effectAreaRange = baseMeta.effectAreaRange;
+        this.castEffects = baseMeta.castEffects;
+        this.visualEffects = baseMeta.visualEffects;
+        this.entityEffects = baseMeta.entityEffects;
     }
 
-    @EventHandler
-    public static void onQuit(PlayerQuitEvent event) {
-        lastUsed.remove(event.getPlayer());
-    }
+    public abstract void cast(Player player);
 
-    abstract void cast(Player player);
 
-    public final void executeSpellFrom(Player player) {
-        int remainingTime = getRemainingTime(player);
-        if (remainingTime <= 0) {
-            cast(player);
-            lastUsed.put(player, System.currentTimeMillis());
-        } else {
-            notifyOfCooldown(player, remainingTime);
-        }
-    }
+    public static abstract class AbstractBuilder<T extends AbstractBuilder<T>> {
 
-    private int getRemainingTime(Player player) {
-        int cooldown = Wands.getPlugin().getPluginData().getMagicCooldownTime() * 1000;
-        long now = System.currentTimeMillis();
-        Long previous = lastUsed.get(player);
-        if (previous == null) {
-            return 0;
-        }
-        long elapsed = now - previous;
-        return (int) Math.ceil(cooldown - elapsed) / 1000;
-    }
-
-    private void notifyOfCooldown(Player player, int remaining) {
-        player.sendActionBar("§6Wait §7" + remaining + " §6second" + ((remaining != 1) ? "s" : ""));
-        player.playSound(player.getLocation(), Sound.ENTITY_BLAZE_AMBIENT, 0.3F, 1);
-    }
-
-    public abstract static class AbstractBuilder<T extends AbstractBuilder<T>> {
-
-        final BuilderWrapper builderWrapper = new BuilderWrapper();
+        final BaseMeta baseMeta = new BaseMeta();
 
         abstract T self();
 
@@ -77,7 +41,7 @@ public abstract class SpellBehaviour implements Listener {
          */
 
         public T setEntityDamage(int damage) {
-            builderWrapper.entityDamage = damage;
+            baseMeta.entityDamage = damage;
             return self();
         }
 
@@ -89,7 +53,7 @@ public abstract class SpellBehaviour implements Listener {
          */
 
         public T setEffectRadius(float radius) {
-            builderWrapper.effectAreaRange = radius;
+            baseMeta.effectAreaRange = radius;
             return self();
         }
 
@@ -101,7 +65,7 @@ public abstract class SpellBehaviour implements Listener {
          */
 
         public T setCastEffects(Consumer<Location> castEffects) {
-            builderWrapper.castEffects = castEffects;
+            baseMeta.castEffects = castEffects;
             return self();
         }
 
@@ -114,7 +78,7 @@ public abstract class SpellBehaviour implements Listener {
          */
 
         public T setVisualEffects(Consumer<Location> effects) {
-            builderWrapper.visualEffects = effects;
+            baseMeta.visualEffects = effects;
             return self();
         }
 
@@ -126,15 +90,15 @@ public abstract class SpellBehaviour implements Listener {
          */
 
         public T setEntityEffects(Consumer<Entity> effects) {
-            builderWrapper.entityEffects = effects;
+            baseMeta.entityEffects = effects;
             return self();
         }
 
-        BuilderWrapper createBuilderWrapper() {
-            return builderWrapper;
+        BaseMeta getMeta() {
+            return baseMeta;
         }
 
-        static class BuilderWrapper {
+        static class BaseMeta {
             private final static Consumer<?> EMPTY_CONSUMER = e -> {
             };
 

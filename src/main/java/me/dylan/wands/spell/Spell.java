@@ -1,7 +1,6 @@
-package me.dylan.wands.spell.meta;
+package me.dylan.wands.spell;
 
 import me.dylan.wands.spell.implementation.*;
-import me.dylan.wands.spell.model.CastableSpell;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -17,9 +16,9 @@ public enum Spell {
     BLOOD_EXPLODE(new BloodExplode()),
     BLOOD_STUN(new BloodStun());
 
-    public final CastableSpell spell;
+    public final BaseSpell spell;
 
-    Spell(CastableSpell spell) {
+    Spell(BaseSpell spell) {
         this.spell = spell;
     }
 
@@ -27,7 +26,7 @@ public enum Spell {
         return spell.getName();
     }
 
-    public static Optional<CastableSpell> getSpell(String name) {
+    public static Optional<BaseSpell> getSpell(String name) {
         if (name == null) return Optional.empty();
         try {
             return Optional.of(Spell.valueOf(name).spell);
@@ -36,13 +35,13 @@ public enum Spell {
         }
     }
 
-    public static CastableSpell[] getSpells(String unparsedArray) throws NoSuchElementException {
+    public static BaseSpell[] getSpells(String unparsedArray) throws NoSuchElementException {
         String[] parsedKeys = unparsedArray.split(",");
-        CastableSpell[] spells = new CastableSpell[parsedKeys.length];
+        BaseSpell[] spells = new BaseSpell[parsedKeys.length];
         for (int i = 0; i < parsedKeys.length; i++) {
             String spellName = parsedKeys[i];
             spells[i] = getSpell(spellName).orElseThrow(() ->
-                    new NoSuchElementException("CastableSpell with identifier " + spellName + " is not registered!"));
+                    new NoSuchElementException("BaseSpell with identifier " + spellName + " is not registered!"));
         }
         return spells;
     }

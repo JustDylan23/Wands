@@ -1,8 +1,8 @@
 package me.dylan.wands.util;
 
 import me.dylan.wands.Wands;
-import me.dylan.wands.spell.meta.Spell;
-import me.dylan.wands.spell.model.CastableSpell;
+import me.dylan.wands.spell.BaseSpell;
+import me.dylan.wands.spell.Spell;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
@@ -48,16 +48,16 @@ public class WandUtil {
         ItemUtil.setPersistentData(itemStack, TAG_SPELL_INDEX, PersistentDataType.INTEGER, index);
     }
 
-    private static CastableSpell[] getSpells(ItemStack itemStack) {
+    private static BaseSpell[] getSpells(ItemStack itemStack) {
         Optional<String> spells = ItemUtil.getPersistentData(itemStack, TAG_SPELLS_LIST, PersistentDataType.STRING);
         if (spells.isPresent()) {
             return Spell.getSpells(spells.get());
         }
-        return new CastableSpell[]{};
+        return new BaseSpell[]{};
     }
 
-    private static Optional<CastableSpell> getSelectedSpell(ItemStack itemStack) {
-        CastableSpell[] spells = getSpells(itemStack);
+    private static Optional<BaseSpell> getSelectedSpell(ItemStack itemStack) {
+        BaseSpell[] spells = getSpells(itemStack);
         int index = getIndex(itemStack);
         if (index < spells.length) return Optional.of(spells[index]);
         setIndex(itemStack, 0);
@@ -65,17 +65,17 @@ public class WandUtil {
     }
 
     public static void castSpell(Player player, ItemStack itemStack) {
-        Optional<CastableSpell> spell = getSelectedSpell(itemStack);
+        Optional<BaseSpell> spell = getSelectedSpell(itemStack);
         if (spell.isPresent()) {
             spell.get().cast(player);
         } else {
-            player.sendActionBar(Wands.PREFIX + "No spell are bound");
+            player.sendActionBar(Wands.PREFIX + "No spells are bound");
         }
     }
 
     public static void nextSpell(Player player, ItemStack itemStack) {
         int index = getIndex(itemStack);
-        CastableSpell[] spells = getSpells(itemStack);
+        BaseSpell[] spells = getSpells(itemStack);
         int length = spells.length;
 
         if (length-- == 0) return;

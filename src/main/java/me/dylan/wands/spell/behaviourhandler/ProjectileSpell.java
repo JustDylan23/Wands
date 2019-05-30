@@ -1,4 +1,4 @@
-package me.dylan.wands.spell.spellhandler;
+package me.dylan.wands.spell.behaviourhandler;
 
 import me.dylan.wands.Wands;
 import me.dylan.wands.pluginmeta.ListenerRegistry;
@@ -20,7 +20,7 @@ import org.bukkit.util.Vector;
 
 import java.util.function.Consumer;
 
-public class ProjectileSpell<T extends Projectile> extends SpellBehaviour implements Listener {
+public class ProjectileSpell<T extends Projectile> extends BaseBehaviour implements Listener {
     private static int idCount;
     private final Class<T> projectile;
     private final Consumer<T> projectilePropperties;
@@ -31,8 +31,8 @@ public class ProjectileSpell<T extends Projectile> extends SpellBehaviour implem
     private final String metadataTag;
 
     //can be accessed via builder
-    private ProjectileSpell(AbstractBuilder.BuilderWrapper builderWrapper, Class<T> projectile, Consumer<T> projectileProps, Consumer<Location> hitEffects, float speed, int lifeTime, int pushSpeed) {
-        super(builderWrapper);
+    private ProjectileSpell(AbstractBuilder.BaseMeta baseMeta, Class<T> projectile, Consumer<T> projectileProps, Consumer<Location> hitEffects, float speed, int lifeTime, int pushSpeed) {
+        super(baseMeta);
         ListenerRegistry.addListener(this);
         this.projectile = projectile;
         this.projectilePropperties = projectileProps;
@@ -164,7 +164,7 @@ public class ProjectileSpell<T extends Projectile> extends SpellBehaviour implem
         }
 
         public ProjectileSpell<T> build() {
-            return new ProjectileSpell<>(createBuilderWrapper(), projectile, projectilePropperties, hitEffects, speed, lifeTime, pushSpeed);
+            return new ProjectileSpell<>(getMeta(), projectile, projectilePropperties, hitEffects, speed, lifeTime, pushSpeed);
         }
     }
 }

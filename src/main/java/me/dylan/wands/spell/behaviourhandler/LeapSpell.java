@@ -1,4 +1,4 @@
-package me.dylan.wands.spell.spellhandler;
+package me.dylan.wands.spell.behaviourhandler;
 
 import me.dylan.wands.pluginmeta.ListenerRegistry;
 import org.bukkit.entity.Player;
@@ -9,20 +9,20 @@ import org.bukkit.util.Vector;
 
 //TODO Finish base template for spell that allow the caster to leap
 
-public class LeapSpell extends SpellBehaviour implements Listener {
+public class LeapSpell extends BaseBehaviour implements Listener {
 
     private final float forwardsSpeed;
     private final float upwardsSpeed;
 
-    private LeapSpell(AbstractBuilder.BuilderWrapper builderWrapper, float forwardsSpeed, float upwardsSpeed) {
-        super(builderWrapper);
+    private LeapSpell(AbstractBuilder.BaseMeta baseMeta, float forwardsSpeed, float upwardsSpeed) {
+        super(baseMeta);
         ListenerRegistry.addListener(this);
         this.forwardsSpeed = forwardsSpeed;
         this.upwardsSpeed = upwardsSpeed;
     }
 
     @Override
-    void cast(Player player) {
+    public void cast(Player player) {
         push(player, forwardsSpeed, upwardsSpeed);
     }
 

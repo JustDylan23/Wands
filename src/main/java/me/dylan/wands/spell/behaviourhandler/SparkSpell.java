@@ -1,4 +1,4 @@
-package me.dylan.wands.spell.spellhandler;
+package me.dylan.wands.spell.behaviourhandler;
 
 import me.dylan.wands.util.EffectUtil;
 import org.bukkit.Location;
@@ -8,12 +8,12 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-public class SparkSpell extends SpellBehaviour {
+public class SparkSpell extends BaseBehaviour {
     private final int effectDistance;
 
     //can be accessed via builder
-    private SparkSpell(AbstractBuilder.BuilderWrapper builderWrapper, int effectDistance) {
-        super(builderWrapper);
+    private SparkSpell(AbstractBuilder.BaseMeta baseMeta, int effectDistance) {
+        super(baseMeta);
         this.effectDistance = effectDistance;
     }
 
@@ -65,7 +65,7 @@ public class SparkSpell extends SpellBehaviour {
 
 
         public SparkSpell build() {
-            return new SparkSpell(createBuilderWrapper(), effectDistance);
+            return new SparkSpell(getMeta(), effectDistance);
         }
     }
 }
