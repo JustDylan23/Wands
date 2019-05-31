@@ -20,13 +20,13 @@ public class Comet extends BaseSpell {
                 .setEffectRadius(4.5F)
                 .setEntityDamage(10)
                 .setEntityEffects(entity -> entity.setFireTicks(60))
-                .setVisualEffects(loc -> {
+                .setRelativeEffects(loc -> {
                     World world = loc.getWorld();
                     world.spawnParticle(Particle.SPELL_WITCH, loc, 40, 0.8, 0.8, 0.8, 0.15, null, true);
                     world.spawnParticle(Particle.SMOKE_LARGE, loc, 10, 0.6, 0.6, 0.6, 0.1, null, true);
                     world.spawnParticle(Particle.SMOKE_LARGE, loc, 10, 1.0, 1.0, 1.0, 0.1, null, true);
                 })
-                .setProjectilePropperties(projectile -> {
+                .setProjectileProps(projectile -> {
                     projectile.setIsIncendiary(false);
                     projectile.setYield(0);
                 })

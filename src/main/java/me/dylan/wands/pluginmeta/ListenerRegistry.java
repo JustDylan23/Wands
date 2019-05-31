@@ -1,6 +1,6 @@
 package me.dylan.wands.pluginmeta;
 
-import me.dylan.wands.Wands;
+import me.dylan.wands.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
@@ -11,7 +11,7 @@ import java.util.Set;
 
 public class ListenerRegistry {
 
-    private static final Wands plugin = Wands.getPlugin();
+    private static final Main plugin = Main.getPlugin();
     private final Set<Listener> toggleableListeners = new HashSet<>();
 
     public static void addListener(Listener... listeners) {
@@ -22,11 +22,15 @@ public class ListenerRegistry {
 
     public void addToggleableListener(Listener... listeners) {
         toggleableListeners.addAll(Arrays.asList(listeners));
-        addListener(listeners);
+        if (Main.getPlugin().getConfigurableData().isMagicUseAllowed()) {
+            Main.log("magic usage is allowed");
+            addListener(listeners);
+        }
     }
 
     void disableListeners() {
         toggleableListeners.forEach(HandlerList::unregisterAll);
+        Main.log("disabling listeners...");
     }
 
     void enableListeners() {

@@ -1,6 +1,6 @@
 package me.dylan.wands.util;
 
-import me.dylan.wands.Wands;
+import me.dylan.wands.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 public class EffectUtil {
 
-    private static final Wands plugin = Wands.getPlugin();
+    private static final Main plugin = Main.getPlugin();
 
     private EffectUtil() {
         throw new UnsupportedOperationException();

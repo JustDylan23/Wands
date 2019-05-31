@@ -16,7 +16,7 @@ public class BloodExplode extends BaseSpell {
                 .setEffectRadius(4.5F)
                 .setEntityDamage(7)
                 .setEntityEffects(entity -> entity.setFireTicks(40))
-                .setVisualEffects(loc -> {
+                .setRelativeEffects(loc -> {
                     loc.getWorld().spawnParticle(Particle.SMOKE_LARGE, loc, 20, 1, 1, 1, 0.1, null, true);
                     loc.getWorld().spawnParticle(Particle.BLOCK_CRACK, loc, 15, 1, 1, 1, 0.15, Material.REDSTONE_BLOCK.createBlockData(), true);
                     loc.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, loc, 0, 0.0, 0.0, 0.0, 0.0, null, true);

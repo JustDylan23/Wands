@@ -1,6 +1,6 @@
 package me.dylan.wands.spell;
 
-import me.dylan.wands.Wands;
+import me.dylan.wands.Main;
 import me.dylan.wands.util.WandUtil;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -37,8 +37,8 @@ public final class PlayerListener implements Listener {
 
     /**
      * This method handles the cooldown which the player
-     * has to wait for after casting a spell before a new
-     * spell may be cast.
+     * has to wait for after casting a baseSpell before a new
+     * baseSpell may be cast.
      *
      * @param player Player.
      * @param itemStack ItemStack which
@@ -56,11 +56,11 @@ public final class PlayerListener implements Listener {
 
     /**
      * @param player Player.
-     * @return Amount of time since player last tried to cast a spell.
+     * @return Amount of time since player last tried to cast a baseSpell.
      */
 
     private int getRemainingTime(Player player) {
-        int cooldown = Wands.getPlugin().getPluginData().getMagicCooldownTime() * 1000;
+        int cooldown = Main.getPlugin().getConfigurableData().getMagicCooldownTime() * 1000;
         long now = System.currentTimeMillis();
         Long previous = lastUsed.get(player);
         if (previous == null) {

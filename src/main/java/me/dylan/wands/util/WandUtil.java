@@ -1,6 +1,6 @@
 package me.dylan.wands.util;
 
-import me.dylan.wands.Wands;
+import me.dylan.wands.Main;
 import me.dylan.wands.spell.BaseSpell;
 import me.dylan.wands.spell.Spell;
 import org.bukkit.Sound;
@@ -24,7 +24,7 @@ public class WandUtil {
 
     public static void setAsWand(ItemStack itemStack) {
         ItemUtil.setPersistentData(itemStack, TAG_VERIFIED, PersistentDataType.BYTE, (byte) 0);
-        ItemUtil.setPersistentData(itemStack, TAG_SPELL_INDEX, PersistentDataType.INTEGER, 1);
+        ItemUtil.setPersistentData(itemStack, TAG_SPELL_INDEX, PersistentDataType.INTEGER, 0);
     }
 
     public static boolean isWand(ItemStack itemStack) {
@@ -59,7 +59,9 @@ public class WandUtil {
     private static Optional<BaseSpell> getSelectedSpell(ItemStack itemStack) {
         BaseSpell[] spells = getSpells(itemStack);
         int index = getIndex(itemStack);
-        if (index < spells.length) return Optional.of(spells[index]);
+        if (index < spells.length) {
+            return Optional.of(spells[index]);
+        }
         setIndex(itemStack, 0);
         return Optional.empty();
     }
@@ -69,28 +71,28 @@ public class WandUtil {
         if (spell.isPresent()) {
             spell.get().cast(player);
         } else {
-            player.sendActionBar(Wands.PREFIX + "No spells are bound");
+            player.sendActionBar(Main.PREFIX + "No spells are bound!");
         }
+
     }
 
     public static void nextSpell(Player player, ItemStack itemStack) {
         int index = getIndex(itemStack);
         BaseSpell[] spells = getSpells(itemStack);
         int length = spells.length;
-
-        if (length-- == 0) return;
-        //index goes forward
-        if (!player.isSneaking()) {
-            index = (index < length) ? ++index : 0;
+        if (length-- == 0) {
+            return;
         }
-        //index goes backwards
-        else {
-            index = (index > 1) ? --index : length;
+
+        if (player.isSneaking()) {
+            index = (index >= 1) ? --index : length;
+        } else {
+            index = (index < length) ? ++index : 0;
         }
 
         setIndex(itemStack, index);
 
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.5F, 0.5F);
-        player.sendActionBar("§6Current spell: §7§l" + spells[index].getName());
+        player.sendActionBar("§6Current baseSpell: §7§l" + spells[index].getName());
     }
 }

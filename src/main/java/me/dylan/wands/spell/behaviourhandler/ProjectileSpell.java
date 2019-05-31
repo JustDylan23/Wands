@@ -1,7 +1,8 @@
 package me.dylan.wands.spell.behaviourhandler;
 
-import me.dylan.wands.Wands;
+import me.dylan.wands.Main;
 import me.dylan.wands.pluginmeta.ListenerRegistry;
+import me.dylan.wands.util.DataUtil;
 import me.dylan.wands.util.EffectUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -23,7 +24,7 @@ import java.util.function.Consumer;
 public class ProjectileSpell<T extends Projectile> extends BaseBehaviour implements Listener {
     private static int idCount;
     private final Class<T> projectile;
-    private final Consumer<T> projectilePropperties;
+    private final Consumer<T> projectileProps;
     private final Consumer<Location> hitEffects;
     private final float speed;
     private final int lifeTime;
@@ -35,7 +36,7 @@ public class ProjectileSpell<T extends Projectile> extends BaseBehaviour impleme
         super(baseMeta);
         ListenerRegistry.addListener(this);
         this.projectile = projectile;
-        this.projectilePropperties = projectileProps;
+        this.projectileProps = projectileProps;
         this.hitEffects = hitEffects;
         this.speed = speed;
         this.lifeTime = lifeTime;
@@ -48,7 +49,7 @@ public class ProjectileSpell<T extends Projectile> extends BaseBehaviour impleme
         Vector velocity = player.getLocation().getDirection().multiply(speed);
         T projectile = player.launchProjectile(this.projectile, velocity);
         trail(projectile);
-        projectilePropperties.accept(projectile);
+        projectileProps.accept(projectile);
         projectile.setMetadata(metadataTag, new FixedMetadataValue(plugin, true));
         activateLifeTimer(projectile);
         castEffects.accept(player.getLocation());
@@ -82,7 +83,7 @@ public class ProjectileSpell<T extends Projectile> extends BaseBehaviour impleme
     }
 
     private void activateLifeTimer(Projectile projectile) {
-        Bukkit.getScheduler().runTaskLater(Wands.getPlugin(), () -> {
+        Bukkit.getScheduler().runTaskLater(Main.getPlugin(), () -> {
             if (projectile.isValid()) {
                 hit((Player) projectile.getShooter(), projectile);
             }
@@ -98,7 +99,7 @@ public class ProjectileSpell<T extends Projectile> extends BaseBehaviour impleme
 
                 } else cancel();
             }
-        }.runTaskTimer(Wands.getPlugin(), 0, 1);
+        }.runTaskTimer(Main.getPlugin(), 0, 1);
     }
 
     @EventHandler
@@ -128,8 +129,8 @@ public class ProjectileSpell<T extends Projectile> extends BaseBehaviour impleme
         private final Class<T> projectile;
         private final float speed;
 
-        private Consumer<T> projectilePropperties;
-        private Consumer<Location> hitEffects;
+        private Consumer<T> projectileProps = DataUtil.emptyConsumer();
+        private Consumer<Location> hitEffects = DataUtil.emptyConsumer();
         private int lifeTime;
         private int pushSpeed;
 
@@ -143,8 +144,8 @@ public class ProjectileSpell<T extends Projectile> extends BaseBehaviour impleme
             return this;
         }
 
-        public Builder<T> setProjectilePropperties(Consumer<T> projectileProps) {
-            this.projectilePropperties = projectileProps;
+        public Builder<T> setProjectileProps(Consumer<T> projectileProps) {
+            this.projectileProps = projectileProps;
             return self();
         }
 
@@ -164,7 +165,7 @@ public class ProjectileSpell<T extends Projectile> extends BaseBehaviour impleme
         }
 
         public ProjectileSpell<T> build() {
-            return new ProjectileSpell<>(getMeta(), projectile, projectilePropperties, hitEffects, speed, lifeTime, pushSpeed);
+            return new ProjectileSpell<>(getMeta(), projectile, projectileProps, hitEffects, speed, lifeTime, pushSpeed);
         }
     }
 }

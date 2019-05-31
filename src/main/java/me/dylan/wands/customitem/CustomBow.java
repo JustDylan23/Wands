@@ -1,6 +1,6 @@
 package me.dylan.wands.customitem;
 
-import me.dylan.wands.Wands;
+import me.dylan.wands.Main;
 import me.dylan.wands.util.EffectUtil;
 import me.dylan.wands.util.ItemUtil;
 import org.bukkit.*;
@@ -32,7 +32,7 @@ import java.util.function.Consumer;
 public class CustomBow implements Listener {
 
     private final String cursedArrow = "cursedArrow";
-    private final Plugin plugin = Wands.getPlugin();
+    private final Plugin plugin = Main.getPlugin();
     private final Set<Player> drawing = new HashSet<>();
     private final Set<Player> hasDrawn = new HashSet<>();
 
@@ -68,7 +68,7 @@ public class CustomBow implements Listener {
                                 }
                             } else cancel();
                         }
-                    }.runTaskTimer(Wands.getPlugin(), 1, 1);
+                    }.runTaskTimer(Main.getPlugin(), 1, 1);
                 }
             }
         }
@@ -125,7 +125,7 @@ public class CustomBow implements Listener {
                     consumer.accept(entity.getLocation());
                 } else cancel();
             }
-        }.runTaskTimer(Wands.getPlugin(), 1, 1);
+        }.runTaskTimer(Main.getPlugin(), 1, 1);
     }
 
     @EventHandler

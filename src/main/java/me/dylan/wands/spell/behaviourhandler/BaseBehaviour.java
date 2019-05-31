@@ -1,6 +1,7 @@
 package me.dylan.wands.spell.behaviourhandler;
 
-import me.dylan.wands.Wands;
+import me.dylan.wands.Main;
+import me.dylan.wands.util.DataUtil;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -9,7 +10,7 @@ import org.bukkit.event.Listener;
 import java.util.function.Consumer;
 
 public abstract class BaseBehaviour implements Listener {
-    final static Wands plugin = Wands.getPlugin();
+    final static Main plugin = Main.getPlugin();
     final int entityDamage;
     final float effectAreaRange;
     final Consumer<Location> castEffects;
@@ -18,9 +19,9 @@ public abstract class BaseBehaviour implements Listener {
 
     BaseBehaviour(AbstractBuilder.BaseMeta baseMeta) {
         this.entityDamage = baseMeta.entityDamage;
-        this.effectAreaRange = baseMeta.effectAreaRange;
+        this.effectAreaRange = baseMeta.effectRadius;
         this.castEffects = baseMeta.castEffects;
-        this.visualEffects = baseMeta.visualEffects;
+        this.visualEffects = baseMeta.relativeEffects;
         this.entityEffects = baseMeta.entityEffects;
     }
 
@@ -34,7 +35,7 @@ public abstract class BaseBehaviour implements Listener {
         abstract T self();
 
         /**
-         * Sets the damage that is applied to the Damageable effected by the spell.
+         * Sets the damage that is applied to the Damageable effected by the baseSpell.
          *
          * @param damage The amount of damage
          * @return this
@@ -46,19 +47,31 @@ public abstract class BaseBehaviour implements Listener {
         }
 
         /**
-         * Sets the radius of the affected Damageables after the spell concludes.
+         * Sets the effects which will effect the Damageables in the baseSpell's effect range.
+         *
+         * @param effects Effects applied to the affected Damageables
+         * @return this
+         */
+
+        public T setEntityEffects(Consumer<Entity> effects) {
+            baseMeta.entityEffects = effects;
+            return self();
+        }
+
+        /**
+         * Sets the radius of the affected Damageables after the baseSpell concludes.
          *
          * @param radius The radius
          * @return this
          */
 
         public T setEffectRadius(float radius) {
-            baseMeta.effectAreaRange = radius;
+            baseMeta.effectRadius = radius;
             return self();
         }
 
         /**
-         * Sets the effect that will be executed relative to the player.
+         * Sets the effects that will be executed relative to the player.
          *
          * @param castEffects Effects relative to the player
          * @return this
@@ -70,27 +83,15 @@ public abstract class BaseBehaviour implements Listener {
         }
 
         /**
-         * Sets the visual effects that the spell shows, whether it is a trail of particles
-         * or is executed relative to where you look is up to the spell type BasePropperties is used in.
+         * Sets the visual effects that the baseSpell shows, whether it is a trail of particles
+         * or is executed relative to where you look is up to the baseSpell type BaseProps is used in.
          *
-         * @param effects Effects relative to the spell
+         * @param effects Effects relative to the baseSpell
          * @return this
          */
 
-        public T setVisualEffects(Consumer<Location> effects) {
-            baseMeta.visualEffects = effects;
-            return self();
-        }
-
-        /**
-         * Sets the effects which will effect the Damageables in the spell's effect range.
-         *
-         * @param effects Effects applied to the affected Damageables
-         * @return this
-         */
-
-        public T setEntityEffects(Consumer<Entity> effects) {
-            baseMeta.entityEffects = effects;
+        public T setRelativeEffects(Consumer<Location> effects) {
+            baseMeta.relativeEffects = effects;
             return self();
         }
 
@@ -99,19 +100,13 @@ public abstract class BaseBehaviour implements Listener {
         }
 
         static class BaseMeta {
-            private final static Consumer<?> EMPTY_CONSUMER = e -> {
-            };
 
             private int entityDamage = 3;
-            private float effectAreaRange = 2;
-            private Consumer<Location> castEffects = emptyConsumer();
-            private Consumer<Location> visualEffects = emptyConsumer();
-            private Consumer<Entity> entityEffects = emptyConsumer();
+            private float effectRadius = 2;
+            private Consumer<Location> castEffects = DataUtil.emptyConsumer();
+            private Consumer<Location> relativeEffects = DataUtil.emptyConsumer();
+            private Consumer<Entity> entityEffects = DataUtil.emptyConsumer();
 
-            @SuppressWarnings("unchecked")
-            private <T> Consumer<T> emptyConsumer() {
-                return (Consumer<T>) EMPTY_CONSUMER;
-            }
         }
     }
 }

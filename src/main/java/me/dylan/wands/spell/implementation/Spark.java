@@ -15,7 +15,7 @@ public class Spark extends BaseSpell {
         return SparkSpell.newBuilder()
                 .setEffectRadius(2.2F)
                 .setEntityDamage(10)
-                .setVisualEffects(loc -> {
+                .setRelativeEffects(loc -> {
                     loc.getWorld().spawnParticle(Particle.SPELL_WITCH, loc, 30, 0.6, 0.7, 0.6, 0.2, null, true);
                     loc.getWorld().spawnParticle(Particle.SMOKE_LARGE, loc, 50, 0.2, 0.2, 0.2, 0.08, null, true);
 

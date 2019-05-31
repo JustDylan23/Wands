@@ -4,26 +4,25 @@ import me.dylan.wands.commandhandler.MainCommandHandler;
 import me.dylan.wands.commandhandler.MainTabCompleter;
 import me.dylan.wands.customitem.CustomBow;
 import me.dylan.wands.customitem.CustomDagger;
+import me.dylan.wands.pluginmeta.ConfigurableData;
 import me.dylan.wands.pluginmeta.ListenerRegistry;
-import me.dylan.wands.pluginmeta.PluginData;
 import me.dylan.wands.spell.PlayerListener;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-@SuppressWarnings("WeakerAccess")
-public final class Wands extends JavaPlugin {
+public final class Main extends JavaPlugin {
 
-    private static Wands plugin;
+    private static Main plugin;
 
     public static final String PREFIX = "§8§l[§6§lWands§8§l]§r ";
 
     //instances of classes accessible via main class
-    private PluginData pluginData;
+    private ConfigurableData configurableData;
     private ListenerRegistry listenerRegistry;
 
-    public static Wands getPlugin() {
+    public static Main getPlugin() {
         return plugin;
     }
 
@@ -33,8 +32,8 @@ public final class Wands extends JavaPlugin {
             Player.class.getMethod("sendActionBar", String.class);
         } catch (NoSuchMethodException e) {
             this.getPluginLoader().disablePlugin(this);
-            sendConsole("§cThis plugin only works on Paper, an improved version of spigot.");
-            sendConsole("§cDisabling plugin...");
+            log("§cThis plugin only works on Paper, an improved version of spigot.");
+            log("§cDisabling plugin...");
             return;
         }
 
@@ -45,14 +44,13 @@ public final class Wands extends JavaPlugin {
 
         plugin = this;
         listenerRegistry = new ListenerRegistry();
-        pluginData = new PluginData();
-
+        configurableData = new ConfigurableData();
         listenerRegistry.addToggleableListener(
                 new PlayerListener(),
                 new CustomDagger(),
                 new CustomBow()
         );
-
+        log("Succesfully enabled");
     }
 
     @Override
@@ -60,15 +58,15 @@ public final class Wands extends JavaPlugin {
         saveConfig();
     }
 
-    public PluginData getPluginData() {
-        return pluginData;
+    public ConfigurableData getConfigurableData() {
+        return configurableData;
     }
 
     public ListenerRegistry getListenerRegistry() {
         return listenerRegistry;
     }
 
-    public void sendConsole(String text) {
-        Bukkit.getConsoleSender().sendMessage(PREFIX + text);
+    public static void log(String text) {
+        Bukkit.getLogger().info(PREFIX + text);
     }
 }

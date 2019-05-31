@@ -1,20 +1,20 @@
 package me.dylan.wands.spell;
 
-import me.dylan.wands.Wands;
+import me.dylan.wands.Main;
 import me.dylan.wands.spell.behaviourhandler.BaseBehaviour;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 /**
  * @author Dylan
- * The BaseSpell class is the base class for every spell that can be casted.
+ * The BaseSpell class is the base class for every baseSpell that can be casted.
  * It's primarily feature is to store an instance of an implementation BaseBehaviour.
  * This object should contain what the BaseSpell does when casted.
  */
 
 public abstract class BaseSpell {
 
-    protected final Plugin plugin = Wands.getPlugin();
+    protected final Plugin plugin = Main.getPlugin();
     private final String displayName;
     private final BaseBehaviour baseBehaviour;
 

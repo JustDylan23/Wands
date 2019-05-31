@@ -1,6 +1,6 @@
 package me.dylan.wands.util;
 
-import me.dylan.wands.Wands;
+import me.dylan.wands.Main;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -16,7 +16,7 @@ import java.util.function.Supplier;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class ItemUtil {
-    private static final Wands plugin = Wands.getPlugin();
+    private static final Main plugin = Main.getPlugin();
 
     private ItemUtil() {
         throw new UnsupportedOperationException();
