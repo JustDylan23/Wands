@@ -1,6 +1,6 @@
 package me.dylan.wands.customitem;
 
-import me.dylan.wands.Wands;
+import me.dylan.wands.Main;
 import me.dylan.wands.util.ItemUtil;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
@@ -25,7 +25,7 @@ import org.bukkit.util.Vector;
 
 public final class CustomDagger implements Listener {
 
-    private final Wands plugin = Wands.getPlugin();
+    private final Main plugin = Main.getPlugin();
     private final String leapKey = "therosJump";
     private final String sneakKey = "therosInvisable";
 
@@ -39,7 +39,7 @@ public final class CustomDagger implements Listener {
     public void onSpringToggle(PlayerToggleSprintEvent event) {
         Player player = event.getPlayer();
         if (hasDagger(player) && event.isSprinting()) {
-            Bukkit.getScheduler().runTaskLater(Wands.getPlugin(), () -> sprintParticles(player), 1);
+            Bukkit.getScheduler().runTaskLater(Main.getPlugin(), () -> sprintParticles(player), 1);
         }
     }
 
@@ -87,7 +87,7 @@ public final class CustomDagger implements Listener {
                                         }
                                     }
                                 }
-                            }.runTaskTimer(Wands.getPlugin(), 3, 3);
+                            }.runTaskTimer(Main.getPlugin(), 3, 3);
                         }
                     }
                 }
@@ -168,7 +168,7 @@ public final class CustomDagger implements Listener {
 
     private void sprintParticles(Player player) {
         PotionEffect speed = new PotionEffect(PotionEffectType.SPEED, 20, 4, true);
-        Bukkit.getScheduler().runTaskLater(Wands.getPlugin(), () -> {
+        Bukkit.getScheduler().runTaskLater(Main.getPlugin(), () -> {
             Location loc = player.getLocation();
             loc.getWorld().spawnParticle(Particle.SMOKE_LARGE, loc, 1, 0.1, 0.1, 0.1, 0.1, null, true);
             loc.getWorld().spawnParticle(Particle.SMOKE_NORMAL, loc, 1, 0.1, 0.1, 0.1, 0.1, null, true);

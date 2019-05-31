@@ -15,7 +15,7 @@ public class BloodSpark extends BaseSpell {
         return SparkSpell.newBuilder()
                 .setEffectRadius(2.2F)
                 .setEntityDamage(10)
-                .setVisualEffects(loc -> {
+                .setRelativeEffects(loc -> {
                     loc.getWorld().spawnParticle(Particle.SMOKE_LARGE, loc, 20, 0.2, 0.2, 0.2, 0.1, null, true);
                     loc.getWorld().spawnParticle(Particle.BLOCK_CRACK, loc, 20, 0.6, 0.7, 0.6, 0.15, Material.REDSTONE_BLOCK.createBlockData(), true);
 

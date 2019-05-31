@@ -1,10 +1,10 @@
 name: Wands
 version: ${project.version}
-main: me.dylan.wands.Wands
+main: me.dylan.wands.Main
 prefix: Wands
 authors: [_JustDylan_]
 description: Adds a set of awesome magic wands to your server
-api-version: 1.13
+api-version: 1.14
 commands:
   wands:
     aliases: [wd]

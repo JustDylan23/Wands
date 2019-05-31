@@ -16,20 +16,20 @@ public enum Spell {
     BLOOD_EXPLODE(new BloodExplode()),
     BLOOD_STUN(new BloodStun());
 
-    public final BaseSpell spell;
+    public final BaseSpell baseSpell;
 
     Spell(BaseSpell spell) {
-        this.spell = spell;
+        this.baseSpell = spell;
     }
 
     public String getName() {
-        return spell.getName();
+        return baseSpell.getName();
     }
 
     public static Optional<BaseSpell> getSpell(String name) {
         if (name == null) return Optional.empty();
         try {
-            return Optional.of(Spell.valueOf(name).spell);
+            return Optional.of(Spell.valueOf(name).baseSpell);
         } catch (IllegalArgumentException e) {
             return Optional.empty();
         }

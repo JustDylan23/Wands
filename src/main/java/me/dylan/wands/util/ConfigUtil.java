@@ -1,16 +1,19 @@
 package me.dylan.wands.util;
 
-import me.dylan.wands.Wands;
+import me.dylan.wands.Main;
 import org.bukkit.configuration.file.FileConfiguration;
 
 public class ConfigUtil {
-    private static final FileConfiguration config = Wands.getPlugin().getConfig();
+    private static FileConfiguration config = Main.getPlugin().getConfig();
 
     private ConfigUtil() {
         throw new UnsupportedOperationException();
     }
 
-    //FIXME Make config working
+    public static void reloadConfig() {
+        Main.getPlugin().reloadConfig();
+        config = Main.getPlugin().getConfig();
+    }
 
     public static int getInt(String key) {
         return config.getInt(key);

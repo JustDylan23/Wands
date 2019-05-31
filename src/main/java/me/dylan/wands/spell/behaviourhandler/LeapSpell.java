@@ -7,7 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.util.Vector;
 
-//TODO Finish base template for spell that allow the caster to leap
+//TODO Finish base template for baseSpell that allow the caster to leap
 
 public class LeapSpell extends BaseBehaviour implements Listener {
 

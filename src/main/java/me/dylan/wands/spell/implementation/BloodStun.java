@@ -24,7 +24,7 @@ public class BloodStun extends BaseSpell {
                     Location location = entity.getLocation();
                     location.getWorld().playSound(location, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, 4, 1);
                 })
-                .setVisualEffects(loc -> {
+                .setRelativeEffects(loc -> {
                     loc.getWorld().spawnParticle(Particle.SMOKE_NORMAL, loc, 2, 0.2, 0.2, 0.2, 0.04, null, true);
                     loc.getWorld().spawnParticle(Particle.DRIP_LAVA, loc, 2, 0.3, 0.3, 0.3, 0.04, null, true);
                     loc.getWorld().spawnParticle(Particle.BLOCK_CRACK, loc, 1, 0.6, 0.7, 0.6, 0.15, Material.REDSTONE_BLOCK.createBlockData(), true);

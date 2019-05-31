@@ -23,7 +23,7 @@ public class MainTabCompleter implements TabCompleter {
     public List<String> onTabComplete(@Nonnull CommandSender sender, @Nonnull Command command, @Nonnull String alias, @Nonnull String[] args) {
         String value = args[args.length - 1];
         if (args.length == 1)
-            return validCompletions(value, "enable", "disable", "get", "set", "info", "spells");
+            return validCompletions(value, "enable", "disable", "get", "set", "info", "spells", "getconfig");
         if (args.length == 2) {
             if (args[0].equalsIgnoreCase("get"))
                 return validCompletions(value, ObtainableItem.getNames());
