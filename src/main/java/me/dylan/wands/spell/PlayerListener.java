@@ -15,7 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 import java.util.Map;
 
-public final class PlayerListener implements Listener {
+public class PlayerListener implements Listener {
 
     private final Map<Player, Long> lastUsed = new HashMap<>();
 
@@ -56,7 +56,7 @@ public final class PlayerListener implements Listener {
 
     /**
      * @param player Player.
-     * @return Amount of time since player last tried to cast a baseSpell.
+     * @return Amount of time since player last tried to cast a @link #ba.
      */
 
     private int getRemainingTime(Player player) {

@@ -12,9 +12,9 @@ public class SparkSpell extends BaseBehaviour {
     private final int effectDistance;
 
     //can be accessed via builder
-    private SparkSpell(AbstractBuilder.BaseMeta baseMeta, int effectDistance) {
+    private SparkSpell(AbstractBuilder.BaseMeta baseMeta, Builder builder) {
         super(baseMeta);
-        this.effectDistance = effectDistance;
+        this.effectDistance = builder.effectDistance;
     }
 
     @Override
@@ -58,14 +58,14 @@ public class SparkSpell extends BaseBehaviour {
             return this;
         }
 
+        @Override
+        public BaseBehaviour build() {
+            return new SparkSpell(getMeta(), this);
+        }
+
         public Builder setEffectDistance(int effectDistance) {
             this.effectDistance = effectDistance;
             return self();
-        }
-
-
-        public SparkSpell build() {
-            return new SparkSpell(getMeta(), effectDistance);
         }
     }
 }

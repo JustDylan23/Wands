@@ -29,7 +29,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
 
-public class CustomBow implements Listener {
+public class CursedBow implements Listener {
 
     private final String cursedArrow = "cursedArrow";
     private final Plugin plugin = Main.getPlugin();

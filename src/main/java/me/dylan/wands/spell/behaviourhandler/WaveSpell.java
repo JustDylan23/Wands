@@ -15,10 +15,10 @@ public class WaveSpell extends BaseBehaviour {
     private final boolean stopAtEntity;
 
     //can be accessed via builder
-    private WaveSpell(AbstractBuilder.BaseMeta baseMeta, int effectDistance, boolean stopAtEntity) {
+    private WaveSpell(AbstractBuilder.BaseMeta baseMeta, Builder builder) {
         super(baseMeta);
-        this.effectDistance = effectDistance;
-        this.stopAtEntity = stopAtEntity;
+        this.effectDistance = builder.effectDistance;
+        this.stopAtEntity = builder.stopAtEntity;
     }
 
     @Override
@@ -83,7 +83,7 @@ public class WaveSpell extends BaseBehaviour {
         }
 
         public WaveSpell build() {
-            return new WaveSpell(getMeta(), effectDistance, stopAtEntity);
+            return new WaveSpell(getMeta(), this);
         }
     }
 }
