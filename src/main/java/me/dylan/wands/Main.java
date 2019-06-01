@@ -26,6 +26,7 @@ public final class Main extends JavaPlugin {
         return plugin;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public void onEnable() {
         try {
@@ -38,7 +39,6 @@ public final class Main extends JavaPlugin {
         }
 
         PluginCommand cmd = this.getCommand("wands");
-        assert (cmd != null) : "Command \"wands\" was not set up correctly in the plugin.yml";
         cmd.setExecutor(new MainCommandHandler());
         cmd.setTabCompleter(new MainTabCompleter());
 
