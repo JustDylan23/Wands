@@ -10,7 +10,9 @@ import org.bukkit.event.Listener;
 import java.util.function.Consumer;
 
 public abstract class BaseBehaviour implements Listener {
+
     final static Main plugin = Main.getPlugin();
+
     final int entityDamage;
     final float effectAreaRange;
     final Consumer<Location> castEffects;

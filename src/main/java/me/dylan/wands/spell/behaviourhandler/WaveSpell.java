@@ -1,6 +1,5 @@
 package me.dylan.wands.spell.behaviourhandler;
 
-import me.dylan.wands.Main;
 import me.dylan.wands.util.EffectUtil;
 import org.apache.commons.lang.RandomStringUtils;
 import org.bukkit.Bukkit;
@@ -54,7 +53,7 @@ public class WaveSpell extends BaseBehaviour {
                     }
                 }
             }
-        }.runTaskTimer(Main.getPlugin(), 1, 1);
+        }.runTaskTimer(plugin, 1, 1);
     }
 
     public static Builder newBuilder() {
