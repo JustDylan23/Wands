@@ -1,9 +1,9 @@
 package me.dylan.wands;
 
 import me.dylan.wands.commandhandler.CommandHandler;
-import me.dylan.wands.commandhandler.TabHandler;
-import me.dylan.wands.customitem.CustomBow;
-import me.dylan.wands.customitem.CustomDagger;
+import me.dylan.wands.commandhandler.TabCompletionHandler;
+import me.dylan.wands.customitem.CursedBow;
+import me.dylan.wands.customitem.AssasinDagger;
 import me.dylan.wands.pluginmeta.ConfigurableData;
 import me.dylan.wands.pluginmeta.ListenerRegistry;
 import me.dylan.wands.spell.PlayerListener;
@@ -41,14 +41,14 @@ public final class Main extends JavaPlugin {
 
         PluginCommand cmd = this.getCommand("wands");
         cmd.setExecutor(new CommandHandler());
-        cmd.setTabCompleter(new TabHandler());
+        cmd.setTabCompleter(new TabCompletionHandler());
 
         listenerRegistry = new ListenerRegistry();
         configurableData = new ConfigurableData();
         listenerRegistry.addToggleableListener(
                 new PlayerListener(),
-                new CustomDagger(),
-                new CustomBow()
+                new AssasinDagger(),
+                new CursedBow()
         );
         log("Succesfully enabled");
     }

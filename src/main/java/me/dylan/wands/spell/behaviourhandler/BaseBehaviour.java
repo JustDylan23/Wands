@@ -7,6 +7,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
+import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
 public abstract class BaseBehaviour implements Listener {
@@ -19,7 +20,7 @@ public abstract class BaseBehaviour implements Listener {
     final Consumer<Location> visualEffects;
     final Consumer<Entity> entityEffects;
 
-    BaseBehaviour(AbstractBuilder.BaseMeta baseMeta) {
+    BaseBehaviour(@Nonnull AbstractBuilder.BaseMeta baseMeta) {
         this.entityDamage = baseMeta.entityDamage;
         this.effectAreaRange = baseMeta.effectRadius;
         this.castEffects = baseMeta.castEffects;
@@ -35,6 +36,7 @@ public abstract class BaseBehaviour implements Listener {
         final BaseMeta baseMeta = new BaseMeta();
 
         abstract T self();
+        public  abstract BaseBehaviour build();
 
         /**
          * Sets the damage that is applied to the Damageable effected by the baseSpell.
@@ -103,8 +105,8 @@ public abstract class BaseBehaviour implements Listener {
 
         static class BaseMeta {
 
-            private int entityDamage = 3;
-            private float effectRadius = 2;
+            private int entityDamage = 0;
+            private float effectRadius = 0;
             private Consumer<Location> castEffects = DataUtil.emptyConsumer();
             private Consumer<Location> relativeEffects = DataUtil.emptyConsumer();
             private Consumer<Entity> entityEffects = DataUtil.emptyConsumer();

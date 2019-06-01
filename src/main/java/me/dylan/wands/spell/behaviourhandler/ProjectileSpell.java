@@ -31,16 +31,16 @@ public class ProjectileSpell<T extends Projectile> extends BaseBehaviour impleme
     private final String metadataTag;
 
     //can be accessed via builder
-    private ProjectileSpell(AbstractBuilder.BaseMeta baseMeta, Class<T> projectile, Consumer<T> projectileProps, Consumer<Location> hitEffects, float speed, int lifeTime, int pushSpeed) {
+    private ProjectileSpell(AbstractBuilder.BaseMeta baseMeta, Builder<T> builder) {
         super(baseMeta);
-        ListenerRegistry.addListener(this);
-        this.projectile = projectile;
-        this.projectileProps = projectileProps;
-        this.hitEffects = hitEffects;
-        this.speed = speed;
-        this.lifeTime = lifeTime;
-        this.pushSpeed = pushSpeed;
+        this.projectile = builder.projectile;
+        this.projectileProps = builder.projectileProps;
+        this.hitEffects = builder.hitEffects;
+        this.speed = builder.speed;
+        this.lifeTime = builder.lifeTime;
+        this.pushSpeed = builder.pushSpeed;
         this.metadataTag = "ProjectileSpell_" + ++idCount;
+        ListenerRegistry.addListener(this);
     }
 
     @Override
@@ -143,6 +143,11 @@ public class ProjectileSpell<T extends Projectile> extends BaseBehaviour impleme
             return this;
         }
 
+        @Override
+        public BaseBehaviour build() {
+            return new ProjectileSpell<>(getMeta(), this);
+        }
+
         public Builder<T> setProjectileProps(Consumer<T> projectileProps) {
             this.projectileProps = projectileProps;
             return self();
@@ -161,10 +166,6 @@ public class ProjectileSpell<T extends Projectile> extends BaseBehaviour impleme
         public Builder<T> setPushSpeed(int pushSpeed) {
             this.pushSpeed = pushSpeed;
             return self();
-        }
-
-        public ProjectileSpell<T> build() {
-            return new ProjectileSpell<>(getMeta(), projectile, projectileProps, hitEffects, speed, lifeTime, pushSpeed);
         }
     }
 }

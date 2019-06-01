@@ -1,8 +1,8 @@
 package me.dylan.wands.pluginmeta;
 
 import me.dylan.wands.Main;
-import me.dylan.wands.customitem.CustomBow;
-import me.dylan.wands.customitem.CustomDagger;
+import me.dylan.wands.customitem.CursedBow;
+import me.dylan.wands.customitem.AssasinDagger;
 import me.dylan.wands.spell.Spell;
 import me.dylan.wands.util.ItemUtil;
 import me.dylan.wands.util.WandUtil;
@@ -23,7 +23,7 @@ public enum ObtainableItem {
     ASSASSINS_DAGGER(ItemUtil.getItemStack(() -> {
         ItemStack itemStack = new ItemStack(Material.MUSIC_DISC_MALL);
         ItemUtil.setName(itemStack, "&dAssassin's &8Dagger");
-        ItemUtil.setPersistentData(itemStack, CustomDagger.ID_TAG, PersistentDataType.BYTE, (byte) 1);
+        ItemUtil.setPersistentData(itemStack, AssasinDagger.ID_TAG, PersistentDataType.BYTE, (byte) 1);
         return itemStack;
     })),
 
@@ -35,7 +35,7 @@ public enum ObtainableItem {
             meta.addEnchant(Enchantment.ARROW_INFINITE, 1, true);
             meta.addItemFlags(ItemFlag.values());
         });
-        ItemUtil.setPersistentData(itemStack, CustomBow.ID_TAG, PersistentDataType.BYTE, (byte) 1);
+        ItemUtil.setPersistentData(itemStack, CursedBow.ID_TAG, PersistentDataType.BYTE, (byte) 1);
         return itemStack;
     })),
 

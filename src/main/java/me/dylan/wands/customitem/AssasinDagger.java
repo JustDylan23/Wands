@@ -23,7 +23,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-public final class CustomDagger implements Listener {
+public class AssasinDagger implements Listener {
 
     private final Main plugin = Main.getPlugin();
     private final String leapKey = "therosJump";
