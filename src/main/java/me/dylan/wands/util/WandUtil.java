@@ -93,6 +93,6 @@ public class WandUtil {
         setIndex(itemStack, index);
 
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.5F, 0.5F);
-        player.sendActionBar("§6Current baseSpell: §7§l" + spells[index].getName());
+        player.sendActionBar("§6Current Spell: §7§l" + spells[index].getName());
     }
 }
