@@ -36,7 +36,7 @@ public enum Spell {
     }
 
     public static BaseSpell[] getSpells(String unparsedArray) throws NoSuchElementException {
-        String[] parsedKeys = unparsedArray.split(",");
+        String[] parsedKeys = unparsedArray.split(";");
         BaseSpell[] spells = new BaseSpell[parsedKeys.length];
         for (int i = 0; i < parsedKeys.length; i++) {
             String spellName = parsedKeys[i];

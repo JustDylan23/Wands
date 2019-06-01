@@ -14,7 +14,7 @@ import org.bukkit.plugin.Plugin;
 
 public abstract class BaseSpell {
 
-    protected final Plugin plugin = Main.getPlugin();
+    protected static final Plugin plugin = Main.getPlugin();
     private final String displayName;
     private final BaseBehaviour baseBehaviour;
 

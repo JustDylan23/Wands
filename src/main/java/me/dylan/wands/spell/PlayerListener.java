@@ -17,10 +17,10 @@ import java.util.Map;
 
 public final class PlayerListener implements Listener {
 
-    private static final Map<Player, Long> lastUsed = new HashMap<>();
+    private final Map<Player, Long> lastUsed = new HashMap<>();
 
     @EventHandler
-    public void onPlayerInteract(PlayerInteractEvent event) {
+    private void onPlayerInteract(PlayerInteractEvent event) {
         Action action = event.getAction();
         if (action == Action.PHYSICAL) return;
         Player player = event.getPlayer();
@@ -76,7 +76,7 @@ public final class PlayerListener implements Listener {
      */
 
     @EventHandler
-    public static void onQuit(PlayerQuitEvent event) {
+    private void onQuit(PlayerQuitEvent event) {
         lastUsed.remove(event.getPlayer());
     }
 

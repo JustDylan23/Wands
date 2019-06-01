@@ -12,8 +12,7 @@ import org.bukkit.entity.Player;
 import javax.annotation.Nonnull;
 import java.util.StringJoiner;
 
-public class MainCommandHandler implements CommandExecutor {
-    @SuppressWarnings("ConstantConditions")
+public class CommandHandler implements CommandExecutor {
     @Override
     public boolean onCommand(@Nonnull CommandSender sender, @Nonnull Command cmd, @Nonnull String label, String[] args) {
         switch (args.length) {

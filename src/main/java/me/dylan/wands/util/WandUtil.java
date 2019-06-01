@@ -32,7 +32,7 @@ public class WandUtil {
     }
 
     public static void setSpells(ItemStack itemStack, Spell... spells) {
-        StringJoiner stringJoiner = new StringJoiner(",");
+        StringJoiner stringJoiner = new StringJoiner(";");
         for (Spell spell : spells) {
             stringJoiner.add(spell.toString());
         }

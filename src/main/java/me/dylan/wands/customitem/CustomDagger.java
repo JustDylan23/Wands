@@ -36,7 +36,7 @@ public final class CustomDagger implements Listener {
     }
 
     @EventHandler
-    public void onSpringToggle(PlayerToggleSprintEvent event) {
+    private void onSpringToggle(PlayerToggleSprintEvent event) {
         Player player = event.getPlayer();
         if (hasDagger(player) && event.isSprinting()) {
             Bukkit.getScheduler().runTaskLater(Main.getPlugin(), () -> sprintParticles(player), 1);
@@ -44,7 +44,7 @@ public final class CustomDagger implements Listener {
     }
 
     @EventHandler
-    public void onAttack(EntityDamageByEntityEvent event) {
+    private void onAttack(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player) {
             Player player = (Player) event.getDamager();
             LivingEntity victim;
@@ -64,7 +64,7 @@ public final class CustomDagger implements Listener {
     }
 
     @EventHandler
-    public void leap(PlayerInteractEvent event) {
+    private void leap(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         if (hasDagger(player)) {
             if (event.getHand() != null) {
@@ -96,7 +96,7 @@ public final class CustomDagger implements Listener {
     }
 
     @EventHandler
-    public void fallDamage(EntityDamageEvent event) {
+    private void fallDamage(EntityDamageEvent event) {
         Entity entity = event.getEntity();
         if (entity instanceof Player) {
             if (event.getCause() == EntityDamageEvent.DamageCause.FALL) {
@@ -109,7 +109,7 @@ public final class CustomDagger implements Listener {
     }
 
     @EventHandler
-    public void onSneakToggle(PlayerToggleSneakEvent event) {
+    private void onSneakToggle(PlayerToggleSneakEvent event) {
         Player player = event.getPlayer();
         if (hasDagger(player)) {
             if (event.isSneaking() && player.isOnGround()) {
@@ -123,7 +123,7 @@ public final class CustomDagger implements Listener {
     }
 
     @EventHandler
-    public void onTakingDamage(EntityDamageEvent event) {
+    private void onTakingDamage(EntityDamageEvent event) {
         Entity entity = event.getEntity();
         if (entity instanceof Player) {
             Player player = (Player) entity;
@@ -159,7 +159,7 @@ public final class CustomDagger implements Listener {
     }
 
     @EventHandler
-    public void onChangeSlot(PlayerItemHeldEvent event) {
+    private void onChangeSlot(PlayerItemHeldEvent event) {
         Player player = event.getPlayer();
         if (player.isSneaking() && hasDagger(player)) {
             cover(player);

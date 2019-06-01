@@ -1,7 +1,7 @@
 package me.dylan.wands;
 
-import me.dylan.wands.commandhandler.MainCommandHandler;
-import me.dylan.wands.commandhandler.MainTabCompleter;
+import me.dylan.wands.commandhandler.CommandHandler;
+import me.dylan.wands.commandhandler.TabHandler;
 import me.dylan.wands.customitem.CustomBow;
 import me.dylan.wands.customitem.CustomDagger;
 import me.dylan.wands.pluginmeta.ConfigurableData;
@@ -37,12 +37,12 @@ public final class Main extends JavaPlugin {
             log("§cDisabling plugin...");
             return;
         }
+        plugin = this;
 
         PluginCommand cmd = this.getCommand("wands");
-        cmd.setExecutor(new MainCommandHandler());
-        cmd.setTabCompleter(new MainTabCompleter());
+        cmd.setExecutor(new CommandHandler());
+        cmd.setTabCompleter(new TabHandler());
 
-        plugin = this;
         listenerRegistry = new ListenerRegistry();
         configurableData = new ConfigurableData();
         listenerRegistry.addToggleableListener(

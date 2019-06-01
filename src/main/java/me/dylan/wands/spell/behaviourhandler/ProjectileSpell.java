@@ -1,6 +1,5 @@
 package me.dylan.wands.spell.behaviourhandler;
 
-import me.dylan.wands.Main;
 import me.dylan.wands.pluginmeta.ListenerRegistry;
 import me.dylan.wands.util.DataUtil;
 import me.dylan.wands.util.EffectUtil;
@@ -68,7 +67,7 @@ public class ProjectileSpell<T extends Projectile> extends BaseBehaviour impleme
     }
 
     @EventHandler
-    public void onProjectileHit(ProjectileHitEvent event) {
+    private void onProjectileHit(ProjectileHitEvent event) {
         Projectile projectile = event.getEntity();
         if (projectile.hasMetadata(metadataTag)) {
             hit((Player) projectile.getShooter(), projectile);
@@ -76,14 +75,14 @@ public class ProjectileSpell<T extends Projectile> extends BaseBehaviour impleme
     }
 
     @EventHandler
-    public void onDamage(EntityDamageByEntityEvent event) {
+    private void onDamage(EntityDamageByEntityEvent event) {
         if (event.getCause() == EntityDamageEvent.DamageCause.PROJECTILE && event.getDamager().hasMetadata(metadataTag)) {
             event.setCancelled(true);
         }
     }
 
     private void activateLifeTimer(Projectile projectile) {
-        Bukkit.getScheduler().runTaskLater(Main.getPlugin(), () -> {
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
             if (projectile.isValid()) {
                 hit((Player) projectile.getShooter(), projectile);
             }
@@ -99,11 +98,11 @@ public class ProjectileSpell<T extends Projectile> extends BaseBehaviour impleme
 
                 } else cancel();
             }
-        }.runTaskTimer(Main.getPlugin(), 0, 1);
+        }.runTaskTimer(plugin, 0, 1);
     }
 
     @EventHandler
-    public void onEntityExplode(EntityExplodeEvent event) {
+    private void onEntityExplode(EntityExplodeEvent event) {
         if (event.getEntity().hasMetadata(metadataTag)) {
             event.setCancelled(true);
         }

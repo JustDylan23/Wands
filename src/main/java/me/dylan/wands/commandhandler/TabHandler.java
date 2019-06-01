@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class MainTabCompleter implements TabCompleter {
+public class TabHandler implements TabCompleter {
 
     private List<String> validCompletions(String value, String... values) {
         return Arrays.stream(values)

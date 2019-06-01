@@ -36,7 +36,7 @@ public class CustomBow implements Listener {
     private final Set<Player> drawing = new HashSet<>();
     private final Set<Player> hasDrawn = new HashSet<>();
 
-    public static final String ID_TAG = "artifact-bow";
+    public final static String ID_TAG = "artifact-bow";
 
     private boolean hasBow(Player player) {
         return ItemUtil.hasPersistentData(player.getInventory().getItemInMainHand(), ID_TAG, PersistentDataType.BYTE);
