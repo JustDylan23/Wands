@@ -31,33 +31,8 @@ public final class MovingBlock extends Behaviour implements Listener {
         this.hitEffects = builder.hitEffects;
     }
 
-    static class BlockReverter implements Runnable {
-
-        private BlockState state;
-        private final Location originLoc;
-        private boolean canRun = true;
-        private final MovingBlock parent;
-        private final Player player;
-
-        BlockReverter(BlockState state, Location originLoc, Player player, MovingBlock parent) {
-            this.state = state;
-            this.originLoc = originLoc;
-            this.parent = parent;
-            this.player = player;
-        }
-
-        void earlyRun() {
-            run();
-            canRun = false;
-        }
-
-        @Override
-        public void run() {
-            if (canRun) {
-                state.update(true);
-                parent.selectedBlock.remove(player);
-            }
-        }
+    public static Builder newBuilder(Material material) {
+        return new Builder(material);
     }
 
     @Override
@@ -112,8 +87,33 @@ public final class MovingBlock extends Behaviour implements Listener {
         return false;
     }
 
-    public static Builder newBuilder(Material material) {
-        return new Builder(material);
+    static class BlockReverter implements Runnable {
+
+        private final Location originLoc;
+        private final MovingBlock parent;
+        private final Player player;
+        private BlockState state;
+        private boolean canRun = true;
+
+        BlockReverter(BlockState state, Location originLoc, Player player, MovingBlock parent) {
+            this.state = state;
+            this.originLoc = originLoc;
+            this.parent = parent;
+            this.player = player;
+        }
+
+        void earlyRun() {
+            run();
+            canRun = false;
+        }
+
+        @Override
+        public void run() {
+            if (canRun) {
+                state.update(true);
+                parent.selectedBlock.remove(player);
+            }
+        }
     }
 
     public static class Builder extends AbstractBuilder<Builder> {
