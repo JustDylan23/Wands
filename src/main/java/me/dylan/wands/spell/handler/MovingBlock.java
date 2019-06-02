@@ -22,7 +22,7 @@ public final class MovingBlock extends Behaviour implements Listener {
 
     private final Material material;
     private final Consumer<Location> hitEffects;
-    private final Map<Player, BlockReverter> hasBlockSelected = new HashMap<>();
+    private final Map<Player, BlockReverter> selectedBlock = new HashMap<>();
 
     private MovingBlock(Builder builder) {
         super(builder.baseMeta);
@@ -55,37 +55,17 @@ public final class MovingBlock extends Behaviour implements Listener {
         public void run() {
             if (canContinue) {
                 state.update(true);
-                parent.hasBlockSelected.remove(player);
+                parent.selectedBlock.remove(player);
             }
         }
     }
 
     @Override
     public boolean cast(Player player) {
-        if (hasBlockSelected.containsKey(player)) {
-            BlockReverter blockReverter = hasBlockSelected.get(player);
-            blockReverter.earlyRun();
-            Location location = blockReverter.location;
-            FallingBlock fallingBlock = location.getWorld().spawnFallingBlock(location, Bukkit.createBlockData(material));
-            fallingBlock.setVelocity(new Vector(0, 1, 0));
-            Block block = player.getTargetBlock(30);
-            if (block != null) {
-                Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                    if (fallingBlock.isValid()) {
-                        Vector vector = block
-                                .getLocation()
-                                .toCenterLocation()
-                                .subtract(fallingBlock.getLocation())
-                                .toVector()
-                                .normalize()
-                                .multiply(1.2);
-                        fallingBlock.setVelocity(vector);
-                    }
-                }, 20L);
-                return true;
-            }
-            return false;
-        }
+        return selectedBlock.containsKey(player) ? launchBlock(player) : prepareBlock(player);
+    }
+
+    private boolean prepareBlock(Player player) {
         Block block = player.getTargetBlock(10);
         if (block != null && block.getType() != Material.AIR) {
             Location location = block.getLocation().toCenterLocation();
@@ -99,7 +79,7 @@ public final class MovingBlock extends Behaviour implements Listener {
             }
             block.setType(material);
             BlockReverter blockReverter = new BlockReverter(oldState, location, player, this);
-            hasBlockSelected.put(player, blockReverter);
+            selectedBlock.put(player, blockReverter);
             Bukkit.getScheduler().runTaskLater(plugin, blockReverter, 100L);
         } else {
             player.sendActionBar("no blocks in range");
@@ -107,12 +87,29 @@ public final class MovingBlock extends Behaviour implements Listener {
         return false;
     }
 
-    private Location getBlockLocation(Player player) {
-        org.bukkit.block.Block block = player.getTargetBlock(16);
+    private boolean launchBlock(Player player) {
+        BlockReverter blockReverter = selectedBlock.get(player);
+        blockReverter.earlyRun();
+        Location location = blockReverter.location;
+        FallingBlock fallingBlock = location.getWorld().spawnFallingBlock(location, Bukkit.createBlockData(material));
+        fallingBlock.setVelocity(new Vector(0, 1, 0));
+        Block block = player.getTargetBlock(30);
         if (block != null) {
-            return block.getLocation().toCenterLocation().subtract(player.getLocation().getDirection().normalize());
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                if (fallingBlock.isValid()) {
+                    fallingBlock.setVelocity(block
+                            .getLocation()
+                            .toCenterLocation()
+                            .subtract(fallingBlock.getLocation())
+                            .toVector()
+                            .normalize()
+                            .multiply(1.2)
+                    );
+                }
+            }, 20L);
+            return true;
         }
-        return null;
+        return false;
     }
 
     public static Builder newBuilder(Material material) {
