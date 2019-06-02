@@ -1,4 +1,4 @@
-package me.dylan.wands.spell.behaviourhandler;
+package me.dylan.wands.spell.handler;
 
 import me.dylan.wands.pluginmeta.ListenerRegistry;
 import me.dylan.wands.util.DataUtil;
@@ -7,7 +7,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -20,7 +19,7 @@ import org.bukkit.util.Vector;
 
 import java.util.function.Consumer;
 
-public class ProjectileSpell<T extends Projectile> extends BaseBehaviour implements Listener {
+public final class Projectile<T extends org.bukkit.entity.Projectile> extends Behaviour implements Listener {
     private static int idCount;
     private final Class<T> projectile;
     private final Consumer<T> projectileProps;
@@ -31,8 +30,8 @@ public class ProjectileSpell<T extends Projectile> extends BaseBehaviour impleme
     private final String metadataTag;
 
     //can be accessed via builder
-    private ProjectileSpell(AbstractBuilder.BaseMeta baseMeta, Builder<T> builder) {
-        super(baseMeta);
+    private Projectile(Builder<T> builder) {
+        super(builder.baseMeta);
         this.projectile = builder.projectile;
         this.projectileProps = builder.projectileProps;
         this.hitEffects = builder.hitEffects;
@@ -44,7 +43,7 @@ public class ProjectileSpell<T extends Projectile> extends BaseBehaviour impleme
     }
 
     @Override
-    public void cast(Player player) {
+    public boolean cast(Player player) {
         Vector velocity = player.getLocation().getDirection().multiply(speed);
         T projectile = player.launchProjectile(this.projectile, velocity);
         trail(projectile);
@@ -52,9 +51,10 @@ public class ProjectileSpell<T extends Projectile> extends BaseBehaviour impleme
         projectile.setMetadata(metadataTag, new FixedMetadataValue(plugin, true));
         activateLifeTimer(projectile);
         castEffects.accept(player.getLocation());
+        return true;
     }
 
-    private void hit(Player player, Projectile projectile) {
+    private void hit(Player player, org.bukkit.entity.Projectile projectile) {
         projectile.remove();
         Location loc = projectile.getLocation();
         EffectUtil.getNearbyDamageables(player, loc, effectAreaRange).forEach(entity -> {
@@ -68,7 +68,7 @@ public class ProjectileSpell<T extends Projectile> extends BaseBehaviour impleme
 
     @EventHandler
     private void onProjectileHit(ProjectileHitEvent event) {
-        Projectile projectile = event.getEntity();
+        org.bukkit.entity.Projectile projectile = event.getEntity();
         if (projectile.hasMetadata(metadataTag)) {
             hit((Player) projectile.getShooter(), projectile);
         }
@@ -81,7 +81,7 @@ public class ProjectileSpell<T extends Projectile> extends BaseBehaviour impleme
         }
     }
 
-    private void activateLifeTimer(Projectile projectile) {
+    private void activateLifeTimer(org.bukkit.entity.Projectile projectile) {
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             if (projectile.isValid()) {
                 hit((Player) projectile.getShooter(), projectile);
@@ -89,7 +89,7 @@ public class ProjectileSpell<T extends Projectile> extends BaseBehaviour impleme
         }, lifeTime);
     }
 
-    private void trail(Projectile projectile) {
+    private void trail(org.bukkit.entity.Projectile projectile) {
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -119,11 +119,11 @@ public class ProjectileSpell<T extends Projectile> extends BaseBehaviour impleme
         }
     }
 
-    public static <T extends Projectile> Builder<T> newBuilder(Class<T> projectileClass, float speed) {
+    public static <T extends org.bukkit.entity.Projectile> Builder<T> newBuilder(Class<T> projectileClass, float speed) {
         return new Builder<>(projectileClass, speed);
     }
 
-    public static class Builder<T extends Projectile> extends AbstractBuilder<Builder<T>> {
+    public static class Builder<T extends org.bukkit.entity.Projectile> extends AbstractBuilder<Builder<T>> {
 
         private final Class<T> projectile;
         private final float speed;
@@ -144,8 +144,8 @@ public class ProjectileSpell<T extends Projectile> extends BaseBehaviour impleme
         }
 
         @Override
-        public BaseBehaviour build() {
-            return new ProjectileSpell<>(getMeta(), this);
+        public Behaviour build() {
+            return new Projectile<>(this);
         }
 
         public Builder<T> setProjectileProps(Consumer<T> projectileProps) {

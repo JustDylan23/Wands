@@ -1,18 +1,18 @@
 package me.dylan.wands.spell.implementation;
 
-import me.dylan.wands.spell.BaseSpell;
-import me.dylan.wands.spell.behaviourhandler.BaseBehaviour;
-import me.dylan.wands.spell.behaviourhandler.SparkSpell;
+import me.dylan.wands.spell.Spell;
+import me.dylan.wands.spell.handler.Behaviour;
+import me.dylan.wands.spell.handler.Spark;
 import me.dylan.wands.util.EffectUtil;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 
-public class BloodSpark extends BaseSpell {
+public class BloodSpark extends Spell {
     @Override
-    public BaseBehaviour getBaseBehaviour() {
-        return SparkSpell.newBuilder()
+    public Behaviour getBehaviour() {
+        return Spark.newBuilder()
                 .setEffectRadius(2.2F)
                 .setEntityDamage(10)
                 .setRelativeEffects(loc -> {

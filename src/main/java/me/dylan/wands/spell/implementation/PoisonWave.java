@@ -1,8 +1,8 @@
 package me.dylan.wands.spell.implementation;
 
-import me.dylan.wands.spell.BaseSpell;
-import me.dylan.wands.spell.behaviourhandler.BaseBehaviour;
-import me.dylan.wands.spell.behaviourhandler.WaveSpell;
+import me.dylan.wands.spell.Spell;
+import me.dylan.wands.spell.handler.Behaviour;
+import me.dylan.wands.spell.handler.Wave;
 import me.dylan.wands.util.EffectUtil;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -10,10 +10,10 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class PoisonWave extends BaseSpell {
+public class PoisonWave extends Spell {
     @Override
-    public BaseBehaviour getBaseBehaviour() {
-        return WaveSpell.newBuilder()
+    public Behaviour getBehaviour() {
+        return Wave.newBuilder()
                 .setEffectRadius(2.2F)
                 .setEntityDamage(1)
                 .setCastEffects(location -> location.getWorld().playSound(location, Sound.ENTITY_EVOKER_CAST_SPELL, 3, 1))

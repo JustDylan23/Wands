@@ -1,4 +1,4 @@
-package me.dylan.wands.spell.behaviourhandler;
+package me.dylan.wands.spell.handler;
 
 import me.dylan.wands.util.EffectUtil;
 import org.bukkit.Location;
@@ -8,17 +8,17 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-public class SparkSpell extends BaseBehaviour {
+public final class Spark extends Behaviour {
     private final int effectDistance;
 
     //can be accessed via builder
-    private SparkSpell(AbstractBuilder.BaseMeta baseMeta, Builder builder) {
-        super(baseMeta);
+    private Spark(Builder builder) {
+        super(builder.baseMeta);
         this.effectDistance = builder.effectDistance;
     }
 
     @Override
-    public void cast(Player player) {
+    public boolean cast(Player player) {
         Location loc = getSpellLocation(player);
         Iterable<Damageable> effectedEntities = EffectUtil.getNearbyDamageables(player, loc, effectAreaRange);
         castEffects.accept(player.getLocation());
@@ -28,6 +28,7 @@ public class SparkSpell extends BaseBehaviour {
             entityEffects.accept(entity);
         });
         visualEffects.accept(loc);
+        return true;
     }
 
     private Location getSpellLocation(Player player) {
@@ -39,7 +40,7 @@ public class SparkSpell extends BaseBehaviour {
         if (block != null) {
             return block.getLocation().toCenterLocation().subtract(player.getLocation().getDirection().normalize());
         }
-        return player.getLocation().getDirection().normalize().multiply(effectDistance).toLocation(player.getWorld()).add(player.getLocation());
+        return player.getLocation();
     }
 
     public static Builder newBuilder() {
@@ -59,8 +60,8 @@ public class SparkSpell extends BaseBehaviour {
         }
 
         @Override
-        public BaseBehaviour build() {
-            return new SparkSpell(getMeta(), this);
+        public Behaviour build() {
+            return new Spark(this);
         }
 
         public Builder setEffectDistance(int effectDistance) {

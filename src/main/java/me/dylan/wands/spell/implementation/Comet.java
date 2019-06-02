@@ -1,8 +1,8 @@
 package me.dylan.wands.spell.implementation;
 
-import me.dylan.wands.spell.BaseSpell;
-import me.dylan.wands.spell.behaviourhandler.BaseBehaviour;
-import me.dylan.wands.spell.behaviourhandler.ProjectileSpell;
+import me.dylan.wands.spell.Spell;
+import me.dylan.wands.spell.handler.Behaviour;
+import me.dylan.wands.spell.handler.Projectile;
 import me.dylan.wands.util.EffectUtil;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -10,10 +10,10 @@ import org.bukkit.SoundCategory;
 import org.bukkit.World;
 import org.bukkit.entity.SmallFireball;
 
-public class Comet extends BaseSpell {
+public class Comet extends Spell {
     @Override
-    public BaseBehaviour getBaseBehaviour() {
-        return ProjectileSpell.newBuilder(SmallFireball.class, 3F)
+    public Behaviour getBehaviour() {
+        return Projectile.newBuilder(SmallFireball.class, 3F)
                 .setCastEffects(loc ->
                         loc.getWorld().playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_BLAST, SoundCategory.MASTER, 5F, 1F)
                 )

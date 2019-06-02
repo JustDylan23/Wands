@@ -1,9 +1,9 @@
 package me.dylan.wands.pluginmeta;
 
 import me.dylan.wands.Main;
-import me.dylan.wands.customitem.CursedBow;
 import me.dylan.wands.customitem.AssasinDagger;
-import me.dylan.wands.spell.Spell;
+import me.dylan.wands.customitem.CursedBow;
+import me.dylan.wands.spell.SpellType;
 import me.dylan.wands.util.ItemUtil;
 import me.dylan.wands.util.WandUtil;
 import org.bukkit.Bukkit;
@@ -43,7 +43,7 @@ public enum ObtainableItem {
         ItemStack itemStack = new ItemStack(Material.STICK);
         ItemUtil.setName(itemStack, "&8&lMagic Wand");
         WandUtil.setAsWand(itemStack);
-        WandUtil.setSpells(itemStack, Spell.COMET, Spell.SPARK, Spell.CONFUSE, Spell.LAUNCH, Spell.POISON_WAVE);
+        WandUtil.setSpells(itemStack, SpellType.COMET, SpellType.SPARK, SpellType.CONFUSE, SpellType.LAUNCH, SpellType.POISON_WAVE);
         return itemStack;
     })),
 
@@ -51,7 +51,7 @@ public enum ObtainableItem {
         ItemStack itemStack = new ItemStack(Material.NETHER_WART);
         ItemUtil.setName(itemStack, "&cBlood Magic");
         WandUtil.setAsWand(itemStack);
-        WandUtil.setSpells(itemStack, Spell.BLOOD_WAVE, Spell.BLOOD_SPARK, Spell.BLOOD_EXPLODE, Spell.BLOOD_STUN);
+        WandUtil.setSpells(itemStack, SpellType.BLOOD_WAVE, SpellType.BLOOD_SPARK, SpellType.BLOOD_EXPLODE, SpellType.BLOOD_STUN, SpellType.BLOOD_BLOCK);
         return itemStack;
     }));
 
