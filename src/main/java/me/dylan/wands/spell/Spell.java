@@ -1,48 +1,35 @@
 package me.dylan.wands.spell;
 
-import me.dylan.wands.spell.implementation.*;
+import me.dylan.wands.Main;
+import me.dylan.wands.spell.handler.Behaviour;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
-import java.util.NoSuchElementException;
-import java.util.Optional;
+/**
+ * @author Dylan
+ * The Spell class is the base class for every spell that can be casted.
+ * It's primarily feature is to store an instance of an implementation Behaviour.
+ * This object should contain what the Spell does when casted.
+ */
 
-public enum Spell {
-    COMET(new Comet()),
-    SPARK(new Spark()),
-    LAUNCH(new Launch()),
-    CONFUSE(new Confuse()),
-    POISON_WAVE(new PoisonWave()),
-    BLOOD_SPARK(new BloodSpark()),
-    BLOOD_WAVE(new BloodWave()),
-    BLOOD_EXPLODE(new BloodExplode()),
-    BLOOD_STUN(new BloodStun());
+public abstract class Spell {
 
-    public final BaseSpell baseSpell;
+    protected static final Plugin plugin = Main.getPlugin();
+    private final String displayName;
+    private final Behaviour behaviour;
 
-    Spell(BaseSpell spell) {
-        this.baseSpell = spell;
+    protected Spell() {
+        this.behaviour = getBehaviour();
+        this.displayName = getClass().getSimpleName();
     }
 
     public String getName() {
-        return baseSpell.getName();
+        return displayName;
     }
 
-    public static Optional<BaseSpell> getSpell(String name) {
-        if (name == null) return Optional.empty();
-        try {
-            return Optional.of(Spell.valueOf(name).baseSpell);
-        } catch (IllegalArgumentException e) {
-            return Optional.empty();
-        }
-    }
+    protected abstract Behaviour getBehaviour();
 
-    public static BaseSpell[] getSpells(String unparsedArray) throws NoSuchElementException {
-        String[] parsedKeys = unparsedArray.split(";");
-        BaseSpell[] spells = new BaseSpell[parsedKeys.length];
-        for (int i = 0; i < parsedKeys.length; i++) {
-            String spellName = parsedKeys[i];
-            spells[i] = getSpell(spellName).orElseThrow(() ->
-                    new NoSuchElementException("BaseSpell with identifier " + spellName + " is not registered!"));
-        }
-        return spells;
+    public final boolean cast(Player player) {
+        return behaviour.cast(player);
     }
 }

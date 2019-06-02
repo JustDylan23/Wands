@@ -1,4 +1,4 @@
-package me.dylan.wands.spell.behaviourhandler;
+package me.dylan.wands.spell.handler;
 
 import me.dylan.wands.Main;
 import me.dylan.wands.util.DataUtil;
@@ -10,7 +10,7 @@ import org.bukkit.event.Listener;
 import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
-public abstract class BaseBehaviour implements Listener {
+public abstract class Behaviour implements Listener {
 
     final static Main plugin = Main.getPlugin();
 
@@ -20,7 +20,7 @@ public abstract class BaseBehaviour implements Listener {
     final Consumer<Location> visualEffects;
     final Consumer<Entity> entityEffects;
 
-    BaseBehaviour(@Nonnull AbstractBuilder.BaseMeta baseMeta) {
+    Behaviour(@Nonnull AbstractBuilder.BaseMeta baseMeta) {
         this.entityDamage = baseMeta.entityDamage;
         this.effectAreaRange = baseMeta.effectRadius;
         this.castEffects = baseMeta.castEffects;
@@ -28,7 +28,7 @@ public abstract class BaseBehaviour implements Listener {
         this.entityEffects = baseMeta.entityEffects;
     }
 
-    public abstract void cast(Player player);
+    public abstract boolean cast(Player player);
 
 
     public static abstract class AbstractBuilder<T extends AbstractBuilder<T>> {
@@ -36,10 +36,10 @@ public abstract class BaseBehaviour implements Listener {
         final BaseMeta baseMeta = new BaseMeta();
 
         abstract T self();
-        public  abstract BaseBehaviour build();
+        public  abstract Behaviour build();
 
         /**
-         * Sets the damage that is applied to the Damageable effected by the baseSpell.
+         * Sets the damage that is applied to the Damageable effected by the spell.
          *
          * @param damage The amount of damage
          * @return this
@@ -51,7 +51,7 @@ public abstract class BaseBehaviour implements Listener {
         }
 
         /**
-         * Sets the effects which will effect the Damageables in the baseSpell's effect range.
+         * Sets the effects which will effect the Damageables in the spell's effect range.
          *
          * @param effects Effects applied to the affected Damageables
          * @return this
@@ -63,7 +63,7 @@ public abstract class BaseBehaviour implements Listener {
         }
 
         /**
-         * Sets the radius of the affected Damageables after the baseSpell concludes.
+         * Sets the radius of the affected Damageables after the spell concludes.
          *
          * @param radius The radius
          * @return this
@@ -87,10 +87,10 @@ public abstract class BaseBehaviour implements Listener {
         }
 
         /**
-         * Sets the visual effects that the baseSpell shows, whether it is a trail of particles
-         * or is executed relative to where you look is up to the baseSpell type BaseProps is used in.
+         * Sets the visual effects that the spell shows, whether it is a trail of particles
+         * or is executed relative to where you look is up to the spell handler BaseProps is used in.
          *
-         * @param effects Effects relative to the baseSpell
+         * @param effects Effects relative to the spell
          * @return this
          */
 
@@ -99,18 +99,12 @@ public abstract class BaseBehaviour implements Listener {
             return self();
         }
 
-        BaseMeta getMeta() {
-            return baseMeta;
-        }
-
         static class BaseMeta {
-
             private int entityDamage = 0;
             private float effectRadius = 0;
             private Consumer<Location> castEffects = DataUtil.emptyConsumer();
             private Consumer<Location> relativeEffects = DataUtil.emptyConsumer();
             private Consumer<Entity> entityEffects = DataUtil.emptyConsumer();
-
         }
     }
 }

@@ -1,4 +1,4 @@
-package me.dylan.wands.spell.behaviourhandler;
+package me.dylan.wands.spell.handler;
 
 import me.dylan.wands.util.EffectUtil;
 import org.apache.commons.lang.RandomStringUtils;
@@ -10,19 +10,19 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-public class WaveSpell extends BaseBehaviour {
+public final class Wave extends Behaviour {
     private final int effectDistance;
     private final boolean stopAtEntity;
 
     //can be accessed via builder
-    private WaveSpell(AbstractBuilder.BaseMeta baseMeta, Builder builder) {
-        super(baseMeta);
+    private Wave(Builder builder) {
+        super(builder.baseMeta);
         this.effectDistance = builder.effectDistance;
         this.stopAtEntity = builder.stopAtEntity;
     }
 
     @Override
-    public void cast(Player player) {
+    public boolean cast(Player player) {
         Vector direction = player.getLocation().getDirection().normalize();
         //id should prevent the entity from being affected twice by the wave
         String randomID = RandomStringUtils.random(5, true, false);
@@ -54,6 +54,7 @@ public class WaveSpell extends BaseBehaviour {
                 }
             }
         }.runTaskTimer(plugin, 1, 1);
+        return true;
     }
 
     public static Builder newBuilder() {
@@ -82,8 +83,8 @@ public class WaveSpell extends BaseBehaviour {
             return self();
         }
 
-        public WaveSpell build() {
-            return new WaveSpell(getMeta(), this);
+        public Wave build() {
+            return new Wave(this);
         }
     }
 }

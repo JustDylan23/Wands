@@ -37,8 +37,8 @@ public class PlayerListener implements Listener {
 
     /**
      * This method handles the cooldown which the player
-     * has to wait for after casting a baseSpell before a new
-     * baseSpell may be cast.
+     * has to wait for after casting a spell before a new
+     * spell may be cast.
      *
      * @param player Player.
      * @param itemStack ItemStack which
@@ -47,8 +47,9 @@ public class PlayerListener implements Listener {
     private void castWithCooldown(Player player, ItemStack itemStack) {
         int remainingTime = getRemainingTime(player);
         if (remainingTime <= 0) {
-            WandUtil.castSpell(player, itemStack);
-            lastUsed.put(player, System.currentTimeMillis());
+            if (WandUtil.castSpell(player, itemStack)) {
+                lastUsed.put(player, System.currentTimeMillis());
+            }
         } else {
             sendRemainingTime(player, remainingTime);
         }

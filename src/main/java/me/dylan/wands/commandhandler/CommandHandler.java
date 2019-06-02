@@ -3,7 +3,7 @@ package me.dylan.wands.commandhandler;
 import me.dylan.wands.Main;
 import me.dylan.wands.pluginmeta.ConfigurableData;
 import me.dylan.wands.pluginmeta.ObtainableItem;
-import me.dylan.wands.spell.Spell;
+import me.dylan.wands.spell.SpellType;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -26,13 +26,13 @@ public class CommandHandler implements CommandExecutor {
                         Main.getPlugin().getConfigurableData().allowMagicUse(true);
                         sender.sendMessage(Main.PREFIX + "All wands are now enabled.");
                         return true;
-                    case "spells":
-                        Spell[] spells = Spell.values();
+                    case "spellTypes":
+                        SpellType[] spellTypes = SpellType.values();
                         StringJoiner sj = new StringJoiner(", ");
-                        for (Spell spell : spells) {
-                            sj.add(spell.getName());
+                        for (SpellType spellType : spellTypes) {
+                            sj.add(spellType.getName());
                         }
-                        sender.sendMessage("§6Spells (" + spells.length + "): §r" + sj);
+                        sender.sendMessage("§6Spells (" + spellTypes.length + "): §r" + sj);
                         return true;
                     case "info":
                         sender.sendMessage("§e ---- §6Wands§e ----");

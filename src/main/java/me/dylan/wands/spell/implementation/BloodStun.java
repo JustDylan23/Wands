@@ -1,8 +1,8 @@
 package me.dylan.wands.spell.implementation;
 
-import me.dylan.wands.spell.BaseSpell;
-import me.dylan.wands.spell.behaviourhandler.BaseBehaviour;
-import me.dylan.wands.spell.behaviourhandler.WaveSpell;
+import me.dylan.wands.spell.Spell;
+import me.dylan.wands.spell.handler.Behaviour;
+import me.dylan.wands.spell.handler.Wave;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -11,10 +11,10 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class BloodStun extends BaseSpell {
+public class BloodStun extends Spell {
     @Override
-    public BaseBehaviour getBaseBehaviour() {
-        return WaveSpell.newBuilder()
+    public Behaviour getBehaviour() {
+        return Wave.newBuilder()
                 .setEffectRadius(1F)
                 .setEntityDamage(5)
                 .setCastEffects(location -> location.getWorld().playSound(location, Sound.ENTITY_FIREWORK_ROCKET_BLAST, 4, 1))

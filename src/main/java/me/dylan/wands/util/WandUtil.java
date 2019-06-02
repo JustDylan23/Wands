@@ -1,8 +1,8 @@
 package me.dylan.wands.util;
 
 import me.dylan.wands.Main;
-import me.dylan.wands.spell.BaseSpell;
 import me.dylan.wands.spell.Spell;
+import me.dylan.wands.spell.SpellType;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
@@ -31,10 +31,10 @@ public class WandUtil {
         return ItemUtil.hasPersistentData(itemStack, TAG_VERIFIED, PersistentDataType.BYTE);
     }
 
-    public static void setSpells(ItemStack itemStack, Spell... spells) {
+    public static void setSpells(ItemStack itemStack, SpellType... spellTypes) {
         StringJoiner stringJoiner = new StringJoiner(";");
-        for (Spell spell : spells) {
-            stringJoiner.add(spell.toString());
+        for (SpellType spellType : spellTypes) {
+            stringJoiner.add(spellType.toString());
         }
         ItemUtil.setPersistentData(itemStack, TAG_SPELLS_LIST, PersistentDataType.STRING, stringJoiner.toString());
     }
@@ -48,16 +48,16 @@ public class WandUtil {
         ItemUtil.setPersistentData(itemStack, TAG_SPELL_INDEX, PersistentDataType.INTEGER, index);
     }
 
-    private static BaseSpell[] getSpells(ItemStack itemStack) {
+    private static Spell[] getSpells(ItemStack itemStack) {
         Optional<String> spells = ItemUtil.getPersistentData(itemStack, TAG_SPELLS_LIST, PersistentDataType.STRING);
         if (spells.isPresent()) {
-            return Spell.getSpells(spells.get());
+            return SpellType.getSpells(spells.get());
         }
-        return new BaseSpell[]{};
+        return new Spell[]{};
     }
 
-    private static Optional<BaseSpell> getSelectedSpell(ItemStack itemStack) {
-        BaseSpell[] spells = getSpells(itemStack);
+    private static Optional<Spell> getSelectedSpell(ItemStack itemStack) {
+        Spell[] spells = getSpells(itemStack);
         int index = getIndex(itemStack);
         if (index < spells.length) {
             return Optional.of(spells[index]);
@@ -66,19 +66,19 @@ public class WandUtil {
         return Optional.empty();
     }
 
-    public static void castSpell(Player player, ItemStack itemStack) {
-        Optional<BaseSpell> spell = getSelectedSpell(itemStack);
+    public static boolean castSpell(Player player, ItemStack itemStack) {
+        Optional<Spell> spell = getSelectedSpell(itemStack);
         if (spell.isPresent()) {
-            spell.get().cast(player);
-        } else {
-            player.sendActionBar(Main.PREFIX + "No spells are bound!");
+            return spell.get().cast(player);
         }
+        player.sendActionBar(Main.PREFIX + "No spells are bound!");
+        return false;
 
     }
 
     public static void nextSpell(Player player, ItemStack itemStack) {
         int index = getIndex(itemStack);
-        BaseSpell[] spells = getSpells(itemStack);
+        Spell[] spells = getSpells(itemStack);
         int length = spells.length;
         if (length-- == 0) {
             return;
@@ -93,6 +93,6 @@ public class WandUtil {
         setIndex(itemStack, index);
 
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.5F, 0.5F);
-        player.sendActionBar("§6Current Spell: §7§l" + spells[index].getName());
+        player.sendActionBar("§6Current SpellType: §7§l" + spells[index].getName());
     }
 }

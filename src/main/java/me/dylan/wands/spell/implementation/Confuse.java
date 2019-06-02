@@ -1,8 +1,8 @@
 package me.dylan.wands.spell.implementation;
 
-import me.dylan.wands.spell.BaseSpell;
-import me.dylan.wands.spell.behaviourhandler.BaseBehaviour;
-import me.dylan.wands.spell.behaviourhandler.SparkSpell;
+import me.dylan.wands.spell.Spell;
+import me.dylan.wands.spell.handler.Behaviour;
+import me.dylan.wands.spell.handler.Spark;
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -11,10 +11,10 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class Confuse extends BaseSpell {
+public class Confuse extends Spell {
     @Override
-    public BaseBehaviour getBaseBehaviour() {
-        return SparkSpell.newBuilder()
+    public Behaviour getBehaviour() {
+        return Spark.newBuilder()
                 .setEffectRadius(4F)
                 .setEntityDamage(6)
                 .setEntityEffects(entity -> ((LivingEntity) entity).addPotionEffect(
