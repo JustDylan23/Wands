@@ -34,26 +34,26 @@ public final class MovingBlock extends Behaviour implements Listener {
     static class BlockReverter implements Runnable {
 
         private BlockState state;
-        private final Location location;
-        private boolean canContinue = true;
+        private final Location originLoc;
+        private boolean canRun = true;
         private final MovingBlock parent;
         private final Player player;
 
-        BlockReverter(BlockState state, Location location, Player player, MovingBlock parent) {
+        BlockReverter(BlockState state, Location originLoc, Player player, MovingBlock parent) {
             this.state = state;
-            this.location = location;
+            this.originLoc = originLoc;
             this.parent = parent;
             this.player = player;
         }
 
         void earlyRun() {
             run();
-            canContinue = false;
+            canRun = false;
         }
 
         @Override
         public void run() {
-            if (canContinue) {
+            if (canRun) {
                 state.update(true);
                 parent.selectedBlock.remove(player);
             }
@@ -90,7 +90,7 @@ public final class MovingBlock extends Behaviour implements Listener {
     private boolean launchBlock(Player player) {
         BlockReverter blockReverter = selectedBlock.get(player);
         blockReverter.earlyRun();
-        Location location = blockReverter.location;
+        Location location = blockReverter.originLoc;
         FallingBlock fallingBlock = location.getWorld().spawnFallingBlock(location, Bukkit.createBlockData(material));
         fallingBlock.setVelocity(new Vector(0, 1, 0));
         Block block = player.getTargetBlock(30);
