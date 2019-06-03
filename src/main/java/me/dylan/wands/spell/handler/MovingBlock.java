@@ -2,6 +2,7 @@ package me.dylan.wands.spell.handler;
 
 import me.dylan.wands.pluginmeta.ListenerRegistry;
 import me.dylan.wands.util.DataUtil;
+import me.dylan.wands.util.EffectUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -9,9 +10,15 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Container;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.HashMap;
@@ -23,6 +30,7 @@ public final class MovingBlock extends Behaviour implements Listener {
     private final Material material;
     private final Consumer<Location> hitEffects;
     private final Map<Player, BlockReverter> selectedBlock = new HashMap<>();
+    private final Map<FallingBlock, Player> caster = new HashMap<>();
 
     private MovingBlock(Builder builder) {
         super(builder.baseMeta);
@@ -53,6 +61,7 @@ public final class MovingBlock extends Behaviour implements Listener {
                 }
             }
             block.setType(material);
+            block.setMetadata("unbreakable", new FixedMetadataValue(plugin, true));
             BlockReverter blockReverter = new BlockReverter(oldState, location, player, this);
             selectedBlock.put(player, blockReverter);
             Bukkit.getScheduler().runTaskLater(plugin, blockReverter, 100L);
@@ -63,11 +72,16 @@ public final class MovingBlock extends Behaviour implements Listener {
     }
 
     private boolean launchBlock(Player player) {
+        castEffects.accept(player.getLocation());
         BlockReverter blockReverter = selectedBlock.get(player);
         blockReverter.earlyRun();
         Location location = blockReverter.originLoc;
         FallingBlock fallingBlock = location.getWorld().spawnFallingBlock(location, Bukkit.createBlockData(material));
         fallingBlock.setVelocity(new Vector(0, 1, 0));
+        fallingBlock.setMetadata("isMovingBlockSpell", new FixedMetadataValue(plugin, player));
+        fallingBlock.setDropItem(false);
+        caster.put(fallingBlock, player);
+        trail(fallingBlock);
         Block block = player.getTargetBlock(30);
         if (block != null) {
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
@@ -85,6 +99,47 @@ public final class MovingBlock extends Behaviour implements Listener {
             return true;
         }
         return false;
+    }
+
+    private void applyHitEffects(FallingBlock fallingBlock) {
+        Player player = caster.get(fallingBlock);
+        if (player != null) {
+            caster.remove(fallingBlock);
+            Location loc = fallingBlock.getLocation();
+            hitEffects.accept(loc);
+            EffectUtil.getNearbyDamageables(player, loc, effectAreaRange).forEach(entity -> {
+                entityEffects.accept(entity);
+                EffectUtil.damage(entityDamage, player, entity);
+                entity.setVelocity(new Vector(0, 0, 0));
+            });
+        }
+    }
+
+    @EventHandler
+    private void onBlockFall(EntityChangeBlockEvent event) {
+        if ((event.getEntityType() == EntityType.FALLING_BLOCK) && event.getEntity().hasMetadata("isMovingBlockSpell")) {
+            event.setCancelled(true);
+            applyHitEffects((FallingBlock) event.getEntity());
+        }
+    }
+
+    @EventHandler
+    private void onBlockBreak(BlockBreakEvent event) {
+        if (event.getBlock().hasMetadata("unbreakable")) event.setCancelled(true);
+    }
+
+    private void trail(FallingBlock entity) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (entity.isValid()) {
+                    visualEffects.accept(entity.getLocation());
+                } else {
+                    cancel();
+                    applyHitEffects(entity);
+                }
+            }
+        }.runTaskTimer(plugin, 0, 1);
     }
 
     static class BlockReverter implements Runnable {

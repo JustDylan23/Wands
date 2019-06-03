@@ -57,13 +57,13 @@ public final class Projectile<T extends org.bukkit.entity.Projectile> extends Be
     private void hit(Player player, org.bukkit.entity.Projectile projectile) {
         projectile.remove();
         Location loc = projectile.getLocation();
+        hitEffects.accept(loc);
         EffectUtil.getNearbyDamageables(player, loc, effectAreaRange).forEach(entity -> {
             entityEffects.accept(entity);
             EffectUtil.damage(entityDamage, player, entity);
             entity.setVelocity(new Vector(0, 0, 0));
             pushFrom(loc, entity, pushSpeed);
         });
-        hitEffects.accept(loc);
     }
 
     @EventHandler
@@ -89,13 +89,12 @@ public final class Projectile<T extends org.bukkit.entity.Projectile> extends Be
         }, lifeTime);
     }
 
-    private void trail(org.bukkit.entity.Projectile projectile) {
+    private void trail(Entity entity) {
         new BukkitRunnable() {
             @Override
             public void run() {
-                if (projectile.isValid()) {
-                    visualEffects.accept(projectile.getLocation());
-
+                if (entity.isValid()) {
+                    visualEffects.accept(entity.getLocation());
                 } else cancel();
             }
         }.runTaskTimer(plugin, 0, 1);
