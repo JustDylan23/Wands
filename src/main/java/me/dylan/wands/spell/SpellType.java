@@ -23,10 +23,6 @@ public enum SpellType {
         this.spell = spell;
     }
 
-    public String getName() {
-        return spell.getName();
-    }
-
     public static Optional<Spell> getSpell(String name) {
         if (name == null) return Optional.empty();
         try {
@@ -45,5 +41,9 @@ public enum SpellType {
                     new NoSuchElementException("Spell with identifier " + spellName + " is not registered!"));
         }
         return spells;
+    }
+
+    public String getName() {
+        return spell.getName();
     }
 }

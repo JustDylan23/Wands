@@ -2,8 +2,8 @@ package me.dylan.wands;
 
 import me.dylan.wands.commandhandler.CommandHandler;
 import me.dylan.wands.commandhandler.TabCompletionHandler;
-import me.dylan.wands.customitem.CursedBow;
 import me.dylan.wands.customitem.AssasinDagger;
+import me.dylan.wands.customitem.CursedBow;
 import me.dylan.wands.pluginmeta.ConfigurableData;
 import me.dylan.wands.pluginmeta.ListenerRegistry;
 import me.dylan.wands.spell.PlayerListener;
@@ -14,16 +14,18 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Main extends JavaPlugin {
 
-    private static Main plugin;
-
     public static final String PREFIX = "§8§l[§6§lWands§8§l]§r ";
-
+    private static Main plugin;
     //instances of classes accessible via main class
     private ConfigurableData configurableData;
     private ListenerRegistry listenerRegistry;
 
     public static Main getPlugin() {
         return plugin;
+    }
+
+    public static void log(String text) {
+        Bukkit.getLogger().info(PREFIX + text);
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -64,9 +66,5 @@ public final class Main extends JavaPlugin {
 
     public ListenerRegistry getListenerRegistry() {
         return listenerRegistry;
-    }
-
-    public static void log(String text) {
-        Bukkit.getLogger().info(PREFIX + text);
     }
 }

@@ -36,7 +36,8 @@ public abstract class Behaviour implements Listener {
         final BaseMeta baseMeta = new BaseMeta();
 
         abstract T self();
-        public  abstract Behaviour build();
+
+        public abstract Behaviour build();
 
         /**
          * Sets the damage that is applied to the Damageable effected by the spell.

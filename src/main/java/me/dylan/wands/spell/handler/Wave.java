@@ -21,6 +21,10 @@ public final class Wave extends Behaviour {
         this.stopAtEntity = builder.stopAtEntity;
     }
 
+    public static Builder newBuilder() {
+        return new Builder();
+    }
+
     @Override
     public boolean cast(Player player) {
         Vector direction = player.getLocation().getDirection().normalize();
@@ -55,10 +59,6 @@ public final class Wave extends Behaviour {
             }
         }.runTaskTimer(plugin, 1, 1);
         return true;
-    }
-
-    public static Builder newBuilder() {
-        return new Builder();
     }
 
     public static class Builder extends AbstractBuilder<Builder> {

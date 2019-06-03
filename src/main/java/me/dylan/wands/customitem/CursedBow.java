@@ -31,12 +31,11 @@ import java.util.function.Consumer;
 
 public class CursedBow implements Listener {
 
+    public final static String ID_TAG = "artifact-bow";
     private final String cursedArrow = "cursedArrow";
     private final Plugin plugin = Main.getPlugin();
     private final Set<Player> drawing = new HashSet<>();
     private final Set<Player> hasDrawn = new HashSet<>();
-
-    public final static String ID_TAG = "artifact-bow";
 
     private boolean hasBow(Player player) {
         return ItemUtil.hasPersistentData(player.getInventory().getItemInMainHand(), ID_TAG, PersistentDataType.BYTE);

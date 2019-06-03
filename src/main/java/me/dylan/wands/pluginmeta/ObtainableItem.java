@@ -67,16 +67,16 @@ public enum ObtainableItem {
         return names;
     }
 
-    public ItemStack getItemStack() {
-        return itemStack;
-    }
-
     public static void openInventory(Player player) {
         Inventory inventory = Bukkit.createInventory(null, InventoryType.DISPENSER, Main.PREFIX);
         for (ObtainableItem obtainableItem : ObtainableItem.values()) {
             inventory.addItem(obtainableItem.itemStack);
         }
         player.openInventory(inventory);
+    }
+
+    public ItemStack getItemStack() {
+        return itemStack;
     }
 
     @Override

@@ -17,6 +17,10 @@ public final class Spark extends Behaviour {
         this.effectDistance = builder.effectDistance;
     }
 
+    public static Builder newBuilder() {
+        return new Builder();
+    }
+
     @Override
     public boolean cast(Player player) {
         Location loc = getSpellLocation(player);
@@ -41,10 +45,6 @@ public final class Spark extends Behaviour {
             return block.getLocation().toCenterLocation().subtract(player.getLocation().getDirection().normalize());
         }
         return player.getLocation();
-    }
-
-    public static Builder newBuilder() {
-        return new Builder();
     }
 
     public static class Builder extends AbstractBuilder<Builder> {

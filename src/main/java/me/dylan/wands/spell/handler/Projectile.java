@@ -42,6 +42,10 @@ public final class Projectile<T extends org.bukkit.entity.Projectile> extends Be
         ListenerRegistry.addListener(this);
     }
 
+    public static <T extends org.bukkit.entity.Projectile> Builder<T> newBuilder(Class<T> projectileClass, float speed) {
+        return new Builder<>(projectileClass, speed);
+    }
+
     @Override
     public boolean cast(Player player) {
         Vector velocity = player.getLocation().getDirection().multiply(speed);
@@ -116,10 +120,6 @@ public final class Projectile<T extends org.bukkit.entity.Projectile> extends Be
             }
             entity.setVelocity(vector);
         }
-    }
-
-    public static <T extends org.bukkit.entity.Projectile> Builder<T> newBuilder(Class<T> projectileClass, float speed) {
-        return new Builder<>(projectileClass, speed);
     }
 
     public static class Builder<T extends org.bukkit.entity.Projectile> extends AbstractBuilder<Builder<T>> {
