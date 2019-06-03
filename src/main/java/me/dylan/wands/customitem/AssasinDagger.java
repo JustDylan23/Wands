@@ -25,11 +25,10 @@ import org.bukkit.util.Vector;
 
 public class AssasinDagger implements Listener {
 
+    public static final String ID_TAG = "artifact-dagger";
     private final Main plugin = Main.getPlugin();
     private final String leapKey = "therosJump";
     private final String sneakKey = "therosInvisable";
-
-    public static final String ID_TAG = "artifact-dagger";
 
     private boolean hasDagger(Player player) {
         return ItemUtil.hasPersistentData(player.getInventory().getItemInMainHand(), ID_TAG, PersistentDataType.BYTE);

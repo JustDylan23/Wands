@@ -40,7 +40,7 @@ public class PlayerListener implements Listener {
      * has to wait for after casting a spell before a new
      * spell may be cast.
      *
-     * @param player Player.
+     * @param player    Player.
      * @param itemStack ItemStack which
      */
 
@@ -73,6 +73,7 @@ public class PlayerListener implements Listener {
 
     /**
      * Clears player from cache on leave.
+     *
      * @param event Gets called once the player disconnects to the server.
      */
 

@@ -66,7 +66,7 @@ public final class MovingBlock extends Behaviour implements Listener {
             selectedBlock.put(player, blockReverter);
             Bukkit.getScheduler().runTaskLater(plugin, blockReverter, 100L);
         } else {
-            player.sendActionBar("no blocks in range");
+            player.sendActionBar("§cselect a closer block");
         }
         return false;
     }
