@@ -1,8 +1,8 @@
 package me.dylan.wands.spell.handler;
 
 import me.dylan.wands.pluginmeta.ListenerRegistry;
-import me.dylan.wands.util.DataUtil;
 import me.dylan.wands.util.EffectUtil;
+import me.dylan.wands.util.ShorthandUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -17,7 +17,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -31,6 +30,9 @@ public final class MovingBlock extends Behaviour implements Listener {
     private final Consumer<Location> hitEffects;
     private final Map<Player, BlockReverter> selectedBlock = new HashMap<>();
     private final Map<FallingBlock, Player> caster = new HashMap<>();
+
+    private static final String TAG_UNBREAKABLE = "TempUnbreakable";
+    private static final String TAG_FALLING_BLOCK = "MovingBlockSpellEntity";
 
     private MovingBlock(Builder builder) {
         super(builder.baseMeta);
@@ -61,7 +63,7 @@ public final class MovingBlock extends Behaviour implements Listener {
                 }
             }
             block.setType(material);
-            block.setMetadata("unbreakable", new FixedMetadataValue(plugin, true));
+            block.setMetadata(TAG_UNBREAKABLE, ShorthandUtil.METADATA_VALUE_TRUE);
             BlockReverter blockReverter = new BlockReverter(oldState, location, player, this);
             selectedBlock.put(player, blockReverter);
             Bukkit.getScheduler().runTaskLater(plugin, blockReverter, 100L);
@@ -78,7 +80,7 @@ public final class MovingBlock extends Behaviour implements Listener {
         Location location = blockReverter.originLoc;
         FallingBlock fallingBlock = location.getWorld().spawnFallingBlock(location, Bukkit.createBlockData(material));
         fallingBlock.setVelocity(new Vector(0, 1, 0));
-        fallingBlock.setMetadata("isMovingBlockSpell", new FixedMetadataValue(plugin, player));
+        fallingBlock.setMetadata(TAG_FALLING_BLOCK, ShorthandUtil.METADATA_VALUE_TRUE);
         fallingBlock.setDropItem(false);
         caster.put(fallingBlock, player);
         trail(fallingBlock);
@@ -110,14 +112,14 @@ public final class MovingBlock extends Behaviour implements Listener {
             EffectUtil.getNearbyDamageables(player, loc, effectAreaRange).forEach(entity -> {
                 entityEffects.accept(entity);
                 EffectUtil.damage(entityDamage, player, entity);
-                entity.setVelocity(new Vector(0, 0, 0));
+                EffectUtil.removeVelocity(entity);
             });
         }
     }
 
     @EventHandler
     private void onBlockFall(EntityChangeBlockEvent event) {
-        if ((event.getEntityType() == EntityType.FALLING_BLOCK) && event.getEntity().hasMetadata("isMovingBlockSpell")) {
+        if ((event.getEntityType() == EntityType.FALLING_BLOCK) && event.getEntity().hasMetadata(TAG_FALLING_BLOCK)) {
             event.setCancelled(true);
             applyHitEffects((FallingBlock) event.getEntity());
         }
@@ -125,7 +127,7 @@ public final class MovingBlock extends Behaviour implements Listener {
 
     @EventHandler
     private void onBlockBreak(BlockBreakEvent event) {
-        if (event.getBlock().hasMetadata("unbreakable")) event.setCancelled(true);
+        if (event.getBlock().hasMetadata(TAG_UNBREAKABLE)) event.setCancelled(true);
     }
 
     private void trail(FallingBlock entity) {
@@ -174,7 +176,7 @@ public final class MovingBlock extends Behaviour implements Listener {
     public static class Builder extends AbstractBuilder<Builder> {
 
         private final Material material;
-        private Consumer<Location> hitEffects = DataUtil.emptyConsumer();
+        private Consumer<Location> hitEffects = ShorthandUtil.emptyConsumer();
 
         private Builder(Material material) {
             this.material = material;

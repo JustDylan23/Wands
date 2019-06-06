@@ -8,8 +8,9 @@ import org.bukkit.plugin.Plugin;
 /**
  * @author Dylan
  * The Spell class is the base class for every spell that can be casted.
- * It's primarily feature is to store an instance of an implementation Behaviour.
- * This object should contain what the Spell does when casted.
+ * It's features are:
+ * > Storing the name of the spell.
+ * > Storing spell behaviour
  */
 
 public abstract class Spell {

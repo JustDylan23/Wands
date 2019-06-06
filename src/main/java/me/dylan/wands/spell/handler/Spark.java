@@ -3,15 +3,12 @@ package me.dylan.wands.spell.handler;
 import me.dylan.wands.util.EffectUtil;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.util.Vector;
 
 public final class Spark extends Behaviour {
     private final int effectDistance;
 
-    //can be accessed via builder
     private Spark(Builder builder) {
         super(builder.baseMeta);
         this.effectDistance = builder.effectDistance;
@@ -24,14 +21,13 @@ public final class Spark extends Behaviour {
     @Override
     public boolean cast(Player player) {
         Location loc = getSpellLocation(player);
-        Iterable<Damageable> effectedEntities = EffectUtil.getNearbyDamageables(player, loc, effectAreaRange);
         castEffects.accept(player.getLocation());
-        effectedEntities.forEach(entity -> {
+        visualEffects.accept(loc);
+        EffectUtil.getNearbyDamageables(player, loc, effectAreaRange).forEach(entity -> {
             EffectUtil.damage(entityDamage, player, entity);
-            entity.setVelocity(new Vector(0, 0, 0));
+            EffectUtil.removeVelocity(entity);
             entityEffects.accept(entity);
         });
-        visualEffects.accept(loc);
         return true;
     }
 

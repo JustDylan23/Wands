@@ -3,6 +3,7 @@ package me.dylan.wands.customitem;
 import me.dylan.wands.Main;
 import me.dylan.wands.util.EffectUtil;
 import me.dylan.wands.util.ItemUtil;
+import me.dylan.wands.util.ShorthandUtil;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -18,7 +19,6 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
@@ -86,7 +86,7 @@ public class CursedBow implements Listener {
             if (hasDrawn.contains(player)) {
                 hasDrawn.remove(player);
                 Entity projectile = event.getProjectile();
-                projectile.setMetadata(cursedArrow, new FixedMetadataValue(plugin, true));
+                projectile.setMetadata(cursedArrow, ShorthandUtil.METADATA_VALUE_TRUE);
                 Location location = player.getLocation();
                 location.getWorld().playSound(location, Sound.ENTITY_ENDER_DRAGON_FLAP, SoundCategory.MASTER, 4F, 1F);
                 location.getWorld().playSound(player.getLocation(), Sound.ENTITY_EVOKER_CAST_SPELL, SoundCategory.MASTER, 4F, 0.1F);
