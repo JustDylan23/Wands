@@ -1,12 +1,12 @@
 package me.dylan.wands.spell.handler;
 
 import me.dylan.wands.util.EffectUtil;
+import me.dylan.wands.util.ShorthandUtil;
 import org.apache.commons.lang.RandomStringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Player;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -42,7 +42,7 @@ public final class Wave extends Behaviour {
                 visualEffects.accept(loc);
                 for (Damageable entity : EffectUtil.getNearbyDamageables(player, loc, effectAreaRange)) {
                     if (!entity.hasMetadata(randomID)) {
-                        entity.setMetadata(randomID, new FixedMetadataValue(plugin, true));
+                        entity.setMetadata(randomID, ShorthandUtil.METADATA_VALUE_TRUE);
                         EffectUtil.damage(entityDamage, player, entity);
                         entityEffects.accept(entity);
                         Bukkit.getScheduler().runTaskLater(plugin, () -> {

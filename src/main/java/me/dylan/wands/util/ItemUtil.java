@@ -14,7 +14,6 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-@SuppressWarnings({"WeakerAccess", "unused"})
 public class ItemUtil {
     private static final Main plugin = Main.getPlugin();
 

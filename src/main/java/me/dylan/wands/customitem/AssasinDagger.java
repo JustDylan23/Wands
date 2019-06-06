@@ -2,6 +2,7 @@ package me.dylan.wands.customitem;
 
 import me.dylan.wands.Main;
 import me.dylan.wands.util.ItemUtil;
+import me.dylan.wands.util.ShorthandUtil;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -16,7 +17,6 @@ import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -30,6 +30,8 @@ public class AssasinDagger implements Listener {
     private final String leapKey = "therosJump";
     private final String sneakKey = "therosInvisable";
 
+    private final PotionEffect speed = new PotionEffect(PotionEffectType.SPEED, 20, 4, true);
+
     private boolean hasDagger(Player player) {
         return ItemUtil.hasPersistentData(player.getInventory().getItemInMainHand(), ID_TAG, PersistentDataType.BYTE);
     }
@@ -38,7 +40,16 @@ public class AssasinDagger implements Listener {
     private void onSpringToggle(PlayerToggleSprintEvent event) {
         Player player = event.getPlayer();
         if (hasDagger(player) && event.isSprinting()) {
-            Bukkit.getScheduler().runTaskLater(Main.getPlugin(), () -> sprintParticles(player), 1);
+            new BukkitRunnable() {
+                public void run() {
+                    if (player.isSprinting()) {
+                        Location loc = player.getLocation();
+                        loc.getWorld().spawnParticle(Particle.SMOKE_LARGE, loc, 1, 0.1, 0.1, 0.1, 0.1, null, true);
+                        loc.getWorld().spawnParticle(Particle.SMOKE_NORMAL, loc, 1, 0.1, 0.1, 0.1, 0.1, null, true);
+                        player.addPotionEffect(speed, true);
+                    } else cancel();
+                }
+            }.runTaskTimer(Main.getPlugin(), 1, 1);
         }
     }
 
@@ -46,9 +57,8 @@ public class AssasinDagger implements Listener {
     private void onAttack(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player) {
             Player player = (Player) event.getDamager();
-            LivingEntity victim;
             if (event.getEntity() instanceof LivingEntity) {
-                victim = (LivingEntity) event.getEntity();
+                LivingEntity victim = (LivingEntity) event.getEntity();
                 if (hasDagger(player)) {
                     victim.removePotionEffect(PotionEffectType.SPEED);
                     victim.removePotionEffect(PotionEffectType.BLINDNESS);
@@ -65,31 +75,23 @@ public class AssasinDagger implements Listener {
     @EventHandler
     private void leap(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        if (hasDagger(player)) {
-            if (event.getHand() != null) {
-                if (event.getHand().equals(EquipmentSlot.HAND)) {
-                    Action a = event.getAction();
-                    if (a == Action.RIGHT_CLICK_AIR || a == Action.RIGHT_CLICK_BLOCK) {
-                        if (!player.hasMetadata(leapKey) && !player.hasMetadata(sneakKey)) {
-                            player.setMetadata(leapKey, new FixedMetadataValue(plugin, true));
-                            player.getWorld().playSound(player.getLocation(), Sound.ENTITY_LLAMA_SWAG, SoundCategory.MASTER, 3.0F, 1.0F);
-                            Vector direction = player.getLocation().getDirection().setY(0).normalize().setY(1.2);
-                            player.setVelocity(direction);
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    if (player.isOnGround()) {
-                                        if (player.hasMetadata(leapKey)) {
-                                            Bukkit.getScheduler().runTaskLater(plugin, () ->
-                                                    player.removeMetadata(leapKey, plugin), 2);
-                                            cancel();
-                                        }
-                                    }
-                                }
-                            }.runTaskTimer(Main.getPlugin(), 3, 3);
+        if (hasDagger(player) && event.getHand() != null && event.getHand().equals(EquipmentSlot.HAND)) {
+            Action a = event.getAction();
+            if ((a == Action.RIGHT_CLICK_AIR || a == Action.RIGHT_CLICK_BLOCK) && !player.hasMetadata(leapKey) && !player.hasMetadata(sneakKey)) {
+                player.setMetadata(leapKey, ShorthandUtil.METADATA_VALUE_TRUE);
+                player.getWorld().playSound(player.getLocation(), Sound.ENTITY_LLAMA_SWAG, SoundCategory.MASTER, 3.0F, 1.0F);
+                Vector direction = player.getLocation().getDirection().setY(0).normalize().setY(1.2);
+                player.setVelocity(direction);
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        if (player.isOnGround() && player.hasMetadata(leapKey)) {
+                            Bukkit.getScheduler().runTaskLater(plugin, () ->
+                                    player.removeMetadata(leapKey, plugin), 2);
+                            cancel();
                         }
                     }
-                }
+                }.runTaskTimer(Main.getPlugin(), 3, 3);
             }
         }
     }
@@ -97,24 +99,18 @@ public class AssasinDagger implements Listener {
     @EventHandler
     private void fallDamage(EntityDamageEvent event) {
         Entity entity = event.getEntity();
-        if (entity instanceof Player) {
-            if (event.getCause() == EntityDamageEvent.DamageCause.FALL) {
-                if (entity.hasMetadata(leapKey)) {
-                    event.setCancelled(true);
-                    entity.removeMetadata(leapKey, plugin);
-                }
-            }
+        if (entity instanceof Player && event.getCause() == EntityDamageEvent.DamageCause.FALL && entity.hasMetadata(leapKey)) {
+            event.setCancelled(true);
+            entity.removeMetadata(leapKey, plugin);
         }
     }
 
     @EventHandler
     private void onSneakToggle(PlayerToggleSneakEvent event) {
         Player player = event.getPlayer();
-        if (hasDagger(player)) {
-            if (event.isSneaking() && player.isOnGround()) {
-                cover(player);
-                return;
-            }
+        if (hasDagger(player) && event.isSneaking() && player.isOnGround()) {
+            cover(player);
+            return;
         }
         if (player.hasMetadata(sneakKey)) {
             uncover(player, "§6You are §cVisible");
@@ -137,7 +133,7 @@ public class AssasinDagger implements Listener {
 
     private void cover(Player player) {
         if (!player.hasMetadata(sneakKey)) {
-            player.setMetadata(sneakKey, new FixedMetadataValue(plugin, true));
+            player.setMetadata(sneakKey, ShorthandUtil.METADATA_VALUE_TRUE);
             Location location = player.getLocation();
             location.getWorld().playSound(location, Sound.ENTITY_ZOMBIE_VILLAGER_CURE, 1.0f, 2f);
             location.getWorld().spawnParticle(Particle.SMOKE_LARGE, location, 15, 0.5, 0.2, 0.5, 0.1, null, true);
@@ -163,19 +159,5 @@ public class AssasinDagger implements Listener {
         if (player.isSneaking() && hasDagger(player)) {
             cover(player);
         }
-    }
-
-    private void sprintParticles(Player player) {
-        PotionEffect speed = new PotionEffect(PotionEffectType.SPEED, 20, 4, true);
-        Bukkit.getScheduler().runTaskLater(Main.getPlugin(), () -> {
-            Location loc = player.getLocation();
-            loc.getWorld().spawnParticle(Particle.SMOKE_LARGE, loc, 1, 0.1, 0.1, 0.1, 0.1, null, true);
-            loc.getWorld().spawnParticle(Particle.SMOKE_NORMAL, loc, 1, 0.1, 0.1, 0.1, 0.1, null, true);
-            player.addPotionEffect(speed, true);
-            if (player.isSprinting()) {
-                sprintParticles(player);
-            }
-        }, 1);
-
     }
 }

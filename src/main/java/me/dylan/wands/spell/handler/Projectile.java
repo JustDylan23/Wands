@@ -1,8 +1,8 @@
 package me.dylan.wands.spell.handler;
 
 import me.dylan.wands.pluginmeta.ListenerRegistry;
-import me.dylan.wands.util.DataUtil;
 import me.dylan.wands.util.EffectUtil;
+import me.dylan.wands.util.ShorthandUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -13,7 +13,6 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -52,7 +51,7 @@ public final class Projectile<T extends org.bukkit.entity.Projectile> extends Be
         T projectile = player.launchProjectile(this.projectile, velocity);
         trail(projectile);
         projectileProps.accept(projectile);
-        projectile.setMetadata(metadataTag, new FixedMetadataValue(plugin, true));
+        projectile.setMetadata(metadataTag, ShorthandUtil.METADATA_VALUE_TRUE);
         activateLifeTimer(projectile);
         castEffects.accept(player.getLocation());
         return true;
@@ -65,7 +64,7 @@ public final class Projectile<T extends org.bukkit.entity.Projectile> extends Be
         EffectUtil.getNearbyDamageables(player, loc, effectAreaRange).forEach(entity -> {
             entityEffects.accept(entity);
             EffectUtil.damage(entityDamage, player, entity);
-            entity.setVelocity(new Vector(0, 0, 0));
+            EffectUtil.removeVelocity(entity);
             pushFrom(loc, entity, pushSpeed);
         });
     }
@@ -127,8 +126,8 @@ public final class Projectile<T extends org.bukkit.entity.Projectile> extends Be
         private final Class<T> projectile;
         private final float speed;
 
-        private Consumer<T> projectileProps = DataUtil.emptyConsumer();
-        private Consumer<Location> hitEffects = DataUtil.emptyConsumer();
+        private Consumer<T> projectileProps = ShorthandUtil.emptyConsumer();
+        private Consumer<Location> hitEffects = ShorthandUtil.emptyConsumer();
         private int lifeTime;
         private int pushSpeed;
 

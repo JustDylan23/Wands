@@ -28,11 +28,11 @@ public class CommandHandler implements CommandExecutor {
                         return true;
                     case "spellTypes":
                         SpellType[] spellTypes = SpellType.values();
-                        StringJoiner sj = new StringJoiner(", ");
+                        StringJoiner stringJoiner = new StringJoiner(", ");
                         for (SpellType spellType : spellTypes) {
-                            sj.add(spellType.getName());
+                            stringJoiner.add(spellType.getName());
                         }
-                        sender.sendMessage("§6Spells (" + spellTypes.length + "): §r" + sj);
+                        sender.sendMessage("§6Spells (" + spellTypes.length + "): §r" + stringJoiner);
                         return true;
                     case "info":
                         sender.sendMessage("§e ---- §6Wands§e ----");

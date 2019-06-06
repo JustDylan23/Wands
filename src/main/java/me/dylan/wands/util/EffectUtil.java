@@ -9,6 +9,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.util.Vector;
 
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 public class EffectUtil {
 
     private static final Main plugin = Main.getPlugin();
+    private static final Vector NO_VELOCITY = new Vector();
 
     private EffectUtil() {
         throw new UnsupportedOperationException();
@@ -69,5 +71,9 @@ public class EffectUtil {
 
     private static double randomize(double d) {
         return ThreadLocalRandom.current().nextDouble() * d * 2.0 - d;
+    }
+
+    public static void removeVelocity(Entity entity) {
+        entity.setVelocity(NO_VELOCITY);
     }
 }
