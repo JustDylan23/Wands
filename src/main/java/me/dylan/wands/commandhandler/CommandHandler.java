@@ -4,6 +4,7 @@ import me.dylan.wands.Main;
 import me.dylan.wands.pluginmeta.ConfigurableData;
 import me.dylan.wands.pluginmeta.ObtainableItem;
 import me.dylan.wands.spell.SpellType;
+import me.dylan.wands.spell.handler.Behaviour;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -26,7 +27,7 @@ public class CommandHandler implements CommandExecutor {
                         Main.getPlugin().getConfigurableData().allowMagicUse(true);
                         sender.sendMessage(Main.PREFIX + "All wands are now enabled.");
                         return true;
-                    case "spellTypes":
+                    case "spells":
                         SpellType[] spellTypes = SpellType.values();
                         StringJoiner stringJoiner = new StringJoiner(", ");
                         for (SpellType spellType : spellTypes) {
@@ -81,6 +82,22 @@ public class CommandHandler implements CommandExecutor {
                             sender.sendMessage(message);
                         } catch (NumberFormatException e) {
                             sender.sendMessage(Main.PREFIX + "Cooldown can only be set to a full number!");
+                        }
+                        return true;
+                    }
+                } else if (args[0].equalsIgnoreCase("spells")) {
+                    if (args[1].equalsIgnoreCase("props")) {
+                        SpellType spellType;
+                        try {
+                            spellType = SpellType.valueOf(args[2].toUpperCase());
+                            Behaviour behaviour = spellType.castable.getBehaviour();
+                            if (behaviour == null) {
+                                sender.sendMessage(Main.PREFIX + "Spell has no behaviour!");
+                            } else {
+                                sender.sendMessage("§e ---- §6" + args[2].toUpperCase() + "§e ----§r\n" + behaviour);
+                            }
+                        } catch (IllegalArgumentException e) {
+                            sender.sendMessage(Main.PREFIX + "Spell does not exist!");
                         }
                         return true;
                     }

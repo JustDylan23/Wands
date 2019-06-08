@@ -18,7 +18,7 @@ import org.bukkit.util.Vector;
 
 import java.util.function.Consumer;
 
-public final class Projectile<T extends org.bukkit.entity.Projectile> extends Behaviour implements Listener {
+public final class ProjectileSpell<T extends org.bukkit.entity.Projectile> extends Behaviour implements Listener {
     private static int idCount;
     private final Class<T> projectile;
     private final Consumer<T> projectileProps;
@@ -29,7 +29,7 @@ public final class Projectile<T extends org.bukkit.entity.Projectile> extends Be
     private final String metadataTag;
 
     //can be accessed via builder
-    private Projectile(Builder<T> builder) {
+    private ProjectileSpell(Builder<T> builder) {
         super(builder.baseMeta);
         this.projectile = builder.projectile;
         this.projectileProps = builder.projectileProps;
@@ -61,9 +61,9 @@ public final class Projectile<T extends org.bukkit.entity.Projectile> extends Be
         projectile.remove();
         Location loc = projectile.getLocation();
         hitEffects.accept(loc);
-        EffectUtil.getNearbyDamageables(player, loc, effectAreaRange).forEach(entity -> {
+        EffectUtil.getNearbyDamageables(player, loc, effectRadius).forEach(entity -> {
             entityEffects.accept(entity);
-            EffectUtil.damage(entityDamage, player, entity);
+            entity.damage(entityDamage);
             EffectUtil.removeVelocity(entity);
             pushFrom(loc, entity, pushSpeed);
         });
@@ -121,6 +121,14 @@ public final class Projectile<T extends org.bukkit.entity.Projectile> extends Be
         }
     }
 
+    @Override
+    public String toString() {
+        return super.toString() + "ID count: " + idCount
+                + "\nSpeed: " + speed
+                + "\nLife time: " + lifeTime + " ticks"
+                + "\nPush speed: " + pushSpeed;
+    }
+
     public static class Builder<T extends org.bukkit.entity.Projectile> extends AbstractBuilder<Builder<T>> {
 
         private final Class<T> projectile;
@@ -128,7 +136,7 @@ public final class Projectile<T extends org.bukkit.entity.Projectile> extends Be
 
         private Consumer<T> projectileProps = ShorthandUtil.emptyConsumer();
         private Consumer<Location> hitEffects = ShorthandUtil.emptyConsumer();
-        private int lifeTime;
+        private int lifeTime = 20;
         private int pushSpeed;
 
         private Builder(Class<T> projectileClass, float speed) throws NullPointerException {
@@ -143,7 +151,7 @@ public final class Projectile<T extends org.bukkit.entity.Projectile> extends Be
 
         @Override
         public Behaviour build() {
-            return new Projectile<>(this);
+            return new ProjectileSpell<>(this);
         }
 
         public Builder<T> setProjectileProps(Consumer<T> projectileProps) {
@@ -156,8 +164,8 @@ public final class Projectile<T extends org.bukkit.entity.Projectile> extends Be
             return self();
         }
 
-        public Builder<T> setLifeTime(int lifeTime) {
-            this.lifeTime = lifeTime;
+        public Builder<T> setLifeTime(int ticks) {
+            this.lifeTime = ticks;
             return self();
         }
 

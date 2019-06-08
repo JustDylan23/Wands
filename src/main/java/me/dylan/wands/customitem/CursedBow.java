@@ -138,7 +138,7 @@ public class CursedBow implements Listener {
                 location.getWorld().spawnParticle(Particle.SMOKE_NORMAL, location, 30, 0.4, 0.4, 0.4, 0.2, null, true);
                 EffectUtil.getNearbyDamageables((Player) projectile.getShooter(), location, 3)
                         .forEach(entity -> {
-                            EffectUtil.damage(8, (Player) projectile.getShooter(), entity);
+                            entity.damage(8);
                             ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 80, 3, false), true);
                         });
                 projectile.remove();

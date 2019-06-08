@@ -23,14 +23,12 @@ public class ListenerRegistry {
     public void addToggleableListener(Listener... listeners) {
         toggleableListeners.addAll(Arrays.asList(listeners));
         if (Main.getPlugin().getConfigurableData().isMagicUseAllowed()) {
-            Main.log("magic usage is allowed");
             addListener(listeners);
         }
     }
 
     void disableListeners() {
         toggleableListeners.forEach(HandlerList::unregisterAll);
-        Main.log("disabling listeners...");
     }
 
     void enableListeners() {

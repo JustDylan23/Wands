@@ -6,10 +6,10 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
-public final class Spark extends Behaviour {
+public final class SparkSpell extends Behaviour {
     private final int effectDistance;
 
-    private Spark(Builder builder) {
+    private SparkSpell(Builder builder) {
         super(builder.baseMeta);
         this.effectDistance = builder.effectDistance;
     }
@@ -23,8 +23,8 @@ public final class Spark extends Behaviour {
         Location loc = getSpellLocation(player);
         castEffects.accept(player.getLocation());
         visualEffects.accept(loc);
-        EffectUtil.getNearbyDamageables(player, loc, effectAreaRange).forEach(entity -> {
-            EffectUtil.damage(entityDamage, player, entity);
+        EffectUtil.getNearbyDamageables(player, loc, effectRadius).forEach(entity -> {
+            entity.damage(entityDamage);
             EffectUtil.removeVelocity(entity);
             entityEffects.accept(entity);
         });
@@ -43,6 +43,12 @@ public final class Spark extends Behaviour {
         return player.getLocation();
     }
 
+    @Override
+    public String toString() {
+        return super.toString() + "Effect distance: " + effectDistance;
+    }
+
+
     public static class Builder extends AbstractBuilder<Builder> {
 
         private int effectDistance;
@@ -57,7 +63,7 @@ public final class Spark extends Behaviour {
 
         @Override
         public Behaviour build() {
-            return new Spark(this);
+            return new SparkSpell(this);
         }
 
         public Builder setEffectDistance(int effectDistance) {

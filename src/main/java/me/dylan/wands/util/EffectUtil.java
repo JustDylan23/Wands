@@ -7,8 +7,6 @@ import org.bukkit.Particle;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.util.Vector;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -30,12 +28,6 @@ public class EffectUtil {
                 .filter(entity -> !entity.equals(player))
                 .map(Damageable.class::cast)
                 .collect(Collectors.toList());
-    }
-
-    public static void damage(int damage, Entity attacker, Damageable victim) {
-        victim.damage(damage);
-        EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(attacker, victim, EntityDamageEvent.DamageCause.ENTITY_ATTACK, damage);
-        victim.setLastDamageCause(event);
     }
 
     public static void runTaskLater(Runnable runnable, int... delays) {
@@ -65,7 +57,7 @@ public class EffectUtil {
         }
     }
 
-    private static Location randomizeLoc(Location location, double x, double y, double z) {
+    public static Location randomizeLoc(Location location, double x, double y, double z) {
         return location.clone().add(randomize(x), randomize(y), randomize(z));
     }
 

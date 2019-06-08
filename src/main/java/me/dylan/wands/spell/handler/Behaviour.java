@@ -15,17 +15,23 @@ public abstract class Behaviour implements Listener {
     final static Main plugin = Main.getPlugin();
 
     final int entityDamage;
-    final float effectAreaRange;
+    final float effectRadius;
     final Consumer<Location> castEffects;
     final Consumer<Location> visualEffects;
     final Consumer<Entity> entityEffects;
 
     Behaviour(@Nonnull AbstractBuilder.BaseMeta baseMeta) {
         this.entityDamage = baseMeta.entityDamage;
-        this.effectAreaRange = baseMeta.effectRadius;
+        this.effectRadius = baseMeta.effectRadius;
         this.castEffects = baseMeta.castEffects;
         this.visualEffects = baseMeta.relativeEffects;
         this.entityEffects = baseMeta.entityEffects;
+    }
+
+    @Override
+    public String toString() {
+        return "Entity damage: " + entityDamage +
+                "\nEffect radius: " + effectRadius + "\n";
     }
 
     public abstract boolean cast(Player player);
@@ -39,7 +45,7 @@ public abstract class Behaviour implements Listener {
         public abstract Behaviour build();
 
         /**
-         * Sets the damage that is applied to the Damageable effected by the spell.
+         * Sets the damage that is applied to the Damageable effected by the castable.
          *
          * @param damage The amount of damage
          * @return this
@@ -51,7 +57,7 @@ public abstract class Behaviour implements Listener {
         }
 
         /**
-         * Sets the effects which will effect the Damageables in the spell's effect range.
+         * Sets the effects which will effect the Damageables in the castable's effect range.
          *
          * @param effects Effects applied to the affected Damageables
          * @return this
@@ -63,7 +69,7 @@ public abstract class Behaviour implements Listener {
         }
 
         /**
-         * Sets the radius of the affected Damageables after the spell concludes.
+         * Sets the radius of the affected Damageables after the castable concludes.
          *
          * @param radius The radius
          * @return this
@@ -87,10 +93,10 @@ public abstract class Behaviour implements Listener {
         }
 
         /**
-         * Sets the visual effects that the spell shows, whether it is a trail of particles
-         * or is executed relative to where you look is up to the spell handler BaseProps is used in.
+         * Sets the visual effects that the castable shows, whether it is a trail of particles
+         * or is executed relative to where you look is up to the castable handler BaseProps is used in.
          *
-         * @param effects Effects relative to the spell
+         * @param effects Effects relative to the castable
          * @return this
          */
 

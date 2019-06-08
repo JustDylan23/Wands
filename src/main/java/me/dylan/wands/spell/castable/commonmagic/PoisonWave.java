@@ -1,8 +1,8 @@
-package me.dylan.wands.spell.implementation;
+package me.dylan.wands.spell.castable.commonmagic;
 
-import me.dylan.wands.spell.Spell;
+import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.handler.Behaviour;
-import me.dylan.wands.spell.handler.Wave;
+import me.dylan.wands.spell.handler.WaveSpell;
 import me.dylan.wands.util.EffectUtil;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -10,10 +10,12 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class PoisonWave extends Spell {
-    @Override
-    public Behaviour getBehaviour() {
-        return Wave.newBuilder()
+public class PoisonWave implements Castable {
+
+    private static Behaviour behaviour;
+
+    static {
+        behaviour = WaveSpell.newBuilder()
                 .setEffectRadius(2.2F)
                 .setEntityDamage(1)
                 .setCastEffects(location -> location.getWorld().playSound(location, Sound.ENTITY_EVOKER_CAST_SPELL, 3, 1))
@@ -22,7 +24,12 @@ public class PoisonWave extends Spell {
                 .setRelativeEffects(loc -> {
                     EffectUtil.spawnColoredParticle(Particle.SPELL_MOB, loc, 18, 1.2, 1.2, 1.2, 75, 140, 50, false);
                     loc.getWorld().spawnParticle(Particle.SMOKE_NORMAL, loc, 5, 1, 1, 1, 0.05, null, true);
-                }).setEffectDistance(30)
+                }).setEffectDistance(20)
                 .build();
+    }
+
+    @Override
+    public Behaviour getBehaviour() {
+        return behaviour;
     }
 }

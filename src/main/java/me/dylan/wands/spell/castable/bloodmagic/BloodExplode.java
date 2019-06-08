@@ -1,18 +1,19 @@
-package me.dylan.wands.spell.implementation;
+package me.dylan.wands.spell.castable.bloodmagic;
 
-import me.dylan.wands.spell.Spell;
+import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.handler.Behaviour;
-import me.dylan.wands.spell.handler.Spark;
+import me.dylan.wands.spell.handler.SparkSpell;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 
-public class BloodExplode extends Spell {
+public class BloodExplode implements Castable {
 
-    @Override
-    public Behaviour getBehaviour() {
-        return Spark.newBuilder()
+    private static Behaviour behaviour;
+
+    static {
+        behaviour = SparkSpell.newBuilder()
                 .setEffectRadius(4.5F)
                 .setEntityDamage(7)
                 .setEntityEffects(entity -> entity.setFireTicks(40))
@@ -25,5 +26,10 @@ public class BloodExplode extends Spell {
                 .setCastEffects(loc -> loc.getWorld().playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_BLAST, SoundCategory.MASTER, 4.0F, 1.0F))
                 .setEffectDistance(30)
                 .build();
+    }
+
+    @Override
+    public Behaviour getBehaviour() {
+        return behaviour;
     }
 }
