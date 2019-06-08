@@ -10,12 +10,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-public final class Wave extends Behaviour {
+public final class WaveSpell extends Behaviour {
     private final int effectDistance;
     private final boolean stopAtEntity;
 
     //can be accessed via builder
-    private Wave(Builder builder) {
+    private WaveSpell(Builder builder) {
         super(builder.baseMeta);
         this.effectDistance = builder.effectDistance;
         this.stopAtEntity = builder.stopAtEntity;
@@ -40,10 +40,10 @@ public final class Wave extends Behaviour {
                 if (count++ >= effectDistance) cancel();
                 Location loc = currentLoc.add(direction).clone();
                 visualEffects.accept(loc);
-                for (Damageable entity : EffectUtil.getNearbyDamageables(player, loc, effectAreaRange)) {
+                for (Damageable entity : EffectUtil.getNearbyDamageables(player, loc, effectRadius)) {
                     if (!entity.hasMetadata(randomID)) {
                         entity.setMetadata(randomID, ShorthandUtil.METADATA_VALUE_TRUE);
-                        EffectUtil.damage(entityDamage, player, entity);
+                        entity.damage(entityDamage);
                         entityEffects.accept(entity);
                         Bukkit.getScheduler().runTaskLater(plugin, () -> {
                             if (entity.isValid()) {
@@ -59,6 +59,12 @@ public final class Wave extends Behaviour {
             }
         }.runTaskTimer(plugin, 1, 1);
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + "Effect distance: " + effectDistance
+                + "\nStop at entity: " + stopAtEntity;
     }
 
     public static class Builder extends AbstractBuilder<Builder> {
@@ -83,8 +89,8 @@ public final class Wave extends Behaviour {
             return self();
         }
 
-        public Wave build() {
-            return new Wave(this);
+        public WaveSpell build() {
+            return new WaveSpell(this);
         }
     }
 }

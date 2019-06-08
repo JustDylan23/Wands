@@ -24,17 +24,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
-public final class MovingBlock extends Behaviour implements Listener {
+public final class MovingBlockSpell extends Behaviour implements Listener {
 
+    private static final String TAG_UNBREAKABLE = "TempUnbreakable";
+    private static final String TAG_FALLING_BLOCK = "MovingBlockSpellEntity";
     private final Material material;
     private final Consumer<Location> hitEffects;
     private final Map<Player, BlockReverter> selectedBlock = new HashMap<>();
     private final Map<FallingBlock, Player> caster = new HashMap<>();
 
-    private static final String TAG_UNBREAKABLE = "TempUnbreakable";
-    private static final String TAG_FALLING_BLOCK = "MovingBlockSpellEntity";
-
-    private MovingBlock(Builder builder) {
+    private MovingBlockSpell(Builder builder) {
         super(builder.baseMeta);
         ListenerRegistry.addListener(this);
         this.material = builder.material;
@@ -109,9 +108,9 @@ public final class MovingBlock extends Behaviour implements Listener {
             caster.remove(fallingBlock);
             Location loc = fallingBlock.getLocation();
             hitEffects.accept(loc);
-            EffectUtil.getNearbyDamageables(player, loc, effectAreaRange).forEach(entity -> {
+            EffectUtil.getNearbyDamageables(player, loc, effectRadius).forEach(entity -> {
                 entityEffects.accept(entity);
-                EffectUtil.damage(entityDamage, player, entity);
+                entity.damage(entityDamage);
                 EffectUtil.removeVelocity(entity);
             });
         }
@@ -144,15 +143,20 @@ public final class MovingBlock extends Behaviour implements Listener {
         }.runTaskTimer(plugin, 0, 1);
     }
 
+    @Override
+    public String toString() {
+        return super.toString() + "Material: " + material;
+    }
+
     static class BlockReverter implements Runnable {
 
         private final Location originLoc;
-        private final MovingBlock parent;
+        private final MovingBlockSpell parent;
         private final Player player;
         private BlockState state;
         private boolean canRun = true;
 
-        BlockReverter(BlockState state, Location originLoc, Player player, MovingBlock parent) {
+        BlockReverter(BlockState state, Location originLoc, Player player, MovingBlockSpell parent) {
             this.state = state;
             this.originLoc = originLoc;
             this.parent = parent;
@@ -189,7 +193,7 @@ public final class MovingBlock extends Behaviour implements Listener {
 
         @Override
         public Behaviour build() {
-            return new MovingBlock(this);
+            return new MovingBlockSpell(this);
         }
 
         public Builder setHitEffects(Consumer<Location> hitEffects) {

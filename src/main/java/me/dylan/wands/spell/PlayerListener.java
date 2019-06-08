@@ -1,7 +1,6 @@
 package me.dylan.wands.spell;
 
 import me.dylan.wands.Main;
-import me.dylan.wands.util.WandUtil;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -25,20 +24,20 @@ public class PlayerListener implements Listener {
         if (action == Action.PHYSICAL) return;
         Player player = event.getPlayer();
         ItemStack itemStack = player.getInventory().getItemInMainHand();
-        if (event.getHand() == EquipmentSlot.HAND && WandUtil.isWand(itemStack)) {
+        if (event.getHand() == EquipmentSlot.HAND && SpellUtil.isWand(itemStack)) {
             event.setCancelled(true);
             if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK) {
                 castWithCooldown(player, itemStack);
             } else if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) {
-                WandUtil.nextSpell(player, itemStack);
+                SpellUtil.nextSpell(player, itemStack);
             }
         }
     }
 
     /**
      * This method handles the cooldown which the player
-     * has to wait for after casting a spell before a new
-     * spell may be cast.
+     * has to wait for after casting a castable before a new
+     * castable may be cast.
      *
      * @param player    Player.
      * @param itemStack ItemStack which
@@ -47,7 +46,7 @@ public class PlayerListener implements Listener {
     private void castWithCooldown(Player player, ItemStack itemStack) {
         int remainingTime = getRemainingTime(player);
         if (remainingTime <= 0) {
-            if (WandUtil.castSpell(player, itemStack)) {
+            if (SpellUtil.castSpell(player, itemStack)) {
                 lastUsed.put(player, System.currentTimeMillis());
             }
         } else {

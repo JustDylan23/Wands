@@ -156,8 +156,10 @@ public class AssasinDagger implements Listener {
     @EventHandler
     private void onChangeSlot(PlayerItemHeldEvent event) {
         Player player = event.getPlayer();
-        if (player.isSneaking() && hasDagger(player)) {
-            cover(player);
-        }
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            if (player.isSneaking() && hasDagger(player)) {
+                cover(player);
+            }
+        }, 1);
     }
 }
