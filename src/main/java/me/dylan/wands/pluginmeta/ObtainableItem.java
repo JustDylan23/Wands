@@ -69,6 +69,7 @@ public enum ObtainableItem {
                 SpellType.THUMDER_RAGE,
                 SpellType.THUNDER_STORM
         );
+        SpellUtil.setSpellBrowseParticles(itemStack, BrowseParticle.PARTICLE_ICE);
         return itemStack;
     }));
 

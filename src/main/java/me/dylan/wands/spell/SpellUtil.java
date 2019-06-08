@@ -98,7 +98,7 @@ public class SpellUtil {
         player.sendActionBar("§6Current spell: §7§l" + spells[index].getDisplayName());
 
         getSpellBrowseParticle(itemStack).ifPresent(particle -> {
-            particle.spawn(player.getEyeLocation());
+            particle.spawn(player.getLocation());
         });
 
     }

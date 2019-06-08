@@ -36,8 +36,8 @@ public class PlayerListener implements Listener {
 
     /**
      * This method handles the cooldown which the player
-     * has to wait for after casting a castable before a new
-     * castable may be cast.
+     * has to wait for after casting a implementations before a new
+     * implementations may be cast.
      *
      * @param player    Player.
      * @param itemStack ItemStack which
