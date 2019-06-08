@@ -45,7 +45,7 @@ public abstract class Behaviour implements Listener {
         public abstract Behaviour build();
 
         /**
-         * Sets the damage that is applied to the Damageable effected by the castable.
+         * Sets the damage that is applied to the Damageable effected by the implementations.
          *
          * @param damage The amount of damage
          * @return this
@@ -57,7 +57,7 @@ public abstract class Behaviour implements Listener {
         }
 
         /**
-         * Sets the effects which will effect the Damageables in the castable's effect range.
+         * Sets the effects which will effect the Damageables in the implementations's effect range.
          *
          * @param effects Effects applied to the affected Damageables
          * @return this
@@ -69,7 +69,7 @@ public abstract class Behaviour implements Listener {
         }
 
         /**
-         * Sets the radius of the affected Damageables after the castable concludes.
+         * Sets the radius of the affected Damageables after the implementations concludes.
          *
          * @param radius The radius
          * @return this
@@ -93,10 +93,10 @@ public abstract class Behaviour implements Listener {
         }
 
         /**
-         * Sets the visual effects that the castable shows, whether it is a trail of particles
-         * or is executed relative to where you look is up to the castable handler BaseProps is used in.
+         * Sets the visual effects that the implementations shows, whether it is a trail of particles
+         * or is executed relative to where you look is up to the implementations handler BaseProps is used in.
          *
-         * @param effects Effects relative to the castable
+         * @param effects Effects relative to the implementations
          * @return this
          */
 

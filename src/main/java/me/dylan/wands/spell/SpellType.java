@@ -1,8 +1,8 @@
 package me.dylan.wands.spell;
 
-import me.dylan.wands.spell.castable.bloodmagic.*;
-import me.dylan.wands.spell.castable.commonmagic.*;
-import me.dylan.wands.spell.castable.icemagic.*;
+import me.dylan.wands.spell.implementations.bloodmagic.*;
+import me.dylan.wands.spell.implementations.commonmagic.*;
+import me.dylan.wands.spell.implementations.icemagic.*;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
