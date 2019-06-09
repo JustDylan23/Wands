@@ -61,7 +61,7 @@ public final class ProjectileSpell<T extends org.bukkit.entity.Projectile> exten
         projectile.remove();
         Location loc = projectile.getLocation();
         hitEffects.accept(loc);
-        EffectUtil.getNearbyDamageables(player, loc, effectRadius).forEach(entity -> {
+        EffectUtil.getNearbyLivingEntities(player, loc, effectRadius).forEach(entity -> {
             entityEffects.accept(entity);
             entity.damage(entityDamage);
             EffectUtil.removeVelocity(entity);

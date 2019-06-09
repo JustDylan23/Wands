@@ -4,8 +4,8 @@ import me.dylan.wands.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
-import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -21,12 +21,12 @@ public class EffectUtil {
         throw new UnsupportedOperationException();
     }
 
-    public static Iterable<Damageable> getNearbyDamageables(Player player, Location loc, double radius) {
+    public static Iterable<LivingEntity> getNearbyLivingEntities(Player player, Location loc, double radius) {
         return loc.getWorld()
                 .getNearbyEntities(loc, radius, radius, radius).stream()
-                .filter(Damageable.class::isInstance)
+                .filter(LivingEntity.class::isInstance)
                 .filter(entity -> !entity.equals(player))
-                .map(Damageable.class::cast)
+                .map(LivingEntity.class::cast)
                 .collect(Collectors.toList());
     }
 

@@ -26,6 +26,6 @@ public enum BrowseParticle {
     void spawn(Location location) {
         location.add(0, 1, 0);
         consumer.accept(location);
-        location.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE,location, 15,0.5,0.5,0.5,1);
+        location.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, location, 15, 0.5, 0.5, 0.5, 1);
     }
 }

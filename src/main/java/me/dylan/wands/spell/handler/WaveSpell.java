@@ -45,7 +45,7 @@ public final class WaveSpell extends Behaviour {
                     if (count >= effectDistance) cancel();
                     Location loc = currentLoc.add(direction).clone();
                     visualEffects.accept(loc);
-                    for (Damageable entity : EffectUtil.getNearbyDamageables(player, loc, effectRadius)) {
+                    for (Damageable entity : EffectUtil.getNearbyLivingEntities(player, loc, effectRadius)) {
                         if (stopAtEntity) {
                             entity.damage(entityDamage);
                             entityEffects.accept(entity);

@@ -3,7 +3,7 @@ package me.dylan.wands.spell.handler;
 import me.dylan.wands.Main;
 import me.dylan.wands.util.ShorthandUtil;
 import org.bukkit.Location;
-import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
@@ -18,7 +18,7 @@ public abstract class Behaviour implements Listener {
     final float effectRadius;
     final Consumer<Location> castEffects;
     final Consumer<Location> visualEffects;
-    final Consumer<Entity> entityEffects;
+    final Consumer<LivingEntity> entityEffects;
 
     Behaviour(@Nonnull AbstractBuilder.BaseMeta baseMeta) {
         this.entityDamage = baseMeta.entityDamage;
@@ -63,7 +63,7 @@ public abstract class Behaviour implements Listener {
          * @return this
          */
 
-        public T setEntityEffects(Consumer<Entity> effects) {
+        public T setEntityEffects(Consumer<LivingEntity> effects) {
             baseMeta.entityEffects = effects;
             return self();
         }
@@ -110,7 +110,7 @@ public abstract class Behaviour implements Listener {
             private float effectRadius = 0;
             private Consumer<Location> castEffects = ShorthandUtil.emptyConsumer();
             private Consumer<Location> relativeEffects = ShorthandUtil.emptyConsumer();
-            private Consumer<Entity> entityEffects = ShorthandUtil.emptyConsumer();
+            private Consumer<LivingEntity> entityEffects = ShorthandUtil.emptyConsumer();
         }
     }
 }

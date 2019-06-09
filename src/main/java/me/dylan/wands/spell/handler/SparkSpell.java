@@ -23,7 +23,7 @@ public final class SparkSpell extends Behaviour {
         Location loc = getSpellLocation(player);
         castEffects.accept(player.getLocation());
         visualEffects.accept(loc);
-        EffectUtil.getNearbyDamageables(player, loc, effectRadius).forEach(entity -> {
+        EffectUtil.getNearbyLivingEntities(player, loc, effectRadius).forEach(entity -> {
             entity.damage(entityDamage);
             EffectUtil.removeVelocity(entity);
             entityEffects.accept(entity);
