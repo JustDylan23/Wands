@@ -8,19 +8,18 @@ import org.bukkit.Bukkit;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class Confuse implements Castable {
+public enum Confuse implements Castable {
+    INSTANCE;
+    private final Behaviour behaviour;
 
-    private static Behaviour behaviour;
-
-    static {
-        behaviour = SparkSpell.newBuilder()
+    Confuse() {
+        this.behaviour = SparkSpell.newBuilder()
                 .setEffectRadius(4F)
                 .setEntityDamage(6)
-                .setEntityEffects(entity -> ((LivingEntity) entity).addPotionEffect(
+                .setEntityEffects(entity -> entity.addPotionEffect(
                         new PotionEffect(PotionEffectType.CONFUSION, 240, 4, false), true))
                 .setRelativeEffects(loc -> {
                     loc.getWorld().spawnParticle(Particle.SMOKE_LARGE, loc, 30, 1, 1, 1, 0.08, null, true);

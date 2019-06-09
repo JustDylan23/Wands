@@ -3,12 +3,12 @@ package me.dylan.wands.spell.implementations.icemagic;
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.handler.Behaviour;
 
-public class ThunderRage implements Castable {
+public enum ThunderRage implements Castable {
+    INSTANCE;
+    private final Behaviour behaviour;
 
-    private static Behaviour behaviour;
-
-    static {
-        behaviour = null;
+    ThunderRage() {
+        this.behaviour = null;
     }
 
     @Override

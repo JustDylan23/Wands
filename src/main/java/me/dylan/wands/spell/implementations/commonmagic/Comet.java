@@ -12,11 +12,10 @@ import org.bukkit.entity.SmallFireball;
 
 public enum Comet implements Castable {
     INSTANCE;
-
-    private Behaviour behaviour;
+    private final Behaviour behaviour;
 
     Comet() {
-        this.behaviour = behaviour = ProjectileSpell.newBuilder(SmallFireball.class, 3F)
+        this.behaviour = ProjectileSpell.newBuilder(SmallFireball.class, 3F)
                 .setCastEffects(loc ->
                         loc.getWorld().playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_BLAST, SoundCategory.MASTER, 5F, 1F)
                 )

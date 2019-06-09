@@ -9,12 +9,12 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 
-public class Spark implements Castable {
+public enum Spark implements Castable {
+    INSTANCE;
+    private final Behaviour behaviour;
 
-    private static Behaviour behaviour;
-
-    static {
-        behaviour = SparkSpell.newBuilder()
+    Spark() {
+        this.behaviour = SparkSpell.newBuilder()
                 .setEffectRadius(2.2F)
                 .setEntityDamage(10)
                 .setRelativeEffects(loc -> {

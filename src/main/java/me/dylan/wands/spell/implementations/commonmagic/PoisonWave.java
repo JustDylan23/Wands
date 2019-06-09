@@ -9,12 +9,12 @@ import org.bukkit.Sound;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class PoisonWave implements Castable {
+public enum PoisonWave implements Castable {
+    INSTANCE;
+    private final Behaviour behaviour;
 
-    private static Behaviour behaviour;
-
-    static {
-        behaviour = WaveSpell.newBuilder()
+    PoisonWave() {
+        this.behaviour = WaveSpell.newBuilder()
                 .setEffectRadius(2.2F)
                 .setEntityDamage(1)
                 .setCastEffects(location -> location.getWorld().playSound(location, Sound.ENTITY_EVOKER_CAST_SPELL, 3, 1))

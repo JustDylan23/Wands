@@ -8,12 +8,12 @@ import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.Arrow;
 
-public class LightningArrow implements Castable {
+public enum LightningArrow implements Castable {
+    INSTANCE;
+    private final Behaviour behaviour;
 
-    private static Behaviour behaviour;
-
-    static {
-        behaviour = ProjectileSpell.newBuilder(Arrow.class, 2.2F)
+    LightningArrow() {
+        this.behaviour = ProjectileSpell.newBuilder(Arrow.class, 2.2F)
                 .setHitEffects(location -> {
                     World w = location.getWorld();
                     w.strikeLightningEffect(location);

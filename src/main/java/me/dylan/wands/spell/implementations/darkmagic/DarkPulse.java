@@ -3,12 +3,12 @@ package me.dylan.wands.spell.implementations.darkmagic;
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.handler.Behaviour;
 
-public class DarkPulse implements Castable {
+public enum DarkPulse implements Castable {
+    INSTANCE;
+    private final Behaviour behaviour;
 
-    private static Behaviour behaviour;
-
-    static {
-        behaviour = null;
+    DarkPulse() {
+        this.behaviour = null;
     }
 
     @Override

@@ -8,12 +8,12 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 
-public class BloodBlock implements Castable {
+public enum BloodBlock implements Castable {
+    INSTANCE;
+    private final Behaviour behaviour;
 
-    private static Behaviour behaviour;
-
-    static {
-        behaviour = MovingBlockSpell.newBuilder(Material.REDSTONE_BLOCK)
+    BloodBlock() {
+        this.behaviour = MovingBlockSpell.newBuilder(Material.REDSTONE_BLOCK)
                 .setHitEffects((loc -> {
                     loc.getWorld().spawnParticle(Particle.SMOKE_LARGE, loc, 20, 1, 1, 1, 0.1, null, true);
                     loc.getWorld().spawnParticle(Particle.BLOCK_CRACK, loc, 15, 1, 1, 1, 0.15, Material.REDSTONE_BLOCK.createBlockData(), true);

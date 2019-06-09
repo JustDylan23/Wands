@@ -3,12 +3,12 @@ package me.dylan.wands.spell.implementations.firemagic;
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.handler.Behaviour;
 
-public class FireTwister implements Castable {
+public enum FireTwister implements Castable {
+    INSTANCE;
+    private final Behaviour behaviour;
 
-    private static Behaviour behaviour;
-
-    static {
-        behaviour = null;
+    FireTwister() {
+        this.behaviour = null;
     }
 
     @Override
