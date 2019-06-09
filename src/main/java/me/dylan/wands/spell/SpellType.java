@@ -8,7 +8,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 public enum SpellType {
-    COMET(new Comet()),
+    COMET(Comet.INSTANCE),
     SPARK(new Spark()),
     LAUNCH(new Launch()),
     CONFUSE(new Confuse()),

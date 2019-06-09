@@ -7,13 +7,14 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class BloodStun implements Castable {
 
     private static Behaviour behaviour;
+    private static final PotionEffect POTION_EFFECT =
+            new PotionEffect(PotionEffectType.SLOW, 180, 3, false);
 
     static {
         behaviour = WaveSpell.newBuilder()
@@ -21,8 +22,8 @@ public class BloodStun implements Castable {
                 .setEntityDamage(5)
                 .setCastEffects(location -> location.getWorld().playSound(location, Sound.ENTITY_FIREWORK_ROCKET_BLAST, 4, 1))
                 .setEntityEffects(entity -> {
-                    ((LivingEntity) entity).addPotionEffect(
-                            new PotionEffect(PotionEffectType.SLOW, 180, 3, false), true);
+                    entity.addPotionEffect(
+                            POTION_EFFECT, true);
                     Location location = entity.getLocation();
                     location.getWorld().playSound(location, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, 4, 1);
                 })

@@ -6,7 +6,6 @@ import me.dylan.wands.util.ItemUtil;
 import me.dylan.wands.util.ShorthandUtil;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -136,10 +135,10 @@ public class CursedBow implements Listener {
                 location.getWorld().playSound(location, Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, SoundCategory.MASTER, 5F, 1F);
                 location.getWorld().playSound(location, Sound.ITEM_TRIDENT_RETURN, SoundCategory.MASTER, 5F, 1F);
                 location.getWorld().spawnParticle(Particle.SMOKE_NORMAL, location, 30, 0.4, 0.4, 0.4, 0.2, null, true);
-                EffectUtil.getNearbyDamageables((Player) projectile.getShooter(), location, 3)
+                EffectUtil.getNearbyLivingEntities((Player) projectile.getShooter(), location, 3)
                         .forEach(entity -> {
                             entity.damage(8);
-                            ((LivingEntity) entity).addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 80, 3, false), true);
+                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 80, 3, false), true);
                         });
                 projectile.remove();
             }

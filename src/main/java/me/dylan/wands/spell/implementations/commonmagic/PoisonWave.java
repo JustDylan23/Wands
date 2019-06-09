@@ -6,7 +6,6 @@ import me.dylan.wands.spell.handler.WaveSpell;
 import me.dylan.wands.util.EffectUtil;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -19,7 +18,7 @@ public class PoisonWave implements Castable {
                 .setEffectRadius(2.2F)
                 .setEntityDamage(1)
                 .setCastEffects(location -> location.getWorld().playSound(location, Sound.ENTITY_EVOKER_CAST_SPELL, 3, 1))
-                .setEntityEffects(entity -> ((LivingEntity) entity).addPotionEffect(
+                .setEntityEffects(entity -> entity.addPotionEffect(
                         new PotionEffect(PotionEffectType.POISON, 60, 4, false), true))
                 .setRelativeEffects(loc -> {
                     EffectUtil.spawnColoredParticle(Particle.SPELL_MOB, loc, 18, 1.2, 1.2, 1.2, 75, 140, 50, false);

@@ -108,7 +108,7 @@ public final class MovingBlockSpell extends Behaviour implements Listener {
             caster.remove(fallingBlock);
             Location loc = fallingBlock.getLocation();
             hitEffects.accept(loc);
-            EffectUtil.getNearbyDamageables(player, loc, effectRadius).forEach(entity -> {
+            EffectUtil.getNearbyLivingEntities(player, loc, effectRadius).forEach(entity -> {
                 entityEffects.accept(entity);
                 entity.damage(entityDamage);
                 EffectUtil.removeVelocity(entity);
