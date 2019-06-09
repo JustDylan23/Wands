@@ -10,20 +10,20 @@ import org.bukkit.Sound;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class BloodStun implements Castable {
-
-    private static Behaviour behaviour;
-    private static final PotionEffect POTION_EFFECT =
+public enum BloodStun implements Castable {
+    INSTANCE;
+    private final PotionEffect potionEffect =
             new PotionEffect(PotionEffectType.SLOW, 180, 3, false);
+    private final Behaviour behaviour;
 
-    static {
-        behaviour = WaveSpell.newBuilder()
+    BloodStun() {
+        this.behaviour = WaveSpell.newBuilder()
                 .setEffectRadius(1F)
                 .setEntityDamage(5)
                 .setCastEffects(location -> location.getWorld().playSound(location, Sound.ENTITY_FIREWORK_ROCKET_BLAST, 4, 1))
                 .setEntityEffects(entity -> {
                     entity.addPotionEffect(
-                            POTION_EFFECT, true);
+                            potionEffect, true);
                     Location location = entity.getLocation();
                     location.getWorld().playSound(location, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, 4, 1);
                 })

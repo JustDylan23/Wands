@@ -9,12 +9,12 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 
-public class BloodSpark implements Castable {
+public enum BloodSpark implements Castable {
+    INSTANCE;
+    private final Behaviour behaviour;
 
-    private static Behaviour behaviour;
-
-    static {
-        behaviour = SparkSpell.newBuilder()
+    BloodSpark() {
+        this.behaviour = SparkSpell.newBuilder()
                 .setEffectRadius(2.2F)
                 .setEntityDamage(10)
                 .setRelativeEffects(loc -> {

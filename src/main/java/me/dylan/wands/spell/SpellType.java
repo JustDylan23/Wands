@@ -2,6 +2,8 @@ package me.dylan.wands.spell;
 
 import me.dylan.wands.spell.implementations.bloodmagic.*;
 import me.dylan.wands.spell.implementations.commonmagic.*;
+import me.dylan.wands.spell.implementations.darkmagic.*;
+import me.dylan.wands.spell.implementations.firemagic.*;
 import me.dylan.wands.spell.implementations.icemagic.*;
 
 import java.util.NoSuchElementException;
@@ -9,22 +11,38 @@ import java.util.Optional;
 
 public enum SpellType {
     COMET(Comet.INSTANCE),
-    SPARK(new Spark()),
-    LAUNCH(new Launch()),
-    CONFUSE(new Confuse()),
-    POISON_WAVE(new PoisonWave()),
-    BLOOD_BLOCK(new BloodBlock()),
-    BLOOD_SPARK(new BloodSpark()),
-    BLOOD_WAVE(new BloodWave()),
-    BLOOD_EXPLODE(new BloodExplode()),
-    BLOOD_STUN(new BloodStun()),
-    ICE_FREEZE(new Freeze()),
-    ICE_AURA(new IceAura()),
-    THUNDER_ARROW(new LightningArrow()),
-    THUMDER_RAGE(new ThunderRage()),
-    THUNDER_STORM(new ThunderStorm()),
-    THUNDER_STRIKE(new ThunderStrike());
+    SPARK(Spark.INSTANCE),
+    LAUNCH(Launch.INSTANCE),
+    CONFUSE(Confuse.INSTANCE),
+    POISON_WAVE(PoisonWave.INSTANCE),
 
+    BLOOD_BLOCK(BloodBlock.INSTANCE),
+    BLOOD_SPARK(BloodSpark.INSTANCE),
+    BLOOD_WAVE(BloodWave.INSTANCE),
+    BLOOD_EXPLODE(BloodExplode.INSTANCE),
+    BLOOD_STUN(BloodStun.INSTANCE),
+
+    ICE_FREEZE(Freeze.INSTANCE),
+    ICE_AURA(IceAura.INSTANCE),
+
+    THUNDER_ARROW(LightningArrow.INSTANCE),
+    THUMDER_RAGE(ThunderRage.INSTANCE),
+    THUNDER_STORM(ThunderStorm.INSTANCE),
+    THUNDER_STRIKE(ThunderStrike.INSTANCE),
+
+    FIRE_COMET(FireComet.INSTANCE),
+    FIRE_SPARK(FireSpark.INSTANCE),
+    FIRE_TWISTER(FireTwister.INSTANCE),
+    FLAME_SHOK_WAVE(FlameShockWave.INSTANCE),
+    FLAME_THROWER(FlameThrower.INSTANCE),
+    FLAME_WAVE(FlameWave.INSTANCE),
+
+    DARK_AURA(DarkAura.INSTANCE),
+    DARK_BLOCK(DarkBlock.INSTANCE),
+    DARK_CIRCLE(DarkCircle.INSTANCE),
+    DARK_PULSE(DarkPulse.INSTANCE),
+    DARK_PUSH(DarkPush.INSTANCE),
+    DARK_SPARK(DarkSpark.INSTANCE);
 
     public final Castable castable;
 

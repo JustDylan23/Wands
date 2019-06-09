@@ -12,15 +12,16 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class Freeze implements Castable {
+public enum Freeze implements Castable {
+    INSTANCE;
+    private final String metaKey = "FREEZE_SPELL";
+    private final FixedMetadataValue meta = new FixedMetadataValue(Main.getPlugin(), true);
+    private final Behaviour behaviour;
+    private PotionEffect slow = new PotionEffect(PotionEffectType.SLOW, 120, 4, false);
 
-    private final static String META_KEY = "FREEZE_SPELL";
-    private final static FixedMetadataValue META = new FixedMetadataValue(Main.getPlugin(), true);
-    private static Behaviour behaviour;
-    private static PotionEffect slow = new PotionEffect(PotionEffectType.SLOW, 120, 4, false);
 
-    static {
-        behaviour = WaveSpell.newBuilder()
+    Freeze() {
+        this.behaviour = WaveSpell.newBuilder()
                 .stopAtEntity(true)
                 .setEffectRadius(0.8F)
                 .setEntityDamage(3)
@@ -34,8 +35,8 @@ public class Freeze implements Castable {
                 .setEntityEffects(entity -> {
                     Location eLoc = entity.getLocation();
                     eLoc.getWorld().playSound(eLoc, Sound.ENTITY_EVOKER_FANGS_ATTACK, 4, 2);
-                    if (entity.hasMetadata(META_KEY)) return;
-                    entity.setMetadata(META_KEY, META);
+                    if (entity.hasMetadata(metaKey)) return;
+                    entity.setMetadata(metaKey, meta);
                     entity.addPotionEffect(slow, true);
                     new BukkitRunnable() {
                         int count = 0;
@@ -44,7 +45,7 @@ public class Freeze implements Castable {
                         public void run() {
                             if (++count > 60 || !entity.isValid()) {
                                 cancel();
-                                entity.removeMetadata(META_KEY, Main.getPlugin());
+                                entity.removeMetadata(metaKey, Main.getPlugin());
                             } else {
                                 Location loc = entity.getLocation().add(0, 3.5, 0);
                                 loc.getWorld().spawnParticle(Particle.SNOW_SHOVEL, loc, 6, 0.5, 0.5, 0.5, 0.01, null, true);

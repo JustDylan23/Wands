@@ -9,12 +9,12 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;
 
-public class ThunderStrike implements Castable {
+public enum ThunderStrike implements Castable {
+    INSTANCE;
+    private final Behaviour behaviour;
 
-    private static Behaviour behaviour;
-
-    static {
-        behaviour = SparkSpell.newBuilder()
+    ThunderStrike() {
+        this.behaviour = SparkSpell.newBuilder()
                 .setEffectDistance(30)
                 .setEntityDamage(6)
                 .setCastEffects(location -> location.getWorld().playSound(location, Sound.ENTITY_WITHER_SHOOT, 4, 1))

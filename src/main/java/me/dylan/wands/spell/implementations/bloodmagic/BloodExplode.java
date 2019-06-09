@@ -8,12 +8,12 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 
-public class BloodExplode implements Castable {
+public enum BloodExplode implements Castable {
+    INSTANCE;
+    private final Behaviour behaviour;
 
-    private static Behaviour behaviour;
-
-    static {
-        behaviour = SparkSpell.newBuilder()
+    BloodExplode() {
+        this.behaviour = SparkSpell.newBuilder()
                 .setEffectRadius(4.5F)
                 .setEntityDamage(7)
                 .setEntityEffects(entity -> entity.setFireTicks(40))

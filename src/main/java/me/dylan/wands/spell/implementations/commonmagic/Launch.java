@@ -10,12 +10,12 @@ import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.util.Vector;
 
-public class Launch implements Castable {
+public enum Launch implements Castable {
+    INSTANCE;
+    private final Behaviour behaviour;
 
-    private static Behaviour behaviour;
-
-    static {
-        behaviour = SparkSpell.newBuilder()
+    Launch() {
+        this.behaviour = SparkSpell.newBuilder()
                 .setEffectRadius(2.2F)
                 .setEntityDamage(3)
                 .setEntityEffects(entity -> entity.setVelocity(new Vector(0, 1.2, 0)))
