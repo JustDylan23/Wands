@@ -2,18 +2,26 @@ package me.dylan.wands.spell.handler;
 
 import me.dylan.wands.Main;
 import me.dylan.wands.util.EffectUtil;
+import me.dylan.wands.util.ShorthandUtil;
 import org.bukkit.Location;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.function.Consumer;
+
 public final class AuraSpell extends Behaviour {
-    private final int effectDistance;
+    private static int instanceCount = 0;
     private final int effectDuration;
+    private final String hasAura;
+    private final Consumer<LivingEntity> playerEffects;
 
     private AuraSpell(Builder builder) {
         super(builder.baseMeta);
-        this.effectDistance = builder.effectDistance;
+        instanceCount++;
         this.effectDuration = builder.effectDuration;
+        this.hasAura = "HAS_AURA;ID#" + instanceCount;
+        this.playerEffects = builder.playerEffects;
     }
 
     public static Builder newBuilder() {
@@ -23,20 +31,25 @@ public final class AuraSpell extends Behaviour {
     @Override
     public boolean cast(Player player) {
         castEffects.accept(player.getLocation());
+        if (player.hasMetadata(hasAura)) return false;
+        player.setMetadata(hasAura, ShorthandUtil.METADATA_VALUE_TRUE);
+        playerEffects.accept(player);
         new BukkitRunnable() {
             int count = 0;
 
             @Override
             public void run() {
-                if (++count > effectDuration) cancel();
-                else {
+                if (++count > effectDuration) {
+                    cancel();
+                    player.removeMetadata(hasAura, plugin);
+                } else {
                     Location loc = player.getLocation();
-                    visualEffects.accept(player.getLocation());
-                    EffectUtil.getNearbyLivingEntities(player, loc, effectRadius).forEach(entity -> {
-                        entity.damage(entityDamage);
-                        EffectUtil.removeVelocity(entity);
-                        entityEffects.accept(entity);
-                    });
+                    visualEffects.accept(loc);
+                    EffectUtil.getNearbyLivingEntities(player, loc, effectRadius)
+                            .forEach(entity -> {
+                                if (entityDamage != 0) entity.damage(entityDamage);
+                                entityEffects.accept(entity);
+                            });
                 }
             }
         }.runTaskTimer(Main.getPlugin(), 1, 1);
@@ -45,15 +58,13 @@ public final class AuraSpell extends Behaviour {
 
     @Override
     public String toString() {
-        return super.toString() + "Effect distance: " + effectDistance
-                + "\nEffect duration: " + effectDuration + " ticks";
+        return super.toString() + "Effect duration: " + effectDuration + " ticks";
     }
 
 
-    public static class Builder extends AbstractBuilder<Builder> {
-
-        private int effectDistance;
+    public static final class Builder extends AbstractBuilder<Builder> {
         private int effectDuration;
+        private Consumer<LivingEntity> playerEffects = ShorthandUtil.emptyConsumer();
 
         private Builder() {
         }
@@ -68,14 +79,14 @@ public final class AuraSpell extends Behaviour {
             return new AuraSpell(this);
         }
 
-        public Builder setEffectDistance(int effectDistance) {
-            this.effectDistance = effectDistance;
-            return self();
+        public Builder setEffectDuration(int ticks) {
+            this.effectDuration = ticks;
+            return this;
         }
 
-        public Builder setEffectDuration(int effectDuration) {
-            this.effectDuration = effectDuration;
-            return self();
+        public Builder setPlayerEffects(Consumer<LivingEntity> playerEffects) {
+            this.playerEffects = playerEffects;
+            return this;
         }
     }
 }

@@ -38,20 +38,19 @@ public class EffectUtil {
         }
     }
 
-    public static void spawnColoredParticle(Particle particle, Location location, int count, double x, double y, double z, int r, int g, int b, boolean rainbow) {
+    public static void spawnColoredParticle(Particle particle, Location location, int count, double offsetX, double offsetY, double offsetZ, int r, int g, int b, boolean rainbow) {
         switch (particle) {
             case REDSTONE:
             case SPELL_MOB:
             case SPELL_MOB_AMBIENT:
                 if (rainbow) {
-                    count = (count > 0) ? count : 1; //if the count is 0 it will color
-                    location.getWorld().spawnParticle(particle, location, count, x, y, z, 1, null);
+                    location.getWorld().spawnParticle(particle, location, (count > 0) ? count : 1, offsetX, offsetY, offsetZ, 1, null, true);
                 } else {
-                    float red = (r <= 0) ? Float.MIN_NORMAL : (r / 255.0f);
-                    float green = (g <= 0) ? 0 : (g / 255.0f);
-                    float blue = (b <= 0) ? 0 : (b / 255.0f);
+                    float red = Math.max(Float.MIN_NORMAL, r / 255F);
+                    float green = Math.max(0, g / 255F);
+                    float blue = Math.max(0, b / 255F);
                     for (int i = 0; count > i; i++) {
-                        location.getWorld().spawnParticle(particle, randomizeLoc(location, x, y, z), 0, red, green, blue, 1, null);
+                        location.getWorld().spawnParticle(particle, randomizeLoc(location, offsetX, offsetY, offsetZ), 0, red, green, blue, 1, null, true);
                     }
                 }
         }

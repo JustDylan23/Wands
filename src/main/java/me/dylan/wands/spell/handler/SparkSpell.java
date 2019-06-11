@@ -23,11 +23,11 @@ public final class SparkSpell extends Behaviour {
         Location loc = getSpellLocation(player);
         castEffects.accept(player.getLocation());
         visualEffects.accept(loc);
-        EffectUtil.getNearbyLivingEntities(player, loc, effectRadius).forEach(entity -> {
-            entity.damage(entityDamage);
-            EffectUtil.removeVelocity(entity);
-            entityEffects.accept(entity);
-        });
+        EffectUtil.getNearbyLivingEntities(player, loc, effectRadius)
+                .forEach(entity -> {
+                    if (entityDamage != 0) entity.damage(entityDamage);
+                    entityEffects.accept(entity);
+                });
         return true;
     }
 
@@ -49,7 +49,7 @@ public final class SparkSpell extends Behaviour {
     }
 
 
-    public static class Builder extends AbstractBuilder<Builder> {
+    public static final class Builder extends AbstractBuilder<Builder> {
 
         private int effectDistance;
 
@@ -68,7 +68,7 @@ public final class SparkSpell extends Behaviour {
 
         public Builder setEffectDistance(int effectDistance) {
             this.effectDistance = effectDistance;
-            return self();
+            return this;
         }
     }
 }

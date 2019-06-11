@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -18,17 +19,16 @@ import org.bukkit.util.Vector;
 
 import java.util.function.Consumer;
 
-public final class ProjectileSpell<T extends org.bukkit.entity.Projectile> extends Behaviour implements Listener {
-    private static int idCount;
+public final class ProjectileSpell<T extends Projectile> extends Behaviour implements Listener {
+    private static int instanceCount;
     private final Class<T> projectile;
     private final Consumer<T> projectileProps;
     private final Consumer<Location> hitEffects;
     private final float speed;
     private final int lifeTime;
     private final float pushSpeed;
-    private final String metadataTag;
+    private final String tagProjectileSpell;
 
-    //can be accessed via builder
     private ProjectileSpell(Builder<T> builder) {
         super(builder.baseMeta);
         this.projectile = builder.projectile;
@@ -37,11 +37,11 @@ public final class ProjectileSpell<T extends org.bukkit.entity.Projectile> exten
         this.speed = builder.speed;
         this.lifeTime = builder.lifeTime;
         this.pushSpeed = builder.pushSpeed;
-        this.metadataTag = "ProjectileSpell_" + ++idCount;
+        this.tagProjectileSpell = "PROJECTILE_SPELL;ID#" + ++instanceCount;
         ListenerRegistry.addListener(this);
     }
 
-    public static <T extends org.bukkit.entity.Projectile> Builder<T> newBuilder(Class<T> projectileClass, float speed) {
+    public static <T extends Projectile> Builder<T> newBuilder(Class<T> projectileClass, float speed) {
         return new Builder<>(projectileClass, speed);
     }
 
@@ -51,40 +51,39 @@ public final class ProjectileSpell<T extends org.bukkit.entity.Projectile> exten
         T projectile = player.launchProjectile(this.projectile, velocity);
         trail(projectile);
         projectileProps.accept(projectile);
-        projectile.setMetadata(metadataTag, ShorthandUtil.METADATA_VALUE_TRUE);
+        projectile.setMetadata(tagProjectileSpell, ShorthandUtil.METADATA_VALUE_TRUE);
         activateLifeTimer(projectile);
         castEffects.accept(player.getLocation());
         return true;
     }
 
-    private void hit(Player player, org.bukkit.entity.Projectile projectile) {
+    private void hit(Player player, Projectile projectile) {
         projectile.remove();
         Location loc = projectile.getLocation();
         hitEffects.accept(loc);
         EffectUtil.getNearbyLivingEntities(player, loc, effectRadius).forEach(entity -> {
             entityEffects.accept(entity);
-            entity.damage(entityDamage);
-            EffectUtil.removeVelocity(entity);
+            if (entityDamage != 0) entity.damage(entityDamage);
             pushFrom(loc, entity, pushSpeed);
         });
     }
 
     @EventHandler
     private void onProjectileHit(ProjectileHitEvent event) {
-        org.bukkit.entity.Projectile projectile = event.getEntity();
-        if (projectile.hasMetadata(metadataTag)) {
+        Projectile projectile = event.getEntity();
+        if (projectile.hasMetadata(tagProjectileSpell)) {
             hit((Player) projectile.getShooter(), projectile);
         }
     }
 
     @EventHandler
     private void onDamage(EntityDamageByEntityEvent event) {
-        if (event.getCause() == EntityDamageEvent.DamageCause.PROJECTILE && event.getDamager().hasMetadata(metadataTag)) {
+        if (event.getCause() == EntityDamageEvent.DamageCause.PROJECTILE && event.getDamager().hasMetadata(tagProjectileSpell)) {
             event.setCancelled(true);
         }
     }
 
-    private void activateLifeTimer(org.bukkit.entity.Projectile projectile) {
+    private void activateLifeTimer(Projectile projectile) {
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             if (projectile.isValid()) {
                 hit((Player) projectile.getShooter(), projectile);
@@ -105,7 +104,7 @@ public final class ProjectileSpell<T extends org.bukkit.entity.Projectile> exten
 
     @EventHandler
     private void onEntityExplode(EntityExplodeEvent event) {
-        if (event.getEntity().hasMetadata(metadataTag)) {
+        if (event.getEntity().hasMetadata(tagProjectileSpell)) {
             event.setCancelled(true);
         }
     }
@@ -123,13 +122,13 @@ public final class ProjectileSpell<T extends org.bukkit.entity.Projectile> exten
 
     @Override
     public String toString() {
-        return super.toString() + "ID count: " + idCount
+        return super.toString() + "ID count: " + instanceCount
                 + "\nSpeed: " + speed
                 + "\nLife time: " + lifeTime + " ticks"
                 + "\nPush speed: " + pushSpeed;
     }
 
-    public static class Builder<T extends org.bukkit.entity.Projectile> extends AbstractBuilder<Builder<T>> {
+    public static final class Builder<T extends Projectile> extends AbstractBuilder<Builder<T>> {
 
         private final Class<T> projectile;
         private final float speed;
@@ -156,22 +155,22 @@ public final class ProjectileSpell<T extends org.bukkit.entity.Projectile> exten
 
         public Builder<T> setProjectileProps(Consumer<T> projectileProps) {
             this.projectileProps = projectileProps;
-            return self();
+            return this;
         }
 
         public Builder<T> setHitEffects(Consumer<Location> hitEffects) {
             this.hitEffects = hitEffects;
-            return self();
+            return this;
         }
 
         public Builder<T> setLifeTime(int ticks) {
             this.lifeTime = ticks;
-            return self();
+            return this;
         }
 
         public Builder<T> setPushSpeed(int pushSpeed) {
             this.pushSpeed = pushSpeed;
-            return self();
+            return this;
         }
     }
 }
