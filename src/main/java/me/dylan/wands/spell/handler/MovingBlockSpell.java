@@ -26,8 +26,9 @@ import java.util.function.Consumer;
 
 public final class MovingBlockSpell extends Behaviour implements Listener {
 
-    private static final String TAG_UNBREAKABLE = "TempUnbreakable";
-    private static final String TAG_FALLING_BLOCK = "MovingBlockSpellEntity";
+    private final String tagUnbreakable;
+    private final String tagFallingBlock;
+    private static int instanceCount = 0;
     private final Material material;
     private final Consumer<Location> hitEffects;
     private final Map<Player, BlockReverter> selectedBlock = new HashMap<>();
@@ -38,6 +39,8 @@ public final class MovingBlockSpell extends Behaviour implements Listener {
         ListenerRegistry.addListener(this);
         this.material = builder.material;
         this.hitEffects = builder.hitEffects;
+        this.tagUnbreakable = "UNBREAKABLE;ID#" + ++instanceCount;
+        this.tagFallingBlock = "MOVING_BLOCK_SPELL;ID#" + instanceCount;
     }
 
     public static Builder newBuilder(Material material) {
@@ -62,7 +65,8 @@ public final class MovingBlockSpell extends Behaviour implements Listener {
                 }
             }
             block.setType(material);
-            block.setMetadata(TAG_UNBREAKABLE, ShorthandUtil.METADATA_VALUE_TRUE);
+            block.setMetadata(tagUnbreakable, ShorthandUtil.METADATA_VALUE_TRUE);
+            block.getState().update();
             BlockReverter blockReverter = new BlockReverter(oldState, location, player, this);
             selectedBlock.put(player, blockReverter);
             Bukkit.getScheduler().runTaskLater(plugin, blockReverter, 100L);
@@ -79,7 +83,7 @@ public final class MovingBlockSpell extends Behaviour implements Listener {
         Location location = blockReverter.originLoc;
         FallingBlock fallingBlock = location.getWorld().spawnFallingBlock(location, Bukkit.createBlockData(material));
         fallingBlock.setVelocity(new Vector(0, 1, 0));
-        fallingBlock.setMetadata(TAG_FALLING_BLOCK, ShorthandUtil.METADATA_VALUE_TRUE);
+        fallingBlock.setMetadata(tagFallingBlock, ShorthandUtil.METADATA_VALUE_TRUE);
         fallingBlock.setDropItem(false);
         caster.put(fallingBlock, player);
         trail(fallingBlock);
@@ -108,17 +112,17 @@ public final class MovingBlockSpell extends Behaviour implements Listener {
             caster.remove(fallingBlock);
             Location loc = fallingBlock.getLocation();
             hitEffects.accept(loc);
-            EffectUtil.getNearbyLivingEntities(player, loc, effectRadius).forEach(entity -> {
-                entityEffects.accept(entity);
-                entity.damage(entityDamage);
-                EffectUtil.removeVelocity(entity);
-            });
+            EffectUtil.getNearbyLivingEntities(player, loc, effectRadius)
+                    .forEach(entity -> {
+                        entityEffects.accept(entity);
+                        if (entityDamage != 0) entity.damage(entityDamage);
+                    });
         }
     }
 
     @EventHandler
     private void onBlockFall(EntityChangeBlockEvent event) {
-        if ((event.getEntityType() == EntityType.FALLING_BLOCK) && event.getEntity().hasMetadata(TAG_FALLING_BLOCK)) {
+        if ((event.getEntityType() == EntityType.FALLING_BLOCK) && event.getEntity().hasMetadata(tagFallingBlock)) {
             event.setCancelled(true);
             applyHitEffects((FallingBlock) event.getEntity());
         }
@@ -126,7 +130,7 @@ public final class MovingBlockSpell extends Behaviour implements Listener {
 
     @EventHandler
     private void onBlockBreak(BlockBreakEvent event) {
-        if (event.getBlock().hasMetadata(TAG_UNBREAKABLE)) event.setCancelled(true);
+        if (event.getBlock().hasMetadata(tagUnbreakable)) event.setCancelled(true);
     }
 
     private void trail(FallingBlock entity) {
@@ -171,13 +175,14 @@ public final class MovingBlockSpell extends Behaviour implements Listener {
         @Override
         public void run() {
             if (canRun) {
+                state.removeMetadata(parent.tagUnbreakable, plugin);
                 state.update(true);
                 parent.selectedBlock.remove(player);
             }
         }
     }
 
-    public static class Builder extends AbstractBuilder<Builder> {
+    public static final class Builder extends AbstractBuilder<Builder> {
 
         private final Material material;
         private Consumer<Location> hitEffects = ShorthandUtil.emptyConsumer();
@@ -198,7 +203,7 @@ public final class MovingBlockSpell extends Behaviour implements Listener {
 
         public Builder setHitEffects(Consumer<Location> hitEffects) {
             this.hitEffects = hitEffects;
-            return self();
+            return this;
         }
     }
 }

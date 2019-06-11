@@ -1,6 +1,7 @@
 package me.dylan.wands.spell;
 
 import me.dylan.wands.Main;
+import org.bukkit.GameMode;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -21,8 +22,8 @@ public class PlayerListener implements Listener {
     @EventHandler
     private void onPlayerInteract(PlayerInteractEvent event) {
         Action action = event.getAction();
-        if (action == Action.PHYSICAL) return;
         Player player = event.getPlayer();
+        if (action == Action.PHYSICAL || player.getGameMode() == GameMode.SPECTATOR) return;
         ItemStack itemStack = player.getInventory().getItemInMainHand();
         if (event.getHand() == EquipmentSlot.HAND && SpellUtil.isWand(itemStack)) {
             event.setCancelled(true);

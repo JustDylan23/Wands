@@ -4,10 +4,10 @@ import me.dylan.wands.Main;
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.handler.Behaviour;
 import me.dylan.wands.spell.handler.WaveSpell;
+import me.dylan.wands.util.ShorthandUtil;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -15,9 +15,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 public enum Freeze implements Castable {
     INSTANCE;
     private final String metaKey = "FREEZE_SPELL";
-    private final FixedMetadataValue meta = new FixedMetadataValue(Main.getPlugin(), true);
     private final Behaviour behaviour;
-    private PotionEffect slow = new PotionEffect(PotionEffectType.SLOW, 120, 4, false);
+    private final PotionEffect slow = new PotionEffect(PotionEffectType.SLOW, 120, 4, false);
 
 
     Freeze() {
@@ -36,7 +35,7 @@ public enum Freeze implements Castable {
                     Location eLoc = entity.getLocation();
                     eLoc.getWorld().playSound(eLoc, Sound.ENTITY_EVOKER_FANGS_ATTACK, 4, 2);
                     if (entity.hasMetadata(metaKey)) return;
-                    entity.setMetadata(metaKey, meta);
+                    entity.setMetadata(metaKey, ShorthandUtil.METADATA_VALUE_TRUE);
                     entity.addPotionEffect(slow, true);
                     new BukkitRunnable() {
                         int count = 0;
