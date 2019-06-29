@@ -1,9 +1,8 @@
 package me.dylan.wands.spell.handler;
 
+import me.dylan.wands.spell.SpellEffectUtil;
 import me.dylan.wands.util.EffectUtil;
 import org.bukkit.Location;
-import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 public final class SparkSpell extends Behaviour {
@@ -20,7 +19,7 @@ public final class SparkSpell extends Behaviour {
 
     @Override
     public boolean cast(Player player) {
-        Location loc = getSpellLocation(player);
+        Location loc = SpellEffectUtil.getSpellLocation(effectDistance, player);
         castEffects.accept(player.getLocation());
         visualEffects.accept(loc);
         EffectUtil.getNearbyLivingEntities(player, loc, effectRadius)
@@ -31,23 +30,10 @@ public final class SparkSpell extends Behaviour {
         return true;
     }
 
-    private Location getSpellLocation(Player player) {
-        Entity entity = player.getTargetEntity(effectDistance);
-        if (entity != null) {
-            return entity.getLocation().add(0, 0.5, 0);
-        }
-        Block block = player.getTargetBlock(effectDistance);
-        if (block != null) {
-            return block.getLocation().toCenterLocation().subtract(player.getLocation().getDirection().normalize());
-        }
-        return player.getLocation();
-    }
-
     @Override
     public String toString() {
         return super.toString() + "Effect distance: " + effectDistance;
     }
-
 
     public static final class Builder extends AbstractBuilder<Builder> {
 
