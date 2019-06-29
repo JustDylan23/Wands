@@ -66,7 +66,7 @@ public enum ObtainableItem {
                 SpellType.THUNDER_STRIKE,
                 SpellType.ICE_FREEZE,
                 SpellType.ICE_AURA,
-                SpellType.THUMDER_RAGE,
+                SpellType.THUNDER_RAGE,
                 SpellType.THUNDER_STORM
         );
         SpellManagementUtil.setSpellBrowseParticles(itemStack, BrowseParticle.PARTICLE_ICE);

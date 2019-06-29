@@ -18,9 +18,7 @@ public enum ThunderStrike implements Castable {
                 .setEffectDistance(30)
                 .setEntityDamage(6)
                 .setCastEffects(location -> location.getWorld().playSound(location, Sound.ENTITY_WITHER_SHOOT, 4, 1))
-                .setEntityEffects(entity -> {
-                    entity.setFireTicks(80);
-                })
+                .setEntityEffects(entity -> entity.setFireTicks(80))
                 .setRelativeEffects(location -> {
                     World w = location.getWorld();
                     w.spawnParticle(Particle.CLOUD, location, 40, 2, 2, 2, 0.2, null, true);

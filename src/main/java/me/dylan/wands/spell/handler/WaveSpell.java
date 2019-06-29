@@ -1,7 +1,7 @@
 package me.dylan.wands.spell.handler;
 
 import me.dylan.wands.util.EffectUtil;
-import me.dylan.wands.util.ShorthandUtil;
+import me.dylan.wands.util.Common;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
@@ -55,7 +55,7 @@ public final class WaveSpell extends Behaviour {
                             cancel();
                             break outer;
                         } else if (!entity.hasMetadata(tagWaveSpell)) {
-                            entity.setMetadata(tagWaveSpell, ShorthandUtil.METADATA_VALUE_TRUE);
+                            entity.setMetadata(tagWaveSpell, Common.METADATA_VALUE_TRUE);
                             if (entityDamage != 0) entity.damage(entityDamage);
                             entityEffects.accept(entity);
                             Bukkit.getScheduler().runTaskLater(plugin, () -> {

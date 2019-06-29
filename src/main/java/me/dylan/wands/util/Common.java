@@ -5,7 +5,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 
 import java.util.function.Consumer;
 
-public class ShorthandUtil {
+public class Common {
     private final static Main plugin = Main.getPlugin();
     public static final FixedMetadataValue METADATA_VALUE_TRUE = new FixedMetadataValue(plugin, true);
     private final static Consumer<?> EMPTY_CONSUMER = e -> {

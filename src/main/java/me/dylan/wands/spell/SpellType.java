@@ -26,14 +26,14 @@ public enum SpellType {
     ICE_AURA(IceAura.INSTANCE),
 
     THUNDER_ARROW(LightningArrow.INSTANCE),
-    THUMDER_RAGE(ThunderRage.INSTANCE),
+    THUNDER_RAGE(ThunderRage.INSTANCE),
     THUNDER_STORM(ThunderStorm.INSTANCE),
     THUNDER_STRIKE(ThunderStrike.INSTANCE),
 
     FIRE_COMET(FireComet.INSTANCE),
     FIRE_SPARK(FireSpark.INSTANCE),
     FIRE_TWISTER(FireTwister.INSTANCE),
-    FLAME_SHOK_WAVE(FlameShockWave.INSTANCE),
+    FLAME_SHOCK_WAVE(FlameShockWave.INSTANCE),
     FLAME_THROWER(FlameThrower.INSTANCE),
     FLAME_WAVE(FlameWave.INSTANCE),
 

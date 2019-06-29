@@ -4,7 +4,7 @@ import me.dylan.wands.Main;
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.handler.Behaviour;
 import me.dylan.wands.spell.handler.WaveSpell;
-import me.dylan.wands.util.ShorthandUtil;
+import me.dylan.wands.util.Common;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -35,7 +35,7 @@ public enum Freeze implements Castable {
                     Location eLoc = entity.getLocation();
                     eLoc.getWorld().playSound(eLoc, Sound.ENTITY_EVOKER_FANGS_ATTACK, 4, 2);
                     if (entity.hasMetadata(metaKey)) return;
-                    entity.setMetadata(metaKey, ShorthandUtil.METADATA_VALUE_TRUE);
+                    entity.setMetadata(metaKey, Common.METADATA_VALUE_TRUE);
                     entity.addPotionEffect(slow, true);
                     new BukkitRunnable() {
                         int count = 0;

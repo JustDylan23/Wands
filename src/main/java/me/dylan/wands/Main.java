@@ -52,7 +52,7 @@ public final class Main extends JavaPlugin {
                 new AssasinDagger(),
                 new CursedBow()
         );
-        log("Succesfully enabled");
+        log("Successfully enabled");
     }
 
     @Override
