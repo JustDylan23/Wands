@@ -25,12 +25,12 @@ public class PlayerListener implements Listener {
         Player player = event.getPlayer();
         if (action == Action.PHYSICAL || player.getGameMode() == GameMode.SPECTATOR) return;
         ItemStack itemStack = player.getInventory().getItemInMainHand();
-        if (event.getHand() == EquipmentSlot.HAND && SpellUtil.isWand(itemStack)) {
+        if (event.getHand() == EquipmentSlot.HAND && SpellManagementUtil.isWand(itemStack)) {
             event.setCancelled(true);
             if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK) {
                 castWithCooldown(player, itemStack);
             } else if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) {
-                SpellUtil.nextSpell(player, itemStack);
+                SpellManagementUtil.nextSpell(player, itemStack);
             }
         }
     }
@@ -47,7 +47,7 @@ public class PlayerListener implements Listener {
     private void castWithCooldown(Player player, ItemStack itemStack) {
         int remainingTime = getRemainingTime(player);
         if (remainingTime <= 0) {
-            if (SpellUtil.castSpell(player, itemStack)) {
+            if (SpellManagementUtil.castSpell(player, itemStack)) {
                 lastUsed.put(player, System.currentTimeMillis());
             }
         } else {

@@ -13,14 +13,14 @@ import java.util.Optional;
 import java.util.StringJoiner;
 
 @SuppressWarnings("WeakerAccess")
-public class SpellUtil {
+public class SpellManagementUtil {
 
     private static final String TAG_SPELL_INDEX = "SpellIndex";
     private static final String TAG_SPELLS_LIST = "Spells";
     private static final String TAG_VERIFIED = "IsWand";
     private static final String TAG_PARTICLE_SPELL_BROWSE = "SpellBrowseParticles";
 
-    private SpellUtil() {
+    private SpellManagementUtil() {
         throw new UnsupportedOperationException();
     }
 

@@ -4,8 +4,8 @@ import me.dylan.wands.Main;
 import me.dylan.wands.customitem.AssasinDagger;
 import me.dylan.wands.customitem.CursedBow;
 import me.dylan.wands.spell.BrowseParticle;
+import me.dylan.wands.spell.SpellManagementUtil;
 import me.dylan.wands.spell.SpellType;
-import me.dylan.wands.spell.SpellUtil;
 import me.dylan.wands.util.ItemUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -43,25 +43,25 @@ public enum ObtainableItem {
     GOD_WAND(ItemUtil.getItemStack(() -> {
         ItemStack itemStack = new ItemStack(Material.STICK);
         ItemUtil.setName(itemStack, "&8&lMagic Wand");
-        SpellUtil.declareWand(itemStack);
-        SpellUtil.setSpells(itemStack, SpellType.COMET, SpellType.SPARK, SpellType.CONFUSE, SpellType.LAUNCH, SpellType.POISON_WAVE);
-        SpellUtil.setSpellBrowseParticles(itemStack, BrowseParticle.DEFAULT);
+        SpellManagementUtil.declareWand(itemStack);
+        SpellManagementUtil.setSpells(itemStack, SpellType.COMET, SpellType.SPARK, SpellType.CONFUSE, SpellType.LAUNCH, SpellType.POISON_WAVE);
+        SpellManagementUtil.setSpellBrowseParticles(itemStack, BrowseParticle.DEFAULT);
         return itemStack;
     })),
 
     BLOOD_WAND(ItemUtil.getItemStack(() -> {
         ItemStack itemStack = new ItemStack(Material.NETHER_WART);
         ItemUtil.setName(itemStack, "&cBlood Magic");
-        SpellUtil.declareWand(itemStack);
-        SpellUtil.setSpells(itemStack, SpellType.BLOOD_WAVE, SpellType.BLOOD_SPARK, SpellType.BLOOD_EXPLODE, SpellType.BLOOD_STUN, SpellType.BLOOD_BLOCK);
-        SpellUtil.setSpellBrowseParticles(itemStack, BrowseParticle.PARTICLE_BLOOD);
+        SpellManagementUtil.declareWand(itemStack);
+        SpellManagementUtil.setSpells(itemStack, SpellType.BLOOD_WAVE, SpellType.BLOOD_SPARK, SpellType.BLOOD_EXPLODE, SpellType.BLOOD_STUN, SpellType.BLOOD_BLOCK);
+        SpellManagementUtil.setSpellBrowseParticles(itemStack, BrowseParticle.PARTICLE_BLOOD);
         return itemStack;
     })),
     ICE_WAND(ItemUtil.getItemStack(() -> {
         ItemStack itemStack = new ItemStack(Material.BLAZE_ROD);
         ItemUtil.setName(itemStack, "&rIce Wand");
-        SpellUtil.declareWand(itemStack);
-        SpellUtil.setSpells(itemStack,
+        SpellManagementUtil.declareWand(itemStack);
+        SpellManagementUtil.setSpells(itemStack,
                 SpellType.THUNDER_ARROW,
                 SpellType.THUNDER_STRIKE,
                 SpellType.ICE_FREEZE,
@@ -69,7 +69,7 @@ public enum ObtainableItem {
                 SpellType.THUMDER_RAGE,
                 SpellType.THUNDER_STORM
         );
-        SpellUtil.setSpellBrowseParticles(itemStack, BrowseParticle.PARTICLE_ICE);
+        SpellManagementUtil.setSpellBrowseParticles(itemStack, BrowseParticle.PARTICLE_ICE);
         return itemStack;
     }));
 
