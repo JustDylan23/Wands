@@ -2,7 +2,7 @@ package me.dylan.wands.spell.handler;
 
 import me.dylan.wands.pluginmeta.ListenerRegistry;
 import me.dylan.wands.util.EffectUtil;
-import me.dylan.wands.util.ShorthandUtil;
+import me.dylan.wands.util.Common;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -65,7 +65,7 @@ public final class MovingBlockSpell extends Behaviour implements Listener {
                 }
             }
             block.setType(material);
-            block.setMetadata(tagUnbreakable, ShorthandUtil.METADATA_VALUE_TRUE);
+            block.setMetadata(tagUnbreakable, Common.METADATA_VALUE_TRUE);
             block.getState().update();
             BlockReverter blockReverter = new BlockReverter(oldState, location, player, this);
             selectedBlock.put(player, blockReverter);
@@ -83,7 +83,7 @@ public final class MovingBlockSpell extends Behaviour implements Listener {
         Location location = blockReverter.originLoc;
         FallingBlock fallingBlock = location.getWorld().spawnFallingBlock(location, Bukkit.createBlockData(material));
         fallingBlock.setVelocity(new Vector(0, 1, 0));
-        fallingBlock.setMetadata(tagFallingBlock, ShorthandUtil.METADATA_VALUE_TRUE);
+        fallingBlock.setMetadata(tagFallingBlock, Common.METADATA_VALUE_TRUE);
         fallingBlock.setDropItem(false);
         caster.put(fallingBlock, player);
         trail(fallingBlock);
@@ -157,7 +157,7 @@ public final class MovingBlockSpell extends Behaviour implements Listener {
         private final Location originLoc;
         private final MovingBlockSpell parent;
         private final Player player;
-        private BlockState state;
+        private final BlockState state;
         private boolean canRun = true;
 
         BlockReverter(BlockState state, Location originLoc, Player player, MovingBlockSpell parent) {
@@ -185,7 +185,7 @@ public final class MovingBlockSpell extends Behaviour implements Listener {
     public static final class Builder extends AbstractBuilder<Builder> {
 
         private final Material material;
-        private Consumer<Location> hitEffects = ShorthandUtil.emptyConsumer();
+        private Consumer<Location> hitEffects = Common.emptyConsumer();
 
         private Builder(Material material) {
             this.material = material;

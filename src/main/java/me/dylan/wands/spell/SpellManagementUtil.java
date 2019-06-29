@@ -97,9 +97,7 @@ public class SpellManagementUtil {
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.5F, 0.5F);
         player.sendActionBar("§6Current spell: §7§l" + spells[index].getDisplayName());
 
-        getSpellBrowseParticle(itemStack).ifPresent(particle -> {
-            particle.spawn(player.getLocation());
-        });
+        getSpellBrowseParticle(itemStack).ifPresent(particle -> particle.spawn(player.getLocation()));
 
     }
 

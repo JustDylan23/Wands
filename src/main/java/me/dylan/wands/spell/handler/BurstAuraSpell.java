@@ -1,7 +1,7 @@
 package me.dylan.wands.spell.handler;
 
 import me.dylan.wands.util.EffectUtil;
-import me.dylan.wands.util.ShorthandUtil;
+import me.dylan.wands.util.Common;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -35,7 +35,7 @@ public final class BurstAuraSpell extends Behaviour {
     }
 
     public static final class Builder extends AbstractBuilder<Builder> {
-        private Consumer<LivingEntity> playerEffects = ShorthandUtil.emptyConsumer();
+        private Consumer<LivingEntity> playerEffects = Common.emptyConsumer();
 
         private Builder() {
         }

@@ -28,9 +28,7 @@ public enum LightningArrow implements Castable {
                     w.spawnParticle(Particle.ENCHANTMENT_TABLE, location, 20, 0.5, 0.5, 0.5, 1, null, true);
                 })
                 .setEntityDamage(6)
-                .setEntityEffects(entity -> {
-                    entity.setFireTicks(80);
-                })
+                .setEntityEffects(entity -> entity.setFireTicks(80))
                 .setCastEffects(location -> location.getWorld().playSound(location, Sound.ENTITY_WITHER_SHOOT, 4, 1))
                 .build();
     }

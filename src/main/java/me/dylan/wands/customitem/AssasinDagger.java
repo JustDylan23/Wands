@@ -2,7 +2,7 @@ package me.dylan.wands.customitem;
 
 import me.dylan.wands.Main;
 import me.dylan.wands.util.ItemUtil;
-import me.dylan.wands.util.ShorthandUtil;
+import me.dylan.wands.util.Common;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -28,7 +28,7 @@ public class AssasinDagger implements Listener {
     public static final String ID_TAG = "artifact-dagger";
     private final Main plugin = Main.getPlugin();
     private final String leapKey = "therosJump";
-    private final String sneakKey = "therosInvisable";
+    private final String sneakKey = "therosInvisible";
 
     private final PotionEffect speed = new PotionEffect(PotionEffectType.SPEED, 20, 4, true);
 
@@ -78,7 +78,7 @@ public class AssasinDagger implements Listener {
         if (hasDagger(player) && event.getHand() != null && event.getHand().equals(EquipmentSlot.HAND)) {
             Action a = event.getAction();
             if ((a == Action.RIGHT_CLICK_AIR || a == Action.RIGHT_CLICK_BLOCK) && !player.hasMetadata(leapKey) && !player.hasMetadata(sneakKey)) {
-                player.setMetadata(leapKey, ShorthandUtil.METADATA_VALUE_TRUE);
+                player.setMetadata(leapKey, Common.METADATA_VALUE_TRUE);
                 player.getWorld().playSound(player.getLocation(), Sound.ENTITY_LLAMA_SWAG, SoundCategory.MASTER, 3.0F, 1.0F);
                 Vector direction = player.getLocation().getDirection().setY(0).normalize().setY(1.2);
                 player.setVelocity(direction);
@@ -133,7 +133,7 @@ public class AssasinDagger implements Listener {
 
     private void cover(Player player) {
         if (!player.hasMetadata(sneakKey)) {
-            player.setMetadata(sneakKey, ShorthandUtil.METADATA_VALUE_TRUE);
+            player.setMetadata(sneakKey, Common.METADATA_VALUE_TRUE);
             Location location = player.getLocation();
             location.getWorld().playSound(location, Sound.ENTITY_ZOMBIE_VILLAGER_CURE, 1.0f, 2f);
             location.getWorld().spawnParticle(Particle.SMOKE_LARGE, location, 15, 0.5, 0.2, 0.5, 0.1, null, true);

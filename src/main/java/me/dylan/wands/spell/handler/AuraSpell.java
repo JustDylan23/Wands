@@ -2,13 +2,22 @@ package me.dylan.wands.spell.handler;
 
 import me.dylan.wands.Main;
 import me.dylan.wands.util.EffectUtil;
-import me.dylan.wands.util.ShorthandUtil;
+import me.dylan.wands.util.Common;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.function.Consumer;
+
+/**
+ * AuraSpell is a type of Behaviour which is executed relative to the player.
+ * The distance in which entities will be affected can vary. The player itself
+ * can also be given effects upon executing the spell that has implemented this behaviour.
+ *
+ *  setEffectDuration is meant for setting the amount of ticks
+ * {@link Builder#setEffectDuration(int)}
+ */
 
 public final class AuraSpell extends Behaviour {
     private static int instanceCount = 0;
@@ -32,7 +41,7 @@ public final class AuraSpell extends Behaviour {
     public boolean cast(Player player) {
         castEffects.accept(player.getLocation());
         if (player.hasMetadata(hasAura)) return false;
-        player.setMetadata(hasAura, ShorthandUtil.METADATA_VALUE_TRUE);
+        player.setMetadata(hasAura, Common.METADATA_VALUE_TRUE);
         playerEffects.accept(player);
         new BukkitRunnable() {
             int count = 0;
@@ -64,7 +73,7 @@ public final class AuraSpell extends Behaviour {
 
     public static final class Builder extends AbstractBuilder<Builder> {
         private int effectDuration;
-        private Consumer<LivingEntity> playerEffects = ShorthandUtil.emptyConsumer();
+        private Consumer<LivingEntity> playerEffects = Common.emptyConsumer();
 
         private Builder() {
         }

@@ -2,7 +2,7 @@ package me.dylan.wands.spell.handler;
 
 import me.dylan.wands.pluginmeta.ListenerRegistry;
 import me.dylan.wands.util.EffectUtil;
-import me.dylan.wands.util.ShorthandUtil;
+import me.dylan.wands.util.Common;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -51,7 +51,7 @@ public final class ProjectileSpell<T extends Projectile> extends Behaviour imple
         T projectile = player.launchProjectile(this.projectile, velocity);
         trail(projectile);
         projectileProps.accept(projectile);
-        projectile.setMetadata(tagProjectileSpell, ShorthandUtil.METADATA_VALUE_TRUE);
+        projectile.setMetadata(tagProjectileSpell, Common.METADATA_VALUE_TRUE);
         activateLifeTimer(projectile);
         castEffects.accept(player.getLocation());
         return true;
@@ -133,8 +133,8 @@ public final class ProjectileSpell<T extends Projectile> extends Behaviour imple
         private final Class<T> projectile;
         private final float speed;
 
-        private Consumer<T> projectileProps = ShorthandUtil.emptyConsumer();
-        private Consumer<Location> hitEffects = ShorthandUtil.emptyConsumer();
+        private Consumer<T> projectileProps = Common.emptyConsumer();
+        private Consumer<Location> hitEffects = Common.emptyConsumer();
         private int lifeTime = 20;
         private int pushSpeed;
 

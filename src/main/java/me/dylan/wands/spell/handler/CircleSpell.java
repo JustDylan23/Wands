@@ -10,33 +10,27 @@ public final class CircleSpell extends Behaviour {
     private final int tickSkip;
     private final int height;
     private final float circleRadius;
-    private final CircleType circleType;
 
     private CircleSpell(Builder builder) {
         super(builder.baseMeta);
         this.tickSkip = builder.tickSkip;
-        this.height = builder.hight;
+        this.height = builder.height;
         this.circleRadius = builder.circleRadius;
-        this.circleType = builder.circleType;
     }
 
-    public static Builder newBuilder(CircleType circleType) {
-        return new Builder(circleType);
+    public static Builder newBuilder() {
+        return new Builder();
     }
 
     @Override
     public boolean cast(Player player) {
         Location pLoc = player.getLocation();
         castEffects.accept(pLoc);
-        Location location;
-        if (circleType == CircleType.RELATIVE) {
-            location = pLoc.clone().add(0, height, 0);
-        } else if (circleType == CircleType.TARGET) {
-            location = SpellEffectUtil.getSpellLocation()
-        }
+        Location location = pLoc.clone().add(0, height, 0);
         Location[] locations = SpellEffectUtil.getCircleFrom(pLoc.clone().add(0, height, 0), circleRadius);
         new BukkitRunnable() {
             int index = 0;
+
             @Override
             public void run() {
                 for (int i = 0; i < tickSkip; i++) {
@@ -44,9 +38,9 @@ public final class CircleSpell extends Behaviour {
                     if (index >= locations.length) {
                         cancel();
                         EffectUtil.getNearbyLivingEntities(player, pLoc, effectRadius)
-                                .forEach(entiy -> {
-                                    if (entityDamage != 0) entiy.damage(entityDamage);
-                                    entityEffects.accept(entiy);
+                                .forEach(entity -> {
+                                    if (entityDamage != 0) entity.damage(entityDamage);
+                                    entityEffects.accept(entity);
                                 });
                     } else {
                         Location loc = locations[index];
@@ -61,15 +55,14 @@ public final class CircleSpell extends Behaviour {
     @Override
     public String toString() {
         return super.toString() + "Radius: " + circleRadius
-                + "\nHightt: " + height
+                + "\nHeight: " + height
                 + "\nTickSkip: " + tickSkip + " ticks";
     }
 
     public static class Builder extends AbstractBuilder<Builder> {
         private int circleRadius = 0;
-        private int hight = 0;
+        private int height = 0;
         private int tickSkip = 1;
-        private CircleType circleType = CircleType.RELATIVE;
 
         private Builder() {
         }
@@ -89,8 +82,8 @@ public final class CircleSpell extends Behaviour {
             return self();
         }
 
-        public Builder setCircleHight(int height) {
-            this.hight = height;
+        public Builder setCircleHeight(int height) {
+            this.height = height;
             return self();
         }
 
@@ -98,24 +91,5 @@ public final class CircleSpell extends Behaviour {
             this.tickSkip = Math.max(1, tickSkip);
             return self();
         }
-
-        public static final class Builder2 extends Builder {
-            private Builder2() {
-                this.
-            }
-            @Override
-            Builder self() {
-                return super.self();
-            }
-
-            @Override
-            public Behaviour build() {
-                return super.build();
-            }
-        }
-    }
-    public enum CircleType {
-        RELATIVE,
-        TARGET
     }
 }

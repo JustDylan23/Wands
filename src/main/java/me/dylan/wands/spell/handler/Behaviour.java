@@ -1,7 +1,7 @@
 package me.dylan.wands.spell.handler;
 
 import me.dylan.wands.Main;
-import me.dylan.wands.util.ShorthandUtil;
+import me.dylan.wands.util.Common;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -108,9 +108,9 @@ public abstract class Behaviour implements Listener {
         static class BaseMeta {
             private int entityDamage = 0;
             private float effectRadius = 0;
-            private Consumer<Location> castEffects = ShorthandUtil.emptyConsumer();
-            private Consumer<Location> relativeEffects = ShorthandUtil.emptyConsumer();
-            private Consumer<LivingEntity> entityEffects = ShorthandUtil.emptyConsumer();
+            private Consumer<Location> castEffects = Common.emptyConsumer();
+            private Consumer<Location> relativeEffects = Common.emptyConsumer();
+            private Consumer<LivingEntity> entityEffects = Common.emptyConsumer();
         }
     }
 }
