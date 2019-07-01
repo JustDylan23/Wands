@@ -14,7 +14,7 @@ public enum ThunderStorm implements Castable {
     private final Behaviour behaviour;
 
     ThunderStorm() {
-        this.behaviour = CircleSpell.newBuilder(CircleSpell.CircleType.RELATIVE)
+        this.behaviour = CircleSpell.newBuilder()
                 .setCircleRadius(10)
                 .setEffectRadius(10)
                 .setCircleHeight(7)
