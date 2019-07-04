@@ -29,7 +29,6 @@ public enum ThunderRage implements Castable {
 
                         @Override
                         public void run() {
-                            Main.log("running");
                             if (++count >= 10) cancel();
                             Location loc = player.getLocation();
                             world.spawnParticle(Particle.CLOUD, loc, 6, 0.2, 0.2, 0.2, 0.1, null, true);
