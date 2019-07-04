@@ -31,7 +31,7 @@ public final class WaveSpell extends Behaviour {
     @Override
     public boolean cast(Player player) {
         Vector direction = player.getLocation().getDirection().normalize();
-        castEffects.accept(direction.clone().multiply(10).toLocation(player.getWorld()).add(player.getEyeLocation()));
+        castSounds.play(player);
         Location currentLoc = player.getEyeLocation();
         new BukkitRunnable() {
             int count = 0;
@@ -47,17 +47,17 @@ public final class WaveSpell extends Behaviour {
                         cancel();
                         return;
                     }
-                    visualEffects.accept(loc);
-                    for (LivingEntity entity : EffectUtil.getNearbyLivingEntities(player, loc, effectRadius)) {
+                    spellRelativeEffects.accept(loc);
+                    for (LivingEntity entity : EffectUtil.getNearbyLivingEntities(player, loc, spellEffectRadius)) {
                         if (stopAtEntity) {
-                            entity.damage(entityDamage);
-                            entityEffects.accept(entity);
+                            entity.damage(affectedEntityDamage);
+                            affectedEntityEffects.accept(entity);
                             cancel();
                             break outer;
                         } else if (!entity.hasMetadata(tagWaveSpell)) {
                             entity.setMetadata(tagWaveSpell, Common.METADATA_VALUE_TRUE);
-                            if (entityDamage != 0) entity.damage(entityDamage);
-                            entityEffects.accept(entity);
+                            if (affectedEntityDamage != 0) entity.damage(affectedEntityDamage);
+                            affectedEntityEffects.accept(entity);
                             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                                 if (entity.isValid()) {
                                     entity.removeMetadata(tagWaveSpell, plugin);

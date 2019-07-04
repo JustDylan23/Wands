@@ -29,7 +29,7 @@ public final class CircleSpell extends Behaviour {
     @Override
     public boolean cast(Player player) {
         Location pLoc = player.getLocation();
-        castEffects.accept(pLoc);
+        castSounds.play(player);
         Location location;
         if (circleType == CircleType.RELATIVE) {
             location = pLoc.clone().add(0, height, 0);
@@ -46,14 +46,14 @@ public final class CircleSpell extends Behaviour {
                     index++;
                     if (index >= locations.length) {
                         cancel();
-                        EffectUtil.getNearbyLivingEntities(player, pLoc, effectRadius)
+                        EffectUtil.getNearbyLivingEntities(player, pLoc, spellEffectRadius)
                                 .forEach(entity -> {
-                                    if (entityDamage != 0) entity.damage(entityDamage);
-                                    entityEffects.accept(entity);
+                                    if (affectedEntityDamage != 0) entity.damage(affectedEntityDamage);
+                                    affectedEntityEffects.accept(entity);
                                 });
                     } else {
                         Location loc = locations[index];
-                        visualEffects.accept(loc);
+                        spellRelativeEffects.accept(loc);
                     }
                 }
             }

@@ -20,12 +20,12 @@ public final class SparkSpell extends Behaviour {
     @Override
     public boolean cast(Player player) {
         Location loc = SpellEffectUtil.getSpellLocation(effectDistance, player);
-        castEffects.accept(player.getLocation());
-        visualEffects.accept(loc);
-        EffectUtil.getNearbyLivingEntities(player, loc, effectRadius)
+        castSounds.play(player);
+        spellRelativeEffects.accept(loc);
+        EffectUtil.getNearbyLivingEntities(player, loc, spellEffectRadius)
                 .forEach(entity -> {
-                    if (entityDamage != 0) entity.damage(entityDamage);
-                    entityEffects.accept(entity);
+                    if (affectedEntityDamage != 0) entity.damage(affectedEntityDamage);
+                    affectedEntityEffects.accept(entity);
                 });
         return true;
     }

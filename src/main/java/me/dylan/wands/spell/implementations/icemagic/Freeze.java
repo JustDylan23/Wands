@@ -22,16 +22,16 @@ public enum Freeze implements Castable {
     Freeze() {
         this.behaviour = WaveSpell.newBuilder()
                 .stopAtEntity(true)
-                .setEffectRadius(0.8F)
-                .setEntityDamage(3)
+                .setSpellEffectRadius(0.8F)
+                .setAffectedEntityDamage(3)
                 .setTickSkip(2)
-                .setCastEffects(loc -> loc.getWorld().playSound(loc, Sound.ENTITY_LLAMA_SWAG, 4, 1))
-                .setRelativeEffects(loc -> {
+                .setCastSound(Sound.ENTITY_LLAMA_SWAG)
+                .setSpellRelativeEffects(loc -> {
                     loc.getWorld().spawnParticle(Particle.CLOUD, loc, 8, 0.1, 0.1, 0.1, 0.02, null, true);
                     loc.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, loc, 10, 0.3, 0.3, 0.3, 0.1, null, true);
                 })
                 .setEffectDistance(25)
-                .setEntityEffects(entity -> {
+                .setAffectedEntityEffects(entity -> {
                     Location eLoc = entity.getLocation();
                     eLoc.getWorld().playSound(eLoc, Sound.ENTITY_EVOKER_FANGS_ATTACK, 4, 2);
                     if (entity.hasMetadata(metaKey)) return;
