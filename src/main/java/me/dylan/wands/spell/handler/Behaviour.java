@@ -1,9 +1,11 @@
 package me.dylan.wands.spell.handler;
 
 import me.dylan.wands.Main;
-import me.dylan.wands.model.SoundPlayer;
+import me.dylan.wands.spell.spelleffect.sound.SoundEffect;
+import me.dylan.wands.spell.spelleffect.sound.SingularSound;
 import me.dylan.wands.util.Common;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -15,24 +17,24 @@ public abstract class Behaviour implements Listener {
 
     final static Main plugin = Main.getPlugin();
 
-    final int entityDamage;
-    final float effectRadius;
-    final Consumer<Location> castEffects;
-    final Consumer<Location> visualEffects;
-    final Consumer<LivingEntity> entityEffects;
+    final int affectedEntityDamage;
+    final float spellEffectRadius;
+    final SoundEffect castSounds;
+    final Consumer<Location> spellRelativeEffects;
+    final Consumer<LivingEntity> affectedEntityEffects;
 
     Behaviour(@Nonnull AbstractBuilder.BaseMeta baseMeta) {
-        this.entityDamage = baseMeta.entityDamage;
-        this.effectRadius = baseMeta.effectRadius;
-        this.castEffects = baseMeta.castEffects;
-        this.visualEffects = baseMeta.relativeEffects;
-        this.entityEffects = baseMeta.entityEffects;
+        this.affectedEntityDamage = baseMeta.affectedEntityDamage;
+        this.spellEffectRadius = baseMeta.spellEffectRadius;
+        this.castSounds = baseMeta.castSounds;
+        this.spellRelativeEffects = baseMeta.spellRelativeEffects;
+        this.affectedEntityEffects = baseMeta.affectedEntityEffects;
     }
 
     @Override
     public String toString() {
-        return "Entity damage: " + entityDamage +
-                "\nEffect radius: " + effectRadius + "\n";
+        return "Entity damage: " + affectedEntityDamage +
+                "\nEffect radius: " + spellEffectRadius + "\n";
     }
 
     public abstract boolean cast(Player player);
@@ -52,8 +54,8 @@ public abstract class Behaviour implements Listener {
          * @return this
          */
 
-        public T setEntityDamage(int damage) {
-            baseMeta.entityDamage = damage;
+        public T setAffectedEntityDamage(int damage) {
+            baseMeta.affectedEntityDamage = damage;
             return self();
         }
 
@@ -64,8 +66,8 @@ public abstract class Behaviour implements Listener {
          * @return this
          */
 
-        public T setEntityEffects(Consumer<LivingEntity> effects) {
-            baseMeta.entityEffects = effects;
+        public T setAffectedEntityEffects(Consumer<LivingEntity> effects) {
+            baseMeta.affectedEntityEffects = effects;
             return self();
         }
 
@@ -76,26 +78,31 @@ public abstract class Behaviour implements Listener {
          * @return this
          */
 
-        public T setEffectRadius(float radius) {
-            baseMeta.effectRadius = radius;
+        public T setSpellEffectRadius(float radius) {
+            baseMeta.spellEffectRadius = radius;
             return self();
         }
 
         /**
-         * Sets the effects that will be executed relative to the player.
+         * Sets the sounds that will be played relative to the player upon casting a spell
          *
-         * @param castEffects Effects relative to the player
+         * @param soundPlayer Interface for playing sound relative to a location
          * @return this
          */
 
-        public T setCastEffects(Consumer<Location> castEffects) {
-            baseMeta.castEffects = castEffects;
+        public T setCastSound(SoundEffect soundPlayer) {
+            baseMeta.castSounds = soundPlayer;
+         return self();
+        }
+
+        public T setCastSound(Sound sound) {
+            baseMeta.castSounds = SingularSound.from(sound, 1);
             return self();
         }
 
-        public T setCastSound(SoundPlayer soundPlayer) {
-            baseMeta.castSounds = soundPlayer;
-         return self();
+        public T setCastSound(Sound sound, float pitch) {
+            baseMeta.castSounds = SingularSound.from(sound, pitch);
+            return self();
         }
 
         /**
@@ -106,18 +113,17 @@ public abstract class Behaviour implements Listener {
          * @return this
          */
 
-        public T setRelativeEffects(Consumer<Location> effects) {
-            baseMeta.relativeEffects = effects;
+        public T setSpellRelativeEffects(Consumer<Location> effects) {
+            baseMeta.spellRelativeEffects = effects;
             return self();
         }
 
         static class BaseMeta {
-            private int entityDamage = 0;
-            private float effectRadius = 0;
-            private SoundPlayer castSounds = SoundPlayer.EMPTY;
-            private Consumer<Location> castEffects = Common.emptyConsumer();
-            private Consumer<Location> relativeEffects = Common.emptyConsumer();
-            private Consumer<LivingEntity> entityEffects = Common.emptyConsumer();
+            private int affectedEntityDamage = 0;
+            private float spellEffectRadius = 0;
+            private SoundEffect castSounds = SoundEffect.EMPTY;
+            private Consumer<Location> spellRelativeEffects = Common.emptyConsumer();
+            private Consumer<LivingEntity> affectedEntityEffects = Common.emptyConsumer();
         }
     }
 }

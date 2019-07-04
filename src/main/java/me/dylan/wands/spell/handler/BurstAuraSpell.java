@@ -25,11 +25,11 @@ public final class BurstAuraSpell extends Behaviour {
     public boolean cast(Player player) {
         Location loc = player.getLocation();
         playerEffects.accept(player);
-        castEffects.accept(loc);
-        visualEffects.accept(loc);
-        EffectUtil.getNearbyLivingEntities(player, loc, effectRadius).forEach(entity -> {
-            if (entityDamage != 0) entity.damage(entityDamage);
-            entityEffects.accept(entity);
+        castSounds.play(player);
+        spellRelativeEffects.accept(loc);
+        EffectUtil.getNearbyLivingEntities(player, loc, spellEffectRadius).forEach(entity -> {
+            if (affectedEntityDamage != 0) entity.damage(affectedEntityDamage);
+            affectedEntityEffects.accept(entity);
         });
         return true;
     }

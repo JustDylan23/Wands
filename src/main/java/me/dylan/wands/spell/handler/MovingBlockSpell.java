@@ -1,15 +1,12 @@
 package me.dylan.wands.spell.handler;
 
 import me.dylan.wands.pluginmeta.ListenerRegistry;
+import me.dylan.wands.spell.spelleffect.sound.SoundEffect;
 import me.dylan.wands.util.EffectUtil;
 import me.dylan.wands.util.Common;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.Chest;
-import org.bukkit.block.Container;
+import org.bukkit.*;
+import org.bukkit.block.*;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
@@ -33,12 +30,15 @@ public final class MovingBlockSpell extends Behaviour implements Listener {
     private final Consumer<Location> hitEffects;
     private final Map<Player, BlockReverter> selectedBlock = new HashMap<>();
     private final Map<FallingBlock, Player> caster = new HashMap<>();
+    private final SoundEffect blockRelativeSounds;
+    private final BlockFace[] around = {BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST};
 
     private MovingBlockSpell(Builder builder) {
         super(builder.baseMeta);
         ListenerRegistry.addListener(this);
         this.material = builder.material;
         this.hitEffects = builder.hitEffects;
+        this.blockRelativeSounds = builder.blockRelativeSounds;
         this.tagUnbreakable = "UNBREAKABLE;ID#" + ++instanceCount;
         this.tagFallingBlock = "MOVING_BLOCK_SPELL;ID#" + instanceCount;
     }
@@ -64,7 +64,7 @@ public final class MovingBlockSpell extends Behaviour implements Listener {
                     ((Container) oldState).getInventory().clear();
                 }
             }
-            block.setType(material);
+            block.setType(material, false);
             block.setMetadata(tagUnbreakable, Common.METADATA_VALUE_TRUE);
             block.getState().update();
             BlockReverter blockReverter = new BlockReverter(oldState, location, player, this);
@@ -77,7 +77,7 @@ public final class MovingBlockSpell extends Behaviour implements Listener {
     }
 
     private boolean launchBlock(Player player) {
-        castEffects.accept(player.getLocation());
+        castSounds.play(player);
         BlockReverter blockReverter = selectedBlock.get(player);
         blockReverter.earlyRun();
         Location location = blockReverter.originLoc;
@@ -85,6 +85,7 @@ public final class MovingBlockSpell extends Behaviour implements Listener {
         fallingBlock.setVelocity(new Vector(0, 1, 0));
         fallingBlock.setMetadata(tagFallingBlock, Common.METADATA_VALUE_TRUE);
         fallingBlock.setDropItem(false);
+        blockRelativeSounds.play(fallingBlock);
         caster.put(fallingBlock, player);
         trail(fallingBlock);
         Block block = player.getTargetBlock(30);
@@ -112,10 +113,10 @@ public final class MovingBlockSpell extends Behaviour implements Listener {
             caster.remove(fallingBlock);
             Location loc = fallingBlock.getLocation();
             hitEffects.accept(loc);
-            EffectUtil.getNearbyLivingEntities(player, loc, effectRadius)
+            EffectUtil.getNearbyLivingEntities(player, loc, spellEffectRadius)
                     .forEach(entity -> {
-                        entityEffects.accept(entity);
-                        if (entityDamage != 0) entity.damage(entityDamage);
+                        affectedEntityEffects.accept(entity);
+                        if (affectedEntityDamage != 0) entity.damage(affectedEntityDamage);
                     });
         }
     }
@@ -138,7 +139,7 @@ public final class MovingBlockSpell extends Behaviour implements Listener {
             @Override
             public void run() {
                 if (entity.isValid()) {
-                    visualEffects.accept(entity.getLocation());
+                    spellRelativeEffects.accept(entity.getLocation());
                 } else {
                     cancel();
                     applyHitEffects(entity);
@@ -165,6 +166,17 @@ public final class MovingBlockSpell extends Behaviour implements Listener {
             this.originLoc = originLoc;
             this.parent = parent;
             this.player = player;
+            new BukkitRunnable() {
+                final World world = originLoc.getWorld();
+                final BlockData blockData = parent.material.createBlockData();
+
+                @Override
+                public void run() {
+                    if (canRun) {
+                        world.spawnParticle(Particle.BLOCK_CRACK, originLoc, 10, 0.5, 0.5, 0.5, 0.15, blockData, true);
+                    } else cancel();
+                }
+            }.runTaskTimer(plugin, 1, 1);
         }
 
         void earlyRun() {
@@ -175,6 +187,7 @@ public final class MovingBlockSpell extends Behaviour implements Listener {
         @Override
         public void run() {
             if (canRun) {
+                canRun = false;
                 state.removeMetadata(parent.tagUnbreakable, plugin);
                 state.update(true);
                 parent.selectedBlock.remove(player);
@@ -186,6 +199,7 @@ public final class MovingBlockSpell extends Behaviour implements Listener {
 
         private final Material material;
         private Consumer<Location> hitEffects = Common.emptyConsumer();
+        private SoundEffect blockRelativeSounds = SoundEffect.EMPTY;
 
         private Builder(Material material) {
             this.material = material;
@@ -203,6 +217,11 @@ public final class MovingBlockSpell extends Behaviour implements Listener {
 
         public Builder setHitEffects(Consumer<Location> hitEffects) {
             this.hitEffects = hitEffects;
+            return this;
+        }
+
+        public Builder setBlockRelativeSounds(SoundEffect soundEffect) {
+            this.blockRelativeSounds = soundEffect;
             return this;
         }
     }

@@ -20,16 +20,16 @@ public enum LightningArrow implements Castable {
                     w.playSound(location, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, 4, 1);
                     w.spawnParticle(Particle.CLOUD, location, 40, 0.2, 0.2, 0.2, 0.3, null, true);
                 })
-                .setEffectRadius(5)
+                .setSpellEffectRadius(5)
                 .setLifeTime(25)
-                .setRelativeEffects(location -> {
+                .setSpellRelativeEffects(location -> {
                     World w = location.getWorld();
                     w.spawnParticle(Particle.CLOUD, location, 10, 0.2, 0.2, 0.2, 0.1, null, true);
                     w.spawnParticle(Particle.ENCHANTMENT_TABLE, location, 20, 0.5, 0.5, 0.5, 1, null, true);
                 })
-                .setEntityDamage(6)
-                .setEntityEffects(entity -> entity.setFireTicks(80))
-                .setCastEffects(location -> location.getWorld().playSound(location, Sound.ENTITY_WITHER_SHOOT, 4, 1))
+                .setAffectedEntityDamage(6)
+                .setAffectedEntityEffects(entity -> entity.setFireTicks(80))
+                .setCastSound(Sound.ENTITY_WITHER_SHOOT)
                 .build();
     }
 

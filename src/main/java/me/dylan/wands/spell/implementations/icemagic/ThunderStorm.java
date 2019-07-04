@@ -16,13 +16,13 @@ public enum ThunderStorm implements Castable {
     ThunderStorm() {
         this.behaviour = CircleSpell.newBuilder(CircleSpell.CircleType.RELATIVE)
                 .setCircleRadius(10)
-                .setEffectRadius(10)
+                .setSpellEffectRadius(10)
                 .setCircleHeight(7)
                 .setCircleSpeedPerTick(2)
-                .setCastEffects(loc -> loc.getWorld().playSound(loc, Sound.ENTITY_WITHER_AMBIENT, 4, 1))
-                .setRelativeEffects(loc -> loc.getWorld().spawnParticle(Particle.CLOUD, loc, 10, 0.2, 0.2, 0.2, 0.1, null, true))
-                .setEntityDamage(6)
-                .setEntityEffects(entity -> {
+                .setCastSound(Sound.ENTITY_WITHER_AMBIENT)
+                .setSpellRelativeEffects(loc -> loc.getWorld().spawnParticle(Particle.CLOUD, loc, 10, 0.2, 0.2, 0.2, 0.1, null, true))
+                .setAffectedEntityDamage(6)
+                .setAffectedEntityEffects(entity -> {
                     Location location = entity.getLocation();
                     World w = location.getWorld();
                     w.spawnParticle(Particle.CLOUD, location, 40, 2, 2, 2, 0.2, null, true);

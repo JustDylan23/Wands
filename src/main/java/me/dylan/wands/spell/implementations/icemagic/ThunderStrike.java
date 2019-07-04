@@ -16,10 +16,10 @@ public enum ThunderStrike implements Castable {
     ThunderStrike() {
         this.behaviour = SparkSpell.newBuilder()
                 .setEffectDistance(30)
-                .setEntityDamage(6)
-                .setCastEffects(location -> location.getWorld().playSound(location, Sound.ENTITY_WITHER_SHOOT, 4, 1))
-                .setEntityEffects(entity -> entity.setFireTicks(80))
-                .setRelativeEffects(location -> {
+                .setAffectedEntityDamage(6)
+                .setCastSound(Sound.ENTITY_WITHER_SHOOT)
+                .setAffectedEntityEffects(entity -> entity.setFireTicks(80))
+                .setSpellRelativeEffects(location -> {
                     World w = location.getWorld();
                     w.spawnParticle(Particle.CLOUD, location, 40, 2, 2, 2, 0.2, null, true);
                     w.spawnParticle(Particle.SMOKE_NORMAL, location, 20, 2, 2, 2, 0.2, null, true);
@@ -31,7 +31,7 @@ public enum ThunderStrike implements Castable {
                         loc.getWorld().strikeLightningEffect(loc);
                     }, 1, 2, 3);
                 })
-                .setEffectRadius(5)
+                .setSpellEffectRadius(5)
                 .build();
     }
 

@@ -1,6 +1,5 @@
 package me.dylan.wands.spell.implementations.commonmagic;
 
-import me.dylan.wands.model.SoundPlayer;
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.handler.Behaviour;
 import me.dylan.wands.spell.handler.ProjectileSpell;
@@ -17,13 +16,11 @@ public enum Comet implements Castable {
 
     Comet() {
         this.behaviour = ProjectileSpell.newBuilder(SmallFireball.class, 3F)
-                .setEffectRadius(4.5F)
-                .setEntityDamage(10)
-                .setEntityEffects(entity -> entity.setFireTicks(60))
-                .setCastSound(SoundPlayer.chain()
-                        .add(Sound.ENTITY_FIREWORK_ROCKET_BLAST, 4, 1)
-                )
-                .setRelativeEffects(loc -> {
+                .setSpellEffectRadius(4.5F)
+                .setAffectedEntityDamage(10)
+                .setAffectedEntityEffects(entity -> entity.setFireTicks(60))
+                .setCastSound(Sound.ENTITY_FIREWORK_ROCKET_BLAST)
+                .setSpellRelativeEffects(loc -> {
                     World world = loc.getWorld();
                     world.spawnParticle(Particle.SPELL_WITCH, loc, 40, 0.8, 0.8, 0.8, 0.15, null, true);
                     world.spawnParticle(Particle.SMOKE_LARGE, loc, 10, 0.6, 0.6, 0.6, 0.1, null, true);

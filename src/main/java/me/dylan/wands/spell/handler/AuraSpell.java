@@ -19,6 +19,8 @@ import java.util.function.Consumer;
  * {@link Builder#setEffectDuration(int)}
  */
 
+//todo add enum EffectRate ONCE, REPEATEDLY
+
 public final class AuraSpell extends Behaviour {
     private static int instanceCount = 0;
     private final int effectDuration;
@@ -39,7 +41,7 @@ public final class AuraSpell extends Behaviour {
 
     @Override
     public boolean cast(Player player) {
-        castEffects.accept(player.getLocation());
+        castSounds.play(player);
         if (player.hasMetadata(hasAura)) return false;
         player.setMetadata(hasAura, Common.METADATA_VALUE_TRUE);
         playerEffects.accept(player);
@@ -53,11 +55,11 @@ public final class AuraSpell extends Behaviour {
                     player.removeMetadata(hasAura, plugin);
                 } else {
                     Location loc = player.getLocation();
-                    visualEffects.accept(loc);
-                    EffectUtil.getNearbyLivingEntities(player, loc, effectRadius)
+                    spellRelativeEffects.accept(loc);
+                    EffectUtil.getNearbyLivingEntities(player, loc, spellEffectRadius)
                             .forEach(entity -> {
-                                if (entityDamage != 0) entity.damage(entityDamage);
-                                entityEffects.accept(entity);
+                                if (affectedEntityDamage != 0) entity.damage(affectedEntityDamage);
+                                affectedEntityEffects.accept(entity);
                             });
                 }
             }

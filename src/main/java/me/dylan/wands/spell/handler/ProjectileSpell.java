@@ -47,13 +47,13 @@ public final class ProjectileSpell<T extends Projectile> extends Behaviour imple
 
     @Override
     public boolean cast(Player player) {
+        castSounds.play(player);
         Vector velocity = player.getLocation().getDirection().multiply(speed);
         T projectile = player.launchProjectile(this.projectile, velocity);
         trail(projectile);
         projectileProps.accept(projectile);
         projectile.setMetadata(tagProjectileSpell, Common.METADATA_VALUE_TRUE);
         activateLifeTimer(projectile);
-        castEffects.accept(player.getLocation());
         return true;
     }
 
@@ -61,9 +61,9 @@ public final class ProjectileSpell<T extends Projectile> extends Behaviour imple
         projectile.remove();
         Location loc = projectile.getLocation();
         hitEffects.accept(loc);
-        EffectUtil.getNearbyLivingEntities(player, loc, effectRadius).forEach(entity -> {
-            entityEffects.accept(entity);
-            if (entityDamage != 0) entity.damage(entityDamage);
+        EffectUtil.getNearbyLivingEntities(player, loc, spellEffectRadius).forEach(entity -> {
+            affectedEntityEffects.accept(entity);
+            if (affectedEntityDamage != 0) entity.damage(affectedEntityDamage);
             pushFrom(loc, entity, pushSpeed);
         });
     }
@@ -96,7 +96,7 @@ public final class ProjectileSpell<T extends Projectile> extends Behaviour imple
             @Override
             public void run() {
                 if (entity.isValid()) {
-                    visualEffects.accept(entity.getLocation());
+                    spellRelativeEffects.accept(entity.getLocation());
                 } else cancel();
             }
         }.runTaskTimer(plugin, 0, 1);
