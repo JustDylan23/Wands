@@ -1,6 +1,7 @@
 package me.dylan.wands.spell.implementations.commonmagic;
 
 import me.dylan.wands.Main;
+import me.dylan.wands.model.SoundPlayer;
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.handler.Behaviour;
 import me.dylan.wands.spell.handler.SparkSpell;
@@ -14,13 +15,13 @@ import org.bukkit.potion.PotionEffectType;
 public enum Confuse implements Castable {
     INSTANCE;
     private final Behaviour behaviour;
+    private final PotionEffect confusion = new PotionEffect(PotionEffectType.CONFUSION, 240, 4, false);
 
     Confuse() {
         this.behaviour = SparkSpell.newBuilder()
                 .setEffectRadius(4F)
                 .setEntityDamage(6)
-                .setEntityEffects(entity -> entity.addPotionEffect(
-                        new PotionEffect(PotionEffectType.CONFUSION, 240, 4, false), true))
+                .setEntityEffects(entity -> entity.addPotionEffect(confusion, true))
                 .setRelativeEffects(loc -> {
                     loc.getWorld().spawnParticle(Particle.SMOKE_LARGE, loc, 30, 1, 1, 1, 0.08, null, true);
                     loc.getWorld().spawnParticle(Particle.SMOKE_NORMAL, loc, 30, 1, 1, 1, 0.08, null, true);
@@ -28,7 +29,9 @@ public enum Confuse implements Castable {
                     Bukkit.getScheduler().runTaskLater(Main.getPlugin(), () ->
                             loc.getWorld().playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, SoundCategory.MASTER, 4.0F, 1.0F), 10L);
                 })
-                .setCastEffects(loc -> loc.getWorld().playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_BLAST, SoundCategory.MASTER, 4.0F, 1.0F))
+                .setCastSound(SoundPlayer.chain()
+                        .add(Sound.ENTITY_FIREWORK_ROCKET_BLAST, 4, 1)
+                )
                 .setEffectDistance(30)
                 .build();
     }

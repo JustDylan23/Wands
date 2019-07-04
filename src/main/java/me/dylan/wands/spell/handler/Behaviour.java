@@ -1,6 +1,7 @@
 package me.dylan.wands.spell.handler;
 
 import me.dylan.wands.Main;
+import me.dylan.wands.model.SoundPlayer;
 import me.dylan.wands.util.Common;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
@@ -92,6 +93,11 @@ public abstract class Behaviour implements Listener {
             return self();
         }
 
+        public T setCastSound(SoundPlayer soundPlayer) {
+            baseMeta.castSounds = soundPlayer;
+         return self();
+        }
+
         /**
          * Sets the visual effects that the implementations shows, whether it is a trail of particles
          * or is executed relative to where you look is up to the implementations handler BaseProps is used in.
@@ -108,6 +114,7 @@ public abstract class Behaviour implements Listener {
         static class BaseMeta {
             private int entityDamage = 0;
             private float effectRadius = 0;
+            private SoundPlayer castSounds = SoundPlayer.EMPTY;
             private Consumer<Location> castEffects = Common.emptyConsumer();
             private Consumer<Location> relativeEffects = Common.emptyConsumer();
             private Consumer<LivingEntity> entityEffects = Common.emptyConsumer();

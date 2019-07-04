@@ -7,33 +7,42 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public final class CircleSpell extends Behaviour {
-    private final int tickSkip;
+    private final int circleSpeed;
     private final int height;
+    private final int effectDistance;
     private final float circleRadius;
+    private final CircleType circleType;
 
     private CircleSpell(Builder builder) {
         super(builder.baseMeta);
-        this.tickSkip = builder.tickSkip;
+        this.circleSpeed = builder.circleSpeed;
         this.height = builder.height;
+        this.effectDistance = builder.effectDistance;
         this.circleRadius = builder.circleRadius;
+        this.circleType = builder.circleType;
     }
 
-    public static Builder newBuilder() {
-        return new Builder();
+    public static Builder newBuilder(CircleType circleType) {
+        return new Builder(circleType);
     }
 
     @Override
     public boolean cast(Player player) {
         Location pLoc = player.getLocation();
         castEffects.accept(pLoc);
-        Location location = pLoc.clone().add(0, height, 0);
-        Location[] locations = SpellEffectUtil.getCircleFrom(pLoc.clone().add(0, height, 0), circleRadius);
+        Location location;
+        if (circleType == CircleType.RELATIVE) {
+            location = pLoc.clone().add(0, height, 0);
+        } else if (circleType == CircleType.TARGET) {
+            location = SpellEffectUtil.getSpellLocation(effectDistance, player);
+        } else location = player.getLocation();
+        Location[] locations = SpellEffectUtil.getCircleFrom(location.clone().add(0, height, 0), circleRadius);
         new BukkitRunnable() {
             int index = 0;
 
             @Override
             public void run() {
-                for (int i = 0; i < tickSkip; i++) {
+                for (int i = 0; i < circleSpeed; i++) {
                     index++;
                     if (index >= locations.length) {
                         cancel();
@@ -56,15 +65,23 @@ public final class CircleSpell extends Behaviour {
     public String toString() {
         return super.toString() + "Radius: " + circleRadius
                 + "\nHeight: " + height
-                + "\nTickSkip: " + tickSkip + " ticks";
+                + "\nTickSkip: " + circleSpeed + " ticks";
     }
 
-    public static class Builder extends AbstractBuilder<Builder> {
-        private int circleRadius = 0;
-        private int height = 0;
-        private int tickSkip = 1;
+    public enum CircleType {
+        TARGET,
+        RELATIVE
+    }
 
-        private Builder() {
+    public static final class Builder extends AbstractBuilder<Builder> {
+        private int circleRadius = 1;
+        private int height = 0;
+        private int circleSpeed = 1;
+        private int effectDistance = 0;
+        private final CircleType circleType;
+
+        private Builder(CircleType circleType) {
+            this.circleType = circleType;
         }
 
         @Override
@@ -79,17 +96,22 @@ public final class CircleSpell extends Behaviour {
 
         public Builder setCircleRadius(int circleRadius) {
             this.circleRadius = circleRadius;
-            return self();
+            return this;
         }
 
         public Builder setCircleHeight(int height) {
             this.height = height;
-            return self();
+            return this;
         }
 
-        public Builder setTickSkip(int tickSkip) {
-            this.tickSkip = Math.max(1, tickSkip);
-            return self();
+        public Builder setCircleSpeedPerTick(int meters) {
+            this.circleSpeed = Math.max(1, meters);
+            return this;
+        }
+
+        public Builder setEffectDistance(int distance) {
+            this.effectDistance = distance;
+            return this;
         }
     }
 }

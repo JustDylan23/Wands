@@ -1,6 +1,7 @@
 package me.dylan.wands.spell.implementations.commonmagic;
 
 import me.dylan.wands.Main;
+import me.dylan.wands.model.SoundPlayer;
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.handler.Behaviour;
 import me.dylan.wands.spell.handler.SparkSpell;
@@ -24,7 +25,9 @@ public enum Spark implements Castable {
                     Bukkit.getScheduler().runTaskLater(Main.getPlugin(), () ->
                             loc.getWorld().playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, SoundCategory.MASTER, 4.0F, 1.0F), 10L);
                 })
-                .setCastEffects(loc -> loc.getWorld().playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_BLAST, SoundCategory.MASTER, 4.0F, 1.0F))
+                .setCastSound(SoundPlayer.chain()
+                        .add(Sound.ENTITY_FIREWORK_ROCKET_BLAST, 4, 1)
+                )
                 .setEffectDistance(25)
                 .build();
     }
