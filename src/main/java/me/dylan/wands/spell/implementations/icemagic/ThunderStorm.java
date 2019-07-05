@@ -3,6 +3,7 @@ package me.dylan.wands.spell.implementations.icemagic;
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.handler.Behaviour;
 import me.dylan.wands.spell.handler.CircleSpell;
+import me.dylan.wands.spell.handler.CircleSpell.CircleType;
 import me.dylan.wands.util.EffectUtil;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -14,7 +15,7 @@ public enum ThunderStorm implements Castable {
     private final Behaviour behaviour;
 
     ThunderStorm() {
-        this.behaviour = CircleSpell.newBuilder(CircleSpell.CircleType.RELATIVE)
+        this.behaviour = CircleSpell.newBuilder(CircleType.RELATIVE)
                 .setCircleRadius(10)
                 .setSpellEffectRadius(10)
                 .setCircleHeight(7)

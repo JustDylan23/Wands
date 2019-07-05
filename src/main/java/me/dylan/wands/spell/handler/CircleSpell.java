@@ -7,9 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public final class CircleSpell extends Behaviour {
-    private final int circleSpeed;
-    private final int height;
-    private final int effectDistance;
+    private final int circleSpeed, height, effectDistance;
     private final float circleRadius;
     private final CircleType circleType;
 
@@ -28,11 +26,10 @@ public final class CircleSpell extends Behaviour {
 
     @Override
     public boolean cast(Player player) {
-        Location pLoc = player.getLocation();
         castSounds.play(player);
         Location location;
         if (circleType == CircleType.RELATIVE) {
-            location = pLoc.clone().add(0, height, 0);
+            location = player.getLocation();
         } else if (circleType == CircleType.TARGET) {
             location = SpellEffectUtil.getSpellLocation(effectDistance, player);
         } else location = player.getLocation();
@@ -46,7 +43,7 @@ public final class CircleSpell extends Behaviour {
                     index++;
                     if (index >= locations.length) {
                         cancel();
-                        EffectUtil.getNearbyLivingEntities(player, pLoc, spellEffectRadius)
+                        EffectUtil.getNearbyLivingEntities(player, location, spellEffectRadius)
                                 .forEach(entity -> {
                                     if (affectedEntityDamage != 0) entity.damage(affectedEntityDamage);
                                     affectedEntityEffects.accept(entity);
@@ -74,10 +71,8 @@ public final class CircleSpell extends Behaviour {
     }
 
     public static final class Builder extends AbstractBuilder<Builder> {
-        private int circleRadius = 1;
-        private int height = 0;
-        private int circleSpeed = 1;
-        private int effectDistance = 0;
+        private int circleRadius, circleSpeed = 1;
+        private int effectDistance, height = 0;
         private final CircleType circleType;
 
         private Builder(CircleType circleType) {

@@ -2,8 +2,8 @@ package me.dylan.wands.spell.handler;
 
 import me.dylan.wands.pluginmeta.ListenerRegistry;
 import me.dylan.wands.spell.spelleffect.sound.SoundEffect;
-import me.dylan.wands.util.EffectUtil;
 import me.dylan.wands.util.Common;
+import me.dylan.wands.util.EffectUtil;
 import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.block.data.BlockData;

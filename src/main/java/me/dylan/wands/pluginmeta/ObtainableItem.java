@@ -40,11 +40,17 @@ public enum ObtainableItem {
         return itemStack;
     })),
 
-    GOD_WAND(ItemUtil.getItemStack(() -> {
+    MAGIC_WAND(ItemUtil.getItemStack(() -> {
         ItemStack itemStack = new ItemStack(Material.STICK);
         ItemUtil.setName(itemStack, "&8&lMagic Wand");
         SpellManagementUtil.declareWand(itemStack);
-        SpellManagementUtil.setSpells(itemStack, SpellType.COMET, SpellType.SPARK, SpellType.CONFUSE, SpellType.LAUNCH, SpellType.POISON_WAVE);
+        SpellManagementUtil.setSpells(itemStack,
+                SpellType.COMET,
+                SpellType.SPARK,
+                SpellType.CONFUSE,
+                SpellType.LAUNCH,
+                SpellType.POISON_WAVE
+        );
         SpellManagementUtil.setSpellBrowseParticles(itemStack, BrowseParticle.DEFAULT);
         return itemStack;
     })),
@@ -53,7 +59,13 @@ public enum ObtainableItem {
         ItemStack itemStack = new ItemStack(Material.NETHER_WART);
         ItemUtil.setName(itemStack, "&cBlood Magic");
         SpellManagementUtil.declareWand(itemStack);
-        SpellManagementUtil.setSpells(itemStack, SpellType.BLOOD_WAVE, SpellType.BLOOD_SPARK, SpellType.BLOOD_EXPLODE, SpellType.BLOOD_STUN, SpellType.BLOOD_BLOCK);
+        SpellManagementUtil.setSpells(itemStack,
+                SpellType.BLOOD_WAVE,
+                SpellType.BLOOD_SPARK,
+                SpellType.BLOOD_EXPLODE,
+                SpellType.BLOOD_STUN,
+                SpellType.BLOOD_BLOCK
+        );
         SpellManagementUtil.setSpellBrowseParticles(itemStack, BrowseParticle.PARTICLE_BLOOD);
         return itemStack;
     })),
@@ -64,11 +76,11 @@ public enum ObtainableItem {
         SpellManagementUtil.setSpells(itemStack,
                 SpellType.THUNDER_ARROW,
                 SpellType.THUNDER_STRIKE,
-                SpellType.ICE_FREEZE,
-                SpellType.ICE_AURA,
+                SpellType.THUNDER_STORM,
                 SpellType.THUNDER_RAGE,
-                SpellType.THUNDER_STORM
-        );
+                SpellType.ICE_FREEZE,
+                SpellType.ICE_AURA
+                );
         SpellManagementUtil.setSpellBrowseParticles(itemStack, BrowseParticle.PARTICLE_ICE);
         return itemStack;
     }));
