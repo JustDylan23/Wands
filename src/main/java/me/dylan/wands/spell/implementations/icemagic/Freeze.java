@@ -27,8 +27,8 @@ public enum Freeze implements Castable {
                 .setTickSkip(2)
                 .setCastSound(Sound.ENTITY_LLAMA_SWAG)
                 .setSpellRelativeEffects(loc -> {
-                    loc.getWorld().spawnParticle(Particle.CLOUD, loc, 8, 0.1, 0.1, 0.1, 0.02, null, true);
-                    loc.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, loc, 10, 0.3, 0.3, 0.3, 0.1, null, true);
+                    loc.getWorld().spawnParticle(Particle.EXPLOSION_NORMAL, loc, 8, 0.1, 0.1, 0.1, 0.02, null, true);
+                    loc.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, loc, 10, 0.5, 0.5, 0.5, 1, null, true);
                 })
                 .setEffectDistance(25)
                 .setAffectedEntityEffects(entity -> {

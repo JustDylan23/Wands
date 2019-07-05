@@ -1,8 +1,8 @@
 package me.dylan.wands.spell.handler;
 
 import me.dylan.wands.Main;
-import me.dylan.wands.spell.spelleffect.sound.SoundEffect;
 import me.dylan.wands.spell.spelleffect.sound.SingularSound;
+import me.dylan.wands.spell.spelleffect.sound.SoundEffect;
 import me.dylan.wands.util.Common;
 import org.bukkit.Location;
 import org.bukkit.Sound;

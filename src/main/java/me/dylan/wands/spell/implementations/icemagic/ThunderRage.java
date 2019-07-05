@@ -1,42 +1,34 @@
 package me.dylan.wands.spell.implementations.icemagic;
 
-import me.dylan.wands.Main;
 import me.dylan.wands.spell.Castable;
+import me.dylan.wands.spell.handler.AuraSpell;
+import me.dylan.wands.spell.handler.AuraSpell.EffectRate;
 import me.dylan.wands.spell.handler.Behaviour;
-import me.dylan.wands.spell.handler.BurstAuraSpell;
-import me.dylan.wands.spell.handler.SparkSpell;
 import me.dylan.wands.util.EffectUtil;
 import org.bukkit.*;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitRunnable;
 
 public enum ThunderRage implements Castable {
     INSTANCE;
     private final Behaviour behaviour;
     private final PotionEffect wither = new PotionEffect(PotionEffectType.WITHER, 80, 1, false);
     private final PotionEffect slow = new PotionEffect(PotionEffectType.SLOW, 80, 3, false);
+    private final PotionEffect strenth = new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 300, 1, false);
+    private final PotionEffect speed = new PotionEffect(PotionEffectType.SPEED, 60, 1, false);
 
     ThunderRage() {
-        this.behaviour = BurstAuraSpell.newBuilder()
+        this.behaviour = AuraSpell.newBuilder(EffectRate.ONCE)
                 .setCastSound(Sound.ITEM_TOTEM_USE)
                 .setAffectedEntityDamage(4)
                 .setSpellEffectRadius(8)
-                .setPlayerEffects(player -> {
-                    new BukkitRunnable() {
-                        World world = player.getWorld();
-                        int count = 0;
-
-                        @Override
-                        public void run() {
-                            if (++count >= 10) cancel();
-                            Location loc = player.getLocation();
-                            world.spawnParticle(Particle.CLOUD, loc, 6, 0.2, 0.2, 0.2, 0.1, null, true);
-                            world.spawnParticle(Particle.SMOKE_LARGE, loc, 2, 0.2, 0.2, 0.2, 0.1, null, true);
-                            world.spawnParticle(Particle.SMOKE_NORMAL, loc, 2, 0.2, 0.2, 0.2, 0.1, null, true);
-                            world.spawnParticle(Particle.FLAME, loc, 2, 0.2, 0.2, 0.2, 0.1, null, true);
-                        }
-                    }.runTaskTimer(Main.getPlugin(), 0, 2);
+                .setEffectDuration(40)
+                .setSpellRelativeEffects(loc -> {
+                    World world = loc.getWorld();
+                    world.spawnParticle(Particle.EXPLOSION_NORMAL, loc, 1, 0.4, 0.3, 0.4, 0.1, null, true);
+                    world.spawnParticle(Particle.SMOKE_LARGE, loc, 1, 0.4, 0.3, 0.4, 0.1, null, true);
+                    world.spawnParticle(Particle.SMOKE_NORMAL, loc, 1, 0.4, 0.3, 0.4, 0.1, null, true);
+                    world.spawnParticle(Particle.FLAME, loc, 1, 0.4, 0.2, 0.4, 0.1, null, true);
                 })
                 .setAffectedEntityEffects(entity -> {
                     entity.addPotionEffect(wither, true);
@@ -50,6 +42,14 @@ public enum ThunderRage implements Castable {
                     EffectUtil.runTaskLater(() -> {
                         world.strikeLightningEffect(loc);
                     }, 3, 3, 3);
+                })
+                .setReverseAuraEffects(player -> {
+                    player.addPotionEffect(strenth, true);
+                    player.addPotionEffect(speed, true);
+                    World world = player.getWorld();
+                    Location location = player.getLocation();
+                    world.spawnParticle(Particle.LAVA, location, 10, 1, 1, 1, 0, null, true);
+                    world.playSound(location, Sound.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.MASTER, 4, 1);
                 })
                 .build();
     }

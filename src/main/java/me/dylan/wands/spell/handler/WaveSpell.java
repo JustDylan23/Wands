@@ -1,7 +1,7 @@
 package me.dylan.wands.spell.handler;
 
-import me.dylan.wands.util.EffectUtil;
 import me.dylan.wands.util.Common;
+import me.dylan.wands.util.EffectUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
