@@ -20,7 +20,7 @@ public enum LightningArrow implements Castable {
                     w.playSound(location, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, 4, 1);
                     w.spawnParticle(Particle.CLOUD, location, 40, 0.2, 0.2, 0.2, 0.3, null, true);
                 })
-                .setSpellEffectRadius(5)
+                .setSpellEffectRadius(3.5F)
                 .setLifeTime(25)
                 .setSpellRelativeEffects(location -> {
                     World w = location.getWorld();

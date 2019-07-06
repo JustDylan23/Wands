@@ -18,7 +18,7 @@ public enum BloodWave implements Castable {
     BloodWave() {
         this.behaviour = WaveSpell.newBuilder()
                 .setEffectDistance(30)
-                .setSpellEffectRadius(1.8F)
+                .setSpellEffectRadius(2F)
                 .setAffectedEntityDamage(4)
                 .setCastSound(CompoundSound.chain()
                         .add(Sound.ENTITY_FIREWORK_ROCKET_BLAST)

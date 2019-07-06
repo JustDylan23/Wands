@@ -3,7 +3,8 @@ package me.dylan.wands.spell.implementations.icemagic;
 import me.dylan.wands.Main;
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.handler.Behaviour;
-import me.dylan.wands.spell.handler.WaveSpell;
+import me.dylan.wands.spell.handler.RaySpell;
+import me.dylan.wands.spell.handler.RaySpell.Target;
 import me.dylan.wands.util.Common;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -20,11 +21,10 @@ public enum Freeze implements Castable {
 
 
     Freeze() {
-        this.behaviour = WaveSpell.newBuilder()
-                .stopAtEntity(true)
-                .setSpellEffectRadius(0.8F)
+        this.behaviour = RaySpell.newBuilder(Target.SINGLE)
+                .setRayWidth(1)
                 .setAffectedEntityDamage(3)
-                .setTickSkip(2)
+                .setMetersPerTick(2)
                 .setCastSound(Sound.ENTITY_LLAMA_SWAG)
                 .setSpellRelativeEffects(loc -> {
                     loc.getWorld().spawnParticle(Particle.EXPLOSION_NORMAL, loc, 8, 0.1, 0.1, 0.1, 0.02, null, true);

@@ -1,7 +1,8 @@
 package me.dylan.wands.spell.handler;
 
+import me.dylan.wands.spell.SpellEffectUtil;
+import me.dylan.wands.spell.handler.SparkSpell.Builder;
 import me.dylan.wands.util.Common;
-import me.dylan.wands.util.EffectUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
@@ -9,19 +10,24 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
+import java.util.UUID;
+
 public final class WaveSpell extends Behaviour {
     private final int effectDistance;
     private final boolean stopAtEntity;
-    private final int tickSkip;
-    private static int instanceCount = 0;
+    private final int speed;
     private final String tagWaveSpell;
 
     private WaveSpell(Builder builder) {
         super(builder.baseMeta);
         this.effectDistance = builder.effectDistance;
         this.stopAtEntity = builder.stopAtEntity;
-        this.tickSkip = builder.tickSkip;
-        this.tagWaveSpell = "WAVE_SPELL;ID#" + instanceCount++;
+        this.speed = builder.speed;
+        this.tagWaveSpell = UUID.randomUUID().toString();
+
+        addStringProperty("Effect distance", effectDistance, "meters");
+        addStringProperty("Stop at entity", stopAtEntity);
+        addStringProperty("Meters per tick", speed, "meters");
     }
 
     public static Builder newBuilder() {
@@ -32,23 +38,23 @@ public final class WaveSpell extends Behaviour {
     public boolean cast(Player player) {
         Vector direction = player.getLocation().getDirection().normalize();
         castSounds.play(player);
-        Location currentLoc = player.getEyeLocation();
+        Location origin = player.getEyeLocation();
         new BukkitRunnable() {
             int count = 0;
 
             @Override
             public void run() {
                 outer:
-                for (int i = 0; i < tickSkip; i++) {
+                for (int i = 0; i < speed; i++) {
                     count++;
                     if (count >= effectDistance) cancel();
-                    Location loc = currentLoc.add(direction).clone();
+                    Location loc = origin.add(direction).clone();
                     if (!loc.getBlock().isPassable()) {
                         cancel();
                         return;
                     }
                     spellRelativeEffects.accept(loc);
-                    for (LivingEntity entity : EffectUtil.getNearbyLivingEntities(player, loc, spellEffectRadius)) {
+                    for (LivingEntity entity : SpellEffectUtil.getNearbyLivingEntities(player, loc, spellEffectRadius)) {
                         if (stopAtEntity) {
                             entity.damage(affectedEntityDamage);
                             affectedEntityEffects.accept(entity);
@@ -71,16 +77,10 @@ public final class WaveSpell extends Behaviour {
         return true;
     }
 
-    @Override
-    public String toString() {
-        return super.toString() + "Effect distance: " + effectDistance
-                + "\nStop at entity: " + stopAtEntity;
-    }
-
     public static final class Builder extends AbstractBuilder<Builder> {
         private int effectDistance;
         private boolean stopAtEntity = false;
-        private int tickSkip = 1;
+        private int speed = 1;
 
         private Builder() {
         }
@@ -95,13 +95,14 @@ public final class WaveSpell extends Behaviour {
             return this;
         }
 
-        public Builder stopAtEntity(boolean stopAtEntity) {
-            this.stopAtEntity = stopAtEntity;
+        public Builder setMetersPerTick(int speed) {
+            this.speed = Math.max(1, speed);
             return this;
         }
 
-        public Builder setTickSkip(int tickSkip) {
-            this.tickSkip = Math.max(1, tickSkip);
+        @Deprecated
+        @Override
+        public Builder setImpactSpeed(float speed) throws NullPointerException {
             return this;
         }
 

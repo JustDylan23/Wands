@@ -11,19 +11,19 @@ import java.util.Optional;
 
 public enum SpellType {
     COMET(Comet.INSTANCE),
+    CONFUSE(Confuse.INSTANCE),
     SPARK(Spark.INSTANCE),
     LAUNCH(Launch.INSTANCE),
-    CONFUSE(Confuse.INSTANCE),
     POISON_WAVE(PoisonWave.INSTANCE),
 
     BLOOD_BLOCK(BloodBlock.INSTANCE),
-    BLOOD_SPARK(BloodSpark.INSTANCE),
-    BLOOD_WAVE(BloodWave.INSTANCE),
     BLOOD_EXPLODE(BloodExplode.INSTANCE),
+    BLOOD_SPARK(BloodSpark.INSTANCE),
     BLOOD_STUN(BloodStun.INSTANCE),
+    BLOOD_WAVE(BloodWave.INSTANCE),
 
-    ICE_FREEZE(Freeze.INSTANCE),
     ICE_AURA(IceAura.INSTANCE),
+    ICE_FREEZE(Freeze.INSTANCE),
 
     THUNDER_ARROW(LightningArrow.INSTANCE),
     THUNDER_RAGE(ThunderRage.INSTANCE),

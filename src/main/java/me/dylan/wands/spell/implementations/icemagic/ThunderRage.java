@@ -1,10 +1,10 @@
 package me.dylan.wands.spell.implementations.icemagic;
 
 import me.dylan.wands.spell.Castable;
+import me.dylan.wands.spell.SpellEffectUtil;
 import me.dylan.wands.spell.handler.AuraSpell;
-import me.dylan.wands.spell.handler.AuraSpell.EffectRate;
+import me.dylan.wands.spell.handler.AuraSpell.EffectFrequency;
 import me.dylan.wands.spell.handler.Behaviour;
-import me.dylan.wands.util.EffectUtil;
 import org.bukkit.*;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -18,10 +18,10 @@ public enum ThunderRage implements Castable {
     private final PotionEffect speed = new PotionEffect(PotionEffectType.SPEED, 60, 1, false);
 
     ThunderRage() {
-        this.behaviour = AuraSpell.newBuilder(EffectRate.ONCE)
+        this.behaviour = AuraSpell.newBuilder(EffectFrequency.ONCE)
                 .setCastSound(Sound.ITEM_TOTEM_USE)
                 .setAffectedEntityDamage(4)
-                .setSpellEffectRadius(8)
+                .setSpellEffectRadius(8F)
                 .setEffectDuration(40)
                 .setSpellRelativeEffects(loc -> {
                     World world = loc.getWorld();
@@ -39,7 +39,7 @@ public enum ThunderRage implements Castable {
                     world.spawnParticle(Particle.FLAME, loc, 10, 0.2, 0.2, 0.2, 0.1, null, true);
                     world.spawnParticle(Particle.CLOUD, loc, 10, 0.2, 0.2, 0.2, 0.1, null, true);
                     world.strikeLightningEffect(loc);
-                    EffectUtil.runTaskLater(() -> {
+                    SpellEffectUtil.runTaskLater(() -> {
                         world.strikeLightningEffect(loc);
                     }, 3, 3, 3);
                 })

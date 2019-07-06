@@ -3,7 +3,6 @@ package me.dylan.wands.spell.handler;
 import me.dylan.wands.pluginmeta.ListenerRegistry;
 import me.dylan.wands.spell.spelleffect.sound.SoundEffect;
 import me.dylan.wands.util.Common;
-import me.dylan.wands.util.EffectUtil;
 import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.block.data.BlockData;
@@ -14,24 +13,23 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Consumer;
 
 public final class MovingBlockSpell extends Behaviour implements Listener {
 
-    private final String tagUnbreakable;
-    private final String tagFallingBlock;
-    private static int instanceCount = 0;
+    private final String tagUnbreakable, tagFallingBlock;
     private final Material material;
     private final Consumer<Location> hitEffects;
-    private final Map<Player, BlockReverter> selectedBlock = new HashMap<>();
+    private final Map<Player, BlockRestorer> selectedBlock = new HashMap<>();
     private final Map<FallingBlock, Player> caster = new HashMap<>();
+    private static final List<Block> effectedBlocks = new ArrayList<>();
+    private static final List<BlockRestorer> PENDING = new ArrayList<>();
     private final SoundEffect blockRelativeSounds;
-    private final BlockFace[] around = {BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST};
 
     private MovingBlockSpell(Builder builder) {
         super(builder.baseMeta);
@@ -39,8 +37,14 @@ public final class MovingBlockSpell extends Behaviour implements Listener {
         this.material = builder.material;
         this.hitEffects = builder.hitEffects;
         this.blockRelativeSounds = builder.blockRelativeSounds;
-        this.tagUnbreakable = "UNBREAKABLE;ID#" + ++instanceCount;
-        this.tagFallingBlock = "MOVING_BLOCK_SPELL;ID#" + instanceCount;
+        this.tagUnbreakable = UUID.randomUUID().toString();
+        this.tagFallingBlock = UUID.randomUUID().toString();
+
+        addStringProperty("Material", material);
+    }
+
+    public static void restorePendingBlocks() {
+        MovingBlockSpell.PENDING.forEach(BlockRestorer::cancel);
     }
 
     public static Builder newBuilder(Material material) {
@@ -55,21 +59,30 @@ public final class MovingBlockSpell extends Behaviour implements Listener {
     private boolean prepareBlock(Player player) {
         Block block = player.getTargetBlock(10);
         if (block != null && block.getType() != Material.AIR) {
-            Location location = block.getLocation().toCenterLocation();
-            BlockState oldState = block.getState();
-            if (oldState instanceof Container) {
-                if (oldState instanceof Chest) {
-                    ((Chest) oldState).getBlockInventory().clear();
-                } else {
-                    ((Container) oldState).getInventory().clear();
+            if (!effectedBlocks.contains(block)) {
+                BlockState oldState = block.getState();
+                if (oldState instanceof Container) {
+                    if (oldState instanceof Chest) {
+                        ((Chest) oldState).getBlockInventory().clear();
+                        Inventory inventory = ((Chest) oldState).getInventory();
+                        if (inventory.getHolder() instanceof DoubleChest) {
+                            player.sendActionBar("§ccan't be used on double chests");
+                            return false;
+                        } else inventory.clear();
+                    } else {
+                        ((Container) oldState).getInventory().clear();
+                    }
                 }
+                block.setType(material, false);
+                block.setMetadata(tagUnbreakable, Common.METADATA_VALUE_TRUE);
+                block.getState().update();
+                effectedBlocks.add(block);
+                BlockRestorer blockRestorer = new BlockRestorer(oldState, player, this);
+                selectedBlock.put(player, blockRestorer);
+                Bukkit.getScheduler().runTaskLater(plugin, blockRestorer, 100L);
+            } else {
+                player.sendActionBar("§cblock is already taken");
             }
-            block.setType(material, false);
-            block.setMetadata(tagUnbreakable, Common.METADATA_VALUE_TRUE);
-            block.getState().update();
-            BlockReverter blockReverter = new BlockReverter(oldState, location, player, this);
-            selectedBlock.put(player, blockReverter);
-            Bukkit.getScheduler().runTaskLater(plugin, blockReverter, 100L);
         } else {
             player.sendActionBar("§cselect a closer block");
         }
@@ -78,9 +91,9 @@ public final class MovingBlockSpell extends Behaviour implements Listener {
 
     private boolean launchBlock(Player player) {
         castSounds.play(player);
-        BlockReverter blockReverter = selectedBlock.get(player);
-        blockReverter.earlyRun();
-        Location location = blockReverter.originLoc;
+        BlockRestorer blockRestorer = selectedBlock.get(player);
+        blockRestorer.earlyRun();
+        Location location = blockRestorer.originLoc;
         FallingBlock fallingBlock = location.getWorld().spawnFallingBlock(location, Bukkit.createBlockData(material));
         fallingBlock.setVelocity(new Vector(0, 1, 0));
         fallingBlock.setMetadata(tagFallingBlock, Common.METADATA_VALUE_TRUE);
@@ -107,17 +120,13 @@ public final class MovingBlockSpell extends Behaviour implements Listener {
         return false;
     }
 
-    private void applyHitEffects(FallingBlock fallingBlock) {
+    private void blockLand(FallingBlock fallingBlock) {
         Player player = caster.get(fallingBlock);
         if (player != null) {
             caster.remove(fallingBlock);
             Location loc = fallingBlock.getLocation();
             hitEffects.accept(loc);
-            EffectUtil.getNearbyLivingEntities(player, loc, spellEffectRadius)
-                    .forEach(entity -> {
-                        affectedEntityEffects.accept(entity);
-                        if (affectedEntityDamage != 0) entity.damage(affectedEntityDamage);
-                    });
+            applyEntityEffects(loc, player);
         }
     }
 
@@ -125,7 +134,7 @@ public final class MovingBlockSpell extends Behaviour implements Listener {
     private void onBlockFall(EntityChangeBlockEvent event) {
         if ((event.getEntityType() == EntityType.FALLING_BLOCK) && event.getEntity().hasMetadata(tagFallingBlock)) {
             event.setCancelled(true);
-            applyHitEffects((FallingBlock) event.getEntity());
+            blockLand((FallingBlock) event.getEntity());
         }
     }
 
@@ -142,28 +151,22 @@ public final class MovingBlockSpell extends Behaviour implements Listener {
                     spellRelativeEffects.accept(entity.getLocation());
                 } else {
                     cancel();
-                    applyHitEffects(entity);
+                    blockLand(entity);
                 }
             }
         }.runTaskTimer(plugin, 0, 1);
     }
 
-    @Override
-    public String toString() {
-        return super.toString() + "Material: " + material;
-    }
-
-    static class BlockReverter implements Runnable {
-
+    public static class BlockRestorer implements Runnable {
         private final Location originLoc;
         private final MovingBlockSpell parent;
         private final Player player;
         private final BlockState state;
         private boolean canRun = true;
 
-        BlockReverter(BlockState state, Location originLoc, Player player, MovingBlockSpell parent) {
+        private BlockRestorer(BlockState state, Player player, MovingBlockSpell parent) {
             this.state = state;
-            this.originLoc = originLoc;
+            this.originLoc = state.getLocation().toCenterLocation();
             this.parent = parent;
             this.player = player;
             new BukkitRunnable() {
@@ -177,6 +180,7 @@ public final class MovingBlockSpell extends Behaviour implements Listener {
                     } else cancel();
                 }
             }.runTaskTimer(plugin, 1, 1);
+            PENDING.add(this);
         }
 
         void earlyRun() {
@@ -184,13 +188,19 @@ public final class MovingBlockSpell extends Behaviour implements Listener {
             canRun = false;
         }
 
+        public void cancel() {
+            state.update(true);
+        }
+
         @Override
         public void run() {
             if (canRun) {
                 canRun = false;
+                effectedBlocks.remove(state.getBlock());
                 state.removeMetadata(parent.tagUnbreakable, plugin);
                 state.update(true);
                 parent.selectedBlock.remove(player);
+                PENDING.remove(this);
             }
         }
     }

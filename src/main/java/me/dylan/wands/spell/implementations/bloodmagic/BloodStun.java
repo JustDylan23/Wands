@@ -2,7 +2,8 @@ package me.dylan.wands.spell.implementations.bloodmagic;
 
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.handler.Behaviour;
-import me.dylan.wands.spell.handler.WaveSpell;
+import me.dylan.wands.spell.handler.RaySpell;
+import me.dylan.wands.spell.handler.RaySpell.Target;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -12,18 +13,16 @@ import org.bukkit.potion.PotionEffectType;
 
 public enum BloodStun implements Castable {
     INSTANCE;
-    private final PotionEffect potionEffect =
-            new PotionEffect(PotionEffectType.SLOW, 180, 3, false);
+    private final PotionEffect slow = new PotionEffect(PotionEffectType.SLOW, 180, 3, false);
     private final Behaviour behaviour;
 
     BloodStun() {
-        this.behaviour = WaveSpell.newBuilder()
-                .setSpellEffectRadius(1F)
-                .setAffectedEntityDamage(5)
+        this.behaviour = RaySpell.newBuilder(Target.SINGLE)
+                .setRayWidth(1)
+                .setAffectedEntityDamage(3)
                 .setCastSound(Sound.ENTITY_FIREWORK_ROCKET_BLAST)
                 .setAffectedEntityEffects(entity -> {
-                    entity.addPotionEffect(
-                            potionEffect, true);
+                    entity.addPotionEffect(slow, true);
                     Location location = entity.getLocation();
                     location.getWorld().playSound(location, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, 4, 1);
                 })
@@ -32,7 +31,6 @@ public enum BloodStun implements Castable {
                     loc.getWorld().spawnParticle(Particle.DRIP_LAVA, loc, 2, 0.3, 0.3, 0.3, 0.04, null, true);
                     loc.getWorld().spawnParticle(Particle.BLOCK_CRACK, loc, 1, 0.6, 0.7, 0.6, 0.15, Material.REDSTONE_BLOCK.createBlockData(), true);
                 }).setEffectDistance(30)
-                .stopAtEntity(true)
                 .build();
     }
 

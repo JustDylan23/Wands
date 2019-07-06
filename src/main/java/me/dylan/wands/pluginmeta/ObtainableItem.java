@@ -69,6 +69,7 @@ public enum ObtainableItem {
         SpellManagementUtil.setSpellBrowseParticles(itemStack, BrowseParticle.PARTICLE_BLOOD);
         return itemStack;
     })),
+
     ICE_WAND(ItemUtil.getItemStack(() -> {
         ItemStack itemStack = new ItemStack(Material.BLAZE_ROD);
         ItemUtil.setName(itemStack, "&rIce Wand");
@@ -80,8 +81,24 @@ public enum ObtainableItem {
                 SpellType.THUNDER_RAGE,
                 SpellType.ICE_FREEZE,
                 SpellType.ICE_AURA
-                );
+        );
         SpellManagementUtil.setSpellBrowseParticles(itemStack, BrowseParticle.PARTICLE_ICE);
+        return itemStack;
+    })),
+
+    DARK_WAND(ItemUtil.getItemStack(() -> {
+        ItemStack itemStack = new ItemStack(Material.STICK);
+        ItemUtil.setName(itemStack, "&8&lDark Wand");
+        SpellManagementUtil.declareWand(itemStack);
+        SpellManagementUtil.setSpells(itemStack,
+                SpellType.DARK_PULSE,
+                SpellType.DARK_BLOCK,
+                SpellType.DARK_CIRCLE,
+                SpellType.DARK_PUSH,
+                SpellType.DARK_AURA,
+                SpellType.DARK_SPARK
+        );
+        SpellManagementUtil.setSpellBrowseParticles(itemStack, BrowseParticle.PARTICLE_DARK);
         return itemStack;
     }));
 
