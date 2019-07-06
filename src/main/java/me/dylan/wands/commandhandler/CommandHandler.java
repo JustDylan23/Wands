@@ -67,6 +67,21 @@ public class CommandHandler implements CommandExecutor {
                     }
                     return true;
                 }
+                if (args[0].equalsIgnoreCase("spells")) {
+                    SpellType spellType;
+                    try {
+                        spellType = SpellType.valueOf(args[1].toUpperCase());
+                        Behaviour behaviour = spellType.castable.getBehaviour();
+                        if (behaviour == null) {
+                            sender.sendMessage(Main.PREFIX + "Spell has no behaviour!");
+                        } else {
+                            sender.sendMessage("§e ---- §6" + args[1].toUpperCase() + "§e ----§r\n" + behaviour);
+                        }
+                    } catch (IllegalArgumentException e) {
+                        sender.sendMessage(Main.PREFIX + "Spell does not exist!");
+                    }
+                    return true;
+                }
                 return false;
             case 3:
                 if (args[0].equalsIgnoreCase("set")) {
@@ -82,22 +97,6 @@ public class CommandHandler implements CommandExecutor {
                             sender.sendMessage(message);
                         } catch (NumberFormatException e) {
                             sender.sendMessage(Main.PREFIX + "Cooldown can only be set to a full number!");
-                        }
-                        return true;
-                    }
-                } else if (args[0].equalsIgnoreCase("spells")) {
-                    if (args[1].equalsIgnoreCase("props")) {
-                        SpellType spellType;
-                        try {
-                            spellType = SpellType.valueOf(args[2].toUpperCase());
-                            Behaviour behaviour = spellType.castable.getBehaviour();
-                            if (behaviour == null) {
-                                sender.sendMessage(Main.PREFIX + "Spell has no behaviour!");
-                            } else {
-                                sender.sendMessage("§e ---- §6" + args[2].toUpperCase() + "§e ----§r\n" + behaviour);
-                            }
-                        } catch (IllegalArgumentException e) {
-                            sender.sendMessage(Main.PREFIX + "Spell does not exist!");
                         }
                         return true;
                     }

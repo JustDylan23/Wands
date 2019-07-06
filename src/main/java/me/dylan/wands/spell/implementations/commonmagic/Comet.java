@@ -1,9 +1,9 @@
 package me.dylan.wands.spell.implementations.commonmagic;
 
 import me.dylan.wands.spell.Castable;
+import me.dylan.wands.spell.SpellEffectUtil;
 import me.dylan.wands.spell.handler.Behaviour;
 import me.dylan.wands.spell.handler.ProjectileSpell;
-import me.dylan.wands.util.EffectUtil;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
@@ -17,8 +17,9 @@ public enum Comet implements Castable {
     Comet() {
         this.behaviour = ProjectileSpell.newBuilder(SmallFireball.class, 3F)
                 .setSpellEffectRadius(4.5F)
-                .setAffectedEntityDamage(10)
+                .setAffectedEntityDamage(8)
                 .setAffectedEntityEffects(entity -> entity.setFireTicks(60))
+                .setImpactSpeed(1)
                 .setCastSound(Sound.ENTITY_FIREWORK_ROCKET_BLAST)
                 .setSpellRelativeEffects(loc -> {
                     World world = loc.getWorld();
@@ -31,12 +32,11 @@ public enum Comet implements Castable {
                     projectile.setYield(0);
                 })
                 .setLifeTime(20)
-                .setPushSpeed(1)
                 .setHitEffects(loc -> {
-                    loc.getWorld().playSound(loc, Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, SoundCategory.MASTER, 5F, 1F);
+                    loc.createExplosion(0);
                     loc.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, loc, 0, 0.0, 0.0, 0.0, 0.0, null, true);
                     loc.getWorld().spawnParticle(Particle.SMOKE_LARGE, loc, 50, 2, 2, 2, 0.05, null, true);
-                    EffectUtil.runTaskLater(() ->
+                    SpellEffectUtil.runTaskLater(() ->
                                     loc.getWorld().playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, SoundCategory.MASTER, 5F, 1F)
                             , 0, 3, 3);
                 })

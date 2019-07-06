@@ -15,6 +15,9 @@ public enum BrowseParticle {
     }),
     PARTICLE_ICE(loc -> {
         loc.getWorld().spawnParticle(Particle.SNOW_SHOVEL, loc, 10, 0.5, 0.5, 0.5, 1);
+    }),
+    PARTICLE_DARK(loc -> {
+        loc.getWorld().spawnParticle(Particle.SMOKE_NORMAL, loc, 10, 0.5, 0.5, 0.5, 0.03);
     });
 
     private final Consumer<Location> consumer;

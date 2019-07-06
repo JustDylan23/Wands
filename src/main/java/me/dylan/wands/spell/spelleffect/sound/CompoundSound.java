@@ -14,6 +14,10 @@ public class CompoundSound implements SoundEffect {
     private CompoundSound() {
     }
 
+    public static CompoundSound chain() {
+        return new CompoundSound();
+    }
+
     public CompoundSound add(@Nonnull Sound sound) {
         sounds.add(SingularSound.from(sound, 1));
         return this;
@@ -27,10 +31,6 @@ public class CompoundSound implements SoundEffect {
     public CompoundSound add(@Nonnull Sound sound, float pitch, int... repeat) {
         sounds.add(me.dylan.wands.spell.spelleffect.sound.RepeatableSound.from(sound, pitch, repeat));
         return this;
-    }
-
-    public static CompoundSound chain() {
-        return new CompoundSound();
     }
 
     @Override

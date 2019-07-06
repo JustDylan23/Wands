@@ -1,6 +1,6 @@
 package me.dylan.wands.spell.spelleffect.sound;
 
-import me.dylan.wands.util.EffectUtil;
+import me.dylan.wands.spell.SpellEffectUtil;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
@@ -28,12 +28,12 @@ public class RepeatableSound implements SoundEffect {
     @Override
     public void play(@NotNull Location location) {
         World world = location.getWorld();
-        EffectUtil.runTaskLater(() -> world.playSound(location, sound, SoundCategory.MASTER, 4, pitch), repeat);
+        SpellEffectUtil.runTaskLater(() -> world.playSound(location, sound, SoundCategory.MASTER, 4, pitch), repeat);
     }
 
     @Override
     public void play(@Nonnull Entity entity) {
         World world = entity.getLocation().getWorld();
-        EffectUtil.runTaskLater(() -> world.playSound(entity.getLocation(), sound, SoundCategory.MASTER, 4, pitch), repeat);
+        SpellEffectUtil.runTaskLater(() -> world.playSound(entity.getLocation(), sound, SoundCategory.MASTER, 4, pitch), repeat);
     }
 }

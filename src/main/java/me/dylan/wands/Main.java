@@ -7,6 +7,7 @@ import me.dylan.wands.customitem.CursedBow;
 import me.dylan.wands.pluginmeta.ConfigurableData;
 import me.dylan.wands.pluginmeta.ListenerRegistry;
 import me.dylan.wands.spell.PlayerListener;
+import me.dylan.wands.spell.handler.MovingBlockSpell;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
@@ -58,6 +59,7 @@ public final class Main extends JavaPlugin {
     @Override
     public void onDisable() {
         saveConfig();
+        MovingBlockSpell.restorePendingBlocks();
     }
 
     public ConfigurableData getConfigurableData() {

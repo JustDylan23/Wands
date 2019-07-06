@@ -2,7 +2,7 @@ package me.dylan.wands.spell.implementations.icemagic;
 
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.handler.AuraSpell;
-import me.dylan.wands.spell.handler.AuraSpell.EffectRate;
+import me.dylan.wands.spell.handler.AuraSpell.EffectFrequency;
 import me.dylan.wands.spell.handler.Behaviour;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -18,8 +18,8 @@ public enum IceAura implements Castable {
     private final PotionEffect weak = new PotionEffect(PotionEffectType.WEAKNESS, 60, 0, false);
 
     IceAura() {
-        this.behaviour = AuraSpell.newBuilder(EffectRate.REPEATEDLY)
-                .setSpellEffectRadius(4)
+        this.behaviour = AuraSpell.newBuilder(EffectFrequency.CONSTANT)
+                .setSpellEffectRadius(3.5F)
                 .setEffectDuration(100)
                 .setPlayerEffects(player -> player.addPotionEffect(speed, true))
                 .setCastSound(Sound.ENTITY_PHANTOM_FLAP)

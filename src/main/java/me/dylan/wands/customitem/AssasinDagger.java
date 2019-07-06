@@ -1,8 +1,8 @@
 package me.dylan.wands.customitem;
 
 import me.dylan.wands.Main;
-import me.dylan.wands.util.ItemUtil;
 import me.dylan.wands.util.Common;
+import me.dylan.wands.util.ItemUtil;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -139,7 +139,7 @@ public class AssasinDagger implements Listener {
             location.getWorld().spawnParticle(Particle.SMOKE_LARGE, location, 15, 0.5, 0.2, 0.5, 0.1, null, true);
             location.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, location, 20, 0.5, 0.5, 0.5, 0.1, null, true);
             player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 6000, 0, true), true);
-            player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 6000, 0, true), true);
+            player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 6000, 0, true), false);
             player.sendActionBar("§6You are §aInvisible");
         }
     }

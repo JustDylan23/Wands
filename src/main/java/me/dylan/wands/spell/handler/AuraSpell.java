@@ -1,13 +1,14 @@
 package me.dylan.wands.spell.handler;
 
 import me.dylan.wands.Main;
+import me.dylan.wands.spell.SpellEffectUtil;
 import me.dylan.wands.util.Common;
-import me.dylan.wands.util.EffectUtil;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.UUID;
 import java.util.function.Consumer;
 
 /**
@@ -19,34 +20,33 @@ import java.util.function.Consumer;
  * {@link Builder#setEffectDuration(int)}
  */
 
-//todo add enum EffectRate ONCE, REPEATEDLY
-
 public final class AuraSpell extends Behaviour {
-    private static int instanceCount = 0;
-    private final EffectRate effectRate;
+    private final EffectFrequency effectFrequency;
     private final int effectDuration;
-    private final String hasAura;
+    private final String AuraUUID;
     private final Consumer<LivingEntity> playerEffects, reverseAuraEffects;
 
     private AuraSpell(Builder builder) {
         super(builder.baseMeta);
-        instanceCount++;
-        this.effectRate = builder.effectRate;
+        this.effectFrequency = builder.effectFrequency;
         this.effectDuration = builder.effectDuration;
-        this.hasAura = "HAS_AURA;ID#" + instanceCount;
+        this.AuraUUID = UUID.randomUUID().toString();
         this.playerEffects = builder.playerEffects;
         this.reverseAuraEffects = builder.reverseAuraEffects;
+
+        addStringProperty("Aura duration", effectDuration, "ticks");
+        addStringProperty("Effect quantity", effectFrequency);
     }
 
-    public static Builder newBuilder(EffectRate effectRate) {
-        return new Builder(effectRate);
+    public static Builder newBuilder(EffectFrequency effectFrequency) {
+        return new Builder(effectFrequency);
     }
 
     @Override
     public boolean cast(Player player) {
+        if (player.hasMetadata(AuraUUID)) return false;
+        player.setMetadata(AuraUUID, Common.METADATA_VALUE_TRUE);
         castSounds.play(player);
-        if (player.hasMetadata(hasAura)) return false;
-        player.setMetadata(hasAura, Common.METADATA_VALUE_TRUE);
         playerEffects.accept(player);
         new BukkitRunnable() {
             int count = 0;
@@ -57,7 +57,7 @@ public final class AuraSpell extends Behaviour {
             public void run() {
                 if (++count > effectDuration) {
                     cancel();
-                    player.removeMetadata(hasAura, plugin);
+                    player.removeMetadata(AuraUUID, plugin);
                     if (!hasAffected) {
                         reverseAuraEffects.accept(player);
                     }
@@ -65,16 +65,18 @@ public final class AuraSpell extends Behaviour {
                     Location loc = player.getLocation();
                     spellRelativeEffects.accept(loc);
                     if (repeat) {
-                        EffectUtil.getNearbyLivingEntities(player, loc, spellEffectRadius)
+                        SpellEffectUtil.getNearbyLivingEntities(player, loc, spellEffectRadius)
                                 .forEach(entity -> {
-                                    if (effectRate == EffectRate.ONCE) {
+                                    if (effectFrequency == EffectFrequency.ONCE) {
                                         repeat = false;
                                     }
                                     if (affectedEntityDamage != 0) {
                                         entity.damage(affectedEntityDamage);
+                                        push(entity, loc, player);
                                     }
                                     hasAffected = true;
                                     affectedEntityEffects.accept(entity);
+
                                 });
                     }
                 }
@@ -83,24 +85,19 @@ public final class AuraSpell extends Behaviour {
         return true;
     }
 
-    @Override
-    public String toString() {
-        return super.toString() + "Effect duration: " + effectDuration + " ticks";
-    }
-
-    public enum EffectRate {
+    public enum EffectFrequency {
         ONCE,
-        REPEATEDLY
+        CONSTANT
     }
 
     public static final class Builder extends AbstractBuilder<Builder> {
+        private final EffectFrequency effectFrequency;
         private Consumer<LivingEntity> reverseAuraEffects = Common.emptyConsumer();
         private Consumer<LivingEntity> playerEffects = Common.emptyConsumer();
         private int effectDuration;
-        private final EffectRate effectRate;
 
-        private Builder(EffectRate effectRate) {
-            this.effectRate = effectRate;
+        private Builder(EffectFrequency effectFrequency) {
+            this.effectFrequency = effectFrequency;
         }
 
         @Override
