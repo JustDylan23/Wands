@@ -6,7 +6,6 @@ import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 
@@ -26,7 +25,7 @@ public class RepeatableSound implements SoundEffect {
     }
 
     @Override
-    public void play(@NotNull Location location) {
+    public void play(@Nonnull Location location) {
         World world = location.getWorld();
         SpellEffectUtil.runTaskLater(() -> world.playSound(location, sound, SoundCategory.MASTER, 4, pitch), repeat);
     }

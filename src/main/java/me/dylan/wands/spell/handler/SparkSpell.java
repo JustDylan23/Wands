@@ -3,6 +3,8 @@ package me.dylan.wands.spell.handler;
 import me.dylan.wands.spell.SpellEffectUtil;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 public final class SparkSpell extends Behaviour {
     private final int effectDistance;
@@ -10,7 +12,6 @@ public final class SparkSpell extends Behaviour {
     private SparkSpell(Builder builder) {
         super(builder.baseMeta);
         this.effectDistance = builder.effectDistance;
-
         addStringProperty("Effect distance", effectDistance, "meters");
     }
 
@@ -23,7 +24,16 @@ public final class SparkSpell extends Behaviour {
         Location loc = SpellEffectUtil.getSpellLocation(effectDistance, player);
         castSounds.play(player);
         spellRelativeEffects.accept(loc);
-        applyEntityEffects(loc, player);
+//        applyEntityEffects(loc, player);
+        SpellEffectUtil.getNearbyLivingEntities(player, loc, spellEffectRadius)
+                .forEach(entity -> {
+                    if (affectedEntityDamage != 0) {
+                        EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(player, entity, DamageCause.CUSTOM, 10);
+                        entity.setLastDamageCause(event);
+                        entity.damage(10);
+                        entity.setLastDamageCause(event);
+                    }
+                });
         return true;
     }
 

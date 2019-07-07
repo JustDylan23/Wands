@@ -25,6 +25,7 @@ public final class Main extends JavaPlugin {
         return plugin;
     }
 
+    @SuppressWarnings("WeakerAccess")
     public static void log(String text) {
         Bukkit.getLogger().info(PREFIX + text);
     }

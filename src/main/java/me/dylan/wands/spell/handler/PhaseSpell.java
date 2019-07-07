@@ -14,11 +14,11 @@ import java.util.function.Function;
 
 public final class PhaseSpell extends Behaviour {
     private final int effectDistance;
+    private final String tagPhaseSpell;
+    private final Target target;
     private final Function<LivingEntity, Boolean> condition;
     private final Consumer<LivingEntity> duringPhaseEffect;
     private final BiConsumer<LivingEntity, Player> afterPhaseEffect;
-    private final Target target;
-    private final String tagPhaseSpell;
 
     private PhaseSpell(Builder builder) {
         super(builder.baseMeta);
@@ -74,11 +74,10 @@ public final class PhaseSpell extends Behaviour {
     public static final class Builder extends AbstractBuilder<Builder> {
 
         private final Target target;
-
         private int effectDistance;
         private Function<LivingEntity, Boolean> condition = (entity) -> false;
         private Consumer<LivingEntity> duringPhaseEffect = Common.emptyConsumer();
-        BiConsumer<LivingEntity, Player> afterPhaseEffect = (livingEntity, player) -> {
+        private BiConsumer<LivingEntity, Player> afterPhaseEffect = (livingEntity, player) -> {
         };
 
         private Builder(Target target) {

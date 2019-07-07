@@ -50,7 +50,7 @@ public enum SpellType {
         this.castable = castable;
     }
 
-    public static Optional<Castable> getSpell(String name) {
+    private static Optional<Castable> getSpell(String name) {
         if (name == null) return Optional.empty();
         try {
             return Optional.of(SpellType.valueOf(name).castable);

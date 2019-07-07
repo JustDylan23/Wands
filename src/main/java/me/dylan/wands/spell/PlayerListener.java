@@ -1,12 +1,15 @@
 package me.dylan.wands.spell;
 
 import me.dylan.wands.Main;
+import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.EquipmentSlot;
@@ -18,6 +21,12 @@ import java.util.Map;
 public class PlayerListener implements Listener {
 
     private final Map<Player, Long> lastUsed = new HashMap<>();
+
+    @EventHandler
+    public void onDeath(PlayerDeathEvent event) {
+        Bukkit.getScheduler().runTaskLater(Main.getPlugin(), event.getEntity().spigot()::respawn, 20L);
+        Bukkit.broadcastMessage("death " + event.getEntity().getLastDamageCause().getCause());
+    }
 
     @EventHandler
     private void onPlayerInteract(PlayerInteractEvent event) {
@@ -45,13 +54,13 @@ public class PlayerListener implements Listener {
      */
 
     private void castWithCooldown(Player player, ItemStack itemStack) {
-        int remainingTime = getRemainingTime(player);
+        double remainingTime = getRemainingTime(player);
         if (remainingTime <= 0) {
             if (SpellManagementUtil.castSpell(player, itemStack)) {
                 lastUsed.put(player, System.currentTimeMillis());
             }
         } else {
-            sendRemainingTime(player, remainingTime);
+            sendRemainingTime(player, (int) Math.ceil(remainingTime));
         }
     }
 
@@ -60,7 +69,7 @@ public class PlayerListener implements Listener {
      * @return Amount of time since player last tried to cast a @link #ba.
      */
 
-    private int getRemainingTime(Player player) {
+    private double getRemainingTime(Player player) {
         int cooldown = Main.getPlugin().getConfigurableData().getMagicCooldownTime() * 1000;
         long now = System.currentTimeMillis();
         Long previous = lastUsed.get(player);
@@ -68,7 +77,7 @@ public class PlayerListener implements Listener {
             return 0;
         }
         long elapsed = now - previous;
-        return (int) Math.ceil(cooldown - elapsed) / 1000;
+        return (cooldown - elapsed) / 1000D;
     }
 
     /**

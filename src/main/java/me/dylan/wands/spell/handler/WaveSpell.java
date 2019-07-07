@@ -1,7 +1,6 @@
 package me.dylan.wands.spell.handler;
 
 import me.dylan.wands.spell.SpellEffectUtil;
-import me.dylan.wands.spell.handler.SparkSpell.Builder;
 import me.dylan.wands.util.Common;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -14,19 +13,16 @@ import java.util.UUID;
 
 public final class WaveSpell extends Behaviour {
     private final int effectDistance;
-    private final boolean stopAtEntity;
     private final int speed;
     private final String tagWaveSpell;
 
     private WaveSpell(Builder builder) {
         super(builder.baseMeta);
         this.effectDistance = builder.effectDistance;
-        this.stopAtEntity = builder.stopAtEntity;
         this.speed = builder.speed;
         this.tagWaveSpell = UUID.randomUUID().toString();
 
         addStringProperty("Effect distance", effectDistance, "meters");
-        addStringProperty("Stop at entity", stopAtEntity);
         addStringProperty("Meters per tick", speed, "meters");
     }
 
@@ -44,7 +40,6 @@ public final class WaveSpell extends Behaviour {
 
             @Override
             public void run() {
-                outer:
                 for (int i = 0; i < speed; i++) {
                     count++;
                     if (count >= effectDistance) cancel();
@@ -55,12 +50,7 @@ public final class WaveSpell extends Behaviour {
                     }
                     spellRelativeEffects.accept(loc);
                     for (LivingEntity entity : SpellEffectUtil.getNearbyLivingEntities(player, loc, spellEffectRadius)) {
-                        if (stopAtEntity) {
-                            entity.damage(affectedEntityDamage);
-                            affectedEntityEffects.accept(entity);
-                            cancel();
-                            break outer;
-                        } else if (!entity.hasMetadata(tagWaveSpell)) {
+                        if (!entity.hasMetadata(tagWaveSpell)) {
                             entity.setMetadata(tagWaveSpell, Common.METADATA_VALUE_TRUE);
                             if (affectedEntityDamage != 0) entity.damage(affectedEntityDamage);
                             affectedEntityEffects.accept(entity);
@@ -79,7 +69,6 @@ public final class WaveSpell extends Behaviour {
 
     public static final class Builder extends AbstractBuilder<Builder> {
         private int effectDistance;
-        private boolean stopAtEntity = false;
         private int speed = 1;
 
         private Builder() {

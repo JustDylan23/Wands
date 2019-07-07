@@ -1,7 +1,6 @@
 package me.dylan.wands.spell.handler;
 
 import me.dylan.wands.pluginmeta.ListenerRegistry;
-import me.dylan.wands.spell.SpellEffectUtil;
 import me.dylan.wands.util.Common;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
