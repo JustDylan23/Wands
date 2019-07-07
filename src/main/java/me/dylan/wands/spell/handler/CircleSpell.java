@@ -2,13 +2,14 @@ package me.dylan.wands.spell.handler;
 
 import me.dylan.wands.spell.SpellEffectUtil;
 import org.bukkit.Location;
+import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public final class CircleSpell extends Behaviour {
     private final int speed, height, effectDistance;
     private final float circleRadius;
-    private final CirclePlacement circleOrigin;
+    private final CirclePlacement circlePlacement;
 
     private CircleSpell(Builder builder) {
         super(builder.baseMeta);
@@ -16,10 +17,10 @@ public final class CircleSpell extends Behaviour {
         this.height = builder.height;
         this.effectDistance = builder.effectDistance;
         this.circleRadius = builder.circleRadius;
-        this.circleOrigin = builder.circlePlacement;
+        this.circlePlacement = builder.circlePlacement;
 
         addStringProperty("Radius", circleRadius, "meters");
-        addStringProperty("Circle origin", circleOrigin);
+        addStringProperty("Circle origin", circlePlacement);
         addStringProperty("Height", height, "meters");
         addStringProperty("Meters per tick", speed, "ticks");
         addStringProperty("Effect distance", effectDistance, "meters");
@@ -33,9 +34,9 @@ public final class CircleSpell extends Behaviour {
     public boolean cast(Player player) {
         castSounds.play(player);
         Location location;
-        if (circleOrigin == CirclePlacement.RELATIVE) {
+        if (circlePlacement == CirclePlacement.RELATIVE) {
             location = player.getLocation();
-        } else if (circleOrigin == CirclePlacement.TARGET) {
+        } else if (circlePlacement == CirclePlacement.TARGET) {
             location = SpellEffectUtil.getSpellLocation(effectDistance, player);
         } else location = player.getLocation();
         Location[] locations = SpellEffectUtil.getCircleFrom(location.clone().add(0, height, 0), circleRadius);

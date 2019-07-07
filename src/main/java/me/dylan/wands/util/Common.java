@@ -3,8 +3,6 @@ package me.dylan.wands.util;
 import me.dylan.wands.Main;
 import org.bukkit.metadata.FixedMetadataValue;
 
-import java.util.List;
-import java.util.Objects;
 import java.util.function.Consumer;
 
 public class Common {

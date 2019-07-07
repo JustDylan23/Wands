@@ -6,8 +6,9 @@ import me.dylan.wands.spell.handler.Behaviour;
 import me.dylan.wands.spell.handler.Behaviour.ImpactDirection;
 import me.dylan.wands.spell.handler.PhaseSpell;
 import me.dylan.wands.spell.handler.PhaseSpell.Target;
-import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.*;
+import org.bukkit.Location;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.potion.PotionEffect;
@@ -26,7 +27,7 @@ public enum DarkPush implements Castable {
                 .setImpactSpeed(1.5F)
                 .setImpactDirection(ImpactDirection.PLAYER)
                 .setEffectDistance(30)
-                .setSpellEffectRadius(1)
+                .setSpellEffectRadius(1.5F)
                 .setSpellRelativeEffects(loc -> {
                     loc.getWorld().spawnParticle(Particle.SMOKE_LARGE, loc, 20, 0.4, 0.4, 0.4, 0.1, null, true);
                     loc.getWorld().spawnParticle(Particle.SMOKE_NORMAL, loc, 20, 0.4, 0.4, 0.4, 0.1, null, true);

@@ -12,6 +12,9 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.util.Vector;
 
 import javax.annotation.Nonnull;
@@ -26,12 +29,13 @@ public abstract class Behaviour implements Listener {
     final static Main plugin = Main.getPlugin();
 
     final int affectedEntityDamage;
-    final float spellEffectRadius, impactSpeed;
+    final float spellEffectRadius;
     final SoundEffect castSounds;
     final Consumer<Location> spellRelativeEffects;
     final Consumer<LivingEntity> affectedEntityEffects;
     private final List<String> props = new ArrayList<>();
     private final ImpactDirection impactDirection;
+    private final float impactSpeed;
 
     Behaviour(@Nonnull BaseMeta baseMeta) {
         this.affectedEntityDamage = baseMeta.affectedEntityDamage;
@@ -45,6 +49,7 @@ public abstract class Behaviour implements Listener {
         addStringProperty("Entity damage", affectedEntityDamage);
         addStringProperty("Effect radius", spellEffectRadius);
         addStringProperty("Impact speed", impactSpeed);
+        addStringProperty("Impact direction", impactDirection);
     }
 
     void addStringProperty(String key, Object value) {
@@ -79,7 +84,9 @@ public abstract class Behaviour implements Listener {
                 .forEach(entity -> {
                     push(entity, center, player);
                     affectedEntityEffects.accept(entity);
-                    if (affectedEntityDamage != 0) entity.damage(affectedEntityDamage);
+                    if (affectedEntityDamage != 0) {
+                        entity.damage(affectedEntityDamage);
+                    }
                 });
     }
 

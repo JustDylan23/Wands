@@ -8,6 +8,7 @@ import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.Contract;
 
 import java.util.Optional;
 import java.util.StringJoiner;
@@ -20,11 +21,12 @@ public class SpellManagementUtil {
     private static final String TAG_VERIFIED = "IsWand";
     private static final String TAG_PARTICLE_SPELL_BROWSE = "SpellBrowseParticles";
 
+    @Contract(value = " -> fail", pure = true)
     private SpellManagementUtil() {
         throw new UnsupportedOperationException();
     }
 
-    public static void declareWand(ItemStack itemStack) {
+    public static void setAsWand(ItemStack itemStack) {
         ItemUtil.setPersistentData(itemStack, TAG_VERIFIED, PersistentDataType.BYTE, (byte) 0);
     }
 

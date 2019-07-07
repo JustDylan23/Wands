@@ -1,39 +1,41 @@
 package me.dylan.wands.spell;
 
+import com.destroystokyo.paper.block.TargetBlockInfo;
 import me.dylan.wands.Main;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Particle;
-import org.bukkit.World;
+import me.dylan.wands.util.Common;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.util.Vector;
 
+import java.io.Console;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.StringJoiner;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 public class SpellEffectUtil {
     private static final Main plugin = Main.getPlugin();
-    private static final Vector NO_VELOCITY = new Vector();
 
     private SpellEffectUtil() {
         throw new UnsupportedOperationException();
     }
 
+    @SuppressWarnings("ConstantConditions")
     public static Location getSpellLocation(int effectDistance, Player player) {
         if (effectDistance == 0) return player.getLocation();
         Entity entity = player.getTargetEntity(effectDistance);
         if (entity != null) {
             return entity.getLocation().add(0, 0.5, 0).toCenterLocation();
         }
-        Block block = player.getTargetBlock(effectDistance);
-        if (block != null) {
-            return block.getLocation().subtract(player.getLocation().getDirection().normalize()).toCenterLocation();
+        TargetBlockInfo info = player.getTargetBlockInfo(effectDistance);
+        if (info.getBlock().getType() == Material.AIR) {
+            return info.getBlock().getLocation().toCenterLocation();
         }
-        return player.getLocation();
+        return info.getRelativeBlock().getLocation().toCenterLocation();
     }
 
     public static Location[] getCircleFrom(Location location, float radius) {
@@ -97,7 +99,4 @@ public class SpellEffectUtil {
         return ThreadLocalRandom.current().nextDouble() * d * 2.0 - d;
     }
 
-    public static void removeVelocity(Entity entity) {
-        entity.setVelocity(NO_VELOCITY);
-    }
 }

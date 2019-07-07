@@ -8,6 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.Contract;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -17,6 +18,7 @@ import java.util.function.Supplier;
 public class ItemUtil {
     private static final Main plugin = Main.getPlugin();
 
+    @Contract(value = " -> fail", pure = true)
     private ItemUtil() {
         throw new UnsupportedOperationException();
     }

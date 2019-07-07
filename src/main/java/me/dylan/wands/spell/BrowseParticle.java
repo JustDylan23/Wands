@@ -18,6 +18,10 @@ public enum BrowseParticle {
     }),
     PARTICLE_DARK(loc -> {
         loc.getWorld().spawnParticle(Particle.SMOKE_NORMAL, loc, 10, 0.5, 0.5, 0.5, 0.03);
+    }),
+    PARTICLE_FIRE(loc -> {
+        loc.getWorld().spawnParticle(Particle.FLAME, loc, 8, 0.5, 0.5, 0.5, 0.03);
+        loc.getWorld().spawnParticle(Particle.SMOKE_NORMAL, loc, 10, 0.5, 0.5, 0.5, 0.03);
     });
 
     private final Consumer<Location> consumer;

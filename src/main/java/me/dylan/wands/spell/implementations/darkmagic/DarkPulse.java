@@ -4,7 +4,9 @@ import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.handler.Behaviour;
 import me.dylan.wands.spell.handler.RaySpell;
 import me.dylan.wands.spell.handler.RaySpell.Target;
-import org.bukkit.*;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -28,9 +30,7 @@ public enum DarkPulse implements Castable {
                 })
                 .setAffectedEntityDamage(6)
                 .setCastSound(Sound.ENTITY_WITHER_SHOOT)
-                .setAffectedEntityEffects(entity -> {
-                    entity.addPotionEffect(blind, true);
-                })
+                .setAffectedEntityEffects(entity -> entity.addPotionEffect(blind, true))
                 .setSpellRelativeEffects(loc -> {
                     loc.getWorld().spawnParticle(Particle.SMOKE_LARGE, loc, 3, 0.4, 0.4, 0.4, 0.1, null, true);
                     loc.getWorld().spawnParticle(Particle.SMOKE_NORMAL, loc, 13, 0.8, 0.8, 0.8, 0.1, null, true);

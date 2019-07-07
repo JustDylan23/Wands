@@ -7,7 +7,6 @@ import me.dylan.wands.spell.spelleffect.sound.CompoundSound;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
-import org.bukkit.SoundCategory;
 
 public enum DarkBlock implements Castable {
     INSTANCE;

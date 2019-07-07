@@ -42,8 +42,8 @@ public enum ObtainableItem {
 
     MAGIC_WAND(ItemUtil.getItemStack(() -> {
         ItemStack itemStack = new ItemStack(Material.STICK);
-        ItemUtil.setName(itemStack, "&8&lMagic Wand");
-        SpellManagementUtil.declareWand(itemStack);
+        ItemUtil.setName(itemStack, "&7Magic Wand");
+        SpellManagementUtil.setAsWand(itemStack);
         SpellManagementUtil.setSpells(itemStack,
                 SpellType.COMET,
                 SpellType.SPARK,
@@ -58,7 +58,7 @@ public enum ObtainableItem {
     BLOOD_WAND(ItemUtil.getItemStack(() -> {
         ItemStack itemStack = new ItemStack(Material.NETHER_WART);
         ItemUtil.setName(itemStack, "&cBlood Magic");
-        SpellManagementUtil.declareWand(itemStack);
+        SpellManagementUtil.setAsWand(itemStack);
         SpellManagementUtil.setSpells(itemStack,
                 SpellType.BLOOD_WAVE,
                 SpellType.BLOOD_SPARK,
@@ -73,7 +73,7 @@ public enum ObtainableItem {
     ICE_WAND(ItemUtil.getItemStack(() -> {
         ItemStack itemStack = new ItemStack(Material.BLAZE_ROD);
         ItemUtil.setName(itemStack, "&rIce Wand");
-        SpellManagementUtil.declareWand(itemStack);
+        SpellManagementUtil.setAsWand(itemStack);
         SpellManagementUtil.setSpells(itemStack,
                 SpellType.THUNDER_ARROW,
                 SpellType.THUNDER_STRIKE,
@@ -89,7 +89,7 @@ public enum ObtainableItem {
     DARK_WAND(ItemUtil.getItemStack(() -> {
         ItemStack itemStack = new ItemStack(Material.STICK);
         ItemUtil.setName(itemStack, "&8&lDark Wand");
-        SpellManagementUtil.declareWand(itemStack);
+        SpellManagementUtil.setAsWand(itemStack);
         SpellManagementUtil.setSpells(itemStack,
                 SpellType.DARK_PULSE,
                 SpellType.DARK_BLOCK,
@@ -100,7 +100,23 @@ public enum ObtainableItem {
         );
         SpellManagementUtil.setSpellBrowseParticles(itemStack, BrowseParticle.PARTICLE_DARK);
         return itemStack;
-    }));
+    })),
+    CELCRIUS_WAND(ItemUtil.getItemStack(() -> {
+        ItemStack itemStack = new ItemStack(Material.BLAZE_POWDER);
+        ItemUtil.setName(itemStack, "&6Celcrius Wand");
+        SpellManagementUtil.setAsWand(itemStack);
+        SpellManagementUtil.setSpells(itemStack,
+                SpellType.FIRE_COMET,
+                SpellType.FIRE_TWISTER,
+                SpellType.FLAME_WAVE,
+                SpellType.FLAME_SHOCK_WAVE,
+                SpellType.FLAME_THROWER,
+                SpellType.FIRE_SPARK
+        );
+        SpellManagementUtil.setSpellBrowseParticles(itemStack, BrowseParticle.PARTICLE_FIRE);
+        return itemStack;
+    }))
+    ;
 
     private static final String[] names = Arrays.stream(values()).map(Enum::toString).toArray(String[]::new);
 

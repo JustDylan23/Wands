@@ -1,5 +1,6 @@
 package me.dylan.wands.spell.handler;
 
+import com.google.common.base.Preconditions;
 import me.dylan.wands.pluginmeta.ListenerRegistry;
 import me.dylan.wands.spell.spelleffect.sound.SoundEffect;
 import me.dylan.wands.util.Common;
@@ -22,13 +23,13 @@ import java.util.function.Consumer;
 
 public final class MovingBlockSpell extends Behaviour implements Listener {
 
+    private static final List<Block> effectedBlocks = new ArrayList<>();
+    private static final List<BlockRestorer> PENDING = new ArrayList<>();
     private final String tagUnbreakable, tagFallingBlock;
     private final Material material;
     private final Consumer<Location> hitEffects;
     private final Map<Player, BlockRestorer> selectedBlock = new HashMap<>();
     private final Map<FallingBlock, Player> caster = new HashMap<>();
-    private static final List<Block> effectedBlocks = new ArrayList<>();
-    private static final List<BlockRestorer> PENDING = new ArrayList<>();
     private final SoundEffect blockRelativeSounds;
 
     private MovingBlockSpell(Builder builder) {
@@ -157,14 +158,14 @@ public final class MovingBlockSpell extends Behaviour implements Listener {
         }.runTaskTimer(plugin, 0, 1);
     }
 
-    public static class BlockRestorer implements Runnable {
+    private static class BlockRestorer implements Runnable {
         private final Location originLoc;
         private final MovingBlockSpell parent;
         private final Player player;
         private final BlockState state;
         private boolean canRun = true;
 
-        private BlockRestorer(BlockState state, Player player, MovingBlockSpell parent) {
+        BlockRestorer(BlockState state, Player player, MovingBlockSpell parent) {
             this.state = state;
             this.originLoc = state.getLocation().toCenterLocation();
             this.parent = parent;
@@ -188,7 +189,7 @@ public final class MovingBlockSpell extends Behaviour implements Listener {
             canRun = false;
         }
 
-        public void cancel() {
+        void cancel() {
             state.update(true);
         }
 
