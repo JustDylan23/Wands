@@ -38,7 +38,7 @@ public final class PhaseSpell extends Behaviour {
     }
 
     @Override
-    public boolean cast(Player player) {
+    public boolean cast(Player player, String wandDisplayName) {
         Location loc = SpellEffectUtil.getSpellLocation(effectDistance, player);
         castSounds.play(player);
         spellRelativeEffects.accept(loc);
@@ -47,7 +47,7 @@ public final class PhaseSpell extends Behaviour {
                 entity.setMetadata(tagPhaseSpell, Common.METADATA_VALUE_TRUE);
                 push(entity, loc, player);
                 affectedEntityEffects.accept(entity);
-                if (affectedEntityDamage != 0) entity.damage(affectedEntityDamage);
+                SpellEffectUtil.damageEffect(player, entity, affectedEntityDamage, wandDisplayName);
                 new BukkitRunnable() {
                     @Override
                     public void run() {

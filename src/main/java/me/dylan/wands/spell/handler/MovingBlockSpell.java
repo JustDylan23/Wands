@@ -1,6 +1,5 @@
 package me.dylan.wands.spell.handler;
 
-import com.google.common.base.Preconditions;
 import me.dylan.wands.pluginmeta.ListenerRegistry;
 import me.dylan.wands.spell.spelleffect.sound.SoundEffect;
 import me.dylan.wands.util.Common;
@@ -15,6 +14,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -53,7 +53,7 @@ public final class MovingBlockSpell extends Behaviour implements Listener {
     }
 
     @Override
-    public boolean cast(Player player) {
+    public boolean cast(Player player, String wandDisplayName) {
         return selectedBlock.containsKey(player) ? launchBlock(player) : prepareBlock(player);
     }
 
@@ -97,7 +97,7 @@ public final class MovingBlockSpell extends Behaviour implements Listener {
         Location location = blockRestorer.originLoc;
         FallingBlock fallingBlock = location.getWorld().spawnFallingBlock(location, Bukkit.createBlockData(material));
         fallingBlock.setVelocity(new Vector(0, 1, 0));
-        fallingBlock.setMetadata(tagFallingBlock, Common.METADATA_VALUE_TRUE);
+        fallingBlock.setMetadata(tagFallingBlock, new FixedMetadataValue(plugin, player.getInventory().getItemInMainHand().getItemMeta().getDisplayName()));
         fallingBlock.setDropItem(false);
         blockRelativeSounds.play(fallingBlock);
         caster.put(fallingBlock, player);
@@ -127,7 +127,7 @@ public final class MovingBlockSpell extends Behaviour implements Listener {
             caster.remove(fallingBlock);
             Location loc = fallingBlock.getLocation();
             hitEffects.accept(loc);
-            applyEntityEffects(loc, player);
+            applyEntityEffects(loc, player, fallingBlock.getMetadata(tagFallingBlock).get(0).asString());
         }
     }
 

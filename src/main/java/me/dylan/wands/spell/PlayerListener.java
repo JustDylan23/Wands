@@ -1,14 +1,16 @@
 package me.dylan.wands.spell;
 
 import me.dylan.wands.Main;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Sound;
+import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -24,8 +26,18 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onDeath(PlayerDeathEvent event) {
-        Bukkit.getScheduler().runTaskLater(Main.getPlugin(), event.getEntity().spigot()::respawn, 20L);
-        Bukkit.broadcastMessage("death " + event.getEntity().getLastDamageCause().getCause());
+        Player player = event.getEntity();
+        EntityDamageEvent damageEvent = player.getLastDamageCause();
+        Bukkit.getScheduler().runTaskLater(Main.getPlugin(), () -> player.spigot().respawn(), 20L);
+        if (damageEvent != null && damageEvent.getCause() == DamageCause.CUSTOM) {
+            if (player.hasMetadata("deathMessage")) {
+                event.setDeathMessage(event.getEntity().getMetadata("deathMessage").get(0).asString());
+            }
+            Player killer = event.getEntity().getKiller();
+            if (killer != null) {
+                killer.incrementStatistic(Statistic.PLAYER_KILLS);
+            }
+        }
     }
 
     @EventHandler

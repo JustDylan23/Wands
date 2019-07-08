@@ -31,7 +31,7 @@ public final class WaveSpell extends Behaviour {
     }
 
     @Override
-    public boolean cast(Player player) {
+    public boolean cast(Player player, String wandDisplayName) {
         Vector direction = player.getLocation().getDirection().normalize();
         castSounds.play(player);
         Location origin = player.getEyeLocation();
@@ -52,7 +52,7 @@ public final class WaveSpell extends Behaviour {
                     for (LivingEntity entity : SpellEffectUtil.getNearbyLivingEntities(player, loc, spellEffectRadius)) {
                         if (!entity.hasMetadata(tagWaveSpell)) {
                             entity.setMetadata(tagWaveSpell, Common.METADATA_VALUE_TRUE);
-                            if (affectedEntityDamage != 0) entity.damage(affectedEntityDamage);
+                            SpellEffectUtil.damageEffect(player, entity, affectedEntityDamage, wandDisplayName);
                             affectedEntityEffects.accept(entity);
                             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                                 if (entity.isValid()) {

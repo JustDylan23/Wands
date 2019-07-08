@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -34,6 +35,11 @@ public class AssasinDagger implements Listener {
 
     private boolean hasDagger(Player player) {
         return ItemUtil.hasPersistentData(player.getInventory().getItemInMainHand(), ID_TAG, PersistentDataType.BYTE);
+    }
+
+    @EventHandler
+    private void onBlockBreak(BlockBreakEvent event) {
+        if (hasDagger(event.getPlayer())) event.setCancelled(true);
     }
 
     @EventHandler

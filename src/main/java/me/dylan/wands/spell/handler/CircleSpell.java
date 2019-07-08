@@ -2,13 +2,13 @@ package me.dylan.wands.spell.handler;
 
 import me.dylan.wands.spell.SpellEffectUtil;
 import org.bukkit.Location;
-import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.List;
+
 public final class CircleSpell extends Behaviour {
-    private final int speed, height, effectDistance;
-    private final float circleRadius;
+    private final int speed, height, effectDistance, circleRadius;
     private final CirclePlacement circlePlacement;
 
     private CircleSpell(Builder builder) {
@@ -31,7 +31,7 @@ public final class CircleSpell extends Behaviour {
     }
 
     @Override
-    public boolean cast(Player player) {
+    public boolean cast(Player player, String wandDisplayName) {
         castSounds.play(player);
         Location location;
         if (circlePlacement == CirclePlacement.RELATIVE) {
@@ -39,7 +39,7 @@ public final class CircleSpell extends Behaviour {
         } else if (circlePlacement == CirclePlacement.TARGET) {
             location = SpellEffectUtil.getSpellLocation(effectDistance, player);
         } else location = player.getLocation();
-        Location[] locations = SpellEffectUtil.getCircleFrom(location.clone().add(0, height, 0), circleRadius);
+        List<Location> locations = SpellEffectUtil.getCircleFrom(location.clone().add(0, height, 0), circleRadius);
         new BukkitRunnable() {
             int index = 0;
 
@@ -47,11 +47,11 @@ public final class CircleSpell extends Behaviour {
             public void run() {
                 for (int i = 0; i < speed; i++) {
                     index++;
-                    if (index >= locations.length) {
+                    if (index >= locations.size()) {
                         cancel();
-                        applyEntityEffects(location, player);
+                        applyEntityEffects(location, player, wandDisplayName);
                     } else {
-                        Location loc = locations[index];
+                        Location loc = locations.get(index);
                         spellRelativeEffects.accept(loc);
                     }
                 }

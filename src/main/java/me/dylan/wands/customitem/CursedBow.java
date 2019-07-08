@@ -2,7 +2,6 @@ package me.dylan.wands.customitem;
 
 import me.dylan.wands.Main;
 import me.dylan.wands.spell.SpellEffectUtil;
-import me.dylan.wands.util.Common;
 import me.dylan.wands.util.ItemUtil;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
@@ -11,6 +10,7 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
@@ -18,6 +18,7 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
@@ -38,6 +39,11 @@ public class CursedBow implements Listener {
 
     private boolean hasBow(Player player) {
         return ItemUtil.hasPersistentData(player.getInventory().getItemInMainHand(), ID_TAG, PersistentDataType.BYTE);
+    }
+
+    @EventHandler
+    private void onBlockBreak(BlockBreakEvent event) {
+        if (hasBow(event.getPlayer())) event.setCancelled(true);
     }
 
     @EventHandler
@@ -85,7 +91,8 @@ public class CursedBow implements Listener {
             if (hasDrawn.contains(player)) {
                 hasDrawn.remove(player);
                 Entity projectile = event.getProjectile();
-                projectile.setMetadata(cursedArrow, Common.METADATA_VALUE_TRUE);
+                projectile.setMetadata(cursedArrow, new FixedMetadataValue(plugin,
+                        player.getInventory().getItemInMainHand().getItemMeta().getDisplayName()));
                 Location location = player.getLocation();
                 location.getWorld().playSound(location, Sound.ENTITY_ENDER_DRAGON_FLAP, SoundCategory.MASTER, 4F, 1F);
                 location.getWorld().playSound(player.getLocation(), Sound.ENTITY_EVOKER_CAST_SPELL, SoundCategory.MASTER, 4F, 0.1F);
@@ -137,7 +144,7 @@ public class CursedBow implements Listener {
                 location.getWorld().spawnParticle(Particle.SMOKE_NORMAL, location, 30, 0.4, 0.4, 0.4, 0.2, null, true);
                 SpellEffectUtil.getNearbyLivingEntities((Player) projectile.getShooter(), location, 3)
                         .forEach(entity -> {
-                            entity.damage(8);
+                            SpellEffectUtil.damageEffect((Player) projectile.getShooter(), entity, 8, projectile.getMetadata(cursedArrow).get(0).asString());
                             entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 80, 3, false), true);
                         });
                 projectile.remove();

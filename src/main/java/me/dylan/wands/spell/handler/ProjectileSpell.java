@@ -13,6 +13,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -47,13 +48,13 @@ public final class ProjectileSpell<T extends Projectile> extends Behaviour imple
     }
 
     @Override
-    public boolean cast(Player player) {
+    public boolean cast(Player player, String wandDisplayName) {
         castSounds.play(player);
         Vector velocity = player.getLocation().getDirection().multiply(speed);
         T projectile = player.launchProjectile(this.projectile, velocity);
         trail(projectile);
         projectileProps.accept(projectile);
-        projectile.setMetadata(tagProjectileSpell, Common.METADATA_VALUE_TRUE);
+        projectile.setMetadata(tagProjectileSpell, new FixedMetadataValue(plugin, wandDisplayName));
         activateLifeTimer(projectile);
         return true;
     }
@@ -62,7 +63,7 @@ public final class ProjectileSpell<T extends Projectile> extends Behaviour imple
         projectile.remove();
         Location loc = projectile.getLocation();
         hitEffects.accept(loc);
-        applyEntityEffects(loc, player);
+        applyEntityEffects(loc, player, projectile.getMetadata(tagProjectileSpell).get(0).asString());
     }
 
     @EventHandler

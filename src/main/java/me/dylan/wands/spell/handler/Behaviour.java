@@ -12,9 +12,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.util.Vector;
 
 import javax.annotation.Nonnull;
@@ -33,6 +30,7 @@ public abstract class Behaviour implements Listener {
     final SoundEffect castSounds;
     final Consumer<Location> spellRelativeEffects;
     final Consumer<LivingEntity> affectedEntityEffects;
+
     private final List<String> props = new ArrayList<>();
     private final ImpactDirection impactDirection;
     private final float impactSpeed;
@@ -60,7 +58,7 @@ public abstract class Behaviour implements Listener {
         props.add("§6" + key.substring(0, 1).toUpperCase() + key.substring(1).toLowerCase() + ":§r " + value.toString().toLowerCase() + " " + unit);
     }
 
-    public abstract boolean cast(Player player);
+    public abstract boolean cast(Player player, String wandDisplayName);
 
     void push(Entity entity, Location from, Player player) {
         if (impactSpeed != 0) {
@@ -79,15 +77,12 @@ public abstract class Behaviour implements Listener {
         }
     }
 
-    void applyEntityEffects(Location center, Player player) {
-        SpellEffectUtil.getNearbyLivingEntities(player, center, spellEffectRadius)
-                .forEach(entity -> {
-                    push(entity, center, player);
-                    affectedEntityEffects.accept(entity);
-                    if (affectedEntityDamage != 0) {
-                        entity.damage(affectedEntityDamage);
-                    }
-                });
+    void applyEntityEffects(Location center, Player player, String wandDisplayName) {
+        SpellEffectUtil.getNearbyLivingEntities(player, center, spellEffectRadius).forEach(entity -> {
+            push(entity, center, player);
+            SpellEffectUtil.damageEffect(player, entity, affectedEntityDamage, wandDisplayName);
+            affectedEntityEffects.accept(entity);
+        });
     }
 
     @Override
