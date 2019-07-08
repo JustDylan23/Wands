@@ -2,18 +2,19 @@ package me.dylan.wands.spell;
 
 import com.destroystokyo.paper.block.TargetBlockInfo;
 import me.dylan.wands.Main;
-import me.dylan.wands.util.Common;
 import org.bukkit.*;
-import org.bukkit.block.Block;
+import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.scheduler.BukkitRunnable;
 
-import java.io.Console;
-import java.util.HashSet;
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.StringJoiner;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
@@ -38,10 +39,10 @@ public class SpellEffectUtil {
         return info.getRelativeBlock().getLocation().toCenterLocation();
     }
 
-    public static Location[] getCircleFrom(Location location, float radius) {
+    public static List<Location> getCircleFrom(Location location, float radius) {
         int density = (int) StrictMath.ceil(radius * 2 * Math.PI);
         double increment = (2 * Math.PI) / density;
-        Location[] locations = new Location[density];
+        List<Location> locations = new ArrayList<>();
         double angle = 0;
         World world = location.getWorld();
         double originX = location.getX();
@@ -51,7 +52,7 @@ public class SpellEffectUtil {
             angle += increment;
             double newX = originX + (radius * Math.cos(angle));
             double newZ = originZ + (radius * Math.sin(angle));
-            locations[i] = new Location(world, newX, originY, newZ);
+            locations.add(new Location(world, newX, originY, newZ));
         }
         return locations;
     }
@@ -73,7 +74,7 @@ public class SpellEffectUtil {
         }
     }
 
-    public static void spawnColoredParticle(Particle particle, Location location, int count, double offsetX, double offsetY, double offsetZ, int r, int g, int b, boolean rainbow) {
+    public static void spawnColoredParticle(Particle particle, Location location, int count, double offsetX, double offsetY, double offsetZ, int red, int green, int blue, boolean rainbow) {
         switch (particle) {
             case REDSTONE:
             case SPELL_MOB:
@@ -81,11 +82,11 @@ public class SpellEffectUtil {
                 if (rainbow) {
                     location.getWorld().spawnParticle(particle, location, (count > 0) ? count : 1, offsetX, offsetY, offsetZ, 1, null, true);
                 } else {
-                    float red = Math.max(Float.MIN_NORMAL, r / 255F);
-                    float green = Math.max(0, g / 255F);
-                    float blue = Math.max(0, b / 255F);
+                    float redR = Math.max(Float.MIN_NORMAL, red / 255F);
+                    float greenG = Math.max(0, green / 255F);
+                    float blueB = Math.max(0, blue / 255F);
                     for (int i = 0; count > i; i++) {
-                        location.getWorld().spawnParticle(particle, randomizeLoc(location, offsetX, offsetY, offsetZ), 0, red, green, blue, 1, null, true);
+                        location.getWorld().spawnParticle(particle, randomizeLoc(location, offsetX, offsetY, offsetZ), 0, redR, greenG, blueB, 1, null, true);
                     }
                 }
         }
@@ -99,4 +100,37 @@ public class SpellEffectUtil {
         return ThreadLocalRandom.current().nextDouble() * d * 2.0 - d;
     }
 
+    public static void damageEffect(Player attacker, Damageable victim, int amount, @Nonnull String weaponDisplayName) {
+        if (amount != 0) {
+            if (victim instanceof Player) {
+                victim.setMetadata("deathMessage", new FixedMetadataValue(plugin,
+                        ((Player) victim).getDisplayName()
+                                + " was slain by "
+                                + attacker.getDisplayName()
+                                + " using §7[§r"
+                                + weaponDisplayName
+                                + "§7]"
+                ));
+                victim.setLastDamageCause(new EntityDamageByEntityEvent(attacker, victim, DamageCause.CUSTOM, amount * 10));
+            }
+            victim.damage(amount);
+        }
+    }
+
+    public static void setFireTicks(Player attacker, Damageable victim, int ticks) {
+        if (victim instanceof Player) {
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (victim.getFireTicks() == -20) {
+                        cancel();
+                    } else {
+                        victim.setLastDamageCause(new EntityDamageByEntityEvent(attacker, victim, DamageCause.CUSTOM, 1));
+                        victim.sendMessage("ticks = " + victim.getFireTicks());
+                    }
+                }
+            }.runTaskTimer(plugin, 0L, 1L);
+        }
+        victim.setFireTicks(ticks);
+    }
 }

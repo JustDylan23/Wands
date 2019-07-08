@@ -36,7 +36,7 @@ public final class RaySpell extends Behaviour {
     }
 
     @Override
-    public boolean cast(Player player) {
+    public boolean cast(Player player, String wandDisplayName) {
         Vector direction = player.getLocation().getDirection().normalize();
         castSounds.play(player);
         Location origin = player.getEyeLocation();
@@ -50,13 +50,13 @@ public final class RaySpell extends Behaviour {
                     Location loc = origin.add(direction).clone();
                     if (count >= effectDistance || !loc.getBlock().isPassable()) {
                         cancel();
-                        effectEntities(loc, player);
+                        effectEntities(loc, player, wandDisplayName);
                         return;
                     }
                     spellRelativeEffects.accept(loc);
                     List<LivingEntity> entities = SpellEffectUtil.getNearbyLivingEntities(player, loc, rayWidth);
                     if (entities.size() != 0) {
-                        effectEntities(loc, player);
+                        effectEntities(loc, player, wandDisplayName);
                         cancel();
                         return;
                     }
@@ -66,12 +66,12 @@ public final class RaySpell extends Behaviour {
         return true;
     }
 
-    private void effectEntities(Location loc, Player player) {
+    private void effectEntities(Location loc, Player player, String wandDisplayName) {
         hitEffects.accept(loc);
         for (LivingEntity entity : SpellEffectUtil.getNearbyLivingEntities(player, loc, (target == Target.SINGLE) ? rayWidth : spellEffectRadius)) {
             push(entity, loc, player);
             affectedEntityEffects.accept(entity);
-            entity.damage(affectedEntityDamage);
+            SpellEffectUtil.damageEffect(player, entity, affectedEntityDamage, wandDisplayName);
             if (target == Target.SINGLE) break;
         }
     }

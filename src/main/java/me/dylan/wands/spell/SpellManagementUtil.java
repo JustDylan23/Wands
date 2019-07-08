@@ -111,7 +111,8 @@ public class SpellManagementUtil {
                 player.sendActionBar("No functionality found!");
                 return false;
             }
-            return behaviour.cast(player);
+            spell.get().getDisplayName();
+            return behaviour.cast(player, itemStack.getItemMeta().getDisplayName());
         }
         player.sendActionBar(Main.PREFIX + "No spells are bound!");
         return false;

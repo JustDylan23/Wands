@@ -43,7 +43,7 @@ public final class AuraSpell extends Behaviour {
     }
 
     @Override
-    public boolean cast(Player player) {
+    public boolean cast(Player player, String wandDisplayName) {
         if (player.hasMetadata(AuraUUID)) return false;
         player.setMetadata(AuraUUID, Common.METADATA_VALUE_TRUE);
         castSounds.play(player);
@@ -70,10 +70,8 @@ public final class AuraSpell extends Behaviour {
                                     if (effectFrequency == EffectFrequency.ONCE) {
                                         repeat = false;
                                     }
-                                    if (affectedEntityDamage != 0) {
-                                        entity.damage(affectedEntityDamage);
-                                        push(entity, loc, player);
-                                    }
+                                    push(entity, loc, player);
+                                    SpellEffectUtil.damageEffect(player, entity, affectedEntityDamage, wandDisplayName);
                                     hasAffected = true;
                                     affectedEntityEffects.accept(entity);
 

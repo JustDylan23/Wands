@@ -30,7 +30,7 @@ public enum BloodBlock implements Castable {
                     loc.getWorld().spawnParticle(Particle.BLOCK_CRACK, loc, 10, 0.5, 0.5, 0.5, 0.15, Material.REDSTONE_BLOCK.createBlockData(), true);
                     loc.getWorld().spawnParticle(Particle.SMOKE_LARGE, loc, 2, 0.2, 0.2, 0.2, 0.1, null, true);
                 })
-                .setSpellEffectRadius(3F)
+                .setSpellEffectRadius(5F)
                 .setAffectedEntityDamage(7)
                 .setImpactSpeed(0.7F)
                 .build();

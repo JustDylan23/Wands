@@ -3,8 +3,6 @@ package me.dylan.wands.spell.handler;
 import me.dylan.wands.spell.SpellEffectUtil;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 public final class SparkSpell extends Behaviour {
     private final int effectDistance;
@@ -20,20 +18,11 @@ public final class SparkSpell extends Behaviour {
     }
 
     @Override
-    public boolean cast(Player player) {
+    public boolean cast(Player player, String wandDisplayName) {
         Location loc = SpellEffectUtil.getSpellLocation(effectDistance, player);
         castSounds.play(player);
         spellRelativeEffects.accept(loc);
-//        applyEntityEffects(loc, player);
-        SpellEffectUtil.getNearbyLivingEntities(player, loc, spellEffectRadius)
-                .forEach(entity -> {
-                    if (affectedEntityDamage != 0) {
-                        EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(player, entity, DamageCause.CUSTOM, 10);
-                        entity.setLastDamageCause(event);
-                        entity.damage(10);
-                        entity.setLastDamageCause(event);
-                    }
-                });
+        applyEntityEffects(loc, player, wandDisplayName);
         return true;
     }
 
