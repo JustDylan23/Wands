@@ -1,4 +1,4 @@
-package me.dylan.wands.spell.implementations.icemagic;
+package me.dylan.wands.spell.implementations.weathermagic;
 
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.handler.AuraSpell;
@@ -24,7 +24,7 @@ public enum IceAura implements Castable {
                 .setPlayerEffects(player -> player.addPotionEffect(speed, true))
                 .setCastSound(Sound.ENTITY_PHANTOM_FLAP)
                 .setSpellRelativeEffects(loc -> loc.getWorld().spawnParticle(Particle.CLOUD, loc, 4, 1, 1, 1, 0.1, null, true))
-                .setAffectedEntityEffects(entity -> {
+                .setEntityEffects(entity -> {
                     entity.addPotionEffect(slow, true);
                     entity.addPotionEffect(weak, true);
                 })

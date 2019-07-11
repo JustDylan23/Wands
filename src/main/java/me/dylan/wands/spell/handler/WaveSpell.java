@@ -89,12 +89,6 @@ public final class WaveSpell extends Behaviour {
             return this;
         }
 
-        @Deprecated
-        @Override
-        public Builder setImpactSpeed(float speed) throws NullPointerException {
-            return this;
-        }
-
         public WaveSpell build() {
             return new WaveSpell(this);
         }

@@ -23,14 +23,14 @@ public enum DarkPulse implements Castable {
                 .setSpellEffectRadius(3F)
                 .setMetersPerTick(2)
                 .setImpactSpeed(1)
-                .setAffectedEntityEffects(entity -> {
+                .setEntityEffects(entity -> {
                     entity.setFireTicks(40);
                     entity.addPotionEffect(blind);
                     entity.addPotionEffect(slow);
                 })
-                .setAffectedEntityDamage(6)
+                .setEntityDamage(6)
                 .setCastSound(Sound.ENTITY_WITHER_SHOOT)
-                .setAffectedEntityEffects(entity -> entity.addPotionEffect(blind, true))
+                .setEntityEffects(entity -> entity.addPotionEffect(blind, true))
                 .setSpellRelativeEffects(loc -> {
                     loc.getWorld().spawnParticle(Particle.SMOKE_LARGE, loc, 3, 0.4, 0.4, 0.4, 0.1, null, true);
                     loc.getWorld().spawnParticle(Particle.SMOKE_NORMAL, loc, 13, 0.8, 0.8, 0.8, 0.1, null, true);

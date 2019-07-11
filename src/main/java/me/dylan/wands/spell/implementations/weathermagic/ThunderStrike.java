@@ -1,30 +1,26 @@
-package me.dylan.wands.spell.implementations.icemagic;
+package me.dylan.wands.spell.implementations.weathermagic;
 
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.SpellEffectUtil;
 import me.dylan.wands.spell.handler.Behaviour;
-import me.dylan.wands.spell.handler.CircleSpell;
-import me.dylan.wands.spell.handler.CircleSpell.CirclePlacement;
+import me.dylan.wands.spell.handler.SparkSpell;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;
 
-public enum ThunderStorm implements Castable {
+public enum ThunderStrike implements Castable {
     INSTANCE;
     private final Behaviour behaviour;
 
-    ThunderStorm() {
-        this.behaviour = CircleSpell.newBuilder(CirclePlacement.RELATIVE)
-                .setCircleRadius(10)
-                .setSpellEffectRadius(10F)
-                .setCircleHeight(7)
-                .setMetersPerTick(2)
-                .setCastSound(Sound.ENTITY_WITHER_AMBIENT)
-                .setSpellRelativeEffects(loc -> loc.getWorld().spawnParticle(Particle.CLOUD, loc, 10, 0.2, 0.2, 0.2, 0.1, null, true))
-                .setAffectedEntityDamage(5)
-                .setAffectedEntityEffects(entity -> {
-                    Location location = entity.getLocation();
+    ThunderStrike() {
+        this.behaviour = SparkSpell.newBuilder()
+                .setEffectDistance(30)
+                .setEntityDamage(6)
+                .setImpactSpeed(0.8F)
+                .setCastSound(Sound.ENTITY_WITHER_SHOOT)
+                .setEntityEffects(entity -> entity.setFireTicks(80))
+                .setSpellRelativeEffects(location -> {
                     World w = location.getWorld();
                     w.spawnParticle(Particle.CLOUD, location, 40, 2, 2, 2, 0.2, null, true);
                     w.spawnParticle(Particle.SMOKE_NORMAL, location, 20, 2, 2, 2, 0.2, null, true);
@@ -35,8 +31,8 @@ public enum ThunderStorm implements Castable {
                         w.playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, 4, 1);
                         loc.getWorld().strikeLightningEffect(loc);
                     }, 1, 2, 3);
-                    entity.setFireTicks(60);
                 })
+                .setSpellEffectRadius(4F)
                 .build();
     }
 

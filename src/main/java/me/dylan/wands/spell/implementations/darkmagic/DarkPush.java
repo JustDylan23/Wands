@@ -3,7 +3,7 @@ package me.dylan.wands.spell.implementations.darkmagic;
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.SpellEffectUtil;
 import me.dylan.wands.spell.handler.Behaviour;
-import me.dylan.wands.spell.handler.Behaviour.ImpactDirection;
+import me.dylan.wands.spell.handler.Behaviour.ImpactCourse;
 import me.dylan.wands.spell.handler.PhaseSpell;
 import me.dylan.wands.spell.handler.PhaseSpell.Target;
 import org.bukkit.Location;
@@ -22,10 +22,10 @@ public enum DarkPush implements Castable {
 
     DarkPush() {
         this.behaviour = PhaseSpell.newBuilder(Target.SINGLE)
-                .setAffectedEntityDamage(3)
+                .setEntityDamage(3)
                 .setCastSound(Sound.ENTITY_WITHER_SHOOT)
                 .setImpactSpeed(1.5F)
-                .setImpactDirection(ImpactDirection.PLAYER)
+                .setImpactCourse(ImpactCourse.PLAYER)
                 .setEffectDistance(30)
                 .setSpellEffectRadius(1.5F)
                 .setSpellRelativeEffects(loc -> {
@@ -33,7 +33,7 @@ public enum DarkPush implements Castable {
                     loc.getWorld().spawnParticle(Particle.SMOKE_NORMAL, loc, 20, 0.4, 0.4, 0.4, 0.1, null, true);
                     loc.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, loc, 40, 0.8, 0.8, 0.8, 0.3, null, true);
                 })
-                .setAffectedEntityEffects(entity -> {
+                .setEntityEffects(entity -> {
                     entity.setVelocity(entity.getVelocity().setY(0.6));
                     entity.addPotionEffect(blind, true);
                 })

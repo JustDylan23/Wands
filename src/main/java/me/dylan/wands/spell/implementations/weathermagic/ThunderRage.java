@@ -1,4 +1,4 @@
-package me.dylan.wands.spell.implementations.icemagic;
+package me.dylan.wands.spell.implementations.weathermagic;
 
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.SpellEffectUtil;
@@ -20,7 +20,7 @@ public enum ThunderRage implements Castable {
     ThunderRage() {
         this.behaviour = AuraSpell.newBuilder(EffectFrequency.ONCE)
                 .setCastSound(Sound.ITEM_TOTEM_USE)
-                .setAffectedEntityDamage(4)
+                .setEntityDamage(4)
                 .setSpellEffectRadius(8F)
                 .setEffectDuration(40)
                 .setSpellRelativeEffects(loc -> {
@@ -30,7 +30,7 @@ public enum ThunderRage implements Castable {
                     world.spawnParticle(Particle.SMOKE_NORMAL, loc, 1, 0.4, 0.3, 0.4, 0.1, null, true);
                     world.spawnParticle(Particle.FLAME, loc, 1, 0.4, 0.2, 0.4, 0.1, null, true);
                 })
-                .setAffectedEntityEffects(entity -> {
+                .setEntityEffects(entity -> {
                     entity.addPotionEffect(wither, true);
                     entity.addPotionEffect(slow, true);
                     entity.setFireTicks(60);

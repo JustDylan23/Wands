@@ -4,6 +4,7 @@ import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.handler.Behaviour;
 import me.dylan.wands.spell.handler.MovingBlockSpell;
 import me.dylan.wands.spell.spelleffect.sound.CompoundSound;
+import me.dylan.wands.util.Common;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -15,6 +16,14 @@ public enum BloodBlock implements Castable {
     BloodBlock() {
         this.behaviour = MovingBlockSpell.newBuilder(Material.REDSTONE_BLOCK)
                 .setCastSound(Sound.ENTITY_FIREWORK_ROCKET_BLAST)
+                .setEntityDamage(7)
+                .setEntityEffects(Common.emptyConsumer())
+                .setSpellEffectRadius(5F)
+                .setSpellRelativeEffects(loc -> {
+                    loc.getWorld().spawnParticle(Particle.BLOCK_CRACK, loc, 10, 0.5, 0.5, 0.5, 0.15, Material.REDSTONE_BLOCK.createBlockData(), true);
+                    loc.getWorld().spawnParticle(Particle.SMOKE_LARGE, loc, 2, 0.2, 0.2, 0.2, 0.1, null, true);
+                })
+                .setImpactSpeed(0.7F)
                 .setBlockRelativeSounds(CompoundSound.chain()
                         .add(Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1, 20)
                         .add(Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, 1, 30, 5)
@@ -26,13 +35,6 @@ public enum BloodBlock implements Castable {
                     loc.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, loc, 0, 0.0, 0.0, 0.0, 0.0, null, true);
                     loc.createExplosion(0);
                 }))
-                .setSpellRelativeEffects(loc -> {
-                    loc.getWorld().spawnParticle(Particle.BLOCK_CRACK, loc, 10, 0.5, 0.5, 0.5, 0.15, Material.REDSTONE_BLOCK.createBlockData(), true);
-                    loc.getWorld().spawnParticle(Particle.SMOKE_LARGE, loc, 2, 0.2, 0.2, 0.2, 0.1, null, true);
-                })
-                .setSpellEffectRadius(5F)
-                .setAffectedEntityDamage(7)
-                .setImpactSpeed(0.7F)
                 .build();
     }
 

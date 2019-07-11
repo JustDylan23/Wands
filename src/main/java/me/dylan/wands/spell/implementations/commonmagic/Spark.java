@@ -16,7 +16,7 @@ public enum Spark implements Castable {
     Spark() {
         this.behaviour = SparkSpell.newBuilder()
                 .setSpellEffectRadius(2.2F)
-                .setAffectedEntityDamage(7)
+                .setEntityDamage(7)
                 .setSpellRelativeEffects(loc -> {
                     loc.getWorld().spawnParticle(Particle.SPELL_WITCH, loc, 30, 0.6, 0.7, 0.6, 0.2, null, true);
                     loc.getWorld().spawnParticle(Particle.SMOKE_LARGE, loc, 50, 0.2, 0.2, 0.2, 0.08, null, true);

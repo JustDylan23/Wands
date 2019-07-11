@@ -15,8 +15,8 @@ public enum FireSpark implements Castable {
     FireSpark() {
         this.behaviour = SparkSpell.newBuilder()
                 .setSpellEffectRadius(2.2F)
-                .setAffectedEntityDamage(4)
-                .setAffectedEntityEffects(entity -> entity.setFireTicks(100))
+                .setEntityDamage(4)
+                .setEntityEffects(entity -> entity.setFireTicks(100))
                 .setSpellRelativeEffects(loc -> {
                     loc.getWorld().spawnParticle(Particle.SMOKE_LARGE, loc, 10, 0.3, 0.3, 0.3, 0.1, null, true);
                     loc.getWorld().spawnParticle(Particle.SMOKE_NORMAL, loc, 10, 0.2, 0.2, 0.2, 0.1, null, true);
