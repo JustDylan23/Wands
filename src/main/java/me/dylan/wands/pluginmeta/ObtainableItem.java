@@ -115,8 +115,22 @@ public enum ObtainableItem {
         );
         SpellManagementUtil.setSpellBrowseParticles(itemStack, BrowseParticle.PARTICLE_FIRE);
         return itemStack;
-    }))
-    ;
+    })),
+    CORRUPTED_WAND(ItemUtil.getItemStack(() -> {
+        ItemStack itemStack = new ItemStack(Material.STICK);
+        ItemUtil.setName(itemStack, "&cCorrupted Wand");
+        SpellManagementUtil.setAsWand(itemStack);
+        SpellManagementUtil.setSpells(itemStack,
+                SpellType.CORRUPTED_RAIN,
+                SpellType.CORRUPTED_WAVE,
+                SpellType.CORRUPTED_SHOCK_WAVE,
+                SpellType.CORRUPTED_WOLFS,
+                SpellType.CORRUPTED_LAUNCH,
+                SpellType.SPARK
+        );
+        SpellManagementUtil.setSpellBrowseParticles(itemStack, BrowseParticle.DEFAULT);
+        return itemStack;
+    }));
 
     private static final String[] names = Arrays.stream(values()).map(Enum::toString).toArray(String[]::new);
 

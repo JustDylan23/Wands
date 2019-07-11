@@ -33,7 +33,7 @@ public final class WaveSpell extends Behaviour {
     @Override
     public boolean cast(Player player, String wandDisplayName) {
         Vector direction = player.getLocation().getDirection().normalize();
-        castSounds.play(player);
+        castSounds.play(player.getLocation().add(direction.clone().multiply(5)));
         Location origin = player.getEyeLocation();
         new BukkitRunnable() {
             int count = 0;

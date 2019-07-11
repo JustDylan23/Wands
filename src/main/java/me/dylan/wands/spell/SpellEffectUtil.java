@@ -96,7 +96,7 @@ public class SpellEffectUtil {
         return location.clone().add(randomize(x), randomize(y), randomize(z));
     }
 
-    private static double randomize(double d) {
+    public static double randomize(double d) {
         return ThreadLocalRandom.current().nextDouble() * d * 2.0 - d;
     }
 

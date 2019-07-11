@@ -14,7 +14,7 @@ public enum DarkCircle implements Castable {
     INSTANCE;
     private final Behaviour behaviour;
 
-    private final PotionEffect blind = new PotionEffect(PotionEffectType.BLINDNESS, 40, 1, false);
+    private final PotionEffect blind = new PotionEffect(PotionEffectType.BLINDNESS, 40, 0, false);
 
     DarkCircle() {
         this.behaviour = CircleSpell.newBuilder(CirclePlacement.RELATIVE)

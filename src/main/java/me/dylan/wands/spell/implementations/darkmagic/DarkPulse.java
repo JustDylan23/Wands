@@ -14,7 +14,7 @@ public enum DarkPulse implements Castable {
     INSTANCE;
     private final Behaviour behaviour;
 
-    private final PotionEffect blind = new PotionEffect(PotionEffectType.BLINDNESS, 60, 1, false);
+    private final PotionEffect blind = new PotionEffect(PotionEffectType.BLINDNESS, 60, 0, false);
     private final PotionEffect slow = new PotionEffect(PotionEffectType.SLOW, 40, 2, false);
 
     DarkPulse() {

@@ -68,7 +68,7 @@ public class AssasinDagger implements Listener {
                 if (hasDagger(player)) {
                     victim.removePotionEffect(PotionEffectType.SPEED);
                     victim.removePotionEffect(PotionEffectType.BLINDNESS);
-                    victim.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 100, 1, false), true);
+                    victim.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 100, 0, false), true);
                     victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 100, 5, true), true);
                     event.setDamage(4);
                     player.getWorld().playSound(player.getLocation(), Sound.ENTITY_GUARDIAN_HURT, SoundCategory.MASTER, 3.0F, 1.0F);
