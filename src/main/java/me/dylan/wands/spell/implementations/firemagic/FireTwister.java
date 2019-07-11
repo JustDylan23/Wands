@@ -29,7 +29,7 @@ public enum FireTwister implements Castable {
                     World world = loc.getWorld();
                     world.spawnParticle(Particle.SMOKE_LARGE, loc, 5, 0.3, 0.3, 0.3, 0.1, null, true);
                     world.spawnParticle(Particle.FLAME, loc, 2, 0.3, 0.3, 0.3, 0.1, null, true);
-                    world.spawnParticle(Particle.LAVA, loc, 2, 0.3, 0.3, 0.3, 0.1, null, true);
+                    world.spawnParticle(Particle.LAVA, loc, 2, 0.3, 0.3, 0.3, 0, null, true);
                 })
                 .setImpactSpeed(1.1F)
                 .setCircleHeight(1)

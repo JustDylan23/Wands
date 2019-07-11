@@ -22,6 +22,7 @@ public final class SparkSpell extends Behaviour {
         Location loc = SpellEffectUtil.getSpellLocation(effectDistance, player);
         castSounds.play(player);
         spellRelativeEffects.accept(loc);
+        spellRelativeEffects2.accept(loc, player);
         applyEntityEffects(loc, player, wandDisplayName);
         return true;
     }

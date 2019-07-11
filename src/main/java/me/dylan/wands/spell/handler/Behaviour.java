@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.StringJoiner;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public abstract class Behaviour implements Listener {
@@ -28,6 +29,7 @@ public abstract class Behaviour implements Listener {
     final float spellEffectRadius;
     final SoundEffect castSounds;
     final Consumer<Location> spellRelativeEffects;
+    final BiConsumer<Location, Player> spellRelativeEffects2;
     final Consumer<LivingEntity> affectedEntityEffects;
 
     private final List<String> props = new ArrayList<>();
@@ -39,6 +41,7 @@ public abstract class Behaviour implements Listener {
         this.spellEffectRadius = baseMeta.spellEffectRadius;
         this.castSounds = baseMeta.castSounds;
         this.spellRelativeEffects = baseMeta.spellRelativeEffects;
+        this.spellRelativeEffects2 = baseMeta.spellRelativeEffects2;
         this.affectedEntityEffects = baseMeta.entityEffects;
         this.impactSpeed = baseMeta.impactSpeed;
         this.impactCourse = baseMeta.impactCourse;
@@ -181,6 +184,11 @@ public abstract class Behaviour implements Listener {
             return self();
         }
 
+        public T setSpellRelativeEffects(BiConsumer<Location, Player> effects) {
+            baseMeta.spellRelativeEffects2 = effects;
+            return self();
+        }
+
         public T setImpactSpeed(float speed) {
             baseMeta.impactSpeed = speed;
             return self();
@@ -196,6 +204,8 @@ public abstract class Behaviour implements Listener {
             private float spellEffectRadius, impactSpeed = 0;
             private SoundEffect castSounds = SoundEffect.EMPTY;
             private Consumer<Location> spellRelativeEffects = Common.emptyConsumer();
+            private BiConsumer<Location, Player> spellRelativeEffects2 = (location, player) -> {
+            };
             private Consumer<LivingEntity> entityEffects = Common.emptyConsumer();
             private ImpactCourse impactCourse = ImpactCourse.SPELL;
         }
