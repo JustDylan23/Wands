@@ -63,7 +63,7 @@ public final class AuraSpell extends Behaviour {
                     }
                 } else {
                     Location loc = player.getLocation();
-                    spellRelativeEffects.accept(loc);
+                    spellRelativeEffects.accept(loc, loc.getWorld());
                     if (repeat) {
                         SpellEffectUtil.getNearbyLivingEntities(player, loc, spellEffectRadius)
                                 .forEach(entity -> {

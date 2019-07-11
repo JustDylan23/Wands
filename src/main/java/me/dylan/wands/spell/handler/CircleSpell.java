@@ -52,7 +52,7 @@ public final class CircleSpell extends Behaviour {
                         applyEntityEffects(location, player, wandDisplayName);
                     } else {
                         Location loc = locations.get(index);
-                        spellRelativeEffects.accept(loc);
+                        spellRelativeEffects.accept(loc, loc.getWorld());
                     }
                 }
             }

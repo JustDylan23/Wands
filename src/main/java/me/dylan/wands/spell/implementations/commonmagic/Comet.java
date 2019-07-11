@@ -7,7 +7,6 @@ import me.dylan.wands.spell.handler.ProjectileSpell;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
-import org.bukkit.World;
 import org.bukkit.entity.SmallFireball;
 
 public enum Comet implements Castable {
@@ -21,8 +20,7 @@ public enum Comet implements Castable {
                 .setEntityEffects(entity -> entity.setFireTicks(60))
                 .setImpactSpeed(1)
                 .setCastSound(Sound.ENTITY_FIREWORK_ROCKET_BLAST)
-                .setSpellRelativeEffects(loc -> {
-                    World world = loc.getWorld();
+                .setSpellRelativeEffects((loc, world) -> {
                     world.spawnParticle(Particle.SPELL_WITCH, loc, 40, 0.8, 0.8, 0.8, 0.15, null, true);
                     world.spawnParticle(Particle.SMOKE_LARGE, loc, 10, 0.6, 0.6, 0.6, 0.1, null, true);
                     world.spawnParticle(Particle.SMOKE_LARGE, loc, 10, 1.0, 1.0, 1.0, 0.1, null, true);
@@ -32,12 +30,12 @@ public enum Comet implements Castable {
                     projectile.setYield(0);
                 })
                 .setLifeTime(20)
-                .setHitEffects(loc -> {
+                .setHitEffects((loc, world) -> {
                     loc.createExplosion(0);
-                    loc.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, loc, 0, 0.0, 0.0, 0.0, 0.0, null, true);
-                    loc.getWorld().spawnParticle(Particle.SMOKE_LARGE, loc, 50, 2, 2, 2, 0.05, null, true);
+                    world.spawnParticle(Particle.EXPLOSION_HUGE, loc, 0, 0.0, 0.0, 0.0, 0.0, null, true);
+                    world.spawnParticle(Particle.SMOKE_LARGE, loc, 50, 2, 2, 2, 0.05, null, true);
                     SpellEffectUtil.runTaskLater(() ->
-                                    loc.getWorld().playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, SoundCategory.MASTER, 5F, 1F)
+                                    world.playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, SoundCategory.MASTER, 5F, 1F)
                             , 0, 3, 3);
                 })
                 .build();

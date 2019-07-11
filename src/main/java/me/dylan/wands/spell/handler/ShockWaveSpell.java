@@ -39,7 +39,7 @@ public final class ShockWaveSpell extends Behaviour {
                 if (++currentRadius > waveRadius) {
                     cancel();
                 } else {
-                    SpellEffectUtil.getCircleFrom(center, currentRadius).forEach(spellRelativeEffects);
+                    SpellEffectUtil.getCircleFrom(center, currentRadius).forEach(loc -> spellRelativeEffects.accept(loc, loc.getWorld()));
                     for (LivingEntity entity : SpellEffectUtil.getNearbyLivingEntities(player, center, currentRadius)) {
                         if (!entity.hasMetadata(tagShokWave)) {
                             entity.setMetadata(tagShokWave, Common.METADATA_VALUE_TRUE);

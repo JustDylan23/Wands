@@ -21,7 +21,7 @@ public enum ThunderStorm implements Castable {
                 .setCircleHeight(7)
                 .setMetersPerTick(2)
                 .setCastSound(Sound.ENTITY_WITHER_AMBIENT)
-                .setSpellRelativeEffects(loc -> loc.getWorld().spawnParticle(Particle.CLOUD, loc, 10, 0.2, 0.2, 0.2, 0.1, null, true))
+                .setSpellRelativeEffects((loc, world) -> world.spawnParticle(Particle.CLOUD, loc, 10, 0.2, 0.2, 0.2, 0.1, null, true))
                 .setEntityDamage(5)
                 .setEntityEffects(entity -> {
                     Location location = entity.getLocation();

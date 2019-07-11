@@ -6,7 +6,6 @@ import me.dylan.wands.spell.handler.BlockProjectileSpell;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
-import org.bukkit.World;
 
 public enum FlameThrower implements Castable {
     INSTANCE;
@@ -19,8 +18,7 @@ public enum FlameThrower implements Castable {
                 .setProjectileShootDelay(3)
                 .setEntityEffects(entity -> entity.setFireTicks(100))
                 .setSpellEffectRadius(3F)
-                .setSpellRelativeEffects(loc -> {
-                    World world = loc.getWorld();
+                .setSpellRelativeEffects((loc, world) -> {
                     world.spawnParticle(Particle.FLAME, loc, 2, 0.8, 0.8, 0.8, 0.1, null, true);
                     world.spawnParticle(Particle.SMOKE_LARGE, loc, 1, 0.3, 0.3, 0.3, 0.1, null, true);
                 })

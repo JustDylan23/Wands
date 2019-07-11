@@ -41,7 +41,7 @@ public final class PhaseSpell extends Behaviour {
     public boolean cast(Player player, String wandDisplayName) {
         Location loc = SpellEffectUtil.getSpellLocation(effectDistance, player);
         castSounds.play(player);
-        spellRelativeEffects.accept(loc);
+        spellRelativeEffects.accept(loc, loc.getWorld());
         for (LivingEntity entity : SpellEffectUtil.getNearbyLivingEntities(player, loc, spellEffectRadius)) {
             if (!entity.hasMetadata(tagPhaseSpell)) {
                 entity.setMetadata(tagPhaseSpell, Common.METADATA_VALUE_TRUE);
@@ -51,7 +51,7 @@ public final class PhaseSpell extends Behaviour {
                 new BukkitRunnable() {
                     @Override
                     public void run() {
-                        if (condition.apply(entity)) {
+                        if (!entity.isValid() || condition.apply(entity)) {
                             afterPhaseEffect.accept(entity, player);
                             entity.removeMetadata(tagPhaseSpell, plugin);
                             cancel();
@@ -75,7 +75,7 @@ public final class PhaseSpell extends Behaviour {
 
         private final Target target;
         private int effectDistance;
-        private Function<LivingEntity, Boolean> condition = (entity) -> false;
+        private Function<LivingEntity, Boolean> condition = (entity) -> true;
         private Consumer<LivingEntity> duringPhaseEffect = Common.emptyConsumer();
         private BiConsumer<LivingEntity, Player> afterPhaseEffect = (livingEntity, player) -> {
         };

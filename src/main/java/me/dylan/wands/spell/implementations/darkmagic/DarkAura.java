@@ -30,7 +30,7 @@ public enum DarkAura implements Castable {
                     entity.addPotionEffect(weakness, true);
                     entity.addPotionEffect(slow, true);
                 })
-                .setSpellRelativeEffects(loc -> loc.getWorld().spawnParticle(Particle.SMOKE_LARGE, loc, 10, 4, -0.2, 4, 0, null, true))
+                .setSpellRelativeEffects((loc, world) -> world.spawnParticle(Particle.SMOKE_LARGE, loc, 10, 4, -0.2, 4, 0, null, true))
                 .build();
     }
 
