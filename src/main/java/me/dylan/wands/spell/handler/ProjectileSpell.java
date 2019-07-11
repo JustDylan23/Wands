@@ -4,6 +4,7 @@ import me.dylan.wands.pluginmeta.ListenerRegistry;
 import me.dylan.wands.util.Common;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -18,12 +19,13 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.UUID;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public final class ProjectileSpell<T extends Projectile> extends Behaviour implements Listener {
     private final Class<T> projectile;
     private final Consumer<T> projectileProps;
-    private final Consumer<Location> hitEffects;
+    private final BiConsumer<Location, World> hitEffects;
     private final float speed;
     private final int lifeTime;
     private final String tagProjectileSpell;
@@ -62,8 +64,27 @@ public final class ProjectileSpell<T extends Projectile> extends Behaviour imple
     private void hit(Player player, Projectile projectile) {
         projectile.remove();
         Location loc = projectile.getLocation();
-        hitEffects.accept(loc);
+        hitEffects.accept(loc, loc.getWorld());
         applyEntityEffects(loc, player, projectile.getMetadata(tagProjectileSpell).get(0).asString());
+    }
+
+    private void activateLifeTimer(Projectile projectile) {
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            if (projectile.isValid()) {
+                hit((Player) projectile.getShooter(), projectile);
+            }
+        }, lifeTime);
+    }
+
+    private void trail(Entity entity) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (entity.isValid()) {
+                    spellRelativeEffects.accept(entity.getLocation(), entity.getWorld());
+                } else cancel();
+            }
+        }.runTaskTimer(plugin, 0, 1);
     }
 
     @EventHandler
@@ -81,25 +102,6 @@ public final class ProjectileSpell<T extends Projectile> extends Behaviour imple
         }
     }
 
-    private void activateLifeTimer(Projectile projectile) {
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            if (projectile.isValid()) {
-                hit((Player) projectile.getShooter(), projectile);
-            }
-        }, lifeTime);
-    }
-
-    private void trail(Entity entity) {
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (entity.isValid()) {
-                    spellRelativeEffects.accept(entity.getLocation());
-                } else cancel();
-            }
-        }.runTaskTimer(plugin, 0, 1);
-    }
-
     @EventHandler
     private void onEntityExplode(EntityExplodeEvent event) {
         if (event.getEntity().hasMetadata(tagProjectileSpell)) {
@@ -113,7 +115,7 @@ public final class ProjectileSpell<T extends Projectile> extends Behaviour imple
         private final float speed;
 
         private Consumer<T> projectileProps = Common.emptyConsumer();
-        private Consumer<Location> hitEffects = Common.emptyConsumer();
+        private BiConsumer<Location, World> hitEffects = Common.emptyBiConsumer();
         private int lifeTime = 20;
 
         private Builder(Class<T> projectileClass, float speed) throws NullPointerException {
@@ -136,7 +138,7 @@ public final class ProjectileSpell<T extends Projectile> extends Behaviour imple
             return this;
         }
 
-        public Builder<T> setHitEffects(Consumer<Location> hitEffects) {
+        public Builder<T> setHitEffects(BiConsumer<Location, World> hitEffects) {
             this.hitEffects = hitEffects;
             return this;
         }

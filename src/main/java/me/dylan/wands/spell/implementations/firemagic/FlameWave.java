@@ -6,7 +6,6 @@ import me.dylan.wands.spell.handler.WaveSpell;
 import me.dylan.wands.spell.spelleffect.sound.CompoundSound;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
-import org.bukkit.World;
 
 public enum FlameWave implements Castable {
     INSTANCE;
@@ -22,8 +21,7 @@ public enum FlameWave implements Castable {
                         .add(Sound.ENTITY_ENDER_DRAGON_FLAP, 1, 0, 3, 3, 3, 3, 3)
                 )
                 .setEntityEffects(entity -> entity.setFireTicks(140))
-                .setSpellRelativeEffects(loc -> {
-                    World world = loc.getWorld();
+                .setSpellRelativeEffects((loc, world) -> {
                     world.spawnParticle(Particle.FLAME, loc, 10, 0.8, 0.8, 0.8, 0.1, null, true);
                     world.spawnParticle(Particle.LAVA, loc, 1, 0.8, 0.8, 0.8, 0, null, true);
                     world.spawnParticle(Particle.SMOKE_LARGE, loc, 7, 0.6, 0.6, 0.6, 0.1, null, true);

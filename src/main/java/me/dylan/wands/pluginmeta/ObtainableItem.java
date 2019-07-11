@@ -128,7 +128,7 @@ public enum ObtainableItem {
                 SpellType.CORRUPTED_LAUNCH,
                 SpellType.SPARK
         );
-        SpellManagementUtil.setSpellBrowseParticles(itemStack, BrowseParticle.DEFAULT);
+        SpellManagementUtil.setSpellBrowseParticles(itemStack, BrowseParticle.PARTICLE_CORRUPTED);
         return itemStack;
     }));
 

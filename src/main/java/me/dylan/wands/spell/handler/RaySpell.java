@@ -53,7 +53,7 @@ public final class RaySpell extends Behaviour {
                         effectEntities(loc, player, wandDisplayName);
                         return;
                     }
-                    spellRelativeEffects.accept(loc);
+                    spellRelativeEffects.accept(loc, loc.getWorld());
                     List<LivingEntity> entities = SpellEffectUtil.getNearbyLivingEntities(player, loc, rayWidth);
                     if (entities.size() != 0) {
                         effectEntities(loc, player, wandDisplayName);

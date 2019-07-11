@@ -19,7 +19,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.*;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 public final class MovingBlockSpell extends Behaviour implements Listener {
 
@@ -27,7 +27,7 @@ public final class MovingBlockSpell extends Behaviour implements Listener {
     private static final List<BlockRestorer> PENDING = new ArrayList<>();
     private final String tagUnbreakable, tagFallingBlock;
     private final Material material;
-    private final Consumer<Location> hitEffects;
+    private final BiConsumer<Location, World> hitEffects;
     private final Map<Player, BlockRestorer> selectedBlock = new HashMap<>();
     private final Map<FallingBlock, Player> caster = new HashMap<>();
     private final SoundEffect blockRelativeSounds;
@@ -126,7 +126,7 @@ public final class MovingBlockSpell extends Behaviour implements Listener {
         if (player != null) {
             caster.remove(fallingBlock);
             Location loc = fallingBlock.getLocation();
-            hitEffects.accept(loc);
+            hitEffects.accept(loc, loc.getWorld());
             applyEntityEffects(loc, player, fallingBlock.getMetadata(tagFallingBlock).get(0).asString());
         }
     }
@@ -149,7 +149,7 @@ public final class MovingBlockSpell extends Behaviour implements Listener {
             @Override
             public void run() {
                 if (entity.isValid()) {
-                    spellRelativeEffects.accept(entity.getLocation());
+                    spellRelativeEffects.accept(entity.getLocation(), entity.getWorld());
                 } else {
                     cancel();
                     blockLand(entity);
@@ -209,7 +209,7 @@ public final class MovingBlockSpell extends Behaviour implements Listener {
     public static final class Builder extends AbstractBuilder<Builder> {
 
         private final Material material;
-        private Consumer<Location> hitEffects = Common.emptyConsumer();
+        private BiConsumer<Location, World> hitEffects = Common.emptyBiConsumer();
         private SoundEffect blockRelativeSounds = SoundEffect.EMPTY;
 
         private Builder(Material material) {
@@ -226,7 +226,7 @@ public final class MovingBlockSpell extends Behaviour implements Listener {
             return new MovingBlockSpell(this);
         }
 
-        public Builder setHitEffects(Consumer<Location> hitEffects) {
+        public Builder setHitEffects(BiConsumer<Location, World> hitEffects) {
             this.hitEffects = hitEffects;
             return this;
         }

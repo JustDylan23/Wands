@@ -6,7 +6,6 @@ import me.dylan.wands.spell.handler.CircleSpell;
 import me.dylan.wands.spell.handler.CircleSpell.CirclePlacement;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
-import org.bukkit.World;
 
 public enum FireTwister implements Castable {
     INSTANCE;
@@ -25,8 +24,7 @@ public enum FireTwister implements Castable {
                 })
                 .setMetersPerTick(2)
                 .setCastSound(Sound.ENTITY_BLAZE_SHOOT)
-                .setSpellRelativeEffects(loc -> {
-                    World world = loc.getWorld();
+                .setSpellRelativeEffects((loc, world) -> {
                     world.spawnParticle(Particle.SMOKE_LARGE, loc, 5, 0.3, 0.3, 0.3, 0.1, null, true);
                     world.spawnParticle(Particle.FLAME, loc, 2, 0.3, 0.3, 0.3, 0.1, null, true);
                     world.spawnParticle(Particle.LAVA, loc, 2, 0.3, 0.3, 0.3, 0, null, true);

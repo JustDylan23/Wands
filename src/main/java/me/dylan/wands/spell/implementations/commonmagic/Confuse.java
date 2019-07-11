@@ -21,12 +21,12 @@ public enum Confuse implements Castable {
                 .setSpellEffectRadius(4F)
                 .setEntityDamage(6)
                 .setEntityEffects(entity -> entity.addPotionEffect(confusion, true))
-                .setSpellRelativeEffects(loc -> {
-                    loc.getWorld().spawnParticle(Particle.SMOKE_LARGE, loc, 30, 1, 1, 1, 0.08, null, true);
-                    loc.getWorld().spawnParticle(Particle.SMOKE_NORMAL, loc, 30, 1, 1, 1, 0.08, null, true);
-                    loc.getWorld().spawnParticle(Particle.SPELL_WITCH, loc, 30, 1, 1, 1, 0.15, null, true);
+                .setSpellRelativeEffects((loc, world) -> {
+                    world.spawnParticle(Particle.SMOKE_LARGE, loc, 30, 1, 1, 1, 0.08, null, true);
+                    world.spawnParticle(Particle.SMOKE_NORMAL, loc, 30, 1, 1, 1, 0.08, null, true);
+                    world.spawnParticle(Particle.SPELL_WITCH, loc, 30, 1, 1, 1, 0.15, null, true);
                     Bukkit.getScheduler().runTaskLater(Main.getPlugin(), () ->
-                            loc.getWorld().playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, SoundCategory.MASTER, 4.0F, 1.0F), 10L);
+                            world.playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, SoundCategory.MASTER, 4.0F, 1.0F), 10L);
                 })
                 .setCastSound(Sound.ENTITY_FIREWORK_ROCKET_BLAST)
                 .setEffectDistance(30)

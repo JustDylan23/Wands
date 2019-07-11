@@ -7,6 +7,7 @@ import me.dylan.wands.spell.spelleffect.sound.SoundEffect;
 import me.dylan.wands.util.Common;
 import org.bukkit.Location;
 import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -28,7 +29,7 @@ public abstract class Behaviour implements Listener {
     final int affectedEntityDamage;
     final float spellEffectRadius;
     final SoundEffect castSounds;
-    final Consumer<Location> spellRelativeEffects;
+    final BiConsumer<Location, World> spellRelativeEffects;
     final BiConsumer<Location, Player> spellRelativeEffects2;
     final Consumer<LivingEntity> affectedEntityEffects;
 
@@ -179,12 +180,12 @@ public abstract class Behaviour implements Listener {
          * @return this
          */
 
-        public T setSpellRelativeEffects(Consumer<Location> effects) {
+        public T setSpellRelativeEffects(BiConsumer<Location, World> effects) {
             baseMeta.spellRelativeEffects = effects;
             return self();
         }
 
-        public T setSpellRelativeEffects(BiConsumer<Location, Player> effects) {
+        public T setSpellRelativeEffects2(BiConsumer<Location, Player> effects) {
             baseMeta.spellRelativeEffects2 = effects;
             return self();
         }
@@ -203,9 +204,8 @@ public abstract class Behaviour implements Listener {
             private int entityDamage = 0;
             private float spellEffectRadius, impactSpeed = 0;
             private SoundEffect castSounds = SoundEffect.EMPTY;
-            private Consumer<Location> spellRelativeEffects = Common.emptyConsumer();
-            private BiConsumer<Location, Player> spellRelativeEffects2 = (location, player) -> {
-            };
+            private BiConsumer<Location, World> spellRelativeEffects = Common.emptyBiConsumer();
+            private BiConsumer<Location, Player> spellRelativeEffects2 = Common.emptyBiConsumer();
             private Consumer<LivingEntity> entityEffects = Common.emptyConsumer();
             private ImpactCourse impactCourse = ImpactCourse.SPELL;
         }

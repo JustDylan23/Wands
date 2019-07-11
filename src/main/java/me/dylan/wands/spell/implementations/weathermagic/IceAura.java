@@ -23,7 +23,7 @@ public enum IceAura implements Castable {
                 .setEffectDuration(100)
                 .setPlayerEffects(player -> player.addPotionEffect(speed, true))
                 .setCastSound(Sound.ENTITY_PHANTOM_FLAP)
-                .setSpellRelativeEffects(loc -> loc.getWorld().spawnParticle(Particle.CLOUD, loc, 4, 1, 1, 1, 0.1, null, true))
+                .setSpellRelativeEffects((loc, world) -> world.spawnParticle(Particle.CLOUD, loc, 4, 1, 1, 1, 0.1, null, true))
                 .setEntityEffects(entity -> {
                     entity.addPotionEffect(slow, true);
                     entity.addPotionEffect(weak, true);

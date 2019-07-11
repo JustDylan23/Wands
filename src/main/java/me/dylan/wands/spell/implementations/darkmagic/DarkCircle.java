@@ -6,7 +6,6 @@ import me.dylan.wands.spell.handler.CircleSpell;
 import me.dylan.wands.spell.handler.CircleSpell.CirclePlacement;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
-import org.bukkit.World;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -28,8 +27,7 @@ public enum DarkCircle implements Castable {
                 })
                 .setMetersPerTick(2)
                 .setCastSound(Sound.ENTITY_ENDER_DRAGON_FLAP)
-                .setSpellRelativeEffects(loc -> {
-                    World world = loc.getWorld();
+                .setSpellRelativeEffects((loc, world) -> {
                     world.spawnParticle(Particle.SMOKE_LARGE, loc, 10, 0.3, 0.3, 0.3, 0.1, null, true);
                     world.spawnParticle(Particle.ENCHANTMENT_TABLE, loc, 8, 0.3, 0.3, 0.3, 0.1, null, true);
                 })

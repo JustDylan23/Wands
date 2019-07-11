@@ -75,7 +75,7 @@ public final class BlockProjectileSpell extends Behaviour implements Listener {
             @Override
             public void run() {
                 if (fallingBlock.isValid()) {
-                    spellRelativeEffects.accept(fallingBlock.getLocation());
+                    spellRelativeEffects.accept(fallingBlock.getLocation(), fallingBlock.getWorld());
                     SpellEffectUtil.getNearbyLivingEntities(player, fallingBlock.getLocation(), spellEffectRadius).forEach(entity -> {
                         if (!entity.hasMetadata(tagBlockProjectile)) {
                             entity.setMetadata(tagBlockProjectile, Common.METADATA_VALUE_TRUE);

@@ -19,9 +19,9 @@ public enum BloodBlock implements Castable {
                 .setEntityDamage(7)
                 .setEntityEffects(Common.emptyConsumer())
                 .setSpellEffectRadius(5F)
-                .setSpellRelativeEffects(loc -> {
-                    loc.getWorld().spawnParticle(Particle.BLOCK_CRACK, loc, 10, 0.5, 0.5, 0.5, 0.15, Material.REDSTONE_BLOCK.createBlockData(), true);
-                    loc.getWorld().spawnParticle(Particle.SMOKE_LARGE, loc, 2, 0.2, 0.2, 0.2, 0.1, null, true);
+                .setSpellRelativeEffects((loc, world) -> {
+                    world.spawnParticle(Particle.BLOCK_CRACK, loc, 10, 0.5, 0.5, 0.5, 0.15, Material.REDSTONE_BLOCK.createBlockData(), true);
+                    world.spawnParticle(Particle.SMOKE_LARGE, loc, 2, 0.2, 0.2, 0.2, 0.1, null, true);
                 })
                 .setImpactSpeed(0.7F)
                 .setBlockRelativeSounds(CompoundSound.chain()
@@ -29,12 +29,12 @@ public enum BloodBlock implements Castable {
                         .add(Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, 1, 30, 5)
                         .add(Sound.ENTITY_FIREWORK_ROCKET_TWINKLE_FAR, 1, 40)
                 )
-                .setHitEffects((loc -> {
-                    loc.getWorld().spawnParticle(Particle.SMOKE_LARGE, loc, 20, 1, 1, 1, 0.1, null, true);
-                    loc.getWorld().spawnParticle(Particle.BLOCK_CRACK, loc, 15, 1, 1, 1, 0.15, Material.REDSTONE_BLOCK.createBlockData(), true);
-                    loc.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, loc, 0, 0.0, 0.0, 0.0, 0.0, null, true);
+                .setHitEffects((loc, world) -> {
+                    world.spawnParticle(Particle.SMOKE_LARGE, loc, 20, 1, 1, 1, 0.1, null, true);
+                    world.spawnParticle(Particle.BLOCK_CRACK, loc, 15, 1, 1, 1, 0.15, Material.REDSTONE_BLOCK.createBlockData(), true);
+                    world.spawnParticle(Particle.EXPLOSION_HUGE, loc, 0, 0.0, 0.0, 0.0, 0.0, null, true);
                     loc.createExplosion(0);
-                }))
+                })
                 .build();
     }
 

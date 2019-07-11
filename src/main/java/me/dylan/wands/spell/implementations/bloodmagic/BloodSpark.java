@@ -17,12 +17,11 @@ public enum BloodSpark implements Castable {
         this.behaviour = SparkSpell.newBuilder()
                 .setSpellEffectRadius(2.2F)
                 .setEntityDamage(7)
-                .setSpellRelativeEffects(loc -> {
-                    loc.getWorld().spawnParticle(Particle.SMOKE_LARGE, loc, 20, 0.2, 0.2, 0.2, 0.1, null, true);
-                    loc.getWorld().spawnParticle(Particle.BLOCK_CRACK, loc, 20, 0.6, 0.7, 0.6, 0.15, Material.REDSTONE_BLOCK.createBlockData(), true);
-
+                .setSpellRelativeEffects((loc, world) -> {
+                    world.spawnParticle(Particle.SMOKE_LARGE, loc, 20, 0.2, 0.2, 0.2, 0.1, null, true);
+                    world.spawnParticle(Particle.BLOCK_CRACK, loc, 20, 0.6, 0.7, 0.6, 0.15, Material.REDSTONE_BLOCK.createBlockData(), true);
                     SpellEffectUtil.runTaskLater(() ->
-                            loc.getWorld().playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, SoundCategory.MASTER, 4.0F, 1.0F), 10);
+                            world.playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, SoundCategory.MASTER, 4.0F, 1.0F), 10);
                 })
                 .setCastSound(Sound.ENTITY_FIREWORK_ROCKET_BLAST)
 

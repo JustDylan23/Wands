@@ -25,7 +25,7 @@ public enum CorruptedWave implements Castable {
                 .setEntityDamage(2)
                 .setEffectDistance(20)
                 .setEntityEffects(entity -> entity.addPotionEffect(wither, true))
-                .setSpellRelativeEffects(loc -> loc.getWorld().spawnParticle(Particle.SPELL_MOB, loc, 20, 1, 1, 1, 1, null, false))
+                .setSpellRelativeEffects((loc, world) -> world.spawnParticle(Particle.SPELL_MOB, loc, 20, 1, 1, 1, 1, null, false))
                 .build();
     }
 

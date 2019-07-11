@@ -17,12 +17,12 @@ public enum Spark implements Castable {
         this.behaviour = SparkSpell.newBuilder()
                 .setSpellEffectRadius(2.2F)
                 .setEntityDamage(7)
-                .setSpellRelativeEffects(loc -> {
-                    loc.getWorld().spawnParticle(Particle.SPELL_WITCH, loc, 30, 0.6, 0.7, 0.6, 0.2, null, true);
-                    loc.getWorld().spawnParticle(Particle.SMOKE_LARGE, loc, 50, 0.2, 0.2, 0.2, 0.08, null, true);
+                .setSpellRelativeEffects((loc, world) -> {
+                    world.spawnParticle(Particle.SPELL_WITCH, loc, 30, 0.6, 0.7, 0.6, 0.2, null, true);
+                    world.spawnParticle(Particle.SMOKE_LARGE, loc, 50, 0.2, 0.2, 0.2, 0.08, null, true);
 
                     Bukkit.getScheduler().runTaskLater(Main.getPlugin(), () ->
-                            loc.getWorld().playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, SoundCategory.MASTER, 4.0F, 1.0F), 10L);
+                            world.playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, SoundCategory.MASTER, 4.0F, 1.0F), 10L);
                 })
                 .setCastSound(Sound.ENTITY_FIREWORK_ROCKET_BLAST)
                 .setEffectDistance(25)

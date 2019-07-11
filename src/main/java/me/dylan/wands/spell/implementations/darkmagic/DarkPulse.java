@@ -31,10 +31,10 @@ public enum DarkPulse implements Castable {
                 .setEntityDamage(6)
                 .setCastSound(Sound.ENTITY_WITHER_SHOOT)
                 .setEntityEffects(entity -> entity.addPotionEffect(blind, true))
-                .setSpellRelativeEffects(loc -> {
-                    loc.getWorld().spawnParticle(Particle.SMOKE_LARGE, loc, 3, 0.4, 0.4, 0.4, 0.1, null, true);
-                    loc.getWorld().spawnParticle(Particle.SMOKE_NORMAL, loc, 13, 0.8, 0.8, 0.8, 0.1, null, true);
-                    loc.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, loc, 10, 0.8, 0.8, 0.8, 0.1, null, true);
+                .setSpellRelativeEffects((loc, world) -> {
+                    world.spawnParticle(Particle.SMOKE_LARGE, loc, 3, 0.4, 0.4, 0.4, 0.1, null, true);
+                    world.spawnParticle(Particle.SMOKE_NORMAL, loc, 13, 0.8, 0.8, 0.8, 0.1, null, true);
+                    world.spawnParticle(Particle.ENCHANTMENT_TABLE, loc, 10, 0.8, 0.8, 0.8, 0.1, null, true);
                 })
                 .setEffectDistance(30)
                 .setHitEffects(loc -> {

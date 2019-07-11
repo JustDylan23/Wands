@@ -48,7 +48,7 @@ public final class WaveSpell extends Behaviour {
                         cancel();
                         return;
                     }
-                    spellRelativeEffects.accept(loc);
+                    spellRelativeEffects.accept(loc, loc.getWorld());
                     for (LivingEntity entity : SpellEffectUtil.getNearbyLivingEntities(player, loc, spellEffectRadius)) {
                         if (!entity.hasMetadata(tagWaveSpell)) {
                             entity.setMetadata(tagWaveSpell, Common.METADATA_VALUE_TRUE);

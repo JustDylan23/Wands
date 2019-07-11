@@ -6,7 +6,6 @@ import me.dylan.wands.spell.handler.ProjectileSpell;
 import me.dylan.wands.spell.spelleffect.sound.CompoundSound;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
-import org.bukkit.World;
 import org.bukkit.entity.SmallFireball;
 
 public enum FireComet implements Castable {
@@ -29,16 +28,15 @@ public enum FireComet implements Castable {
                     projectile.setIsIncendiary(false);
                     projectile.setYield(0);
                 })
-                .setSpellRelativeEffects(loc -> {
-                    World world = loc.getWorld();
+                .setSpellRelativeEffects((loc, world) -> {
                     world.spawnParticle(Particle.FLAME, loc, 6, 0.8, 0.8, 0.8, 0.1, null, true);
                     world.spawnParticle(Particle.SMOKE_NORMAL, loc, 10, 1, 1, 1, 0.05, null, true);
                     world.spawnParticle(Particle.SMOKE_LARGE, loc, 10, 0.6, 0.6, 0.6, 0.15, null, true);
                     world.spawnParticle(Particle.LAVA, loc, 5, 1, 1, 1, 0, null, true);
                 })
-                .setHitEffects(loc -> {
+                .setHitEffects((loc, world) -> {
                     loc.createExplosion(0);
-                    loc.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, loc, 0, 0.0, 0.0, 0.0, 0.0, null, true);
+                    world.spawnParticle(Particle.EXPLOSION_HUGE, loc, 0, 0.0, 0.0, 0.0, 0.0, null, true);
                 })
                 .build();
     }

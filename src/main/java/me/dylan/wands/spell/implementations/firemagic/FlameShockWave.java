@@ -15,9 +15,9 @@ public enum FlameShockWave implements Castable {
                 .setCastSound(Sound.ENTITY_BLAZE_SHOOT)
                 .setWaveRadius(10)
                 .setEntityEffects(entity -> entity.setFireTicks(120))
-                .setSpellRelativeEffects(loc -> {
-                    loc.getWorld().spawnParticle(Particle.FLAME, loc, 1, 1, 1, 1, 0.1, null, true);
-                    loc.getWorld().spawnParticle(Particle.LAVA, loc, 1, 1, 1, 1, 0, null, true);
+                .setSpellRelativeEffects((loc, world) -> {
+                    world.spawnParticle(Particle.FLAME, loc, 1, 1, 1, 1, 0.1, null, true);
+                    world.spawnParticle(Particle.LAVA, loc, 1, 1, 1, 1, 0, null, true);
                 })
                 .setExpentionDelay(3)
                 .build();

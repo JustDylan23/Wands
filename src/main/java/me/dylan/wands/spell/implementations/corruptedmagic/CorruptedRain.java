@@ -10,9 +10,8 @@ import me.dylan.wands.spell.spelleffect.sound.CompoundSound;
 import me.dylan.wands.util.Common;
 import org.bukkit.*;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.entity.*;
 import org.bukkit.entity.AbstractArrow.PickupStatus;
-import org.bukkit.event.Event;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -42,7 +41,7 @@ public enum CorruptedRain implements Castable, Listener {
                         .add(Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1, 1)
                 )
                 .setEffectDistance(30)
-                .setSpellRelativeEffects(this::spawnArrows)
+                .setSpellRelativeEffects2(this::spawnArrows)
                 .build();
     }
 
@@ -66,7 +65,7 @@ public enum CorruptedRain implements Castable, Listener {
                 if (++count >= 14) {
                     cancel();
                 } else {
-                    Location arrowLoc = SpellEffectUtil.randomizeLoc(location.clone(), 1.5, 0, 1.5);
+                    Location arrowLoc = SpellEffectUtil.randomizeLoc(location, 1.5, 0, 1.5);
                     Arrow arrow = (Arrow) world.spawnEntity(arrowLoc, EntityType.ARROW);
                     arrow.setDamage(6);
                     arrow.setPickupStatus(PickupStatus.ALLOWED);
@@ -92,7 +91,7 @@ public enum CorruptedRain implements Castable, Listener {
     private void onEntityDamageEntity(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Projectile) {
             Projectile projectile = (Projectile) event.getDamager();
-            if (projectile.hasMetadata(tagCorruptedRain)){
+            if (projectile.hasMetadata(tagCorruptedRain)) {
                 Player source = (Player) projectile.getShooter();
                 if (source != null && source.equals(event.getEntity())) {
                     event.setCancelled(true);
