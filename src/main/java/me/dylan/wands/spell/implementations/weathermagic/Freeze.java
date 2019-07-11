@@ -1,4 +1,4 @@
-package me.dylan.wands.spell.implementations.icemagic;
+package me.dylan.wands.spell.implementations.weathermagic;
 
 import me.dylan.wands.Main;
 import me.dylan.wands.spell.Castable;
@@ -23,7 +23,7 @@ public enum Freeze implements Castable {
     Freeze() {
         this.behaviour = RaySpell.newBuilder(Target.SINGLE)
                 .setRayWidth(1)
-                .setAffectedEntityDamage(3)
+                .setEntityDamage(3)
                 .setMetersPerTick(2)
                 .setCastSound(Sound.ENTITY_LLAMA_SWAG)
                 .setSpellRelativeEffects(loc -> {
@@ -31,7 +31,7 @@ public enum Freeze implements Castable {
                     loc.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, loc, 10, 0.5, 0.5, 0.5, 1, null, true);
                 })
                 .setEffectDistance(25)
-                .setAffectedEntityEffects(entity -> {
+                .setEntityEffects(entity -> {
                     Location eLoc = entity.getLocation();
                     eLoc.getWorld().playSound(eLoc, Sound.ENTITY_EVOKER_FANGS_ATTACK, 4, 2);
                     if (entity.hasMetadata(metaKey)) return;

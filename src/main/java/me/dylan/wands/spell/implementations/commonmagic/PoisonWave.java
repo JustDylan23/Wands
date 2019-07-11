@@ -17,12 +17,13 @@ public enum PoisonWave implements Castable {
     PoisonWave() {
         this.behaviour = WaveSpell.newBuilder()
                 .setSpellEffectRadius(2.5F)
-                .setAffectedEntityDamage(2)
+                .setEntityDamage(2)
                 .setEffectDistance(20)
                 .setCastSound(Sound.ENTITY_EVOKER_CAST_SPELL)
-                .setAffectedEntityEffects(entity -> entity.addPotionEffect(poison, true))
+                .setEntityEffects(entity -> entity.addPotionEffect(poison, true))
                 .setSpellRelativeEffects(loc -> {
                     SpellEffectUtil.spawnColoredParticle(Particle.SPELL_MOB, loc, 18, 1.2, 1.2, 1.2, 75, 140, 50, false);
+                    loc.getWorld().spawnParticle(Particle.SMOKE_NORMAL, loc, 5, 1, 1, 1, 0.05, null, true);
                     loc.getWorld().spawnParticle(Particle.SMOKE_NORMAL, loc, 5, 1, 1, 1, 0.05, null, true);
                 })
                 .build();

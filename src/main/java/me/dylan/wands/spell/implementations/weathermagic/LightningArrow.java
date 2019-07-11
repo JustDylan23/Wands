@@ -1,4 +1,4 @@
-package me.dylan.wands.spell.implementations.icemagic;
+package me.dylan.wands.spell.implementations.weathermagic;
 
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.handler.Behaviour;
@@ -27,8 +27,8 @@ public enum LightningArrow implements Castable {
                     w.spawnParticle(Particle.CLOUD, location, 10, 0.2, 0.2, 0.2, 0.1, null, true);
                     w.spawnParticle(Particle.ENCHANTMENT_TABLE, location, 20, 0.5, 0.5, 0.5, 1, null, true);
                 })
-                .setAffectedEntityDamage(6)
-                .setAffectedEntityEffects(entity -> entity.setFireTicks(80))
+                .setEntityDamage(6)
+                .setEntityEffects(entity -> entity.setFireTicks(80))
                 .setCastSound(Sound.ENTITY_WITHER_SHOOT)
                 .build();
     }

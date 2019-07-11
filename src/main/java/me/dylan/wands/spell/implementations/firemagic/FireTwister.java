@@ -15,10 +15,10 @@ public enum FireTwister implements Castable {
     FireTwister() {
         this.behaviour = CircleSpell.newBuilder(CirclePlacement.TARGET)
                 .setCircleRadius(3)
-                .setAffectedEntityDamage(2)
+                .setEntityDamage(2)
                 .setSpellEffectRadius(3F)
                 .setEffectDistance(30)
-                .setAffectedEntityEffects(entity -> {
+                .setEntityEffects(entity -> {
                     entity.setVelocity(entity.getVelocity().setY(0.5f));
                     entity.getLocation().createExplosion(0);
                     entity.setFireTicks(40);

@@ -19,12 +19,12 @@ public enum BloodWave implements Castable {
         this.behaviour = WaveSpell.newBuilder()
                 .setEffectDistance(30)
                 .setSpellEffectRadius(2F)
-                .setAffectedEntityDamage(4)
+                .setEntityDamage(4)
                 .setCastSound(CompoundSound.chain()
                         .add(Sound.ENTITY_FIREWORK_ROCKET_BLAST)
                         .add(Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, 1, 20, 5, 3)
                 )
-                .setAffectedEntityEffects(entity -> entity.addPotionEffect(wither, true))
+                .setEntityEffects(entity -> entity.addPotionEffect(wither, true))
                 .setSpellRelativeEffects(loc -> {
                     loc.getWorld().spawnParticle(Particle.SMOKE_NORMAL, loc, 10, 0.2, 0.2, 0.2, 0.1, null, true);
                     loc.getWorld().spawnParticle(Particle.SMOKE_LARGE, loc, 10, 1, 1, 1, 0.1, null, true);

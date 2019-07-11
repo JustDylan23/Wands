@@ -2,9 +2,10 @@ package me.dylan.wands.spell;
 
 import me.dylan.wands.spell.implementations.bloodmagic.*;
 import me.dylan.wands.spell.implementations.commonmagic.*;
+import me.dylan.wands.spell.implementations.corruptedmagic.*;
 import me.dylan.wands.spell.implementations.darkmagic.*;
 import me.dylan.wands.spell.implementations.firemagic.*;
-import me.dylan.wands.spell.implementations.icemagic.*;
+import me.dylan.wands.spell.implementations.weathermagic.*;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -24,7 +25,6 @@ public enum SpellType {
 
     ICE_AURA(IceAura.INSTANCE),
     ICE_FREEZE(Freeze.INSTANCE),
-
     THUNDER_ARROW(LightningArrow.INSTANCE),
     THUNDER_RAGE(ThunderRage.INSTANCE),
     THUNDER_STORM(ThunderStorm.INSTANCE),
@@ -42,7 +42,14 @@ public enum SpellType {
     DARK_CIRCLE(DarkCircle.INSTANCE),
     DARK_PULSE(DarkPulse.INSTANCE),
     DARK_PUSH(DarkPush.INSTANCE),
-    DARK_SPARK(DarkSpark.INSTANCE);
+    DARK_SPARK(DarkSpark.INSTANCE),
+
+    CURRUPTED_WAVE(CorruptedWave.INSTANCE),
+    CORRUPTED_WOLFS(CorruptedWolfs.INSTANCE),
+    CORRUPTED_RAIN(CorruptedRain.INSTANCE),
+    CORRUPTED_SHOCK_WAVE(CorruptedShockWave.INSTANCE),
+    CORRUPTED_LAUNCH(CorruptedLaunch.INSTANCE),
+    CORRUPTED_SPARK(CorruptedSpark.INSTANCE);
 
     public final Castable castable;
 

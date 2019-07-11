@@ -18,14 +18,14 @@ public enum BloodStun implements Castable {
 
     BloodStun() {
         this.behaviour = RaySpell.newBuilder(Target.SINGLE)
-                .setRayWidth(1)
-                .setAffectedEntityDamage(3)
                 .setCastSound(Sound.ENTITY_FIREWORK_ROCKET_BLAST)
-                .setAffectedEntityEffects(entity -> {
+                .setEntityDamage(3)
+                .setEntityEffects(entity -> {
                     entity.addPotionEffect(slow, true);
                     Location location = entity.getLocation();
                     location.getWorld().playSound(location, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, 4, 1);
                 })
+                .setRayWidth(1)
                 .setSpellRelativeEffects(loc -> {
                     loc.getWorld().spawnParticle(Particle.SMOKE_NORMAL, loc, 2, 0.2, 0.2, 0.2, 0.04, null, true);
                     loc.getWorld().spawnParticle(Particle.DRIP_LAVA, loc, 2, 0.3, 0.3, 0.3, 0.04, null, true);

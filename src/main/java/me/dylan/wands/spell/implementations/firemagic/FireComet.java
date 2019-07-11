@@ -21,8 +21,8 @@ public enum FireComet implements Castable {
                         .add(Sound.ENTITY_FIREWORK_ROCKET_TWINKLE_FAR, 1, 20)
                 )
                 .setSpellEffectRadius(3)
-                .setAffectedEntityDamage(3)
-                .setAffectedEntityEffects(entity -> entity.setFireTicks(100))
+                .setEntityDamage(3)
+                .setEntityEffects(entity -> entity.setFireTicks(100))
                 .setImpactSpeed(1)
                 .setLifeTime(20)
                 .setProjectileProps(projectile -> {

@@ -2,7 +2,6 @@ package me.dylan.wands.spell.handler;
 
 import me.dylan.wands.Main;
 import me.dylan.wands.spell.SpellEffectUtil;
-import me.dylan.wands.spell.handler.Behaviour.AbstractBuilder.BaseMeta;
 import me.dylan.wands.spell.spelleffect.sound.SingularSound;
 import me.dylan.wands.spell.spelleffect.sound.SoundEffect;
 import me.dylan.wands.util.Common;
@@ -32,22 +31,22 @@ public abstract class Behaviour implements Listener {
     final Consumer<LivingEntity> affectedEntityEffects;
 
     private final List<String> props = new ArrayList<>();
-    private final ImpactDirection impactDirection;
+    private final ImpactCourse impactCourse;
     private final float impactSpeed;
 
-    Behaviour(@Nonnull BaseMeta baseMeta) {
-        this.affectedEntityDamage = baseMeta.affectedEntityDamage;
+    Behaviour(@Nonnull AbstractBuilder.BaseMeta baseMeta) {
+        this.affectedEntityDamage = baseMeta.entityDamage;
         this.spellEffectRadius = baseMeta.spellEffectRadius;
         this.castSounds = baseMeta.castSounds;
         this.spellRelativeEffects = baseMeta.spellRelativeEffects;
-        this.affectedEntityEffects = baseMeta.affectedEntityEffects;
+        this.affectedEntityEffects = baseMeta.entityEffects;
         this.impactSpeed = baseMeta.impactSpeed;
-        this.impactDirection = baseMeta.impactDirection;
+        this.impactCourse = baseMeta.impactCourse;
 
         addStringProperty("Entity damage", affectedEntityDamage);
         addStringProperty("Effect radius", spellEffectRadius);
         addStringProperty("Impact speed", impactSpeed);
-        addStringProperty("Impact direction", impactDirection);
+        addStringProperty("Impact direction", impactCourse);
     }
 
     void addStringProperty(String key, Object value) {
@@ -63,7 +62,7 @@ public abstract class Behaviour implements Listener {
     void push(Entity entity, Location from, Player player) {
         if (impactSpeed != 0) {
             Location location = entity.getLocation();
-            if (impactDirection == ImpactDirection.PLAYER) {
+            if (impactCourse == ImpactCourse.PLAYER) {
                 location.subtract(player.getLocation());
             } else {
                 location.subtract(from);
@@ -95,54 +94,21 @@ public abstract class Behaviour implements Listener {
         return sj.toString();
     }
 
-    public enum ImpactDirection {
+    public enum ImpactCourse {
         SPELL,
         PLAYER
     }
 
     public static abstract class AbstractBuilder<T extends AbstractBuilder<T>> {
 
-        final BaseMeta baseMeta = new BaseMeta();
+        BaseMeta baseMeta = new BaseMeta();
+
+        AbstractBuilder() {
+        }
 
         abstract T self();
 
         public abstract Behaviour build();
-
-        /**
-         * Sets the damage that is applied to the Damageable effected by the implementations.
-         *
-         * @param damage The amount of damage
-         * @return this
-         */
-
-        public T setAffectedEntityDamage(int damage) {
-            baseMeta.affectedEntityDamage = damage;
-            return self();
-        }
-
-        /**
-         * Sets the effects which will effect the Damageables in the implementations's effect range.
-         *
-         * @param effects Effects applied to the affected Damageables
-         * @return this
-         */
-
-        public T setAffectedEntityEffects(Consumer<LivingEntity> effects) {
-            baseMeta.affectedEntityEffects = effects;
-            return self();
-        }
-
-        /**
-         * Sets the radius of the affected Damageables after the implementations concludes.
-         *
-         * @param radius The radius
-         * @return this
-         */
-
-        public T setSpellEffectRadius(float radius) {
-            baseMeta.spellEffectRadius = radius;
-            return self();
-        }
 
         /**
          * Sets the sounds that will be played relative to the player upon casting a spell
@@ -167,6 +133,42 @@ public abstract class Behaviour implements Listener {
         }
 
         /**
+         * Sets the damage that will ne dealth to the entities that are hit by the spell.
+         *
+         * @param damage The amount of damage
+         * @return this
+         */
+
+        public T setEntityDamage(int damage) {
+            baseMeta.entityDamage = damage;
+            return self();
+        }
+
+        /**
+         * Sets the effects which will effect the Damageables in the implementations's effect range.
+         *
+         * @param effects Effects applied to the affected Damageables
+         * @return this
+         */
+
+        public T setEntityEffects(Consumer<LivingEntity> effects) {
+            baseMeta.entityEffects = effects;
+            return self();
+        }
+
+        /**
+         * Sets the radius of the affected Damageables after the implementations concludes.
+         *
+         * @param radius The radius
+         * @return this
+         */
+
+        public T setSpellEffectRadius(float radius) {
+            baseMeta.spellEffectRadius = radius;
+            return self();
+        }
+
+        /**
          * Sets the visual effects that the implementations shows, whether it is a trail of particles
          * or is executed relative to where you look is up to the implementations handler BaseProps is used in.
          *
@@ -184,18 +186,18 @@ public abstract class Behaviour implements Listener {
             return self();
         }
 
-        public T setImpactDirection(ImpactDirection impactDirection) {
-            baseMeta.impactDirection = impactDirection;
+        public T setImpactCourse(ImpactCourse impactCourse) {
+            baseMeta.impactCourse = impactCourse;
             return self();
         }
 
         static class BaseMeta {
-            private int affectedEntityDamage = 0;
+            private int entityDamage = 0;
             private float spellEffectRadius, impactSpeed = 0;
             private SoundEffect castSounds = SoundEffect.EMPTY;
             private Consumer<Location> spellRelativeEffects = Common.emptyConsumer();
-            private Consumer<LivingEntity> affectedEntityEffects = Common.emptyConsumer();
-            private ImpactDirection impactDirection = ImpactDirection.SPELL;
+            private Consumer<LivingEntity> entityEffects = Common.emptyConsumer();
+            private ImpactCourse impactCourse = ImpactCourse.SPELL;
         }
     }
 }

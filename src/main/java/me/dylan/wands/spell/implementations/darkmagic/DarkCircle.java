@@ -19,9 +19,9 @@ public enum DarkCircle implements Castable {
     DarkCircle() {
         this.behaviour = CircleSpell.newBuilder(CirclePlacement.RELATIVE)
                 .setCircleRadius(4)
-                .setAffectedEntityDamage(2)
+                .setEntityDamage(2)
                 .setSpellEffectRadius(4F)
-                .setAffectedEntityEffects(entity -> {
+                .setEntityEffects(entity -> {
                     entity.setVelocity(entity.getVelocity().setY(0.5f));
                     entity.getLocation().createExplosion(0);
                     entity.addPotionEffect(blind, true);
