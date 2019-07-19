@@ -76,14 +76,13 @@ public final class BlockProjectileSpell extends Behaviour implements Listener {
             public void run() {
                 if (fallingBlock.isValid()) {
                     spellRelativeEffects.accept(fallingBlock.getLocation(), fallingBlock.getWorld());
-                    SpellEffectUtil.getNearbyLivingEntities(player, fallingBlock.getLocation(), spellEffectRadius).forEach(entity -> {
-                        if (!entity.hasMetadata(tagBlockProjectile)) {
-                            entity.setMetadata(tagBlockProjectile, Common.METADATA_VALUE_TRUE);
-                            Bukkit.getScheduler().runTaskLater(plugin, () -> entity.removeMetadata(tagBlockProjectile, plugin), 25L);
-                            affectedEntityEffects.accept(entity);
-                            SpellEffectUtil.damageEffect(player, entity, affectedEntityDamage, wandDisplayName);
-                        }
-                    });
+                    SpellEffectUtil.getNearbyLivingEntities(player, fallingBlock.getLocation(), entity -> !entity.hasMetadata(tagBlockProjectile), spellEffectRadius)
+                            .forEach(entity -> {
+                                entity.setMetadata(tagBlockProjectile, Common.METADATA_VALUE_TRUE);
+                                Bukkit.getScheduler().runTaskLater(plugin, () -> entity.removeMetadata(tagBlockProjectile, plugin), 25L);
+                                affectedEntityEffects.accept(entity);
+                                SpellEffectUtil.damageEffect(player, entity, affectedEntityDamage, wandDisplayName);
+                            });
                 } else cancel();
             }
         }.runTaskTimer(plugin, 0, 1);

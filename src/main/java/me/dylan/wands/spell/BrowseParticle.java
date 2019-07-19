@@ -9,24 +9,24 @@ import java.util.function.BiConsumer;
 
 public enum BrowseParticle {
     DEFAULT((loc, world) -> {
-        world.spawnParticle(Particle.SPELL_WITCH, loc, 10, 0.5, 0.5, 0.5, 1);
-        world.spawnParticle(Particle.ENCHANTMENT_TABLE, loc, 15, 0.5, 0.5, 0.5, 1);
+        world.spawnParticle(Particle.SPELL_WITCH, loc, 10, 0.5, 0.5, 0.5, 1, null, true);
+        world.spawnParticle(Particle.ENCHANTMENT_TABLE, loc, 15, 0.5, 0.5, 0.5, 1, null, true);
     }),
     PARTICLE_BLOOD((loc, world) -> {
-        world.spawnParticle(Particle.BLOCK_CRACK, loc, 10, 0.5, 0.5, 0.5, 1, Material.REDSTONE_BLOCK.createBlockData());
-        world.spawnParticle(Particle.ENCHANTMENT_TABLE, loc, 15, 0.5, 0.5, 0.5, 1);
+        world.spawnParticle(Particle.BLOCK_CRACK, loc, 10, 0.5, 0.5, 0.5, 1, Material.REDSTONE_BLOCK.createBlockData(), true);
+        world.spawnParticle(Particle.ENCHANTMENT_TABLE, loc, 15, 0.5, 0.5, 0.5, 1, null, true);
     }),
     PARTICLE_ICE((loc, world) -> {
-        world.spawnParticle(Particle.SNOW_SHOVEL, loc, 10, 0.5, 0.5, 0.5, 1);
-        world.spawnParticle(Particle.ENCHANTMENT_TABLE, loc, 15, 0.5, 0.5, 0.5, 1);
+        world.spawnParticle(Particle.SNOW_SHOVEL, loc, 10, 0.5, 0.5, 0.5, 1, null, true);
+        world.spawnParticle(Particle.ENCHANTMENT_TABLE, loc, 15, 0.5, 0.5, 0.5, 1, null, true);
     }),
     PARTICLE_DARK((loc, world) -> {
-        world.spawnParticle(Particle.SMOKE_NORMAL, loc, 10, 0.5, 0.5, 0.5, 0.03);
-        world.spawnParticle(Particle.ENCHANTMENT_TABLE, loc, 15, 0.5, 0.5, 0.5, 1);
+        world.spawnParticle(Particle.SMOKE_NORMAL, loc, 10, 0.5, 0.5, 0.5, 0.03, null, true);
+        world.spawnParticle(Particle.ENCHANTMENT_TABLE, loc, 15, 0.5, 0.5, 0.5, 1, null, true);
     }),
     PARTICLE_FIRE((loc, world) -> {
-        world.spawnParticle(Particle.FLAME, loc, 8, 0.5, 0.5, 0.5, 0.03);
-        world.spawnParticle(Particle.SMOKE_NORMAL, loc, 10, 0.5, 0.5, 0.5, 0.03);
+        world.spawnParticle(Particle.FLAME, loc, 8, 0.5, 0.5, 0.5, 0.03, null, true);
+        world.spawnParticle(Particle.SMOKE_NORMAL, loc, 10, 0.5, 0.5, 0.5, 0.03, null, true);
         world.spawnParticle(Particle.ENCHANTMENT_TABLE, loc, 15, 0.5, 0.5, 0.5, 1);
     }),
     PARTICLE_CORRUPTED((loc, world) -> {

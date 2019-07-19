@@ -37,7 +37,7 @@ public enum DarkPulse implements Castable {
                     world.spawnParticle(Particle.ENCHANTMENT_TABLE, loc, 10, 0.8, 0.8, 0.8, 0.1, null, true);
                 })
                 .setEffectDistance(30)
-                .setHitEffects(loc -> {
+                .setHitEffects((loc, world) -> {
                     loc.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, loc, 0, 0.0, 0.0, 0.0, 0.0, null, true);
                     loc.createExplosion(0);
                     loc.getWorld().playSound(loc, Sound.ENTITY_WITHER_HURT, SoundCategory.MASTER, 4.0F, 1.0F);

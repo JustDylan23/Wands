@@ -34,7 +34,7 @@ public class TabCompletionHandler implements TabCompleter {
             if (args[0].equalsIgnoreCase("get"))
                 return validCompletions(value, ObtainableItem.getNames());
             if (args[0].equalsIgnoreCase("set"))
-                return validCompletions(value, "cooldown");
+                return validCompletions(value, "cooldown", "selfharm");
         }
         return Collections.emptyList();
     }

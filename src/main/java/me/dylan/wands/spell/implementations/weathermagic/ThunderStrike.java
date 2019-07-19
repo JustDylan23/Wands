@@ -3,6 +3,8 @@ package me.dylan.wands.spell.implementations.weathermagic;
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.SpellEffectUtil;
 import me.dylan.wands.spell.handler.Behaviour;
+import me.dylan.wands.spell.handler.RaySpell;
+import me.dylan.wands.spell.handler.RaySpell.Target;
 import me.dylan.wands.spell.handler.SparkSpell;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -13,13 +15,18 @@ public enum ThunderStrike implements Castable {
     private final Behaviour behaviour;
 
     ThunderStrike() {
-        this.behaviour = SparkSpell.newBuilder()
-                .setEffectDistance(30)
+        this.behaviour = RaySpell.newBuilder(Target.MULTI)
+                .setEffectDistance(40)
                 .setEntityDamage(6)
                 .setImpactSpeed(0.8F)
                 .setCastSound(Sound.ENTITY_WITHER_SHOOT)
                 .setEntityEffects(entity -> entity.setFireTicks(80))
+                .setMetersPerTick(3)
                 .setSpellRelativeEffects((loc, world) -> {
+                    world.spawnParticle(Particle.CLOUD, loc, 5, 0.2, 0.2, 0.2, 0.05, null, true);
+                    world.spawnParticle(Particle.ENCHANTMENT_TABLE, loc, 15, 0.5, 0.5, 0.5, 1, null, true);
+                })
+                .setHitEffects((loc, world) -> {
                     world.spawnParticle(Particle.CLOUD, loc, 40, 2, 2, 2, 0.2, null, true);
                     world.spawnParticle(Particle.SMOKE_NORMAL, loc, 20, 2, 2, 2, 0.2, null, true);
                     world.spawnParticle(Particle.SMOKE_LARGE, loc, 5, 2, 2, 2, 0.2, null, true);

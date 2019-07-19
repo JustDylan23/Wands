@@ -3,19 +3,21 @@ package me.dylan.wands.spell.handler;
 import me.dylan.wands.spell.SpellEffectUtil;
 import me.dylan.wands.util.Common;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public final class RaySpell extends Behaviour {
     private final int effectDistance, speed;
     private final float rayWidth;
     private final Target target;
-    private final Consumer<Location> hitEffects;
+    private final BiConsumer<Location, World> hitEffects;
 
     private RaySpell(Builder builder) {
         super(builder.baseMeta);
@@ -67,7 +69,7 @@ public final class RaySpell extends Behaviour {
     }
 
     private void effectEntities(Location loc, Player player, String wandDisplayName) {
-        hitEffects.accept(loc);
+        hitEffects.accept(loc, loc.getWorld());
         for (LivingEntity entity : SpellEffectUtil.getNearbyLivingEntities(player, loc, (target == Target.SINGLE) ? rayWidth : spellEffectRadius)) {
             push(entity, loc, player);
             affectedEntityEffects.accept(entity);
@@ -87,7 +89,7 @@ public final class RaySpell extends Behaviour {
         private int effectDistance;
         private int speed = 1;
         private float rayWidth;
-        private Consumer<Location> hitEffects = Common.emptyConsumer();
+        private BiConsumer<Location, World> hitEffects = Common.emptyBiConsumer();
 
         private Builder(Target target) {
             this.target = target;
@@ -118,7 +120,7 @@ public final class RaySpell extends Behaviour {
             return this;
         }
 
-        public Builder setHitEffects(Consumer<Location> hitEffects) {
+        public Builder setHitEffects(BiConsumer<Location, World> hitEffects) {
             this.hitEffects = hitEffects;
             return this;
         }

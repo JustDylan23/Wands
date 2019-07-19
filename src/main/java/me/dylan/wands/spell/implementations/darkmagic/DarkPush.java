@@ -44,7 +44,7 @@ public enum DarkPush implements Castable {
                     loc.getWorld().spawnParticle(Particle.SMOKE_LARGE, loc, 15, 2, 0.2, 2, 0.05, null, true);
                     loc.createExplosion(0);
                     for (LivingEntity loopEntity : SpellEffectUtil.getNearbyLivingEntities(player, loc, 3)) {
-                        entity.damage(2);
+                        loopEntity.damage(2);
                         if (!loopEntity.equals(entity)) {
                             loopEntity.setVelocity(loopEntity.getLocation().subtract(loc).toVector().normalize().multiply(0.5F));
                             loc.createExplosion(0);

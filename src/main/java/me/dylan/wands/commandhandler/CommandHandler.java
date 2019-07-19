@@ -99,6 +99,15 @@ public class CommandHandler implements CommandExecutor {
                             sender.sendMessage(Main.PREFIX + "Cooldown can only be set to a full number!");
                         }
                         return true;
+                    } else if (args[1].equalsIgnoreCase("selfharm")) {
+                        boolean b = Boolean.parseBoolean(args[2]);
+                        if (b) {
+                            sender.sendMessage(Main.PREFIX + "Player can now harm himself with wands");
+                        } else {
+                            sender.sendMessage(Main.PREFIX + "Player can no longer harm himself with wands");
+                        }
+                        Main.getPlugin().getConfigurableData().allowSelfHarm(b);
+                        return true;
                     }
                 }
         }

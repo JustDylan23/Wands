@@ -2,8 +2,8 @@ package me.dylan.wands;
 
 import me.dylan.wands.commandhandler.CommandHandler;
 import me.dylan.wands.commandhandler.TabCompletionHandler;
-import me.dylan.wands.customitem.AssasinDagger;
-import me.dylan.wands.customitem.CursedBow;
+import me.dylan.wands.customitems.AssasinDagger;
+import me.dylan.wands.customitems.CursedBow;
 import me.dylan.wands.pluginmeta.ConfigurableData;
 import me.dylan.wands.pluginmeta.ListenerRegistry;
 import me.dylan.wands.spell.PlayerListener;
