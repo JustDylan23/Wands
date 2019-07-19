@@ -1,4 +1,4 @@
-package me.dylan.wands.customitem;
+package me.dylan.wands.customitems;
 
 import me.dylan.wands.Main;
 import me.dylan.wands.util.Common;
@@ -91,13 +91,13 @@ public class AssasinDagger implements Listener {
                 new BukkitRunnable() {
                     @Override
                     public void run() {
-                        if (player.isOnGround() && player.hasMetadata(leapKey)) {
+                        if (player.isOnGround()) {
                             Bukkit.getScheduler().runTaskLater(plugin, () ->
                                     player.removeMetadata(leapKey, plugin), 2);
                             cancel();
                         }
                     }
-                }.runTaskTimer(Main.getPlugin(), 3, 3);
+                }.runTaskTimer(Main.getPlugin(), 1, 1);
             }
         }
     }

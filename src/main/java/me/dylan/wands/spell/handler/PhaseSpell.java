@@ -42,26 +42,25 @@ public final class PhaseSpell extends Behaviour {
         Location loc = SpellEffectUtil.getSpellLocation(effectDistance, player);
         castSounds.play(player);
         spellRelativeEffects.accept(loc, loc.getWorld());
-        for (LivingEntity entity : SpellEffectUtil.getNearbyLivingEntities(player, loc, spellEffectRadius)) {
-            if (!entity.hasMetadata(tagPhaseSpell)) {
-                entity.setMetadata(tagPhaseSpell, Common.METADATA_VALUE_TRUE);
-                push(entity, loc, player);
-                affectedEntityEffects.accept(entity);
-                SpellEffectUtil.damageEffect(player, entity, affectedEntityDamage, wandDisplayName);
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        if (!entity.isValid() || condition.apply(entity)) {
-                            afterPhaseEffect.accept(entity, player);
-                            entity.removeMetadata(tagPhaseSpell, plugin);
-                            cancel();
-                        } else {
-                            duringPhaseEffect.accept(entity);
-                        }
+        for (LivingEntity entity : SpellEffectUtil.getNearbyLivingEntities(player, loc, entity -> !entity.hasMetadata(tagPhaseSpell), spellEffectRadius)) {
+            entity.setMetadata(tagPhaseSpell, Common.METADATA_VALUE_TRUE);
+            push(entity, loc, player);
+            affectedEntityEffects.accept(entity);
+            SpellEffectUtil.damageEffect(player, entity, affectedEntityDamage, wandDisplayName);
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (!entity.isValid() || condition.apply(entity)) {
+                        afterPhaseEffect.accept(entity, player);
+                        entity.removeMetadata(tagPhaseSpell, plugin);
+                        cancel();
+                    } else {
+                        duringPhaseEffect.accept(entity);
                     }
-                }.runTaskTimer(plugin, 2, 1);
-                if (target == Target.SINGLE) break;
-            }
+                }
+            }.runTaskTimer(plugin, 2, 1);
+            if (target == Target.SINGLE) break;
+
         }
         return true;
     }

@@ -49,18 +49,16 @@ public final class WaveSpell extends Behaviour {
                         return;
                     }
                     spellRelativeEffects.accept(loc, loc.getWorld());
-                    for (LivingEntity entity : SpellEffectUtil.getNearbyLivingEntities(player, loc, spellEffectRadius)) {
-                        if (!entity.hasMetadata(tagWaveSpell)) {
-                            entity.setMetadata(tagWaveSpell, Common.METADATA_VALUE_TRUE);
-                            SpellEffectUtil.damageEffect(player, entity, affectedEntityDamage, wandDisplayName);
-                            affectedEntityEffects.accept(entity);
-                            Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                                if (entity.isValid()) {
-                                    entity.removeMetadata(tagWaveSpell, plugin);
-                                }
-                            }, effectDistance - count);
-                        }
-                    }
+                    SpellEffectUtil.getNearbyLivingEntities(player, loc, entity -> !entity.hasMetadata(tagWaveSpell), spellEffectRadius).forEach(entity -> {
+                        entity.setMetadata(tagWaveSpell, Common.METADATA_VALUE_TRUE);
+                        SpellEffectUtil.damageEffect(player, entity, affectedEntityDamage, wandDisplayName);
+                        affectedEntityEffects.accept(entity);
+                        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                            if (entity.isValid()) {
+                                entity.removeMetadata(tagWaveSpell, plugin);
+                            }
+                        }, effectDistance - count);
+                    });
                 }
             }
         }.runTaskTimer(plugin, 1, 1);

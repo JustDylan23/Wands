@@ -1,4 +1,4 @@
-package me.dylan.wands.customitem;
+package me.dylan.wands.customitems;
 
 import me.dylan.wands.Main;
 import me.dylan.wands.spell.SpellEffectUtil;

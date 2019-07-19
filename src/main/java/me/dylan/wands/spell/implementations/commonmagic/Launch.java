@@ -15,12 +15,12 @@ public enum Launch implements Castable {
 
     Launch() {
         this.behaviour = PhaseSpell.newBuilder(Target.MULTI)
-                .setSpellEffectRadius(2.2F)
+                .setSpellEffectRadius(2.5F)
                 .setEntityDamage(3)
                 .setEntityEffects(entity -> entity.setVelocity(new Vector(0, 1.2, 0)))
                 .setSpellRelativeEffects((loc, world) -> {
-                    world.spawnParticle(Particle.SPELL_WITCH, loc, 30, 0.6, 0.7, 0.6, 0.3, null, true);
-                    world.spawnParticle(Particle.SMOKE_LARGE, loc, 50, 0.2, 0.2, 0.2, 0.1, null, true);
+                    world.spawnParticle(Particle.SPELL_WITCH, loc, 30, 0.6, 0.7, 0.6, 0.4, null, true);
+                    world.spawnParticle(Particle.SMOKE_LARGE, loc, 20, 0.2, 0.2, 0.2, 0.2, null, true);
                     world.playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_BLAST, SoundCategory.MASTER, 4.0F, 1.0F);
                     Bukkit.getScheduler().runTaskLater(Main.getPlugin(), () ->
                             world.playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, SoundCategory.MASTER, 4.0F, 1.0F), 10L);

@@ -18,13 +18,13 @@ public enum Confuse implements Castable {
 
     Confuse() {
         this.behaviour = SparkSpell.newBuilder()
-                .setSpellEffectRadius(4F)
+                .setSpellEffectRadius(3F)
                 .setEntityDamage(6)
                 .setEntityEffects(entity -> entity.addPotionEffect(confusion, true))
                 .setSpellRelativeEffects((loc, world) -> {
-                    world.spawnParticle(Particle.SMOKE_LARGE, loc, 30, 1, 1, 1, 0.08, null, true);
-                    world.spawnParticle(Particle.SMOKE_NORMAL, loc, 30, 1, 1, 1, 0.08, null, true);
-                    world.spawnParticle(Particle.SPELL_WITCH, loc, 30, 1, 1, 1, 0.15, null, true);
+                    world.spawnParticle(Particle.SMOKE_LARGE, loc, 50, 1.4, 1.2, 1.4, 0.08, null, true);
+                    world.spawnParticle(Particle.SMOKE_NORMAL, loc, 50, 1.4, 1.2, 1.4, 0.08, null, true);
+                    world.spawnParticle(Particle.SPELL_WITCH, loc, 50, 1.4, 1.2, 1.4, 0.15, null, true);
                     Bukkit.getScheduler().runTaskLater(Main.getPlugin(), () ->
                             world.playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, SoundCategory.MASTER, 4.0F, 1.0F), 10L);
                 })

@@ -3,10 +3,7 @@ package me.dylan.wands.spell;
 import com.destroystokyo.paper.block.TargetBlockInfo;
 import me.dylan.wands.Main;
 import org.bukkit.*;
-import org.bukkit.entity.Damageable;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -16,6 +13,7 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class SpellEffectUtil {
@@ -58,13 +56,22 @@ public class SpellEffectUtil {
     }
 
     public static List<LivingEntity> getNearbyLivingEntities(Player player, Location loc, double radius) {
+        return getNearbyLivingEntities(player, loc, b -> true, radius);
+    }
+
+    public static List<LivingEntity> getNearbyLivingEntities(Player player, Location loc, Predicate<LivingEntity> predicate, double radius) {
         return loc.getWorld()
                 .getNearbyEntities(loc, radius, radius, radius).stream()
-                .filter(LivingEntity.class::isInstance)
-                .filter(entity -> !entity.equals(player))
+                .filter(entity ->
+                        entity instanceof LivingEntity
+                                && !(entity instanceof ArmorStand)
+                                && (Main.getPlugin().getConfigurableData().isSelfHarmAllowed() || !entity.equals(player))
+                )
                 .map(LivingEntity.class::cast)
-                .collect(Collectors.toList());
+                .filter(predicate)
+                .collect(Collectors.toCollection(ArrayList::new));
     }
+
 
     public static void runTaskLater(Runnable runnable, int... delays) {
         int delay = 0;

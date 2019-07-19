@@ -93,10 +93,9 @@ public enum CorruptedRain implements Castable, Listener {
             Projectile projectile = (Projectile) event.getDamager();
             if (projectile.hasMetadata(tagCorruptedRain)) {
                 Player source = (Player) projectile.getShooter();
-                if (source != null && source.equals(event.getEntity())) {
+                if (source != null && source.equals(event.getEntity()) && !Main.getPlugin().getConfigurableData().isSelfHarmAllowed()) {
                     event.setCancelled(true);
                     projectile.remove();
-                    source.sendMessage("you hit yourself lmao");
                 }
             }
         }

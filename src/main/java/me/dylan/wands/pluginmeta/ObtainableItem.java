@@ -1,8 +1,8 @@
 package me.dylan.wands.pluginmeta;
 
 import me.dylan.wands.Main;
-import me.dylan.wands.customitem.AssasinDagger;
-import me.dylan.wands.customitem.CursedBow;
+import me.dylan.wands.customitems.AssasinDagger;
+import me.dylan.wands.customitems.CursedBow;
 import me.dylan.wands.spell.BrowseParticle;
 import me.dylan.wands.spell.SpellManagementUtil;
 import me.dylan.wands.spell.SpellType;
@@ -126,7 +126,8 @@ public enum ObtainableItem {
                 SpellType.CORRUPTED_SHOCK_WAVE,
                 SpellType.CORRUPTED_WOLFS,
                 SpellType.CORRUPTED_LAUNCH,
-                SpellType.SPARK
+                SpellType.CORRUPTED_SPARK,
+                SpellType.POISON_WAVE
         );
         SpellManagementUtil.setSpellBrowseParticles(itemStack, BrowseParticle.PARTICLE_CORRUPTED);
         return itemStack;

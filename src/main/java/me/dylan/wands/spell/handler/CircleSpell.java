@@ -1,6 +1,7 @@
 package me.dylan.wands.spell.handler;
 
 import me.dylan.wands.spell.SpellEffectUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -50,6 +51,7 @@ public final class CircleSpell extends Behaviour {
                     if (index >= locations.size()) {
                         cancel();
                         applyEntityEffects(location, player, wandDisplayName);
+                        break;
                     } else {
                         Location loc = locations.get(index);
                         spellRelativeEffects.accept(loc, loc.getWorld());

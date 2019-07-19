@@ -12,13 +12,13 @@ import java.util.UUID;
 
 public final class ShockWaveSpell extends Behaviour {
     private final int waveRadius, delay;
-    private final String tagShokWave;
+    private final String tagShockWave;
 
     private ShockWaveSpell(Builder builder) {
         super(builder.baseMeta);
         this.waveRadius = builder.waveRadius;
         this.delay = builder.delay;
-        this.tagShokWave = UUID.randomUUID().toString();
+        this.tagShockWave = UUID.randomUUID().toString();
 
         addStringProperty("Radius", waveRadius, "meters");
     }
@@ -30,24 +30,25 @@ public final class ShockWaveSpell extends Behaviour {
     @Override
     public boolean cast(Player player, String wandDisplayName) {
         castSounds.play(player);
-        Location center = player.getLocation();
+        Location origin = player.getLocation();
         new BukkitRunnable() {
-            int currentRadius = 0;
+            float currentRadius = 0;
 
             @Override
             public void run() {
-                if (++currentRadius > waveRadius) {
+                currentRadius += 0.5f;
+                if (currentRadius > waveRadius) {
                     cancel();
                 } else {
-                    SpellEffectUtil.getCircleFrom(center, currentRadius).forEach(loc -> spellRelativeEffects.accept(loc, loc.getWorld()));
-                    for (LivingEntity entity : SpellEffectUtil.getNearbyLivingEntities(player, center, currentRadius)) {
-                        if (!entity.hasMetadata(tagShokWave)) {
-                            entity.setMetadata(tagShokWave, Common.METADATA_VALUE_TRUE);
-                            SpellEffectUtil.damageEffect(player, entity, affectedEntityDamage, wandDisplayName);
-                            affectedEntityEffects.accept(entity);
-                            push(entity, player.getLocation(), player);
-                            Bukkit.getScheduler().runTaskLater(plugin, () -> entity.removeMetadata(tagShokWave, plugin), (long) (waveRadius - currentRadius) * delay);
-                        }
+                    SpellEffectUtil.getCircleFrom(origin, currentRadius).forEach(loc -> spellRelativeEffects.accept(loc, loc.getWorld()));
+                    for (LivingEntity entity : SpellEffectUtil.getNearbyLivingEntities(player, origin, entity -> !entity.hasMetadata(tagShockWave), currentRadius)) {
+                        entity.setMetadata(tagShockWave, Common.METADATA_VALUE_TRUE);
+                        SpellEffectUtil.damageEffect(player, entity, affectedEntityDamage, wandDisplayName);
+                        affectedEntityEffects.accept(entity);
+                        push(entity, player.getLocation(), player);
+                        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                            entity.removeMetadata(tagShockWave, plugin);
+                        }, Math.round((waveRadius - currentRadius) * 2D * delay) + delay);
                     }
                 }
             }
@@ -76,7 +77,7 @@ public final class ShockWaveSpell extends Behaviour {
             return this;
         }
 
-        public Builder setExpentionDelay(int ticks) {
+        public Builder setExpansionDelay(int ticks) {
             this.delay = ticks;
             return this;
         }
