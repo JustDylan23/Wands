@@ -97,7 +97,7 @@ public class AssasinDagger implements Listener {
                             cancel();
                         }
                     }
-                }.runTaskTimer(Main.getPlugin(), 1, 1);
+                }.runTaskTimer(Main.getPlugin(), 3, 3);
             }
         }
     }

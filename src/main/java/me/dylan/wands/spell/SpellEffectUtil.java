@@ -165,7 +165,7 @@ public class SpellEffectUtil {
                 Player player = (Player) victim;
                 AttributeInstance atr = player.getAttribute(Attribute.GENERIC_ARMOR);
                 if (atr != null) {
-                    armorDamageReduction = 1 - (3 * atr.getValue()) / 100D;
+                    armorDamageReduction = 1 - (1.75 * atr.getValue()) / 100D;
                 }
             }
             victim.damage(Math.round((amount * armorDamageReduction) * 10) / 10);
