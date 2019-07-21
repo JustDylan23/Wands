@@ -19,6 +19,7 @@ public enum FireTwister implements Castable {
                 .setSpellEffectRadius(3F)
                 .setEffectDistance(30)
                 .setEntityEffects(entity -> {
+                    entity.setVelocity(entity.getVelocity().setY(0.6));
                     entity.getLocation().createExplosion(0);
                     entity.setFireTicks(60);
                 })
@@ -29,9 +30,9 @@ public enum FireTwister implements Castable {
                     world.spawnParticle(Particle.FLAME, loc, 2, 0.3, 0.3, 0.3, 0.1, null, true);
                     world.spawnParticle(Particle.LAVA, loc, 2, 0.3, 0.3, 0.3, 0, null, true);
                 })
-                .setImpactSpeed(1.5F)
-                .setImpactCourse(ImpactCourse.PLAYER)
-//                .setCircleHeight(1)
+                .setImpactSpeed(1.1F)
+                .setImpactCourse(ImpactCourse.SPELL)
+                .setCircleHeight(1)
                 .build();
     }
 

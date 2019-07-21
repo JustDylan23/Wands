@@ -27,12 +27,13 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 public class CursedBow implements Listener {
 
     public final static String ID_TAG = "artifact-bow";
-    private final String cursedArrow = "cursedArrow";
+    private final String cursedArrow = UUID.randomUUID().toString();
     private final Plugin plugin = Main.getPlugin();
     private final Set<Player> drawing = new HashSet<>();
     private final Set<Player> hasDrawn = new HashSet<>();

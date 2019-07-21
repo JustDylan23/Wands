@@ -3,14 +3,11 @@ package me.dylan.wands.spell;
 import me.dylan.wands.Main;
 import me.dylan.wands.spell.handler.Behaviour;
 import me.dylan.wands.util.ItemUtil;
-import org.bukkit.Location;
-import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.Contract;
 
 import java.util.Optional;

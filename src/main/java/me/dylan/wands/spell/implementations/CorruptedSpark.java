@@ -4,6 +4,7 @@ import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.SpellEffectUtil;
 import me.dylan.wands.spell.handler.Behaviour;
 import me.dylan.wands.spell.handler.SparkSpell;
+import me.dylan.wands.spell.handler.SparkSpell.Target;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -18,7 +19,7 @@ public enum CorruptedSpark implements Castable {
 
 
     CorruptedSpark() {
-        this.behaviour = SparkSpell.newBuilder()
+        this.behaviour = SparkSpell.newBuilder(Target.MULTI)
                 .setSpellEffectRadius(2.2F)
                 .setEntityDamage(12)
                 .setSpellRelativeEffects((loc, world) -> {

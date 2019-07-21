@@ -4,7 +4,6 @@ import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.handler.Behaviour;
 import me.dylan.wands.spell.handler.MovingBlockSpell;
 import me.dylan.wands.spell.spelleffect.sound.CompoundSound;
-import me.dylan.wands.util.Common;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;

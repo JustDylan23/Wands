@@ -5,7 +5,6 @@ import me.dylan.wands.spell.SpellEffectUtil;
 import me.dylan.wands.spell.handler.Behaviour;
 import me.dylan.wands.spell.handler.RaySpell;
 import me.dylan.wands.spell.handler.RaySpell.Target;
-import me.dylan.wands.spell.handler.SparkSpell;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;

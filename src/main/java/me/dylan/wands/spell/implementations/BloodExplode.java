@@ -3,6 +3,7 @@ package me.dylan.wands.spell.implementations;
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.handler.Behaviour;
 import me.dylan.wands.spell.handler.SparkSpell;
+import me.dylan.wands.spell.handler.SparkSpell.Target;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -12,7 +13,7 @@ public enum BloodExplode implements Castable {
     private final Behaviour behaviour;
 
     BloodExplode() {
-        this.behaviour = SparkSpell.newBuilder()
+        this.behaviour = SparkSpell.newBuilder(Target.MULTI)
                 .setSpellEffectRadius(3F)
                 .setEntityDamage(10)
                 .setImpactSpeed(0.7F)
