@@ -13,7 +13,7 @@ import org.bukkit.potion.PotionEffectType;
 public enum DarkAura implements Castable {
     INSTANCE;
     private final Behaviour behaviour;
-    private final PotionEffect wither = new PotionEffect(PotionEffectType.WITHER, 40, 1);
+    private final PotionEffect wither = new PotionEffect(PotionEffectType.WITHER, 60, 1);
     private final PotionEffect weakness = new PotionEffect(PotionEffectType.WEAKNESS, 40, 2);
     private final PotionEffect slow = new PotionEffect(PotionEffectType.SLOW, 40, 0);
 

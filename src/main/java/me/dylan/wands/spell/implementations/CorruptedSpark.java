@@ -20,7 +20,7 @@ public enum CorruptedSpark implements Castable {
     CorruptedSpark() {
         this.behaviour = SparkSpell.newBuilder()
                 .setSpellEffectRadius(2.2F)
-                .setEntityDamage(8)
+                .setEntityDamage(12)
                 .setSpellRelativeEffects((loc, world) -> {
                     world.spawnParticle(Particle.SPELL_MOB, loc, 20, 0.6, 0.6, 0.6, 1, null, true);
                     world.spawnParticle(Particle.BLOCK_CRACK, loc, 10, 0.8, 0.3, 0.8, 0.4, obsidian, true);

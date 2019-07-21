@@ -45,7 +45,7 @@ public final class PhaseSpell extends Behaviour {
         for (LivingEntity entity : SpellEffectUtil.getNearbyLivingEntities(player, loc, entity -> !entity.hasMetadata(tagPhaseSpell), spellEffectRadius)) {
             entity.setMetadata(tagPhaseSpell, Common.METADATA_VALUE_TRUE);
             push(entity, loc, player);
-            affectedEntityEffects.accept(entity);
+            entityEffects.accept(entity);
             SpellEffectUtil.damageEffect(player, entity, affectedEntityDamage, wandDisplayName);
             new BukkitRunnable() {
                 @Override

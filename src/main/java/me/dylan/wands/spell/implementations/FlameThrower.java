@@ -16,7 +16,8 @@ public enum FlameThrower implements Castable {
                 .setCastSound(Sound.ENTITY_BLAZE_SHOOT)
                 .setProjectileAmount(8)
                 .setProjectileShootDelay(3)
-                .setEntityEffects(entity -> entity.setFireTicks(100))
+                .setEntityEffects(entity -> entity.setFireTicks(120))
+                .setEntityDamage(4)
                 .setSpellEffectRadius(3F)
                 .setSpellRelativeEffects((loc, world) -> {
                     world.spawnParticle(Particle.FLAME, loc, 2, 0.8, 0.8, 0.8, 0.1, null, true);

@@ -24,7 +24,7 @@ public enum Freeze implements Castable {
     Freeze() {
         this.behaviour = RaySpell.newBuilder(Target.SINGLE)
                 .setRayWidth(1)
-                .setEntityDamage(3)
+                .setEntityDamage(6)
                 .setMetersPerTick(2)
                 .setCastSound(Sound.ENTITY_LLAMA_SWAG)
                 .setSpellRelativeEffects((loc, world) -> {

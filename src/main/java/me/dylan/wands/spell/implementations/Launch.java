@@ -16,7 +16,7 @@ public enum Launch implements Castable {
     Launch() {
         this.behaviour = PhaseSpell.newBuilder(Target.MULTI)
                 .setSpellEffectRadius(2.5F)
-                .setEntityDamage(3)
+                .setEntityDamage(7)
                 .setEntityEffects(entity -> entity.setVelocity(new Vector(0, 1.2, 0)))
                 .setSpellRelativeEffects((loc, world) -> {
                     world.spawnParticle(Particle.SPELL_WITCH, loc, 30, 0.6, 0.7, 0.6, 0.4, null, true);

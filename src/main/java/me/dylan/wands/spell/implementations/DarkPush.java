@@ -22,7 +22,7 @@ public enum DarkPush implements Castable {
 
     DarkPush() {
         this.behaviour = PhaseSpell.newBuilder(Target.SINGLE)
-                .setEntityDamage(3)
+                .setEntityDamage(6)
                 .setCastSound(Sound.ENTITY_WITHER_SHOOT)
                 .setImpactSpeed(1.5F)
                 .setImpactCourse(ImpactCourse.PLAYER)
@@ -44,7 +44,7 @@ public enum DarkPush implements Castable {
                     loc.getWorld().spawnParticle(Particle.SMOKE_LARGE, loc, 15, 2, 0.2, 2, 0.05, null, true);
                     loc.createExplosion(0);
                     for (LivingEntity loopEntity : SpellEffectUtil.getNearbyLivingEntities(player, loc, 3)) {
-                        loopEntity.damage(2);
+                        loopEntity.damage(3);
                         if (!loopEntity.equals(entity)) {
                             loopEntity.setVelocity(loopEntity.getLocation().subtract(loc).toVector().normalize().multiply(0.5F));
                             loc.createExplosion(0);

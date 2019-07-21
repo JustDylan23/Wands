@@ -14,7 +14,7 @@ public enum FlameWave implements Castable {
     FlameWave() {
         this.behaviour = WaveSpell.newBuilder()
                 .setSpellEffectRadius(2.5F)
-                .setEntityDamage(2)
+                .setEntityDamage(6)
                 .setEffectDistance(20)
                 .setCastSound(CompoundSound.chain()
                         .add(Sound.ENTITY_BLAZE_SHOOT)

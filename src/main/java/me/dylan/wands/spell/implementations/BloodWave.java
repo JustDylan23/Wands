@@ -13,13 +13,13 @@ import org.bukkit.potion.PotionEffectType;
 public enum BloodWave implements Castable {
     INSTANCE;
     private final Behaviour behaviour;
-    private final PotionEffect wither = new PotionEffect(PotionEffectType.WITHER, 60, 4, false);
+    private final PotionEffect wither = new PotionEffect(PotionEffectType.WITHER, 80, 4, false);
 
     BloodWave() {
         this.behaviour = WaveSpell.newBuilder()
                 .setEffectDistance(30)
                 .setSpellEffectRadius(2F)
-                .setEntityDamage(4)
+                .setEntityDamage(5)
                 .setCastSound(CompoundSound.chain()
                         .add(Sound.ENTITY_FIREWORK_ROCKET_BLAST)
                         .add(Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, 1, 20, 5, 3)

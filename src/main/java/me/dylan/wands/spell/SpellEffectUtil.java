@@ -58,8 +58,7 @@ public class SpellEffectUtil {
     }
 
     @SuppressWarnings("SameParameterValue")
-    public static Location[] getCircleFromPlayerView(@Nonnull Player player, double radius, int points, double distance) {
-        Location location = player.getEyeLocation();
+    public static Location[] getCircleFromPlayerView(@Nonnull Location location, double radius, int points, double distance) {
         World world = location.getWorld();
         Location[] locations = new Location[points];
 

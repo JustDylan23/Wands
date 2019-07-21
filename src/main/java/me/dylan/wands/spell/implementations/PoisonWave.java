@@ -12,12 +12,12 @@ import org.bukkit.potion.PotionEffectType;
 public enum PoisonWave implements Castable {
     INSTANCE;
     private final Behaviour behaviour;
-    private final PotionEffect poison = new PotionEffect(PotionEffectType.POISON, 60, 4, false);
+    private final PotionEffect poison = new PotionEffect(PotionEffectType.POISON, 120, 4, false);
 
     PoisonWave() {
         this.behaviour = WaveSpell.newBuilder()
                 .setSpellEffectRadius(2F)
-                .setEntityDamage(2)
+                .setEntityDamage(6)
                 .setEffectDistance(20)
                 .setCastSound(Sound.ENTITY_EVOKER_CAST_SPELL)
                 .setEntityEffects(entity -> entity.addPotionEffect(poison, true))

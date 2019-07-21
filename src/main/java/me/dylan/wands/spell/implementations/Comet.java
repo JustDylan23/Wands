@@ -15,9 +15,9 @@ public enum Comet implements Castable {
 
     Comet() {
         this.behaviour = ProjectileSpell.newBuilder(SmallFireball.class, 3F)
-                .setSpellEffectRadius(4.5F)
-                .setEntityDamage(8)
-                .setEntityEffects(entity -> entity.setFireTicks(60))
+                .setSpellEffectRadius(4F)
+                .setEntityDamage(10)
+                .setEntityEffects(entity -> entity.setFireTicks(100))
                 .setImpactSpeed(1)
                 .setCastSound(Sound.ENTITY_FIREWORK_ROCKET_BLAST)
                 .setSpellRelativeEffects((loc, world) -> {

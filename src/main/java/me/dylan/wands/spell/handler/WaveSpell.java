@@ -4,7 +4,6 @@ import me.dylan.wands.spell.SpellEffectUtil;
 import me.dylan.wands.util.Common;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
@@ -52,7 +51,7 @@ public final class WaveSpell extends Behaviour {
                     SpellEffectUtil.getNearbyLivingEntities(player, loc, entity -> !entity.hasMetadata(tagWaveSpell), spellEffectRadius).forEach(entity -> {
                         entity.setMetadata(tagWaveSpell, Common.METADATA_VALUE_TRUE);
                         SpellEffectUtil.damageEffect(player, entity, affectedEntityDamage, wandDisplayName);
-                        affectedEntityEffects.accept(entity);
+                        entityEffects.accept(entity);
                         Bukkit.getScheduler().runTaskLater(plugin, () -> {
                             if (entity.isValid()) {
                                 entity.removeMetadata(tagWaveSpell, plugin);

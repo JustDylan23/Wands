@@ -43,7 +43,7 @@ public final class CircleSpell extends Behaviour {
         if (circlePlacement == CirclePlacement.RELATIVE) {
             locations = SpellEffectUtil.getHorizontalCircleFrom(location.clone().add(0, height, 0), circleRadius);
         } else {
-            locations = SpellEffectUtil.getCircleFromPlayerView(player, circleRadius, (int) Math.ceil(circleRadius * 2 * Math.PI), location.distance(player.getLocation()));
+            locations = SpellEffectUtil.getCircleFromPlayerView(player.getEyeLocation(), circleRadius, (int) Math.ceil(circleRadius * 2 * Math.PI), location.distance(player.getLocation()));
         }
         new BukkitRunnable() {
             int index = 0;

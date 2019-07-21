@@ -15,7 +15,7 @@ public enum DarkSpark implements Castable {
     DarkSpark() {
         this.behaviour = SparkSpell.newBuilder()
                 .setSpellEffectRadius(2.2F)
-                .setEntityDamage(8)
+                .setEntityDamage(12)
                 .setSpellRelativeEffects((loc, world) -> {
                     world.spawnParticle(Particle.SMOKE_LARGE, loc, 20, 0.4, 0.4, 0.4, 0.1, null, true);
                     world.spawnParticle(Particle.SMOKE_NORMAL, loc, 20, 0.4, 0.4, 0.4, 0.1, null, true);
