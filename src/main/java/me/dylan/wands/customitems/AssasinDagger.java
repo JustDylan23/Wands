@@ -70,7 +70,7 @@ public class AssasinDagger implements Listener {
                     victim.removePotionEffect(PotionEffectType.BLINDNESS);
                     victim.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 100, 0, false), true);
                     victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 100, 5, true), true);
-                    event.setDamage(4);
+                    event.setDamage(8);
                     player.getWorld().playSound(player.getLocation(), Sound.ENTITY_GUARDIAN_HURT, SoundCategory.MASTER, 3.0F, 1.0F);
                     player.getWorld().playSound(player.getLocation(), Sound.ENTITY_GUARDIAN_HURT, SoundCategory.MASTER, 3.0F, 0.3F);
                 }
@@ -94,10 +94,11 @@ public class AssasinDagger implements Listener {
                         if (player.isOnGround()) {
                             Bukkit.getScheduler().runTaskLater(plugin, () ->
                                     player.removeMetadata(leapKey, plugin), 2);
+                            player.sendMessage("landed");
                             cancel();
                         }
                     }
-                }.runTaskTimer(Main.getPlugin(), 3, 3);
+                }.runTaskTimer(Main.getPlugin(), 2, 2);
             }
         }
     }
@@ -119,7 +120,6 @@ public class AssasinDagger implements Listener {
             return;
         }
         if (player.hasMetadata(sneakKey)) {
-            uncover(player, "§6You are §cVisible");
         }
     }
 
