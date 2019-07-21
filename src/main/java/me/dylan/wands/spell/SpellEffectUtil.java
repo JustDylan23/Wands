@@ -3,6 +3,8 @@ package me.dylan.wands.spell;
 import com.destroystokyo.paper.block.TargetBlockInfo;
 import me.dylan.wands.Main;
 import org.bukkit.*;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
@@ -37,20 +39,58 @@ public class SpellEffectUtil {
         return info.getRelativeBlock().getLocation().toCenterLocation();
     }
 
-    public static List<Location> getCircleFrom(Location location, float radius) {
-        int density = (int) StrictMath.ceil(radius * 2 * Math.PI);
-        double increment = (2 * Math.PI) / density;
-        List<Location> locations = new ArrayList<>();
+    public static Location[] getHorizontalCircleFrom(Location location, float radius) {
+        int points = (int) Math.ceil(radius * 2 * Math.PI);
+        double increment = (2 * Math.PI) / points;
+        Location[] locations = new Location[points];
         double angle = 0;
         World world = location.getWorld();
         double originX = location.getX();
         double originY = location.getY();
         double originZ = location.getZ();
-        for (int i = 0; i < density; i++) {
-            angle += increment;
+        for (int i = 0; i < points; i++) {
             double newX = originX + (radius * Math.cos(angle));
             double newZ = originZ + (radius * Math.sin(angle));
-            locations.add(new Location(world, newX, originY, newZ));
+            locations[i] = new Location(world, newX, originY, newZ);
+            angle += increment;
+        }
+        return locations;
+    }
+
+    @SuppressWarnings("SameParameterValue")
+    public static Location[] getCircleFromPlayerView(@Nonnull Player player, double radius, int points, double distance) {
+        Location location = player.getEyeLocation();
+        World world = location.getWorld();
+        Location[] locations = new Location[points];
+
+        double oldX = location.getX();
+        double oldY = location.getY();
+        double oldZ = location.getZ();
+
+        double xzRotation = Math.toRadians(270.0f + location.getYaw());
+        double rotXZSin = Math.sin(xzRotation);
+        double rotXZCos = Math.cos(xzRotation);
+
+        double yRotation = Math.toRadians(180.0f - location.getPitch());
+        double rotYSin = Math.sin(yRotation);
+        double rotYCos = Math.cos(yRotation);
+
+        double angleIncrement = (2 * Math.PI) / points;
+        double angle = 0;
+        for (int i = 0; i < points; ++i) {
+            double sin = Math.sin(angle);
+            double cos = Math.cos(angle);
+
+            double x = radius * sin;
+            double y = radius * cos;
+
+            double yRotatedY = y * rotYCos - distance * rotYSin + oldY;
+            double yRotatedZ = y * rotYSin + distance * rotYCos;
+
+            double xyzRotatedX = yRotatedZ * rotXZCos - x * rotXZSin + oldX;
+            double xyzRotatedZ = yRotatedZ * rotXZSin + x * rotXZCos + oldZ;
+            locations[i] = new Location(world, xyzRotatedX, yRotatedY, xyzRotatedZ);
+            angle += angleIncrement;
         }
         return locations;
     }
@@ -118,9 +158,18 @@ public class SpellEffectUtil {
                                 + weaponDisplayName
                                 + "§7]"
                 ));
-                victim.setLastDamageCause(new EntityDamageByEntityEvent(attacker, victim, DamageCause.CUSTOM, amount * 10));
+                victim.setLastDamageCause(new EntityDamageByEntityEvent(attacker, victim, DamageCause.CUSTOM, amount));
             }
-            victim.damage(amount);
+            double armorDamageReduction = 1;
+            if (victim instanceof Player) {
+                Player player = (Player) victim;
+                AttributeInstance atr = player.getAttribute(Attribute.GENERIC_ARMOR);
+                if (atr != null) {
+                    armorDamageReduction = 1 - (3 * atr.getValue()) / 100D;
+                    player.sendMessage("armorDamageReduction: " + armorDamageReduction);
+                }
+            }
+            victim.damage(Math.round((amount * armorDamageReduction) * 10) / 10);
         }
     }
 

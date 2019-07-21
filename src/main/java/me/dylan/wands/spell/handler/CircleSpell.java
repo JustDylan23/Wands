@@ -1,7 +1,6 @@
 package me.dylan.wands.spell.handler;
 
 import me.dylan.wands.spell.SpellEffectUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -40,25 +39,30 @@ public final class CircleSpell extends Behaviour {
         } else if (circlePlacement == CirclePlacement.TARGET) {
             location = SpellEffectUtil.getSpellLocation(effectDistance, player);
         } else location = player.getLocation();
-        List<Location> locations = SpellEffectUtil.getCircleFrom(location.clone().add(0, height, 0), circleRadius);
+        Location[] locations;
+        if (circlePlacement == CirclePlacement.RELATIVE) {
+            locations = SpellEffectUtil.getHorizontalCircleFrom(location.clone().add(0, height, 0), circleRadius);
+        } else {
+            locations = SpellEffectUtil.getCircleFromPlayerView(player, circleRadius, (int) Math.ceil(circleRadius * 2 * Math.PI), location.distance(player.getLocation()));
+        }
         new BukkitRunnable() {
             int index = 0;
 
             @Override
             public void run() {
                 for (int i = 0; i < speed; i++) {
-                    index++;
-                    if (index >= locations.size()) {
+                    if (index >= locations.length) {
                         cancel();
                         applyEntityEffects(location, player, wandDisplayName);
                         break;
                     } else {
-                        Location loc = locations.get(index);
+                        Location loc = locations[index];
                         spellRelativeEffects.accept(loc, loc.getWorld());
                     }
+                    index++;
                 }
             }
-        }.runTaskTimer(plugin, 1, 1);
+        }.runTaskTimer(plugin, 0, 1);
         return true;
     }
 
