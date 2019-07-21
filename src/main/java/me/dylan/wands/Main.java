@@ -2,7 +2,7 @@ package me.dylan.wands;
 
 import me.dylan.wands.commandhandler.CommandHandler;
 import me.dylan.wands.commandhandler.TabCompletionHandler;
-import me.dylan.wands.customitems.AssasinDagger;
+import me.dylan.wands.customitems.AssassinDagger;
 import me.dylan.wands.customitems.CursedBow;
 import me.dylan.wands.pluginmeta.ConfigurableData;
 import me.dylan.wands.pluginmeta.ListenerRegistry;
@@ -51,7 +51,7 @@ public final class Main extends JavaPlugin {
         configurableData = new ConfigurableData();
         listenerRegistry.addToggleableListener(
                 new PlayerListener(),
-                new AssasinDagger(),
+                new AssassinDagger(),
                 new CursedBow()
         );
         log("Successfully enabled");

@@ -14,13 +14,13 @@ public enum ThunderRage implements Castable {
     private final Behaviour behaviour;
     private final PotionEffect wither = new PotionEffect(PotionEffectType.WITHER, 80, 1, false);
     private final PotionEffect slow = new PotionEffect(PotionEffectType.SLOW, 80, 3, false);
-    private final PotionEffect strenth = new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 300, 1, false);
+    private final PotionEffect strength = new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 300, 1, false);
     private final PotionEffect speed = new PotionEffect(PotionEffectType.SPEED, 60, 1, false);
 
     ThunderRage() {
         this.behaviour = AuraSpell.newBuilder(EffectFrequency.ONCE)
                 .setCastSound(Sound.ITEM_TOTEM_USE)
-                .setEntityDamage(4)
+                .setEntityDamage(7)
                 .setSpellEffectRadius(8F)
                 .setEffectDuration(40)
                 .setSpellRelativeEffects((loc, world) -> {
@@ -41,7 +41,7 @@ public enum ThunderRage implements Castable {
                     SpellEffectUtil.runTaskLater(() -> world.strikeLightningEffect(loc), 3, 3, 3);
                 })
                 .setReverseAuraEffects(player -> {
-                    player.addPotionEffect(strenth, true);
+                    player.addPotionEffect(strength, true);
                     player.addPotionEffect(speed, true);
                     World world = player.getWorld();
                     Location location = player.getLocation();

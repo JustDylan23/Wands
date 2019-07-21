@@ -16,7 +16,7 @@ public enum BloodSpark implements Castable {
     BloodSpark() {
         this.behaviour = SparkSpell.newBuilder()
                 .setSpellEffectRadius(2.2F)
-                .setEntityDamage(7)
+                .setEntityDamage(12)
                 .setSpellRelativeEffects((loc, world) -> {
                     world.spawnParticle(Particle.SMOKE_LARGE, loc, 20, 0.2, 0.2, 0.2, 0.1, null, true);
                     world.spawnParticle(Particle.BLOCK_CRACK, loc, 20, 0.6, 0.7, 0.6, 0.15, Material.REDSTONE_BLOCK.createBlockData(), true);

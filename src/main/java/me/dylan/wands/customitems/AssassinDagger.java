@@ -24,14 +24,17 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-public class AssasinDagger implements Listener {
+import java.util.UUID;
+
+public class AssassinDagger implements Listener {
 
     public static final String ID_TAG = "artifact-dagger";
     private final Main plugin = Main.getPlugin();
-    private final String leapKey = "therosJump";
-    private final String sneakKey = "therosInvisible";
+    private final String tagLeap = UUID.randomUUID().toString();
+    private final String tagSneak = UUID.randomUUID().toString();
+    private final String tagSprint = UUID.randomUUID().toString();
 
-    private final PotionEffect speed = new PotionEffect(PotionEffectType.SPEED, 20, 4, true);
+    private final PotionEffect speed = new PotionEffect(PotionEffectType.SPEED, 10, 4, true);
 
     private boolean hasDagger(Player player) {
         return ItemUtil.hasPersistentData(player.getInventory().getItemInMainHand(), ID_TAG, PersistentDataType.BYTE);
@@ -46,6 +49,13 @@ public class AssasinDagger implements Listener {
     private void onSpringToggle(PlayerToggleSprintEvent event) {
         Player player = event.getPlayer();
         if (hasDagger(player) && event.isSprinting()) {
+            sprintEffect(player);
+        }
+    }
+
+    private void sprintEffect(Player player) {
+        if (!player.hasMetadata(tagSprint)) {
+            player.setMetadata(tagSprint, Common.METADATA_VALUE_TRUE);
             new BukkitRunnable() {
                 public void run() {
                     if (player.isSprinting()) {
@@ -53,7 +63,11 @@ public class AssasinDagger implements Listener {
                         loc.getWorld().spawnParticle(Particle.SMOKE_LARGE, loc, 1, 0.1, 0.1, 0.1, 0.1, null, true);
                         loc.getWorld().spawnParticle(Particle.SMOKE_NORMAL, loc, 1, 0.1, 0.1, 0.1, 0.1, null, true);
                         player.addPotionEffect(speed, true);
-                    } else cancel();
+                    } else {
+                        cancel();
+                        player.removeMetadata(tagSprint, plugin);
+                        player.removePotionEffect(PotionEffectType.SPEED);
+                    }
                 }
             }.runTaskTimer(Main.getPlugin(), 1, 1);
         }
@@ -83,8 +97,9 @@ public class AssasinDagger implements Listener {
         Player player = event.getPlayer();
         if (hasDagger(player) && event.getHand() != null && event.getHand().equals(EquipmentSlot.HAND)) {
             Action a = event.getAction();
-            if ((a == Action.RIGHT_CLICK_AIR || a == Action.RIGHT_CLICK_BLOCK) && !player.hasMetadata(leapKey) && !player.hasMetadata(sneakKey)) {
-                player.setMetadata(leapKey, Common.METADATA_VALUE_TRUE);
+            if ((a == Action.RIGHT_CLICK_AIR || a == Action.RIGHT_CLICK_BLOCK) && !player.hasMetadata(tagLeap) && !player.hasMetadata(tagSneak)) {
+                player.setMetadata(tagLeap, Common.METADATA_VALUE_TRUE);
+                event.setCancelled(true);
                 player.getWorld().playSound(player.getLocation(), Sound.ENTITY_LLAMA_SWAG, SoundCategory.MASTER, 3.0F, 1.0F);
                 Vector direction = player.getLocation().getDirection().setY(0).normalize().setY(1.2);
                 player.setVelocity(direction);
@@ -92,8 +107,7 @@ public class AssasinDagger implements Listener {
                     @Override
                     public void run() {
                         if (player.isOnGround()) {
-                            Bukkit.getScheduler().runTaskLater(plugin, () ->
-                                    player.removeMetadata(leapKey, plugin), 2);
+                            Bukkit.getScheduler().runTaskLater(plugin, () -> player.removeMetadata(tagLeap, plugin), 2);
                             cancel();
                         }
                     }
@@ -105,9 +119,8 @@ public class AssasinDagger implements Listener {
     @EventHandler
     private void fallDamage(EntityDamageEvent event) {
         Entity entity = event.getEntity();
-        if (entity instanceof Player && event.getCause() == EntityDamageEvent.DamageCause.FALL && entity.hasMetadata(leapKey)) {
+        if (entity instanceof Player && event.getCause() == EntityDamageEvent.DamageCause.FALL && entity.hasMetadata(tagLeap)) {
             event.setCancelled(true);
-            entity.removeMetadata(leapKey, plugin);
         }
     }
 
@@ -118,7 +131,8 @@ public class AssasinDagger implements Listener {
             cover(player);
             return;
         }
-        if (player.hasMetadata(sneakKey)) {
+        if (player.hasMetadata(tagSneak)) {
+            uncover(player, "§6You are §cVisible");
         }
     }
 
@@ -127,7 +141,7 @@ public class AssasinDagger implements Listener {
         Entity entity = event.getEntity();
         if (entity instanceof Player) {
             Player player = (Player) entity;
-            if (player.hasMetadata(sneakKey)) {
+            if (player.hasMetadata(tagSneak)) {
                 uncover(player, "§6You have been §cUncovered");
                 Location location = player.getLocation();
                 location.getWorld().spawnParticle(Particle.VILLAGER_ANGRY, location, 5, 1, 1, 1, 1, null, true);
@@ -137,8 +151,8 @@ public class AssasinDagger implements Listener {
     }
 
     private void cover(Player player) {
-        if (!player.hasMetadata(sneakKey)) {
-            player.setMetadata(sneakKey, Common.METADATA_VALUE_TRUE);
+        if (!player.hasMetadata(tagSneak)) {
+            player.setMetadata(tagSneak, Common.METADATA_VALUE_TRUE);
             Location location = player.getLocation();
             location.getWorld().playSound(location, Sound.ENTITY_ZOMBIE_VILLAGER_CURE, 1.0f, 2f);
             location.getWorld().spawnParticle(Particle.SMOKE_LARGE, location, 15, 0.5, 0.2, 0.5, 0.1, null, true);
@@ -150,7 +164,7 @@ public class AssasinDagger implements Listener {
     }
 
     private void uncover(Player player, String message) {
-        player.removeMetadata(sneakKey, plugin);
+        player.removeMetadata(tagSneak, plugin);
         player.removePotionEffect(PotionEffectType.INVISIBILITY);
         player.removePotionEffect(PotionEffectType.REGENERATION);
         Location location = player.getLocation();
@@ -162,8 +176,12 @@ public class AssasinDagger implements Listener {
     private void onChangeSlot(PlayerItemHeldEvent event) {
         Player player = event.getPlayer();
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            if (player.isSneaking() && hasDagger(player)) {
-                cover(player);
+            if (hasDagger(player)) {
+                if (player.isSneaking()) {
+                    cover(player);
+                } else if (player.isSprinting()) {
+                    sprintEffect(player);
+                }
             }
         }, 1);
     }

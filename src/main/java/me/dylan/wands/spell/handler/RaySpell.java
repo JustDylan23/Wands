@@ -11,7 +11,6 @@ import org.bukkit.util.Vector;
 
 import java.util.List;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 public final class RaySpell extends Behaviour {
     private final int effectDistance, speed;
@@ -72,7 +71,7 @@ public final class RaySpell extends Behaviour {
         hitEffects.accept(loc, loc.getWorld());
         for (LivingEntity entity : SpellEffectUtil.getNearbyLivingEntities(player, loc, (target == Target.SINGLE) ? rayWidth : spellEffectRadius)) {
             push(entity, loc, player);
-            affectedEntityEffects.accept(entity);
+            entityEffects.accept(entity);
             SpellEffectUtil.damageEffect(player, entity, affectedEntityDamage, wandDisplayName);
             if (target == Target.SINGLE) break;
         }

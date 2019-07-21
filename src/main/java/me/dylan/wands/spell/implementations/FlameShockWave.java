@@ -14,7 +14,8 @@ public enum FlameShockWave implements Castable {
         this.behaviour = ShockWaveSpell.newBuilder()
                 .setCastSound(Sound.ENTITY_BLAZE_SHOOT)
                 .setWaveRadius(8)
-                .setEntityEffects(entity -> entity.setFireTicks(120))
+                .setEntityDamage(6)
+                .setEntityEffects(entity -> entity.setFireTicks(140))
                 .setSpellRelativeEffects((loc, world) -> world.spawnParticle(Particle.LAVA, loc, 1, 0, 0, 0, 0, null, true))
                 .setExpansionDelay(2)
                 .build();

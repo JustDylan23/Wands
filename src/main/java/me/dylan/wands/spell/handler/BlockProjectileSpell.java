@@ -80,7 +80,7 @@ public final class BlockProjectileSpell extends Behaviour implements Listener {
                             .forEach(entity -> {
                                 entity.setMetadata(tagBlockProjectile, Common.METADATA_VALUE_TRUE);
                                 Bukkit.getScheduler().runTaskLater(plugin, () -> entity.removeMetadata(tagBlockProjectile, plugin), 25L);
-                                affectedEntityEffects.accept(entity);
+                                entityEffects.accept(entity);
                                 SpellEffectUtil.damageEffect(player, entity, affectedEntityDamage, wandDisplayName);
                             });
                 } else cancel();

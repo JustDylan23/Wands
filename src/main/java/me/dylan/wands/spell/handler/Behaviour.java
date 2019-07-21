@@ -31,7 +31,7 @@ public abstract class Behaviour implements Listener {
     final SoundEffect castSounds;
     final BiConsumer<Location, World> spellRelativeEffects;
     final BiConsumer<Location, Player> spellRelativeEffects2;
-    final Consumer<LivingEntity> affectedEntityEffects;
+    final Consumer<LivingEntity> entityEffects;
 
     private final List<String> props = new ArrayList<>();
     private final ImpactCourse impactCourse;
@@ -43,7 +43,7 @@ public abstract class Behaviour implements Listener {
         this.castSounds = baseMeta.castSounds;
         this.spellRelativeEffects = baseMeta.spellRelativeEffects;
         this.spellRelativeEffects2 = baseMeta.spellRelativeEffects2;
-        this.affectedEntityEffects = baseMeta.entityEffects;
+        this.entityEffects = baseMeta.entityEffects;
         this.impactSpeed = baseMeta.impactSpeed;
         this.impactCourse = baseMeta.impactCourse;
 
@@ -84,7 +84,7 @@ public abstract class Behaviour implements Listener {
         SpellEffectUtil.getNearbyLivingEntities(player, center, spellEffectRadius).forEach(entity -> {
             push(entity, center, player);
             SpellEffectUtil.damageEffect(player, entity, affectedEntityDamage, wandDisplayName);
-            affectedEntityEffects.accept(entity);
+            entityEffects.accept(entity);
         });
     }
 

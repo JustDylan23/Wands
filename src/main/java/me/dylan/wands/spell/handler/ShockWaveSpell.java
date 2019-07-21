@@ -46,7 +46,7 @@ public final class ShockWaveSpell extends Behaviour {
                     for (LivingEntity entity : SpellEffectUtil.getNearbyLivingEntities(player, origin, entity -> !entity.hasMetadata(tagShockWave), currentRadius)) {
                         entity.setMetadata(tagShockWave, Common.METADATA_VALUE_TRUE);
                         SpellEffectUtil.damageEffect(player, entity, affectedEntityDamage, wandDisplayName);
-                        affectedEntityEffects.accept(entity);
+                        entityEffects.accept(entity);
                         push(entity, player.getLocation(), player);
                         Bukkit.getScheduler().runTaskLater(plugin, () -> {
                             entity.removeMetadata(tagShockWave, plugin);

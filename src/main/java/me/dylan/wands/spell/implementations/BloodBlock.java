@@ -16,8 +16,7 @@ public enum BloodBlock implements Castable {
     BloodBlock() {
         this.behaviour = MovingBlockSpell.newBuilder(Material.REDSTONE_BLOCK)
                 .setCastSound(Sound.ENTITY_FIREWORK_ROCKET_BLAST)
-                .setEntityDamage(7)
-                .setEntityEffects(Common.emptyConsumer())
+                .setEntityDamage(12)
                 .setSpellEffectRadius(3F)
                 .setSpellRelativeEffects((loc, world) -> {
                     world.spawnParticle(Particle.BLOCK_CRACK, loc, 10, 0.5, 0.5, 0.5, 0.15, Material.REDSTONE_BLOCK.createBlockData(), true);

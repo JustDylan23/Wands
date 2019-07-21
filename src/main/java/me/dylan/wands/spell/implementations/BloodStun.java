@@ -19,7 +19,7 @@ public enum BloodStun implements Castable {
     BloodStun() {
         this.behaviour = RaySpell.newBuilder(Target.SINGLE)
                 .setCastSound(Sound.ENTITY_FIREWORK_ROCKET_BLAST)
-                .setEntityDamage(3)
+                .setEntityDamage(8)
                 .setEntityEffects(entity -> {
                     entity.addPotionEffect(slow, true);
                     Location location = entity.getLocation();

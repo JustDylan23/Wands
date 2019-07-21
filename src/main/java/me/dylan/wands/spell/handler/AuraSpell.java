@@ -73,7 +73,7 @@ public final class AuraSpell extends Behaviour {
                                     push(entity, loc, player);
                                     SpellEffectUtil.damageEffect(player, entity, affectedEntityDamage, wandDisplayName);
                                     hasAffected = true;
-                                    affectedEntityEffects.accept(entity);
+                                    entityEffects.accept(entity);
 
                                 });
                     }

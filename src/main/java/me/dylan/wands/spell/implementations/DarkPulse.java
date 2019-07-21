@@ -16,6 +16,8 @@ public enum DarkPulse implements Castable {
 
     private final PotionEffect blind = new PotionEffect(PotionEffectType.BLINDNESS, 60, 0, false);
     private final PotionEffect slow = new PotionEffect(PotionEffectType.SLOW, 40, 2, false);
+    private final PotionEffect wither = new PotionEffect(PotionEffectType.WITHER, 40, 2, false);
+
 
     DarkPulse() {
         this.behaviour = RaySpell.newBuilder(Target.MULTI)
@@ -24,13 +26,12 @@ public enum DarkPulse implements Castable {
                 .setMetersPerTick(2)
                 .setImpactSpeed(1)
                 .setEntityEffects(entity -> {
-                    entity.setFireTicks(40);
                     entity.addPotionEffect(blind);
+                    entity.addPotionEffect(wither);
                     entity.addPotionEffect(slow);
                 })
-                .setEntityDamage(6)
+                .setEntityDamage(10)
                 .setCastSound(Sound.ENTITY_WITHER_SHOOT)
-                .setEntityEffects(entity -> entity.addPotionEffect(blind, true))
                 .setSpellRelativeEffects((loc, world) -> {
                     world.spawnParticle(Particle.SMOKE_LARGE, loc, 3, 0.4, 0.4, 0.4, 0.1, null, true);
                     world.spawnParticle(Particle.SMOKE_NORMAL, loc, 13, 0.8, 0.8, 0.8, 0.1, null, true);

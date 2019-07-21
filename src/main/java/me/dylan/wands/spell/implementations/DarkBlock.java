@@ -31,7 +31,7 @@ public enum DarkBlock implements Castable {
                     world.spawnParticle(Particle.SMOKE_LARGE, loc, 2, 0.2, 0.2, 0.2, 0.1, null, true);
                 })
                 .setSpellEffectRadius(3F)
-                .setEntityDamage(7)
+                .setEntityDamage(12)
                 .setImpactSpeed(0.7F)
                 .build();
     }

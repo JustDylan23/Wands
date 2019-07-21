@@ -19,7 +19,7 @@ public enum Confuse implements Castable {
     Confuse() {
         this.behaviour = SparkSpell.newBuilder()
                 .setSpellEffectRadius(3F)
-                .setEntityDamage(6)
+                .setEntityDamage(8)
                 .setEntityEffects(entity -> entity.addPotionEffect(confusion, true))
                 .setSpellRelativeEffects((loc, world) -> {
                     world.spawnParticle(Particle.SMOKE_LARGE, loc, 50, 1.4, 1.2, 1.4, 0.08, null, true);
