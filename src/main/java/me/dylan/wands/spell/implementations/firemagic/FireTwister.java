@@ -2,6 +2,7 @@ package me.dylan.wands.spell.implementations.firemagic;
 
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.handler.Behaviour;
+import me.dylan.wands.spell.handler.Behaviour.ImpactCourse;
 import me.dylan.wands.spell.handler.CircleSpell;
 import me.dylan.wands.spell.handler.CircleSpell.CirclePlacement;
 import org.bukkit.Particle;
@@ -18,7 +19,6 @@ public enum FireTwister implements Castable {
                 .setSpellEffectRadius(3F)
                 .setEffectDistance(30)
                 .setEntityEffects(entity -> {
-                    entity.setVelocity(entity.getVelocity().setY(0.5f));
                     entity.getLocation().createExplosion(0);
                     entity.setFireTicks(40);
                 })
@@ -30,7 +30,8 @@ public enum FireTwister implements Castable {
                     world.spawnParticle(Particle.LAVA, loc, 2, 0.3, 0.3, 0.3, 0, null, true);
                 })
                 .setImpactSpeed(1.1F)
-                .setCircleHeight(1)
+                .setImpactCourse(ImpactCourse.PLAYER)
+//                .setCircleHeight(1)
                 .build();
     }
 

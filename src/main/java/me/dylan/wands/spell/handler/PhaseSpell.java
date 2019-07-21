@@ -10,13 +10,13 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.UUID;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import java.util.function.Function;
+import java.util.function.Predicate;
 
 public final class PhaseSpell extends Behaviour {
     private final int effectDistance;
     private final String tagPhaseSpell;
     private final Target target;
-    private final Function<LivingEntity, Boolean> condition;
+    private final Predicate<LivingEntity> condition;
     private final Consumer<LivingEntity> duringPhaseEffect;
     private final BiConsumer<LivingEntity, Player> afterPhaseEffect;
 
@@ -50,7 +50,7 @@ public final class PhaseSpell extends Behaviour {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    if (!entity.isValid() || condition.apply(entity)) {
+                    if (!entity.isValid() || condition.test(entity)) {
                         afterPhaseEffect.accept(entity, player);
                         entity.removeMetadata(tagPhaseSpell, plugin);
                         cancel();
@@ -74,7 +74,7 @@ public final class PhaseSpell extends Behaviour {
 
         private final Target target;
         private int effectDistance;
-        private Function<LivingEntity, Boolean> condition = (entity) -> true;
+        private Predicate<LivingEntity> condition = (entity) -> true;
         private Consumer<LivingEntity> duringPhaseEffect = Common.emptyConsumer();
         private BiConsumer<LivingEntity, Player> afterPhaseEffect = (livingEntity, player) -> {
         };
@@ -98,7 +98,7 @@ public final class PhaseSpell extends Behaviour {
             return this;
         }
 
-        public Builder setStagePassCondition(Function<LivingEntity, Boolean> condition) {
+        public Builder setStagePassCondition(Predicate<LivingEntity> condition) {
             this.condition = condition;
             return this;
         }
