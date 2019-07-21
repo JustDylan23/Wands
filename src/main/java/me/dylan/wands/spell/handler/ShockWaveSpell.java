@@ -48,9 +48,7 @@ public final class ShockWaveSpell extends Behaviour {
                         SpellEffectUtil.damageEffect(player, entity, affectedEntityDamage, wandDisplayName);
                         entityEffects.accept(entity);
                         push(entity, player.getLocation(), player);
-                        Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                            entity.removeMetadata(tagShockWave, plugin);
-                        }, Math.round((waveRadius - currentRadius) * 2D * delay) + delay);
+                        Bukkit.getScheduler().runTaskLater(plugin, () -> entity.removeMetadata(tagShockWave, plugin), Math.round((waveRadius - currentRadius) * 2D * delay) + delay);
                     }
                 }
             }

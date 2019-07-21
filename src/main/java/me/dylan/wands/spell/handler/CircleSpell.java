@@ -5,11 +5,10 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.List;
-
 public final class CircleSpell extends Behaviour {
     private final int speed, height, effectDistance, circleRadius;
     private final CirclePlacement circlePlacement;
+    private final boolean requireLivingTarget;
 
     private CircleSpell(Builder builder) {
         super(builder.baseMeta);
@@ -18,12 +17,14 @@ public final class CircleSpell extends Behaviour {
         this.effectDistance = builder.effectDistance;
         this.circleRadius = builder.circleRadius;
         this.circlePlacement = builder.circlePlacement;
+        this.requireLivingTarget = builder.requireLivingTarget;
 
         addStringProperty("Radius", circleRadius, "meters");
         addStringProperty("Circle origin", circlePlacement);
         addStringProperty("Height", height, "meters");
         addStringProperty("Meters per tick", speed, "ticks");
         addStringProperty("Effect distance", effectDistance, "meters");
+        addStringProperty("Require Living Target", requireLivingTarget);
     }
 
     public static Builder newBuilder(CirclePlacement circlePlacement) {
@@ -37,14 +38,12 @@ public final class CircleSpell extends Behaviour {
         if (circlePlacement == CirclePlacement.RELATIVE) {
             location = player.getLocation();
         } else if (circlePlacement == CirclePlacement.TARGET) {
-            location = SpellEffectUtil.getSpellLocation(effectDistance, player);
+            location = SpellEffectUtil.getSpellLocation(effectDistance, player, requireLivingTarget);
+            if (location == null) {
+                return false;
+            }
         } else location = player.getLocation();
-        Location[] locations;
-        if (circlePlacement == CirclePlacement.RELATIVE) {
-            locations = SpellEffectUtil.getHorizontalCircleFrom(location.clone().add(0, height, 0), circleRadius);
-        } else {
-            locations = SpellEffectUtil.getCircleFromPlayerView(player.getEyeLocation(), circleRadius, (int) Math.ceil(circleRadius * 2 * Math.PI), location.distance(player.getLocation()));
-        }
+        Location[] locations = SpellEffectUtil.getHorizontalCircleFrom(location.clone().add(0, height, 0), circleRadius);
         new BukkitRunnable() {
             int index = 0;
 
@@ -75,6 +74,7 @@ public final class CircleSpell extends Behaviour {
         private final CirclePlacement circlePlacement;
         private int circleRadius, speed = 1;
         private int effectDistance, height;
+        private boolean requireLivingTarget = false;
 
         private Builder(CirclePlacement circlePlacement) {
             this.circlePlacement = circlePlacement;
@@ -107,6 +107,11 @@ public final class CircleSpell extends Behaviour {
 
         public Builder setEffectDistance(int distance) {
             this.effectDistance = distance;
+            return this;
+        }
+
+        public Builder requireLivingTarget(boolean b) {
+            this.requireLivingTarget = b;
             return this;
         }
     }

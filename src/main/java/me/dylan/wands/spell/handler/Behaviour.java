@@ -105,7 +105,7 @@ public abstract class Behaviour implements Listener {
 
     public static abstract class AbstractBuilder<T extends AbstractBuilder<T>> {
 
-        BaseMeta baseMeta = new BaseMeta();
+        final BaseMeta baseMeta = new BaseMeta();
 
         AbstractBuilder() {
         }
@@ -137,7 +137,7 @@ public abstract class Behaviour implements Listener {
         }
 
         /**
-         * Sets the damage that will ne dealth to the entities that are hit by the spell.
+         * Sets the damage that will ne dealt to the entities that are hit by the spell.
          *
          * @param damage The amount of damage
          * @return this

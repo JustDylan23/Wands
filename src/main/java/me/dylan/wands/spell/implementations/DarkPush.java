@@ -22,6 +22,7 @@ public enum DarkPush implements Castable {
 
     DarkPush() {
         this.behaviour = PhaseSpell.newBuilder(Target.SINGLE)
+                .requireLivingTarget(true)
                 .setEntityDamage(6)
                 .setCastSound(Sound.ENTITY_WITHER_SHOOT)
                 .setImpactSpeed(1.5F)

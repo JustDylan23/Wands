@@ -4,6 +4,7 @@ import me.dylan.wands.Main;
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.handler.Behaviour;
 import me.dylan.wands.spell.handler.SparkSpell;
+import me.dylan.wands.spell.handler.SparkSpell.Target;
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -14,7 +15,7 @@ public enum Spark implements Castable {
     private final Behaviour behaviour;
 
     Spark() {
-        this.behaviour = SparkSpell.newBuilder()
+        this.behaviour = SparkSpell.newBuilder(Target.MULTI)
                 .setSpellEffectRadius(2.2F)
                 .setEntityDamage(12)
                 .setSpellRelativeEffects((loc, world) -> {

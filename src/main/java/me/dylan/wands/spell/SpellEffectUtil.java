@@ -12,27 +12,36 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class SpellEffectUtil {
-    private static final Main plugin = Main.getPlugin();
+    private static Main plugin = Main.getPlugin();
+    public static final String UNTARGETABLE = UUID.randomUUID().toString();
 
     private SpellEffectUtil() {
         throw new UnsupportedOperationException();
     }
 
-    @SuppressWarnings("ConstantConditions")
-    public static Location getSpellLocation(int effectDistance, Player player) {
+    @Nullable
+    public static Location getSpellLocation(int effectDistance, Player player, boolean requireLivingTarget) {
         if (effectDistance == 0) return player.getLocation();
         Entity entity = player.getTargetEntity(effectDistance);
-        if (entity != null) {
+        if (entity instanceof LivingEntity && !(entity instanceof ArmorStand) && !entity.hasMetadata(UNTARGETABLE)) {
             return entity.getLocation().add(0, 0.5, 0).toCenterLocation();
+        } else if (requireLivingTarget) {
+            player.sendActionBar("§cselect a valid target");
+            return null;
         }
         TargetBlockInfo info = player.getTargetBlockInfo(effectDistance);
+        if (info == null) {
+            return null;
+        }
         if (info.getBlock().getType() == Material.AIR) {
             return info.getBlock().getLocation().toCenterLocation();
         }
@@ -186,5 +195,15 @@ public class SpellEffectUtil {
             }.runTaskTimer(plugin, 0L, 1L);
         }
         victim.setFireTicks(ticks);
+    }
+
+    public static Location getFirstPassableBlockAbove(Location location) {
+        if (location.getBlock().isPassable()) return location;
+        Location loc = new Location(location.getWorld(), location.getX(), location.getY(), location.getZ());
+        for (int i = (int) loc.getY(); i < 256; i++) {
+            loc.add(0, 1, 0);
+            if (loc.getBlock().isPassable()) return loc;
+        }
+        return loc;
     }
 }

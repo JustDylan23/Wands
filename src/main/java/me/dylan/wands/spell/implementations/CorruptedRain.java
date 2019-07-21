@@ -6,6 +6,7 @@ import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.SpellEffectUtil;
 import me.dylan.wands.spell.handler.Behaviour;
 import me.dylan.wands.spell.handler.SparkSpell;
+import me.dylan.wands.spell.handler.SparkSpell.Target;
 import me.dylan.wands.spell.spelleffect.sound.CompoundSound;
 import me.dylan.wands.util.Common;
 import org.bukkit.*;
@@ -34,7 +35,7 @@ public enum CorruptedRain implements Castable, Listener {
 
     CorruptedRain() {
         ListenerRegistry.addListener(this);
-        this.behaviour = SparkSpell.newBuilder()
+        this.behaviour = SparkSpell.newBuilder(Target.MULTI)
                 .setCastSound(CompoundSound.chain()
                         .add(Sound.ENTITY_ARROW_SHOOT)
                         .add(Sound.BLOCK_STONE_PLACE)

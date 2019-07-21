@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -101,6 +102,13 @@ public class PlayerListener implements Listener {
     @EventHandler
     private void onQuit(PlayerQuitEvent event) {
         lastUsed.remove(event.getPlayer());
+    }
+
+    @EventHandler
+    private void onBlockBreak(BlockBreakEvent event) {
+        if (SpellManagementUtil.isWand(event.getPlayer().getInventory().getItemInMainHand())) {
+            event.setCancelled(true);
+        }
     }
 
     private void sendRemainingTime(Player player, int remaining) {

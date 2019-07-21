@@ -19,6 +19,7 @@ public final class PhaseSpell extends Behaviour {
     private final Predicate<LivingEntity> condition;
     private final Consumer<LivingEntity> duringPhaseEffect;
     private final BiConsumer<LivingEntity, Player> afterPhaseEffect;
+    private final boolean requireLivingTarget;
 
     private PhaseSpell(Builder builder) {
         super(builder.baseMeta);
@@ -28,9 +29,11 @@ public final class PhaseSpell extends Behaviour {
         this.afterPhaseEffect = builder.afterPhaseEffect;
         this.target = builder.target;
         this.tagPhaseSpell = UUID.randomUUID().toString();
+        this.requireLivingTarget = builder.requireLivingTarget;
 
         addStringProperty("Effect distance", effectDistance, "meters");
         addStringProperty("Target", target, "meters");
+        addStringProperty("Require Living Target", requireLivingTarget);
     }
 
     public static Builder newBuilder(Target target) {
@@ -39,7 +42,10 @@ public final class PhaseSpell extends Behaviour {
 
     @Override
     public boolean cast(Player player, String wandDisplayName) {
-        Location loc = SpellEffectUtil.getSpellLocation(effectDistance, player);
+        Location loc = SpellEffectUtil.getSpellLocation(effectDistance, player, requireLivingTarget);
+        if (loc == null) {
+            return false;
+        }
         castSounds.play(player);
         spellRelativeEffects.accept(loc, loc.getWorld());
         for (LivingEntity entity : SpellEffectUtil.getNearbyLivingEntities(player, loc, entity -> !entity.hasMetadata(tagPhaseSpell), spellEffectRadius)) {
@@ -78,6 +84,7 @@ public final class PhaseSpell extends Behaviour {
         private Consumer<LivingEntity> duringPhaseEffect = Common.emptyConsumer();
         private BiConsumer<LivingEntity, Player> afterPhaseEffect = (livingEntity, player) -> {
         };
+        private boolean requireLivingTarget = false;
 
         private Builder(Target target) {
             this.target = target;
@@ -110,6 +117,11 @@ public final class PhaseSpell extends Behaviour {
 
         public Builder setEffectAfterPhase(BiConsumer<LivingEntity, Player> effect) {
             this.afterPhaseEffect = effect;
+            return this;
+        }
+
+        public Builder requireLivingTarget(boolean b) {
+            this.requireLivingTarget = b;
             return this;
         }
     }
