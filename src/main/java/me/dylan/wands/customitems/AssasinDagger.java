@@ -94,7 +94,6 @@ public class AssasinDagger implements Listener {
                         if (player.isOnGround()) {
                             Bukkit.getScheduler().runTaskLater(plugin, () ->
                                     player.removeMetadata(leapKey, plugin), 2);
-                            player.sendMessage("landed");
                             cancel();
                         }
                     }
