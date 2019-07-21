@@ -57,6 +57,7 @@ public final class MovingBlockSpell extends Behaviour implements Listener {
         return selectedBlock.containsKey(player) ? launchBlock(player) : prepareBlock(player);
     }
 
+    @SuppressWarnings("SameReturnValue")
     private boolean prepareBlock(Player player) {
         Block block = player.getTargetBlock(10);
         if (block != null && block.getType() != Material.AIR) {

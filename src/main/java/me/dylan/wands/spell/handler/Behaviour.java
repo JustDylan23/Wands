@@ -103,6 +103,7 @@ public abstract class Behaviour implements Listener {
         PLAYER
     }
 
+    @SuppressWarnings("unused")
     public static abstract class AbstractBuilder<T extends AbstractBuilder<T>> {
 
         final BaseMeta baseMeta = new BaseMeta();

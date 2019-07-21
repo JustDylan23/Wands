@@ -36,7 +36,7 @@ public class CommandHandler implements CommandExecutor {
                         sender.sendMessage("§6Spells (" + spellTypes.length + "): §r" + stringJoiner);
                         return true;
                     case "info":
-                        sender.sendMessage("§e ---- §6Wands§e ----");
+                        sender.sendMessage("§e---- §6Wands§e ----");
                         sender.sendMessage("§6Created by: §e_JustDylan_");
                         sender.sendMessage("§6Current version:§e " + Main.getPlugin().getDescription().getVersion());
                         return true;
