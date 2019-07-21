@@ -9,7 +9,6 @@ import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -21,7 +20,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class SpellEffectUtil {
-    private static Main plugin = Main.getPlugin();
+    private static final Main plugin = Main.getPlugin();
     public static final String UNTARGETABLE = UUID.randomUUID().toString();
 
     private SpellEffectUtil() {
@@ -178,23 +177,6 @@ public class SpellEffectUtil {
             }
             victim.damage(Math.round((amount * armorDamageReduction) * 10) / 10);
         }
-    }
-
-    public static void setFireTicks(Player attacker, Damageable victim, int ticks) {
-        if (victim instanceof Player) {
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    if (victim.getFireTicks() == -20) {
-                        cancel();
-                    } else {
-                        victim.setLastDamageCause(new EntityDamageByEntityEvent(attacker, victim, DamageCause.CUSTOM, 1));
-                        victim.sendMessage("ticks = " + victim.getFireTicks());
-                    }
-                }
-            }.runTaskTimer(plugin, 0L, 1L);
-        }
-        victim.setFireTicks(ticks);
     }
 
     public static Location getFirstPassableBlockAbove(Location location) {
