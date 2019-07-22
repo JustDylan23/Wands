@@ -40,7 +40,7 @@ public enum SpellType {
     DARK_SPARK(DarkSpark.INSTANCE),
 
     CORRUPTED_WAVE(CorruptedWave.INSTANCE),
-    CORRUPTED_WOLFS(CorruptedWolfs.INSTANCE),
+    CORRUPTED_WOLFS(CorruptedWolves.INSTANCE),
     CORRUPTED_RAIN(CorruptedRain.INSTANCE),
     CORRUPTED_SHOCK_WAVE(CorruptedShockWave.INSTANCE),
     CORRUPTED_LAUNCH(CorruptedLaunch.INSTANCE),

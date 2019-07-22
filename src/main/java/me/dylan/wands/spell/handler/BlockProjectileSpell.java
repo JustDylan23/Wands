@@ -6,6 +6,7 @@ import me.dylan.wands.util.Common;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
@@ -15,13 +16,17 @@ import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 public final class BlockProjectileSpell extends Behaviour implements Listener {
+    private static final Set<Entity> projectiles = new HashSet<>();
     private final Material material;
     private final float speed;
     private final String tagBlockProjectile;
     private final int amount, delay;
+
 
     private BlockProjectileSpell(Builder builder) {
         super(builder.baseMeta);
@@ -35,6 +40,9 @@ public final class BlockProjectileSpell extends Behaviour implements Listener {
 
         addStringProperty("Material", material);
         addStringProperty("Speed", speed);
+
+        plugin.addDisableLogic(() -> projectiles.forEach(Entity::remove));
+
     }
 
     public static Builder newBuilder(Material material, float speed) {
@@ -67,6 +75,7 @@ public final class BlockProjectileSpell extends Behaviour implements Listener {
         fallingBlock.setVelocity(velocity);
         fallingBlock.setMetadata(tagBlockProjectile, Common.METADATA_VALUE_TRUE);
         fallingBlock.setDropItem(false);
+        projectiles.add(fallingBlock);
         return fallingBlock;
     }
 
@@ -92,6 +101,7 @@ public final class BlockProjectileSpell extends Behaviour implements Listener {
     private void onBlockFall(EntityChangeBlockEvent event) {
         if ((event.getEntityType() == EntityType.FALLING_BLOCK) && event.getEntity().hasMetadata(tagBlockProjectile)) {
             event.setCancelled(true);
+            projectiles.remove(event.getEntity());
         }
     }
 

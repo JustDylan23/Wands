@@ -7,25 +7,22 @@ import me.dylan.wands.customitems.CursedBow;
 import me.dylan.wands.pluginmeta.ConfigurableData;
 import me.dylan.wands.pluginmeta.ListenerRegistry;
 import me.dylan.wands.spell.PlayerListener;
-import me.dylan.wands.spell.handler.MovingBlockSpell;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 
 public final class Main extends JavaPlugin {
 
     public static final String PREFIX = "§8§l[§6§lWands§8§l]§r ";
     private static Main plugin;
+    private final Set<Runnable> disableLogic = new HashSet<>();
     //instances of classes accessible via main class
     private ConfigurableData configurableData;
     private ListenerRegistry listenerRegistry;
-    private final Map<String, Runnable> disableLogic = new HashMap<>();
 
     public static Main getPlugin() {
         return plugin;
@@ -66,16 +63,15 @@ public final class Main extends JavaPlugin {
     @Override
     public void onDisable() {
         saveConfig();
-        MovingBlockSpell.restorePendingBlocks();
-        disableLogic.values().forEach(Runnable::run);
+        disableLogic.forEach(Runnable::run);
     }
 
-    public void addDisableLogic(String key, Runnable logic) {
-        this.disableLogic.put(key, logic);
+    public void addDisableLogic(Runnable runnable) {
+        this.disableLogic.add(runnable);
     }
 
-    public void removeDisableLogic(String key) {
-        this.disableLogic.remove(key);
+    public void removeDisableLogic(Runnable runnable) {
+        this.disableLogic.remove(runnable);
     }
 
     public ConfigurableData getConfigurableData() {

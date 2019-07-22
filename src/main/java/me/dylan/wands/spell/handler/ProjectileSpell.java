@@ -18,11 +18,14 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public final class ProjectileSpell<T extends Projectile> extends Behaviour implements Listener {
+    private static final Set<Projectile> projectiles = new HashSet<>();
     private final Class<T> projectile;
     private final Consumer<T> projectileProps;
     private final BiConsumer<Location, World> hitEffects;
@@ -43,6 +46,8 @@ public final class ProjectileSpell<T extends Projectile> extends Behaviour imple
         addStringProperty("Projectile", projectile.getSimpleName());
         addStringProperty("Speed", speed);
         addStringProperty("Life time", lifeTime, "ticks");
+
+        plugin.addDisableLogic(() -> projectiles.forEach(Entity::remove));
     }
 
     public static <T extends Projectile> Builder<T> newBuilder(Class<T> projectileClass, float speed) {
@@ -54,6 +59,7 @@ public final class ProjectileSpell<T extends Projectile> extends Behaviour imple
         castSounds.play(player);
         Vector velocity = player.getLocation().getDirection().multiply(speed);
         T projectile = player.launchProjectile(this.projectile, velocity);
+        projectiles.add(projectile);
         trail(projectile);
         projectileProps.accept(projectile);
         projectile.setMetadata(tagProjectileSpell, new FixedMetadataValue(plugin, wandDisplayName));
@@ -63,6 +69,7 @@ public final class ProjectileSpell<T extends Projectile> extends Behaviour imple
 
     private void hit(Player player, Projectile projectile) {
         projectile.remove();
+        projectiles.remove(projectile);
         Location loc = projectile.getLocation();
         hitEffects.accept(loc, loc.getWorld());
         applyEntityEffects(loc, player, projectile.getMetadata(tagProjectileSpell).get(0).asString());

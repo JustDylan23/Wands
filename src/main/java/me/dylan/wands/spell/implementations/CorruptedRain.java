@@ -22,6 +22,9 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
+import javax.annotation.Nonnull;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 public enum CorruptedRain implements Castable, Listener {
@@ -32,6 +35,8 @@ public enum CorruptedRain implements Castable, Listener {
     private final PotionEffect blind = new PotionEffect(PotionEffectType.BLINDNESS, 160, 0, false);
     private final BlockData obsidian = Material.OBSIDIAN.createBlockData();
     private final String tagCorruptedRain = UUID.randomUUID().toString();
+    private final Main plugin = Main.getPlugin();
+    private final Set<Arrow> arrows = new HashSet<>();
 
     CorruptedRain() {
         ListenerRegistry.addListener(this);
@@ -44,6 +49,8 @@ public enum CorruptedRain implements Castable, Listener {
                 .setEffectDistance(30)
                 .setSpellRelativeEffects2(this::spawnArrows)
                 .build();
+
+        plugin.addDisableLogic(() -> arrows.forEach(Entity::remove));
     }
 
     @Override
@@ -51,7 +58,7 @@ public enum CorruptedRain implements Castable, Listener {
         return behaviour;
     }
 
-    private void spawnArrows(Location location, Player player) {
+    private void spawnArrows(@Nonnull Location location, Player player) {
         location.add(0, 5, 0);
         World world = location.getWorld();
         Location particleLoc = location.clone().add(0, 2, 0);
@@ -75,9 +82,10 @@ public enum CorruptedRain implements Castable, Listener {
                     arrow.addCustomEffect(wither, true);
                     arrow.setVelocity(new Vector(SpellEffectUtil.randomize(0.4), -1, SpellEffectUtil.randomize(0.4)));
                     arrow.setMetadata(tagCorruptedRain, Common.METADATA_VALUE_TRUE);
+                    arrows.add(arrow);
                 }
             }
-        }.runTaskTimer(Main.getPlugin(), 0, 1);
+        }.runTaskTimer(plugin, 0, 1);
     }
 
     @EventHandler
@@ -85,6 +93,7 @@ public enum CorruptedRain implements Castable, Listener {
         Entity entity = event.getEntity();
         if (entity instanceof Arrow && entity.hasMetadata(tagCorruptedRain)) {
             entity.remove();
+            arrows.remove(entity);
         }
     }
 

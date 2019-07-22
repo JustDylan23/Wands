@@ -20,8 +20,8 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class SpellEffectUtil {
-    private static final Main plugin = Main.getPlugin();
     public static final String UNTARGETABLE = UUID.randomUUID().toString();
+    private static final Main plugin = Main.getPlugin();
 
     private SpellEffectUtil() {
         throw new UnsupportedOperationException();

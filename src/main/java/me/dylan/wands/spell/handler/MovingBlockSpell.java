@@ -23,8 +23,8 @@ import java.util.function.BiConsumer;
 
 public final class MovingBlockSpell extends Behaviour implements Listener {
 
-    private static final List<Block> effectedBlocks = new ArrayList<>();
-    private static final List<BlockRestorer> PENDING = new ArrayList<>();
+    private static final Set<Block> effectedBlocks = new HashSet<>();
+    private static final Set<BlockRestorer> pending = new HashSet<>();
     private final String tagUnbreakable, tagFallingBlock;
     private final Material material;
     private final BiConsumer<Location, World> hitEffects;
@@ -42,10 +42,8 @@ public final class MovingBlockSpell extends Behaviour implements Listener {
         this.tagFallingBlock = UUID.randomUUID().toString();
 
         addStringProperty("Material", material);
-    }
 
-    public static void restorePendingBlocks() {
-        MovingBlockSpell.PENDING.forEach(BlockRestorer::cancel);
+        plugin.addDisableLogic(() -> pending.forEach(BlockRestorer::cancel));
     }
 
     public static Builder newBuilder(Material material) {
@@ -182,7 +180,7 @@ public final class MovingBlockSpell extends Behaviour implements Listener {
                     } else cancel();
                 }
             }.runTaskTimer(plugin, 1, 1);
-            PENDING.add(this);
+            pending.add(this);
         }
 
         void earlyRun() {
@@ -202,7 +200,7 @@ public final class MovingBlockSpell extends Behaviour implements Listener {
                 state.removeMetadata(parent.tagUnbreakable, plugin);
                 state.update(true);
                 parent.selectedBlock.remove(player);
-                PENDING.remove(this);
+                pending.remove(this);
             }
         }
     }
