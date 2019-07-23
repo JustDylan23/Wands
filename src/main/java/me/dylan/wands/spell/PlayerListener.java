@@ -13,6 +13,8 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerAnimationEvent;
+import org.bukkit.event.player.PlayerAnimationType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.EquipmentSlot;
@@ -42,14 +44,26 @@ public class PlayerListener implements Listener {
     }
 
     @EventHandler
+    private void onLeftClick(PlayerAnimationEvent event) {
+        Player player = event.getPlayer();
+        if (event.getAnimationType() == PlayerAnimationType.ARM_SWING && player.getGameMode() == GameMode.ADVENTURE && player.hasPermission("wands.use")) {
+            ItemStack itemStack = player.getInventory().getItemInMainHand();
+            if (SpellManagementUtil.isWand(itemStack)) {
+                SpellManagementUtil.castSpell(player, itemStack);
+            }
+        }
+    }
+
+    @EventHandler
     private void onPlayerInteract(PlayerInteractEvent event) {
         Action action = event.getAction();
         Player player = event.getPlayer();
-        if (action == Action.PHYSICAL || player.getGameMode() == GameMode.SPECTATOR) return;
+        GameMode gameMode = player.getGameMode();
+        if (action == Action.PHYSICAL || gameMode == GameMode.SPECTATOR) return;
         ItemStack itemStack = player.getInventory().getItemInMainHand();
         if (event.getHand() == EquipmentSlot.HAND && SpellManagementUtil.isWand(itemStack)) {
             event.setCancelled(true);
-            if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK) {
+            if (gameMode != GameMode.ADVENTURE && (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK)) {
                 castWithCooldown(player, itemStack);
             } else if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) {
                 SpellManagementUtil.nextSpell(player, itemStack);
