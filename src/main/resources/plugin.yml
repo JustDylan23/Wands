@@ -11,5 +11,4 @@ commands:
     description: The main command for the wands plugin.
     usage: /<command> <arguments>
     permission: wands.command
-    permission-message: You don't have wands.command
 
