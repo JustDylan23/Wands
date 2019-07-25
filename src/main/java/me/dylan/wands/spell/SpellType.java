@@ -1,9 +1,10 @@
 package me.dylan.wands.spell;
 
+import me.dylan.wands.spell.handler.MySomething;
 import me.dylan.wands.spell.implementations.*;
 
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public enum SpellType {
     COMET(Comet.INSTANCE),
@@ -44,7 +45,9 @@ public enum SpellType {
     CORRUPTED_RAIN(CorruptedRain.INSTANCE),
     CORRUPTED_SHOCK_WAVE(CorruptedShockWave.INSTANCE),
     CORRUPTED_LAUNCH(CorruptedLaunch.INSTANCE),
-    CORRUPTED_SPARK(CorruptedSpark.INSTANCE);
+    CORRUPTED_SPARK(CorruptedSpark.INSTANCE),
+
+    JETP(new MySomething());
 
     public final Castable castable;
 
@@ -52,24 +55,22 @@ public enum SpellType {
         this.castable = castable;
     }
 
-    private static Optional<Castable> getSpell(String name) {
-        if (name == null) return Optional.empty();
+    @Nullable
+    public static Castable getSpell(@Nonnull String name) {
         try {
-            return Optional.of(SpellType.valueOf(name).castable);
+            return SpellType.valueOf(name.toUpperCase()).castable;
         } catch (IllegalArgumentException e) {
-            return Optional.empty();
+            return null;
         }
     }
 
-    public static Castable[] getSpells(String unparsedArray) throws NoSuchElementException {
-        String[] parsedKeys = unparsedArray.split(";");
-        Castable[] castables = new Castable[parsedKeys.length];
-        for (int i = 0; i < parsedKeys.length; i++) {
-            String spellName = parsedKeys[i];
-            castables[i] = getSpell(spellName).orElseThrow(() ->
-                    new NoSuchElementException("Castable with identifier " + spellName + " is not declared!"));
+    @Nullable
+    public static SpellType getSpellType(@Nonnull String name) {
+        try {
+            return SpellType.valueOf(name.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return null;
         }
-        return castables;
     }
 
     public String getName() {

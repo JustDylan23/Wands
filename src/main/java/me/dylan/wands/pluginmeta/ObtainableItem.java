@@ -131,6 +131,14 @@ public enum ObtainableItem {
         );
         SpellManagementUtil.setSpellBrowseParticles(itemStack, BrowseParticle.PARTICLE_CORRUPTED);
         return itemStack;
+    })),
+    JETP_WAND(ItemUtil.getItemStack(() -> {
+        ItemStack itemStack = new ItemStack(Material.POTATO);
+        ItemUtil.setName(itemStack, "&4&lE&c&lp&6&li&e&lc&2&l &a&lJ&b&le&3&lt&1&lp&9&l &d&lW&4&la&c&ln&6&ld");
+        ItemUtil.setLore(itemStack, "A wand containing spells", "which are created by ", "jetp250");
+        SpellManagementUtil.setAsWand(itemStack);
+        SpellManagementUtil.setSpells(itemStack, SpellType.JETP);
+        return itemStack;
     }));
 
     private static final String[] names = Arrays.stream(values()).map(Enum::toString).toArray(String[]::new);
@@ -146,7 +154,7 @@ public enum ObtainableItem {
     }
 
     public static void openInventory(Player player) {
-        Inventory inventory = Bukkit.createInventory(null, InventoryType.DISPENSER, Main.PREFIX);
+        Inventory inventory = Bukkit.createInventory(null, InventoryType.CHEST, Main.PREFIX);
         for (ObtainableItem obtainableItem : ObtainableItem.values()) {
             inventory.addItem(obtainableItem.itemStack);
         }

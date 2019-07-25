@@ -1,25 +1,17 @@
-package me.dylan.wands.commandhandler;
+package me.dylan.wands.commandhandler.tabcompleters;
 
+import me.dylan.wands.commandhandler.BaseCompleter;
 import me.dylan.wands.pluginmeta.ObtainableItem;
 import me.dylan.wands.spell.SpellType;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
-public class TabCompletionHandler implements TabCompleter {
-
-    private List<String> validCompletions(String value, String... values) {
-        return Arrays.stream(values)
-                .filter(s -> s.toLowerCase().startsWith(value))
-                .map(String::toLowerCase)
-                .collect(Collectors.toList());
-    }
+public class WandsComplete extends BaseCompleter {
 
     @Override
     public List<String> onTabComplete(@Nonnull CommandSender sender, @Nonnull Command command, @Nonnull String alias, @Nonnull String[] args) {

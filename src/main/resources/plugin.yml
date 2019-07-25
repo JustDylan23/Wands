@@ -9,6 +9,27 @@ commands:
   wands:
     aliases: [wd]
     description: The main command for the wands plugin.
-    usage: /<command> <arguments>
+    usage: /wands <arguments>
     permission: wands.command
+  createwand:
+    aliases: [wd]
+    description: Transform held item into a wand.
+    usage: /createwand <name>
+    permission: wands.create
+  bind:
+    description: Bind spells to a wand.
+    usage: /bind <spell>
+    permission: wands.bind
+  bindall:
+    description: Binds all spells to a wand.
+    usage: /bindall <spell>
+    permission: wands.bind
+  unbind:
+    description: Unbind spells from a wand.
+    usage: /unbind <spell>
+    permission: wands.unbind
+  unbindall:
+    description: Unbinds spells from a wand.
+    usage: /unbindall
+    permission: wands.unbind
 

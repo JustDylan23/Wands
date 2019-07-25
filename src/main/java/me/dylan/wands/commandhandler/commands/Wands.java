@@ -1,24 +1,34 @@
-package me.dylan.wands.commandhandler;
+package me.dylan.wands.commandhandler.commands;
 
 import me.dylan.wands.Main;
+import me.dylan.wands.commandhandler.BaseCommand;
 import me.dylan.wands.pluginmeta.ConfigurableData;
 import me.dylan.wands.pluginmeta.ObtainableItem;
 import me.dylan.wands.spell.SpellType;
 import me.dylan.wands.spell.handler.Behaviour;
+import me.dylan.wands.util.ItemUtil;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
 
 import javax.annotation.Nonnull;
 import java.util.StringJoiner;
 
-public class CommandHandler implements CommandExecutor {
+public class Wands extends BaseCommand {
     @Override
-    public boolean onCommand(@Nonnull CommandSender sender, @Nonnull Command cmd, @Nonnull String label, String[] args) {
+    public boolean onCommand(@Nonnull CommandSender sender, @Nonnull Command cmd, @Nonnull String label, @Nonnull String[] args) {
         switch (args.length) {
             case 1:
                 switch (args[0]) {
+                    case "inspect":
+                        if (isPlayer(sender)) {
+                            Player player = (Player) sender;
+                            ItemStack itemStack = player.getInventory().getItemInMainHand();
+                            player.sendMessage("Spells: [" + (ItemUtil.getPersistentData(itemStack, "Spells", PersistentDataType.STRING).orElse("empty")) + "]");
+                        }
+                        return true;
                     case "disable":
                         if (checkPerm(sender, "toggle")) {
                             Main.getPlugin().getConfigurableData().allowMagicUse(false);
@@ -133,12 +143,4 @@ public class CommandHandler implements CommandExecutor {
         return false;
     }
 
-    private boolean checkPerm(CommandSender commandSender, String permission) {
-        if (commandSender.hasPermission("wands.command." + permission)) {
-            return true;
-        } else {
-            commandSender.sendMessage("§cYou require §rwands.command." + permission);
-            return false;
-        }
-    }
 }
