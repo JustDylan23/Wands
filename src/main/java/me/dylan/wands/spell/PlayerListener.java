@@ -5,11 +5,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Sound;
 import org.bukkit.Statistic;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -122,6 +124,17 @@ public class PlayerListener implements Listener {
     private void onBlockBreak(BlockBreakEvent event) {
         if (SpellManagementUtil.isWand(event.getPlayer().getInventory().getItemInMainHand())) {
             event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    private void onEntityDamageEntity(EntityDamageByEntityEvent event) {
+        Entity damager = event.getDamager();
+        if (damager instanceof Player) {
+            Player player = (Player) damager;
+            if (SpellManagementUtil.isWand(player.getInventory().getItemInMainHand())) {
+                event.setCancelled(true);
+            }
         }
     }
 

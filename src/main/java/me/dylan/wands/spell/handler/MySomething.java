@@ -24,7 +24,7 @@ import java.util.function.Predicate;
 
 /**
  * @author jetp250
- *
+ * <p>
  * This class was created by jetp250 for testing purposes.
  */
 
@@ -164,6 +164,7 @@ public class MySomething extends Behaviour implements Castable {
         Location whereIsIt;
         Player whoOwnsIt;
         BukkitTask whatsExecutingIt;
+
         SpellDataThing(Location where, Player whose, BukkitTask runner) {
             this.whereIsIt = where;
             this.whoOwnsIt = whose;

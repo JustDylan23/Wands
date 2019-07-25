@@ -1,9 +1,6 @@
 package me.dylan.wands;
 
-import me.dylan.wands.commandhandler.commands.Bind;
-import me.dylan.wands.commandhandler.commands.Unbind;
-import me.dylan.wands.commandhandler.commands.UnbindAll;
-import me.dylan.wands.commandhandler.commands.Wands;
+import me.dylan.wands.commandhandler.commands.*;
 import me.dylan.wands.commandhandler.tabcompleters.BindComplete;
 import me.dylan.wands.commandhandler.tabcompleters.UnbindComplete;
 import me.dylan.wands.commandhandler.tabcompleters.WandsComplete;
@@ -55,9 +52,10 @@ public final class Main extends JavaPlugin {
         plugin = this;
 
         addCommand("wands", new Wands(), new WandsComplete());
+        addCommand("createwand", new CreateWand(), null);
         addCommand("bind", new Bind(), new BindComplete());
         addCommand("unbind", new Unbind(), new UnbindComplete());
-//        addCommand("bindall", new BindAll(), null);
+        addCommand("bindall", new BindAll(), null);
         addCommand("unbindall", new UnbindAll(), null);
 
         listenerRegistry = new ListenerRegistry();
