@@ -21,25 +21,40 @@ public class SpellManagementUtil {
     private static final String TAG_SPELLS_LIST = "Spells";
     private static final String TAG_VERIFIED = "IsWand";
     private static final String TAG_PARTICLE_SPELL_BROWSE = "SpellBrowseParticles";
+    private static final String TAG_UNMODIFIABLE = "BlockModification";
+    private static final String TAG_BLOCK_REGISTERING = "BlockRegistering";
 
     @Contract(value = " -> fail", pure = true)
     private SpellManagementUtil() {
         throw new UnsupportedOperationException();
     }
 
-    public static void setAsWand(@Nonnull ItemStack itemStack) {
-        ItemUtil.setPersistentData(itemStack, TAG_VERIFIED, PersistentDataType.BYTE, (byte) 0);
+    public static void setAsWand(ItemStack itemStack) {
+        if (canBeRegistered(itemStack)) {
+            ItemUtil.setPersistentData(itemStack, TAG_VERIFIED, PersistentDataType.BYTE, (byte) 0);
+        }
     }
 
-    public static void undoWand(@Nonnull ItemStack itemStack) {
+    public static boolean isWand(@Nonnull ItemStack itemStack) {
+        return ItemUtil.hasPersistentData(itemStack, TAG_VERIFIED, PersistentDataType.BYTE);
+    }
+
+    public static void undoWand(ItemStack itemStack) {
         ItemUtil.removePersistentData(itemStack, TAG_VERIFIED);
         ItemUtil.removePersistentData(itemStack, TAG_SPELL_INDEX);
         ItemUtil.removePersistentData(itemStack, TAG_SPELLS_LIST);
         ItemUtil.removePersistentData(itemStack, TAG_PARTICLE_SPELL_BROWSE);
-
     }
 
-    public static void setSpells(@Nonnull ItemStack itemStack, @Nonnull SpellType... spellTypes) {
+    public static void setAsUnregisterable(ItemStack itemStack) {
+        ItemUtil.setPersistentData(itemStack, TAG_BLOCK_REGISTERING, PersistentDataType.BYTE, (byte) 0);
+    }
+
+    public static boolean canBeRegistered(@Nonnull ItemStack itemStack) {
+        return !ItemUtil.hasPersistentData(itemStack, TAG_BLOCK_REGISTERING, PersistentDataType.BYTE);
+    }
+
+    public static void setSpells(ItemStack itemStack, @Nonnull SpellType... spellTypes) {
         StringJoiner stringJoiner = new StringJoiner(", ");
         for (SpellType spellType : spellTypes) {
             stringJoiner.add(spellType.toString());
@@ -47,7 +62,7 @@ public class SpellManagementUtil {
         ItemUtil.setPersistentData(itemStack, TAG_SPELLS_LIST, PersistentDataType.STRING, stringJoiner.toString());
     }
 
-    public static void setSpellBrowseParticles(@Nonnull ItemStack itemStack, @Nonnull BrowseParticle browseParticle) {
+    public static void setSpellBrowseParticles(ItemStack itemStack, @Nonnull BrowseParticle browseParticle) {
         ItemUtil.setPersistentData(itemStack, TAG_PARTICLE_SPELL_BROWSE, PersistentDataType.STRING, browseParticle.toString());
     }
 
@@ -55,16 +70,12 @@ public class SpellManagementUtil {
         ItemUtil.setPersistentData(itemStack, TAG_SPELL_INDEX, PersistentDataType.INTEGER, index);
     }
 
-    public static boolean isWand(@Nonnull ItemStack itemStack) {
-        return ItemUtil.hasPersistentData(itemStack, TAG_VERIFIED, PersistentDataType.BYTE);
-    }
-
     private static int getIndex(@Nonnull ItemStack itemStack) {
         return ItemUtil.getPersistentData(itemStack, TAG_SPELL_INDEX, PersistentDataType.INTEGER)
                 .orElse(0);
     }
 
-    public static Optional<BrowseParticle> getSpellBrowseParticle(@Nonnull ItemStack itemStack) {
+    public static Optional<BrowseParticle> getSpellBrowseParticle(ItemStack itemStack) {
         Optional<String> stringOptional = ItemUtil.getPersistentData(itemStack, TAG_PARTICLE_SPELL_BROWSE, PersistentDataType.STRING);
         if (stringOptional.isPresent()) {
             try {
@@ -76,7 +87,7 @@ public class SpellManagementUtil {
     }
 
     @Nullable
-    private static String getSelectedSpell(@Nonnull ItemStack itemStack) {
+    private static String getSelectedSpell(ItemStack itemStack) {
         List<String> spells = SpellCompoundUtil.getSpells(itemStack);
         if (spells.isEmpty()) return null;
         int index = getIndex(itemStack);
@@ -88,13 +99,13 @@ public class SpellManagementUtil {
         }
     }
 
-    private static void removeCorruptedSpell(@Nonnull Player player, @Nonnull ItemStack itemStack, @Nonnull String spell) {
+    private static void removeCorruptedSpell(@Nonnull Player player, ItemStack itemStack, String spell) {
         player.sendMessage(Main.PREFIX + "The spell that you tried to cast does not exist,\n" +
                 "it was removed from your wand");
         SpellCompoundUtil.removeSpell(itemStack, spell);
     }
 
-    static void nextSpell(@Nonnull Player player, @Nonnull ItemStack itemStack) {
+    static void nextSpell(Player player, ItemStack itemStack) {
         int index = getIndex(itemStack);
         List<String> spells = SpellCompoundUtil.getSpells(itemStack);
         int length = spells.size();
@@ -124,7 +135,7 @@ public class SpellManagementUtil {
         }
     }
 
-    static boolean castSpell(@Nonnull Player player, @Nonnull ItemStack itemStack) {
+    static boolean castSpell(Player player, ItemStack itemStack) {
         String spell = getSelectedSpell(itemStack);
         if (spell != null) {
             // returns null when the spell stored on the item isn't a SpellType
@@ -146,14 +157,14 @@ public class SpellManagementUtil {
     }
 
     public static class SpellCompoundUtil {
-        public static List<String> getSpells(@Nonnull ItemStack itemStack) {
+        public static List<String> getSpells(ItemStack itemStack) {
             return ItemUtil.getPersistentData(itemStack, TAG_SPELLS_LIST, PersistentDataType.STRING)
                     .filter(s -> !s.isEmpty())
                     .map(s -> new ArrayList<>(Arrays.asList(s.split(", "))))
                     .orElseGet(ArrayList::new);
         }
 
-        public static boolean containsSpell(ItemStack itemStack, String spell) {
+        public static boolean containsSpell(ItemStack itemStack, @Nonnull String spell) {
             return getSpells(itemStack).contains(spell.toUpperCase());
         }
 
@@ -171,7 +182,7 @@ public class SpellManagementUtil {
             }
         }
 
-        public static void addSpell(ItemStack itemStack, SpellType spellType) {
+        public static void addSpell(ItemStack itemStack, @Nonnull SpellType spellType) {
             Optional<String> spells = ItemUtil.getPersistentData(itemStack, TAG_SPELLS_LIST, PersistentDataType.STRING);
             String rawList = spells
                     .map(s -> s + ", " + spellType)

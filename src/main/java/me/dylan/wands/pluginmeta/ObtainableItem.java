@@ -23,6 +23,7 @@ import java.util.Arrays;
 public enum ObtainableItem {
     ASSASSINS_DAGGER(ItemUtil.getItemStack(() -> {
         ItemStack itemStack = new ItemStack(Material.MUSIC_DISC_MALL);
+        SpellManagementUtil.setAsUnregisterable(itemStack);
         ItemUtil.setName(itemStack, "&dAssassin's &8Dagger");
         ItemUtil.setPersistentData(itemStack, AssassinDagger.ID_TAG, PersistentDataType.BYTE, (byte) 1);
         return itemStack;
@@ -30,6 +31,7 @@ public enum ObtainableItem {
 
     CURSED_BOW(ItemUtil.getItemStack(() -> {
         ItemStack itemStack = new ItemStack(Material.BOW);
+        SpellManagementUtil.setAsUnregisterable(itemStack);
         ItemUtil.setName(itemStack, "&cCursed Bow");
         ItemUtil.setItemMeta(itemStack, meta -> {
             meta.setUnbreakable(true);
