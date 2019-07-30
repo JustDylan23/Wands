@@ -46,7 +46,6 @@ public enum CooldownManager implements Listener {
      */
 
     // todo optimize long values and method
-
     private int getRemainingTime(Player player) {
         int cooldown = Main.getPlugin().getConfigurableData().getMagicCooldownTime();
         if (cooldown == 0) return 0;

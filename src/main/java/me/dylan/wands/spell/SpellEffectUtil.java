@@ -9,6 +9,10 @@ import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.ScoreboardManager;
+import org.bukkit.scoreboard.Team;
+import org.bukkit.scoreboard.Team.Option;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -104,6 +108,12 @@ public class SpellEffectUtil {
         return locations;
     }
 
+    public static boolean canDamage(Player player1, Player player2) {
+        Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
+        Team team = scoreboard.getEntryTeam(player1.getName());
+        return team == null || team.allowFriendlyFire() || !team.equals(scoreboard.getEntryTeam(player2.getName()));
+    }
+
     public static List<LivingEntity> getNearbyLivingEntities(Player player, Location loc, double radius) {
         return getNearbyLivingEntities(player, loc, b -> true, radius);
     }
@@ -115,6 +125,7 @@ public class SpellEffectUtil {
                         entity instanceof LivingEntity
                                 && !(entity instanceof ArmorStand)
                                 && (Main.getPlugin().getConfigurableData().isSelfHarmAllowed() || !entity.equals(player))
+                                && (!(entity instanceof Player) || canDamage((Player) entity, player))
                 )
                 .map(LivingEntity.class::cast)
                 .filter(predicate)
