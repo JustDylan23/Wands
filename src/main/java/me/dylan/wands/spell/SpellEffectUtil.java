@@ -108,10 +108,10 @@ public class SpellEffectUtil {
         return locations;
     }
 
-    public static boolean canDamage(Player player1, Player player2) {
+    private static boolean canDamage(Player p1, Player p2) {
         Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
-        Team team = scoreboard.getEntryTeam(player1.getName());
-        return team == null || team.allowFriendlyFire() || !team.equals(scoreboard.getEntryTeam(player2.getName()));
+        Team team = scoreboard.getEntryTeam(p1.getName());
+        return team == null || team.allowFriendlyFire() || !team.equals(scoreboard.getEntryTeam(p2.getName()));
     }
 
     public static List<LivingEntity> getNearbyLivingEntities(Player player, Location loc, double radius) {
