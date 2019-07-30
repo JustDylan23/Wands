@@ -1,24 +1,26 @@
 package me.dylan.wands.commandhandler.commands;
 
 import me.dylan.wands.Main;
+import me.dylan.wands.PreSetItem;
 import me.dylan.wands.commandhandler.BaseCommand;
-import me.dylan.wands.pluginmeta.ConfigurableData;
-import me.dylan.wands.pluginmeta.ObtainableItem;
+import me.dylan.wands.config.ConfigurableData;
 import me.dylan.wands.spell.SpellType;
 import me.dylan.wands.spell.handler.Behaviour;
 import me.dylan.wands.util.ItemUtil;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.util.StringJoiner;
 
 public class Wands extends BaseCommand {
     @Override
-    public boolean onCommand(@Nonnull CommandSender sender, @Nonnull Command cmd, @Nonnull String label, @Nonnull String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
         switch (args.length) {
             case 1:
                 switch (args[0]) {
@@ -59,7 +61,7 @@ public class Wands extends BaseCommand {
                     case "get":
                         if (checkPerm(sender, "get")) {
                             if (sender instanceof Player) {
-                                ObtainableItem.openInventory((Player) sender);
+                                PreSetItem.openInventory((Player) sender);
                             } else
                                 sender.sendMessage(Main.PREFIX + "You must be a player in order to perform this action!");
                         }
@@ -67,18 +69,34 @@ public class Wands extends BaseCommand {
                     case "getconfig":
                         if (checkPerm(sender, "viewconfig")) {
                             ConfigurableData cd = Main.getPlugin().getConfigurableData();
-                            sender.sendMessage("§6magic cooldown time:§r " + cd.getMagicCooldownTime());
+                            sender.sendMessage("§6magic cooldown time:§r " + (cd.getMagicCooldownTime() / 1000) + " seconds");
                             sender.sendMessage("§6allow magic use:§r " + (cd.isMagicUseAllowed() ? "§a" : "§c") + cd.isMagicUseAllowed());
                             sender.sendMessage("§6allow self harm use:§r " + (cd.isSelfHarmAllowed() ? "§a" : "§c") + cd.isSelfHarmAllowed());
+                            sender.sendMessage("§6wands usage requires permissoin:§r " + (cd.doesCastingRequirePermission() ? "§a" : "§c") + cd.doesCastingRequirePermission());
                         }
                         return true;
+                    case "getcdwands":
+                        if (checkPerm(sender, "getcdwands") && isPlayer(sender)) {
+                            Player player = (Player) sender;
+                            ItemStack item = PreSetItem.MAGIC_WAND.getItemStack();
+                            ItemMeta meta = item.getItemMeta();
+                            item = new ItemStack(Material.BLAZE_ROD);
+                            item.setItemMeta(meta);
+                            ItemUtil.setName(item, "&cEmpire Wand");
+                            player.getInventory().addItem(item);
+                            item = PreSetItem.CURSED_BOW.getItemStack();
+                            ItemUtil.setName(item, "&cEmpire Bow");
+                            player.getInventory().addItem(item);
+                            return true;
+                        }
+                        return false;
                 }
                 return false;
             case 2:
                 if (args[0].equalsIgnoreCase("get")) {
                     if (checkPerm(sender, "get")) {
                         try {
-                            ObtainableItem value = ObtainableItem.valueOf(args[1].toUpperCase());
+                            PreSetItem value = PreSetItem.valueOf(args[1].toUpperCase());
                             if (sender instanceof Player)
                                 ((Player) sender).getInventory().addItem(value.getItemStack());
                             else {
@@ -114,13 +132,17 @@ public class Wands extends BaseCommand {
                         if (checkPerm(sender, "setcooldown")) {
                             try {
                                 int i = Integer.parseInt(args[2]);
-                                if (i < 0) {
-                                    sender.sendMessage(Main.PREFIX + "Cooldown can't be a negative number!");
-                                    return true;
+                                int x = i * 1000;
+                                if (args[2].length() <= 2) {
+                                    if (i >= 0) {
+                                        Main.getPlugin().getConfigurableData().setMagicCooldownTime(x);
+                                        sender.sendMessage(Main.PREFIX + "Cooldown has been set to " + i + " second" + ((i != 1) ? "s" : ""));
+                                    } else {
+                                        sender.sendMessage(Main.PREFIX + "Number can't be negative!");
+                                    }
+                                } else {
+                                    sender.sendMessage(Main.PREFIX + "Max value is 99");
                                 }
-                                Main.getPlugin().getConfigurableData().setMagicCooldownTime(i);
-                                String message = Main.PREFIX + "Cooldown has been set to " + i + " second" + ((i != 1) ? "s" : "");
-                                sender.sendMessage(message);
                             } catch (NumberFormatException e) {
                                 sender.sendMessage(Main.PREFIX + "Cooldown can only be set to a full number!");
                             }
@@ -135,6 +157,17 @@ public class Wands extends BaseCommand {
                                 sender.sendMessage(Main.PREFIX + "Player can no longer harm himself with wands");
                             }
                             Main.getPlugin().getConfigurableData().allowSelfHarm(b);
+                        }
+                        return true;
+                    } else if (args[1].equalsIgnoreCase("restriction")) {
+                        if (checkPerm(sender, "restrict")) {
+                            boolean b = Boolean.parseBoolean(args[2]);
+                            if (b) {
+                                sender.sendMessage(Main.PREFIX + "Only players with §7wands.use §rcan use wands now");
+                            } else {
+                                sender.sendMessage(Main.PREFIX + "All players can use wands now");
+                            }
+                            Main.getPlugin().getConfigurableData().requirePermissionForCasting(b);
                         }
                         return true;
                     }

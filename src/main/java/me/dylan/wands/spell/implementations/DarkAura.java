@@ -1,10 +1,10 @@
 package me.dylan.wands.spell.implementations;
 
+import me.dylan.wands.sound.CompoundSound;
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.handler.AuraSpell;
 import me.dylan.wands.spell.handler.AuraSpell.EffectFrequency;
 import me.dylan.wands.spell.handler.Behaviour;
-import me.dylan.wands.spell.spelleffect.sound.CompoundSound;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.potion.PotionEffect;

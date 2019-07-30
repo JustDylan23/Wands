@@ -7,20 +7,22 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 public class UnbindAll extends BaseCommand {
     @Override
-    public boolean onCommand(@Nonnull CommandSender sender, @Nonnull Command cmd, @Nonnull String label, @Nonnull String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
         if (isPlayer(sender)) {
-            ItemStack itemStack = ((Player) sender).getInventory().getItemInMainHand();
+            Player player = (Player) sender;
+            ItemStack itemStack = player.getInventory().getItemInMainHand();
             if (isWand(sender, itemStack)) {
+                String itemName = itemStack.getItemMeta().getDisplayName();
                 if (SpellCompoundUtil.getSpells(itemStack).isEmpty()) {
-                    sender.sendMessage(Main.PREFIX + itemStack.getItemMeta().getDisplayName() + " §ris already empty!");
+                    sender.sendMessage(Main.PREFIX + itemName + " §ris already empty!");
                 } else {
-                    SpellCompoundUtil.clearSpells(itemStack);
-                    sender.sendMessage(Main.PREFIX + "Successfully removed all spells from " + itemStack.getItemMeta().getDisplayName());
+                    if (SpellCompoundUtil.clearSpells(itemStack, player, false)) {
+                        sender.sendMessage(Main.PREFIX + "Successfully removed all spells from " + itemName);
+                    }
                 }
             }
         }

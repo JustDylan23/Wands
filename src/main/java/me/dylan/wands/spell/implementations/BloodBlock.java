@@ -1,9 +1,9 @@
 package me.dylan.wands.spell.implementations;
 
+import me.dylan.wands.sound.CompoundSound;
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.handler.Behaviour;
 import me.dylan.wands.spell.handler.MovingBlockSpell;
-import me.dylan.wands.spell.spelleffect.sound.CompoundSound;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;

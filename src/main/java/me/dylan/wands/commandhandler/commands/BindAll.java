@@ -7,17 +7,18 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 public class BindAll extends BaseCommand {
     @Override
-    public boolean onCommand(@Nonnull CommandSender sender, @Nonnull Command cmd, @Nonnull String label, @Nonnull String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
         if (isPlayer(sender)) {
-            ItemStack itemStack = ((Player) sender).getInventory().getItemInMainHand();
+            Player player = (Player) sender;
+            ItemStack itemStack = player.getInventory().getItemInMainHand();
             if (isWand(sender, itemStack)) {
-                SpellCompoundUtil.addAllSpells(itemStack);
-                sender.sendMessage(Main.PREFIX + "Successfully added all spells to " + itemStack.getItemMeta().getDisplayName());
+                if (SpellCompoundUtil.addAllSpells(itemStack, player, false)) {
+                    sender.sendMessage(Main.PREFIX + "Successfully added all spells to " + itemStack.getItemMeta().getDisplayName());
+                }
             }
         }
         return true;

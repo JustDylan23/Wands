@@ -1,11 +1,13 @@
-package me.dylan.wands.util;
+package me.dylan.wands.config;
 
 import me.dylan.wands.Main;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.jetbrains.annotations.Contract;
 
 public class ConfigUtil {
     private static FileConfiguration config = Main.getPlugin().getConfig();
 
+    @Contract(value = " -> fail", pure = true)
     private ConfigUtil() {
         throw new UnsupportedOperationException();
     }
@@ -15,19 +17,15 @@ public class ConfigUtil {
         config = Main.getPlugin().getConfig();
     }
 
-    public static int getInt(String key) {
+    static int getInt(String key) {
         return config.getInt(key);
     }
 
-    public static void setInt(String key, int value) {
-        config.set(key, value);
-    }
-
-    public static boolean getBoolean(String key) {
+    static boolean getBoolean(String key) {
         return config.getBoolean(key);
     }
 
-    public static void setBoolean(String key, boolean v) {
-        config.set(key, v);
+    static void set(String key, Object value) {
+        config.set(key, value);
     }
 }

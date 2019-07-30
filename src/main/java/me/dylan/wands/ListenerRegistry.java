@@ -1,9 +1,9 @@
-package me.dylan.wands.pluginmeta;
+package me.dylan.wands;
 
-import me.dylan.wands.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -13,24 +13,24 @@ public class ListenerRegistry {
     private static final Main plugin = Main.getPlugin();
     private final Set<Listener> toggleableListeners = new HashSet<>();
 
-    public static void addListener(Listener... listeners) {
+    public static void addListener(@NotNull Listener... listeners) {
         for (Listener listener : listeners) {
             Bukkit.getServer().getPluginManager().registerEvents(listener, plugin);
         }
     }
 
-    public void addToggleableListener(Listener... listeners) {
+    void addToggleableListener(Listener... listeners) {
         toggleableListeners.addAll(Arrays.asList(listeners));
         if (Main.getPlugin().getConfigurableData().isMagicUseAllowed()) {
             addListener(listeners);
         }
     }
 
-    void disableListeners() {
+    public void disableListeners() {
         toggleableListeners.forEach(HandlerList::unregisterAll);
     }
 
-    void enableListeners() {
+    public void enableListeners() {
         toggleableListeners.forEach(HandlerList::unregisterAll);
         toggleableListeners.forEach(listener -> Bukkit.getServer().getPluginManager().registerEvents(listener, plugin));
     }

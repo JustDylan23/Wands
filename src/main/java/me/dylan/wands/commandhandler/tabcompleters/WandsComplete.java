@@ -1,12 +1,12 @@
 package me.dylan.wands.commandhandler.tabcompleters;
 
+import me.dylan.wands.PreSetItem;
 import me.dylan.wands.commandhandler.BaseCompleter;
-import me.dylan.wands.pluginmeta.ObtainableItem;
 import me.dylan.wands.spell.SpellType;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.List;
 public class WandsComplete extends BaseCompleter {
 
     @Override
-    public List<String> onTabComplete(@Nonnull CommandSender sender, @Nonnull Command command, @Nonnull String alias, @Nonnull String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         String value = args[args.length - 1];
         if (args.length == 1)
             return validCompletions(value, "enable", "disable", "get", "set", "info", "spells", "getconfig");
@@ -24,12 +24,12 @@ public class WandsComplete extends BaseCompleter {
                 return validCompletions(value, str);
             }
             if (args[0].equalsIgnoreCase("get"))
-                return validCompletions(value, ObtainableItem.getNames());
+                return validCompletions(value, PreSetItem.getNames());
             if (args[0].equalsIgnoreCase("set"))
-                return validCompletions(value, "cooldown", "selfharm");
+                return validCompletions(value, "cooldown", "selfharm", "restriction");
         } else if (args.length == 3) {
             if (args[0].equalsIgnoreCase("set"))
-                if (args[1].equalsIgnoreCase("selfharm"))
+                if (args[1].equalsIgnoreCase("selfharm") || args[1].equalsIgnoreCase("restriction"))
                     return validCompletions(value, "true", "false");
         }
         return Collections.emptyList();
