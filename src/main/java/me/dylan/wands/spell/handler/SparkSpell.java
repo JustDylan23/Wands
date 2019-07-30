@@ -4,6 +4,7 @@ import me.dylan.wands.spell.SpellEffectUtil;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Spellcaster.Spell;
 
 public final class SparkSpell extends Behaviour {
     private final int effectDistance;

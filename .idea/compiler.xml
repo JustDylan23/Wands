@@ -9,8 +9,5 @@
         <module name="wands" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="wands" target="1.8" />
-    </bytecodeTargetLevel>
   </component>
 </project>

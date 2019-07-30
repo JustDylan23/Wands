@@ -1,207 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="f4b8ccf4-0bf6-4ab3-a681-871e4f29d641" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/dylan/wands/MouseClickListeners.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/dylan/wands/PreSetItem.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/CooldownManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/WandBuilder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/implementations/Escape.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/dylan/wands/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/dylan/wands/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/dylan/wands/commandhandler/BaseCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/dylan/wands/commandhandler/BaseCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/dylan/wands/commandhandler/BaseCompleter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/dylan/wands/commandhandler/BaseCompleter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/dylan/wands/commandhandler/commands/Bind.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/dylan/wands/commandhandler/commands/Bind.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/dylan/wands/commandhandler/commands/BindAll.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/dylan/wands/commandhandler/commands/BindAll.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/dylan/wands/commandhandler/commands/CreateWand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/dylan/wands/commandhandler/commands/CreateWand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/dylan/wands/commandhandler/commands/Unbind.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/dylan/wands/commandhandler/commands/Unbind.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/dylan/wands/commandhandler/commands/UnbindAll.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/dylan/wands/commandhandler/commands/UnbindAll.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/dylan/wands/commandhandler/commands/Wands.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/dylan/wands/commandhandler/commands/Wands.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/dylan/wands/commandhandler/tabcompleters/BindComplete.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/dylan/wands/commandhandler/tabcompleters/BindComplete.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/dylan/wands/commandhandler/tabcompleters/UnbindComplete.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/dylan/wands/commandhandler/tabcompleters/UnbindComplete.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/dylan/wands/commandhandler/tabcompleters/WandsComplete.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/dylan/wands/commandhandler/tabcompleters/WandsComplete.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/dylan/wands/customitems/AssassinDagger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/dylan/wands/customitems/AssassinDagger.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/dylan/wands/customitems/CursedBow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/dylan/wands/customitems/CursedBow.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/dylan/wands/pluginmeta/ConfigurableData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/dylan/wands/config/ConfigurableData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/dylan/wands/pluginmeta/ListenerRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/dylan/wands/ListenerRegistry.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/dylan/wands/pluginmeta/ObtainableItem.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/Castable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/Castable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/PlayerListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/PlayerListener.java" afterDir="false" />
+    <list default="true" id="b3b9a6f0-269c-47c0-b29b-cdbce8186ae5" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/dylan.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_destroystokyo_paper_paper_api_1_14_4_R0_1_SNAPSHOT.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_google_code_findbugs_jsr305_1_3_9.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_google_code_gson_gson_2_8_0.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_google_guava_guava_21_0.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_googlecode_json_simple_json_simple_1_1_1.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__commons_lang_commons_lang_2_6.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__it_unimi_dsi_fastutil_8_2_2.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__junit_junit_4_10.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__net_md_5_bungeecord_chat_1_13_SNAPSHOT.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_hamcrest_hamcrest_core_1_1.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_jetbrains_annotations_16_0_2.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_ow2_asm_asm_7_1.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_ow2_asm_asm_analysis_7_1.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_ow2_asm_asm_commons_7_1.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_ow2_asm_asm_tree_7_1.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_slf4j_slf4j_api_1_7_25.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_yaml_snakeyaml_1_23.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/SpellEffectUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/SpellEffectUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/SpellManagementUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/SpellManagementUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/SpellType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/SpellType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/handler/Behaviour.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/handler/Behaviour.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/handler/BlockProjectileSpell.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/handler/BlockProjectileSpell.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/handler/MovingBlockSpell.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/handler/MovingBlockSpell.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/handler/MySomething.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/handler/ProjectileSpell.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/handler/ProjectileSpell.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/implementations/BloodBlock.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/implementations/BloodBlock.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/implementations/BloodWave.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/implementations/BloodWave.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/implementations/CorruptedRain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/implementations/CorruptedRain.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/implementations/CorruptedShockWave.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/implementations/CorruptedShockWave.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/implementations/CorruptedWave.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/implementations/CorruptedWave.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/implementations/DarkAura.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/implementations/DarkAura.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/implementations/DarkBlock.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/implementations/DarkBlock.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/implementations/FireComet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/implementations/FireComet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/implementations/FlameWave.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/implementations/FlameWave.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/spelleffect/sound/CompoundSound.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/dylan/wands/sound/CompoundSound.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/spelleffect/sound/RepeatableSound.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/dylan/wands/sound/RepeatableSound.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/spelleffect/sound/SingularSound.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/dylan/wands/sound/SingularSound.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/spelleffect/sound/SoundEffect.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/dylan/wands/sound/SoundEffect.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/dylan/wands/util/Common.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/dylan/wands/util/Common.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/dylan/wands/util/ConfigUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/dylan/wands/config/ConfigUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/dylan/wands/util/ItemUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/dylan/wands/util/ItemUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/config.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/handler/SparkSpell.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/handler/SparkSpell.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/implementations/Escape.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/implementations/Escape.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wands.iml" beforeDir="false" />
     </list>
-    <ignored path="$PROJECT_DIR$/classes/" />
-    <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="DatabaseView">
-    <option name="SHOW_INTERMEDIATE" value="true" />
-    <option name="GROUP_DATA_SOURCES" value="true" />
-    <option name="GROUP_SCHEMA" value="true" />
-    <option name="GROUP_CONTENTS" value="false" />
-    <option name="SORT_POSITIONED" value="false" />
-    <option name="SHOW_EMPTY_GROUPS" value="false" />
-    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
-    <option name="HIDDEN_KINDS">
-      <set />
-    </option>
-    <expand />
-    <select />
-  </component>
-  <component name="DefaultGradleProjectSettings">
-    <option name="isMigrated" value="true" />
-  </component>
-  <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/me/dylan/wands/customitems/CursedBow.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-166">
-              <caret line="63" column="38" lean-forward="true" selection-start-line="63" selection-start-column="38" selection-end-line="63" selection-end-column="38" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/me/dylan/wands/customitems/AssassinDagger.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="425">
-              <caret line="53" column="36" selection-start-line="53" selection-start-column="36" selection-end-line="53" selection-end-column="36" />
-              <folding>
-                <element signature="e#5410#5725#0" expanded="true" />
-                <element signature="e#5724#5725#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/PlayerListener.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="34" column="72" lean-forward="true" selection-start-line="34" selection-start-column="72" selection-end-line="34" selection-end-column="72" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
-  </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Class" />
-      </list>
-    </option>
-  </component>
-  <component name="FindInProjectRecents">
-    <findStrings>
-      <find>EntityDamageEntity</find>
-      <find>startsW</find>
-      <find>wolves</find>
-      <find>ob</find>
-      <find>jguard</find>
-      <find>NotNull</find>
-      <find>@Nonnull</find>
-      <find>@Nullable</find>
-      <find>@No</find>
-      <find>.stream</find>
-      <find>ø</find>
-      <find>jetp</find>
-      <find>List&lt;</find>
-      <find>tagLeap</find>
-      <find>rcase</find>
-      <find>getconfig</find>
-      <find>name</find>
-      <find>predi</find>
-      <find>couldn</find>
-      <find>location</find>
-      <find>world</find>
-      <find>player.setVelocity(vector);</find>
-      <find>Action.RIGH</find>
-    </findStrings>
-    <replaceStrings>
-      <replace />
-    </replaceStrings>
-  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-  </component>
-  <component name="IdeDocumentHistory">
-    <option name="CHANGED_PATHS">
-      <list>
-        <option value="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/implementations/CorruptedWolves.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/dylan/wands/commandhandler/tabcompleters/BindComplete.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/dylan/wands/commandhandler/commands/CreateWand.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/dylan/wands/commandhandler/tabcompleters/UnbindComplete.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/dylan/wands/commandhandler/BaseCommand.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/dylan/wands/pluginmeta/ObtainableItem.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/dylan/wands/pluginmeta/PreSetItem.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/dylan/wands/util/Common.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/dylan/wands/util/ConfigUtil.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/dylan/wands/ConfigurableData.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/dylan/wands/commandhandler/BaseCompleter.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/dylan/wands/util/ItemUtil.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/WandBuilder.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/dylan/wands/ListenerRegistry.java" />
-        <option value="$PROJECT_DIR$/src/main/resources/plugin.yml" />
-        <option value="$PROJECT_DIR$/src/main/java/me/dylan/wands/CustomListeners.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/dylan/wands/Main.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/dylan/wands/CooldownManager.java" />
-        <option value="$PROJECT_DIR$/pom.xml" />
-        <option value="$PROJECT_DIR$/src/main/java/me/dylan/wands/config/ConfigUtil.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/dylan/wands/MouseClickListeners.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/CooldownManager.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/dylan/wands/config/ConfigurableData.java" />
-        <option value="$PROJECT_DIR$/src/main/resources/config.yml" />
-        <option value="$PROJECT_DIR$/src/main/java/me/dylan/wands/commandhandler/tabcompleters/WandsComplete.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/handler/Behaviour.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/dylan/wands/sound/RepeatableSound.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/SpellType.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/dylan/wands/commandhandler/commands/BindAll.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/dylan/wands/commandhandler/commands/UnbindAll.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/dylan/wands/commandhandler/commands/Bind.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/SpellManagementUtil.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/dylan/wands/commandhandler/commands/Unbind.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/dylan/wands/PreSetItem.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/dylan/wands/commandhandler/commands/Wands.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/implementations/Escape.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/SpellEffectUtil.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/dylan/wands/customitems/AssassinDagger.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/PlayerListener.java" />
-        <option value="$PROJECT_DIR$/src/main/java/me/dylan/wands/customitems/CursedBow.java" />
-      </list>
-    </option>
   </component>
   <component name="MavenImportPreferences">
     <option name="importingSettings">
@@ -210,208 +46,17 @@
       </MavenImportingSettings>
     </option>
   </component>
-  <component name="MavenProjectNavigator">
-    <treeState>
-      <expand>
-        <path>
-          <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
-          <item name="Wands" type="9519ce18:MavenProjectsStructure$ProjectNode" />
-        </path>
-        <path>
-          <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
-          <item name="Wands" type="9519ce18:MavenProjectsStructure$ProjectNode" />
-          <item name="Lifecycle" type="58874e2:MavenProjectsStructure$LifecycleNode" />
-        </path>
-      </expand>
-      <select />
-    </treeState>
-  </component>
-  <component name="ProjectConfigurationFiles">
-    <option name="files">
-      <list>
-        <option value="$PROJECT_DIR$/wands.iml" />
-        <option value="$PROJECT_DIR$/.idea/compiler.xml" />
-        <option value="$PROJECT_DIR$/.idea/misc.xml" />
-        <option value="$PROJECT_DIR$/.idea/vcs.xml" />
-        <option value="$PROJECT_DIR$/.idea/encodings.xml" />
-        <option value="$PROJECT_DIR$/.idea/modules.xml" />
-        <option value="$PROJECT_DIR$/.idea/libraries/Maven__com_google_code_gson_gson_2_8_0.xml" />
-        <option value="$PROJECT_DIR$/.idea/libraries/Maven__com_google_guava_guava_21_0.xml" />
-        <option value="$PROJECT_DIR$/.idea/libraries/Maven__commons_lang_commons_lang_2_6.xml" />
-        <option value="$PROJECT_DIR$/.idea/libraries/Maven__net_md_5_bungeecord_chat_1_13_SNAPSHOT.xml" />
-        <option value="$PROJECT_DIR$/.idea/libraries/Maven__org_yaml_snakeyaml_1_23.xml" />
-        <option value="$PROJECT_DIR$/.idea/libraries/Maven__com_destroystokyo_paper_paper_api_1_14_4_R0_1_SNAPSHOT.xml" />
-        <option value="$PROJECT_DIR$/.idea/libraries/Maven__com_google_code_findbugs_jsr305_1_3_9.xml" />
-        <option value="$PROJECT_DIR$/.idea/libraries/Maven__com_googlecode_json_simple_json_simple_1_1_1.xml" />
-        <option value="$PROJECT_DIR$/.idea/libraries/Maven__junit_junit_4_10.xml" />
-        <option value="$PROJECT_DIR$/.idea/libraries/Maven__org_hamcrest_hamcrest_core_1_1.xml" />
-        <option value="$PROJECT_DIR$/.idea/libraries/Maven__org_ow2_asm_asm_7_1.xml" />
-        <option value="$PROJECT_DIR$/.idea/libraries/Maven__org_ow2_asm_asm_analysis_7_1.xml" />
-        <option value="$PROJECT_DIR$/.idea/libraries/Maven__org_ow2_asm_asm_commons_7_1.xml" />
-        <option value="$PROJECT_DIR$/.idea/libraries/Maven__org_ow2_asm_asm_tree_7_1.xml" />
-        <option value="$PROJECT_DIR$/.idea/libraries/Maven__org_slf4j_slf4j_api_1_7_25.xml" />
-        <option value="$PROJECT_DIR$/.idea/dictionaries/dylan.xml" />
-        <option value="$PROJECT_DIR$/.idea/uiDesigner.xml" />
-        <option value="$PROJECT_DIR$/.idea/libraries/Maven__it_unimi_dsi_fastutil_8_2_2.xml" />
-      </list>
-    </option>
-  </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="789" />
-    <option name="y" value="128" />
-    <option name="width" value="976" />
-    <option name="height" value="1056" />
-  </component>
-  <component name="ProjectView">
-    <navigator proportions="" version="1">
-      <foldersAlwaysOnTop value="true" />
-    </navigator>
-    <panes>
-      <pane id="Scope" />
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="wands" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Wands" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="wands" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Wands" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="wands" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Wands" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="wands" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Wands" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="wands" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Wands" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="wands" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="wands" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Wands" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="wands" type="462c0819:PsiDirectoryNode" />
-              <item name="commandhandler" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="wands" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Wands" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="wands" type="462c0819:PsiDirectoryNode" />
-              <item name="commandhandler" type="462c0819:PsiDirectoryNode" />
-              <item name="commands" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="wands" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Wands" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="wands" type="462c0819:PsiDirectoryNode" />
-              <item name="commandhandler" type="462c0819:PsiDirectoryNode" />
-              <item name="tabcompleters" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="wands" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Wands" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="wands" type="462c0819:PsiDirectoryNode" />
-              <item name="customitems" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="wands" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Wands" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="wands" type="462c0819:PsiDirectoryNode" />
-              <item name="spell" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="wands" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Wands" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="wands" type="462c0819:PsiDirectoryNode" />
-              <item name="spell" type="462c0819:PsiDirectoryNode" />
-              <item name="implementations" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="wands" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Wands" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="wands" type="462c0819:PsiDirectoryNode" />
-              <item name="util" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="wands" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Wands" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="wands" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-      <pane id="PackagesPane" />
-    </panes>
-  </component>
+  <component name="ProjectId" id="1OkDvHbzZroZXJNAoLC5jTfxsOp" />
   <component name="PropertiesComponent">
-    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="js.buildTools.gulp.gulp_package_dir" value="" />
-    <property name="last_opened_file_path" value="$USER_HOME$/Desktop/server/paper-152.jar" />
-    <property name="nodejs.protractor.protractor_package" value="" />
-    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
-    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="nodejs_package_manager_path" value="npm" />
-    <property name="project.structure.last.edited" value="Modules" />
-    <property name="project.structure.proportion" value="0.15" />
-    <property name="project.structure.side.proportion" value="0.2" />
-    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
-  </component>
-  <component name="RecentsManager">
-    <key name="MoveMembersDialog.RECENTS_KEY">
-      <recent name="me.dylan.wands.spell.SpellManagementUtil" />
-      <recent name="me.dylan.wands.spell.PlayerListener" />
-    </key>
-    <key name="MoveInnerDialog.RECENTS_KEY">
-      <recent name="me.dylan.wands.spell" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\dylan\Documents\repositories\Wands\src\main\resources" />
-    </key>
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -425,15 +70,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="JAR Application.Run server">
-    <configuration name="Run server" type="JarApplication">
-      <option name="JAR_PATH" value="$USER_HOME$/Desktop/server/paper-152.jar" />
-      <option name="WORKING_DIRECTORY" value="C:\Users\dylan\Desktop\server" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <method v="2">
-        <option name="Maven.BeforeRunTask" enabled="true" file="$PROJECT_DIR$/pom.xml" goal="clean install" />
-      </method>
-    </configuration>
+  <component name="RunManager">
     <configuration name="wands [install]" type="MavenRunConfiguration" factoryName="Maven">
       <MavenSettings>
         <option name="myGeneralSettings" />
@@ -460,577 +97,36 @@
       </MavenSettings>
       <method v="2" />
     </configuration>
-    <configuration default="true" type="js.build_tools.gulp">
-      <node-interpreter>project</node-interpreter>
-      <node-options />
-      <gulpfile />
-      <tasks />
-      <arguments />
-      <envs />
-      <method v="2" />
-    </configuration>
-    <list>
-      <item itemvalue="JAR Application.Run server" />
-      <item itemvalue="Maven.wands [install]" />
-    </list>
   </component>
   <component name="SvnConfiguration">
     <configuration />
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="f4b8ccf4-0bf6-4ab3-a681-871e4f29d641" name="Default Changelist" comment="" />
-      <created>1564044465402</created>
+      <changelist id="b3b9a6f0-269c-47c0-b29b-cdbce8186ae5" name="Default Changelist" comment="" />
+      <created>1564512930006</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1564044465402</updated>
-      <workItem from="1564044466510" duration="6421000" />
-      <workItem from="1564059442000" duration="801000" />
-      <workItem from="1564060260450" duration="582000" />
-      <workItem from="1564088573300" duration="367000" />
-      <workItem from="1564135480232" duration="4000" />
-      <workItem from="1564138736857" duration="6709000" />
-      <workItem from="1564168978686" duration="3472000" />
-      <workItem from="1564344935926" duration="2637000" />
-      <workItem from="1564390670981" duration="12724000" />
-      <workItem from="1564409951668" duration="1312000" />
-      <workItem from="1564426234039" duration="15603000" />
-      <workItem from="1564475439266" duration="8601000" />
+      <updated>1564512930006</updated>
+      <workItem from="1564512931199" duration="144000" />
+      <workItem from="1564514470355" duration="7620000" />
     </task>
-    <task id="LOCAL-00001" summary="improved performance and made tab completer smarter">
-      <created>1564060643547</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1564060643547</updated>
-    </task>
-    <option name="localTasksCounter" value="2" />
     <servers />
-  </component>
-  <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="59233000" />
-  </component>
-  <component name="TodoView">
-    <todo-panel id="selected-file">
-      <is-autoscroll-to-source value="true" />
-    </todo-panel>
-    <todo-panel id="all">
-      <are-packages-shown value="true" />
-      <is-autoscroll-to-source value="true" />
-    </todo-panel>
-  </component>
-  <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25266525" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info id="Image Layers" order="2" />
-      <window_info id="Designer" order="3" />
-      <window_info id="UI Designer" order="4" />
-      <window_info id="Capture Tool" order="5" />
-      <window_info id="Favorites" order="6" side_tool="true" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.3261105" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.3997833" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" weight="0.32936078" />
-      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="8" />
-      <window_info anchor="bottom" id="Database Changes" order="9" />
-      <window_info anchor="bottom" id="JProfiler" order="10" />
-      <window_info anchor="bottom" id="Terminal" order="11" weight="0.32910052" />
-      <window_info anchor="bottom" id="Event Log" order="12" side_tool="true" />
-      <window_info anchor="bottom" id="IntelliGuard" order="13" />
-      <window_info active="true" anchor="bottom" id="Messages" order="14" visible="true" weight="0.32936078" />
-      <window_info anchor="bottom" id="Inspection Results" order="15" weight="0.32910052" />
-      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="Palette" order="3" />
-      <window_info anchor="right" id="Theme Preview" order="4" />
-      <window_info anchor="right" id="Maven" order="5" weight="0.3296875" />
-      <window_info anchor="right" id="Capture Analysis" order="6" />
-      <window_info anchor="right" id="Palette&#9;" order="7" />
-      <window_info anchor="right" id="Database" order="8" />
-    </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
-  <component name="VcsManagerConfiguration">
-    <MESSAGE value="improved performance and made tab completer smarter" />
-    <option name="LAST_COMMIT_MESSAGE" value="improved performance and made tab completer smarter" />
-  </component>
-  <component name="editorHistoryManager">
-    <entry file="jar://C:/Program Files/Java/jdk-12.0.1/lib/src.zip!/java.base/java/lang/String.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="2534" column="18" selection-start-line="2534" selection-start-column="18" selection-end-line="2534" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/WandBuilder.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="714">
-          <caret line="42" lean-forward="true" selection-start-line="42" selection-end-line="42" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/destroystokyo/paper/paper-api/1.14.4-R0.1-SNAPSHOT/paper-api-1.14.4-R0.1-20190726.013959-12-sources.jar!/org/bukkit/persistence/PersistentDataType.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="45" column="35" selection-start-line="45" selection-start-column="17" selection-end-line="45" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/destroystokyo/paper/paper-api/1.14.4-R0.1-SNAPSHOT/paper-api-1.14.4-R0.1-20190726.013959-12-sources.jar!/org/bukkit/plugin/PluginManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="203">
-          <caret line="119" column="16" selection-start-line="119" selection-start-column="16" selection-end-line="119" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/destroystokyo/paper/paper-api/1.14.4-R0.1-SNAPSHOT/paper-api-1.14.4-R0.1-20190726.013959-12-sources.jar!/org/bukkit/event/Cancellable.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="18" column="43" selection-start-line="18" selection-start-column="37" selection-end-line="18" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/destroystokyo/paper/paper-api/1.14.4-R0.1-SNAPSHOT/paper-api-1.14.4-R0.1-20190726.013959-12-sources.jar!/org/bukkit/event/player/PlayerInteractEvent.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="203">
-          <caret line="27" column="71" lean-forward="true" selection-start-line="27" selection-start-column="71" selection-end-line="27" selection-end-column="71" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/it/unimi/dsi/fastutil/8.2.2/fastutil-8.2.2.jar!/it/unimi/dsi/fastutil/objects/Object2LongMap.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="41" column="17" selection-start-line="41" selection-start-column="17" selection-end-line="41" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/it/unimi/dsi/fastutil/8.2.2/fastutil-8.2.2.jar!/it/unimi/dsi/fastutil/objects/Object2LongFunction.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="20" column="9" selection-start-line="20" selection-start-column="9" selection-end-line="20" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/it/unimi/dsi/fastutil/8.2.2/fastutil-8.2.2.jar!/it/unimi/dsi/fastutil/objects/Object2LongOpenHashMap.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="44" column="43" selection-start-line="44" selection-start-column="43" selection-end-line="44" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/it/unimi/dsi/fastutil/8.2.2/fastutil-8.2.2-sources.jar!/it/unimi/dsi/fastutil/objects/Object2LongOpenHashMap.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="98" column="11" selection-start-line="98" selection-start-column="11" selection-end-line="98" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk-12.0.1/lib/src.zip!/java.base/java/lang/Integer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="299">
-          <caret line="609" column="22" selection-start-line="609" selection-start-column="22" selection-end-line="609" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/destroystokyo/paper/paper-api/1.14.4-R0.1-SNAPSHOT/paper-api-1.14.4-R0.1-20190727.235729-13.jar!/org/bukkit/configuration/MemorySection.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="141" column="16" selection-start-line="141" selection-start-column="16" selection-end-line="141" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/dylan/wands/config/ConfigUtil.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="17" column="5" lean-forward="true" selection-start-line="17" selection-start-column="5" selection-end-line="17" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/dylan/wands/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="540">
-          <caret line="105" column="53" selection-start-line="105" selection-start-column="31" selection-end-line="105" selection-end-column="53" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/destroystokyo/paper/paper-api/1.14.4-R0.1-SNAPSHOT/paper-api-1.14.4-R0.1-20190727.235729-13.jar!/org/bukkit/permissions/Permissible.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="17" column="12" selection-start-line="17" selection-start-column="12" selection-end-line="17" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/config.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="33" selection-start-line="3" selection-start-column="33" selection-end-line="3" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/dylan/wands/commandhandler/tabcompleters/BindComplete.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="18" column="126" selection-start-line="18" selection-start-column="126" selection-end-line="18" selection-end-column="126" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/CooldownManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="299">
-          <caret line="29" column="29" selection-start-line="29" selection-start-column="29" selection-end-line="29" selection-end-column="29" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/dylan/wands/config/ConfigurableData.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="30" selection-end-column="30" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/plugin.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="17" selection-start-line="9" selection-start-column="17" selection-end-line="9" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="18" column="11" selection-start-line="18" selection-start-column="11" selection-end-line="54" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk-12.0.1/lib/src.zip!/java.base/java/lang/Enum.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="199">
-          <caret line="127" column="14" selection-start-line="127" selection-start-column="14" selection-end-line="127" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/dylan/wands/ListenerRegistry.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="17" column="38" selection-start-line="17" selection-start-column="38" selection-end-line="17" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/destroystokyo/paper/paper-api/1.14.4-R0.1-SNAPSHOT/paper-api-1.14.4-R0.1-20190727.235729-13.jar!/org/bukkit/entity/Entity.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="33" column="13" selection-start-line="33" selection-start-column="13" selection-end-line="33" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/destroystokyo/paper/paper-api/1.14.4-R0.1-SNAPSHOT/paper-api-1.14.4-R0.1-20190727.235729-13-sources.jar!/org/bukkit/Location.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="299">
-          <caret line="295" column="18" selection-start-line="295" selection-start-column="18" selection-end-line="295" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/handler/PhaseSpell.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="422">
-          <caret line="58" column="25" selection-start-line="58" selection-start-column="25" selection-end-line="58" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/implementations/DarkPush.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
-          <caret line="40" column="29" selection-start-line="40" selection-start-column="29" selection-end-line="40" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/destroystokyo/paper/paper-api/1.14.4-R0.1-SNAPSHOT/paper-api-1.14.4-R0.1-20190727.235729-13-sources.jar!/org/bukkit/entity/Entity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="401">
-          <caret line="237" column="7" selection-start-line="237" selection-start-column="4" selection-end-line="237" selection-end-column="7" />
-          <caret line="238" column="76" selection-start-line="238" selection-start-column="4" selection-end-line="238" selection-end-column="76" />
-          <caret line="239" column="14" selection-start-line="239" selection-start-column="4" selection-end-line="239" selection-end-column="14" />
-          <caret line="240" column="6" selection-start-line="240" selection-start-column="4" selection-end-line="240" selection-end-column="6" />
-          <caret line="241" column="29" selection-start-line="241" selection-start-column="4" selection-end-line="241" selection-end-column="29" />
-          <caret line="242" column="7" selection-start-line="242" selection-start-column="4" selection-end-line="242" selection-end-column="7" />
-          <caret line="243" column="29" selection-start-line="243" selection-start-column="4" selection-end-line="243" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/target/wands/me/dylan/wands/spell/handler/Behaviour.class" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/dylan/wands/sound/SoundEffect.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="10" column="17" selection-start-line="10" selection-start-column="17" selection-end-line="10" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/dylan/wands/sound/RepeatableSound.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
-          <caret line="36" column="16" selection-start-line="36" selection-start-column="16" selection-end-line="36" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/SpellType.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="268">
-          <caret line="18" column="32" selection-start-line="18" selection-start-column="32" selection-end-line="18" selection-end-column="32" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/dylan/wands/commandhandler/commands/BindAll.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="18" column="38" selection-start-line="18" selection-start-column="38" selection-end-line="18" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/dylan/wands/commandhandler/commands/UnbindAll.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="22" column="42" selection-start-line="22" selection-start-column="42" selection-end-line="22" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/dylan/wands/commandhandler/commands/Bind.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="223">
-          <caret line="25" column="50" selection-start-line="25" selection-start-column="50" selection-end-line="25" selection-end-column="50" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/dylan/wands/commandhandler/commands/Unbind.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="251">
-          <caret line="25" column="93" selection-start-line="25" selection-start-column="93" selection-end-line="25" selection-end-column="93" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/handler/Behaviour.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="182">
-          <caret line="71" lean-forward="true" selection-start-line="71" selection-end-line="71" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/7973bd96-2658-4e8d-b052-3a7b5554c1ab.dat">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/dylan/wands/commandhandler/tabcompleters/WandsComplete.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="28" column="83" selection-start-line="28" selection-start-column="72" selection-end-line="28" selection-end-column="83" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/dylan/wands/PreSetItem.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="191">
-          <caret line="149" column="23" selection-start-line="149" selection-start-column="23" selection-end-line="149" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/dylan/wands/commandhandler/commands/Wands.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="336">
-          <caret line="103" column="29" lean-forward="true" selection-start-line="103" selection-start-column="29" selection-end-line="103" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/implementations/Escape.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="34" column="95" selection-start-line="34" selection-start-column="95" selection-end-line="34" selection-end-column="95" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/destroystokyo/paper/paper-api/1.14.4-R0.1-SNAPSHOT/paper-api-1.14.4-R0.1-20190727.235729-13-sources.jar!/org/bukkit/Material.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="199">
-          <caret line="2429" column="4" selection-start-line="2429" selection-start-column="4" selection-end-line="2429" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/SpellEffectUtil.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="387">
-          <caret line="198" column="68" selection-start-line="198" selection-start-column="68" selection-end-line="198" selection-end-column="68" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/SpellManagementUtil.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="540">
-          <caret line="239" column="7" selection-start-line="239" selection-start-column="7" selection-end-line="239" selection-end-column="7" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/implementations/Comet.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="35" selection-start-line="35" selection-end-line="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/dylan/wands/MouseClickListeners.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="97">
-          <caret line="17" column="13" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/dylan/wands/customitems/AssassinDagger.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="53" column="36" selection-start-line="53" selection-start-column="36" selection-end-line="53" selection-end-column="36" />
-          <folding>
-            <element signature="e#5410#5725#0" expanded="true" />
-            <element signature="e#5724#5725#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/destroystokyo/paper/paper-api/1.14.4-R0.1-SNAPSHOT/paper-api-1.14.4-R0.1-20190727.235729-13-sources.jar!/org/bukkit/inventory/PlayerInventory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="199">
-          <caret line="162" column="14" selection-start-line="162" selection-start-column="14" selection-end-line="162" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/dylan/wands/spell/PlayerListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="34" column="72" lean-forward="true" selection-start-line="34" selection-start-column="72" selection-end-line="34" selection-end-column="72" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/me/dylan/wands/customitems/CursedBow.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-166">
-          <caret line="63" column="38" lean-forward="true" selection-start-line="63" selection-start-column="38" selection-end-line="63" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-  </component>
-  <component name="masterDetails">
-    <states>
-      <state key="ArtifactsStructureConfigurable.UI">
-        <settings>
-          <artifact-editor />
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="FacetStructureConfigurable.UI">
-        <settings>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="GlobalLibrariesConfigurable.UI">
-        <settings>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="JdkListConfigurable.UI">
-        <settings>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="ModuleStructureConfigurable.UI">
-        <settings>
-          <last-edited>Obfuscation|wands</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="ProjectJDKs.UI">
-        <settings>
-          <last-edited>1.8</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="ProjectLibrariesConfigurable.UI">
-        <settings>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-    </states>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

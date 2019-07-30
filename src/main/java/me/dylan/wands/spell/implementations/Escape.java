@@ -61,7 +61,7 @@ public class Escape extends Behaviour implements Castable, Listener {
                     count++;
                     if (!player.isValid() || player.isOnGround()) {
                         cancel();
-                        player.removeMetadata(tagEscaping, plugin);
+                        Bukkit.getScheduler().runTaskLater(plugin, () -> player.removeMetadata(tagEscaping, plugin), 10L);
                         leaping.remove(player);
                         Location loc = player.getLocation();
                         loc.createExplosion(0);
