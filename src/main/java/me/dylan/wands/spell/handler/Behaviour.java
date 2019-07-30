@@ -1,9 +1,10 @@
 package me.dylan.wands.spell.handler;
 
 import me.dylan.wands.Main;
+import me.dylan.wands.sound.SingularSound;
+import me.dylan.wands.sound.SoundEffect;
 import me.dylan.wands.spell.SpellEffectUtil;
-import me.dylan.wands.spell.spelleffect.sound.SingularSound;
-import me.dylan.wands.spell.spelleffect.sound.SoundEffect;
+import me.dylan.wands.spell.handler.Behaviour.AbstractBuilder.BaseMeta;
 import me.dylan.wands.util.Common;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -13,8 +14,9 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -24,7 +26,7 @@ import java.util.function.Consumer;
 
 public abstract class Behaviour implements Listener {
 
-    final static Main plugin = Main.getPlugin();
+    protected final static Main plugin = Main.getPlugin();
 
     final int affectedEntityDamage;
     final float spellEffectRadius;
@@ -37,7 +39,10 @@ public abstract class Behaviour implements Listener {
     private final ImpactCourse impactCourse;
     private final float impactSpeed;
 
-    Behaviour(@Nonnull AbstractBuilder.BaseMeta baseMeta) {
+    protected Behaviour(@Nullable AbstractBuilder.BaseMeta baseMeta) {
+        if (baseMeta == null) {
+            baseMeta = BaseMeta.EMPTY;
+        }
         this.affectedEntityDamage = baseMeta.entityDamage;
         this.spellEffectRadius = baseMeta.spellEffectRadius;
         this.castSounds = baseMeta.castSounds;
@@ -47,23 +52,25 @@ public abstract class Behaviour implements Listener {
         this.impactSpeed = baseMeta.impactSpeed;
         this.impactCourse = baseMeta.impactCourse;
 
-        addStringProperty("Entity damage", affectedEntityDamage);
-        addStringProperty("Effect radius", spellEffectRadius);
-        addStringProperty("Impact speed", impactSpeed);
-        addStringProperty("Impact direction", impactCourse);
+        if (!baseMeta.isEmpty) {
+            addStringProperty("Entity damage", affectedEntityDamage);
+            addStringProperty("Effect radius", spellEffectRadius);
+            addStringProperty("Impact speed", impactSpeed);
+            addStringProperty("Impact direction", impactCourse);
+        }
     }
 
-    void addStringProperty(String key, Object value) {
+    protected void addStringProperty(String key, Object value) {
         addStringProperty(key, value, "");
     }
 
-    void addStringProperty(String key, Object value, String unit) {
+    protected void addStringProperty(@NotNull String key, @NotNull Object value, String unit) {
         props.add("§6" + key.substring(0, 1).toUpperCase() + key.substring(1).toLowerCase() + ":§r " + value.toString().toLowerCase() + " " + unit);
     }
 
     public abstract boolean cast(Player player, String wandDisplayName);
 
-    void push(Entity entity, Location from, Player player) {
+    protected void push(Entity entity, Location from, Player player) {
         if (impactSpeed != 0) {
             Location location = entity.getLocation();
             if (impactCourse == ImpactCourse.PLAYER) {
@@ -80,7 +87,7 @@ public abstract class Behaviour implements Listener {
         }
     }
 
-    void applyEntityEffects(Location center, Player player, String wandDisplayName) {
+    protected void applyEntityEffects(Location center, Player player, String wandDisplayName) {
         SpellEffectUtil.getNearbyLivingEntities(player, center, spellEffectRadius).forEach(entity -> {
             push(entity, center, player);
             SpellEffectUtil.damageEffect(player, entity, affectedEntityDamage, wandDisplayName);
@@ -201,7 +208,17 @@ public abstract class Behaviour implements Listener {
             return self();
         }
 
-        static class BaseMeta {
+        public static class BaseMeta {
+            private BaseMeta() {
+                this.isEmpty = false;
+            }
+
+            private BaseMeta(boolean isEmpty) {
+                this.isEmpty = isEmpty;
+            }
+
+            private final static BaseMeta EMPTY = new BaseMeta(true);
+
             private int entityDamage = 0;
             private float spellEffectRadius, impactSpeed = 0;
             private SoundEffect castSounds = SoundEffect.EMPTY;
@@ -209,6 +226,8 @@ public abstract class Behaviour implements Listener {
             private BiConsumer<Location, Player> spellRelativeEffects2 = Common.emptyBiConsumer();
             private Consumer<LivingEntity> entityEffects = Common.emptyConsumer();
             private ImpactCourse impactCourse = ImpactCourse.SPELL;
+
+            private final boolean isEmpty;
         }
     }
 }

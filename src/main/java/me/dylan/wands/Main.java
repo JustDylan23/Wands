@@ -4,10 +4,9 @@ import me.dylan.wands.commandhandler.commands.*;
 import me.dylan.wands.commandhandler.tabcompleters.BindComplete;
 import me.dylan.wands.commandhandler.tabcompleters.UnbindComplete;
 import me.dylan.wands.commandhandler.tabcompleters.WandsComplete;
+import me.dylan.wands.config.ConfigurableData;
 import me.dylan.wands.customitems.AssassinDagger;
 import me.dylan.wands.customitems.CursedBow;
-import me.dylan.wands.pluginmeta.ConfigurableData;
-import me.dylan.wands.pluginmeta.ListenerRegistry;
 import me.dylan.wands.spell.PlayerListener;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
@@ -15,9 +14,8 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.Contract;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,7 +27,9 @@ public final class Main extends JavaPlugin {
     // instances of classes accessible via main class
     private ConfigurableData configurableData;
     private ListenerRegistry listenerRegistry;
+    private MouseClickListeners mouseClickListeners;
 
+    @Contract(pure = true)
     public static Main getPlugin() {
         return plugin;
     }
@@ -58,12 +58,15 @@ public final class Main extends JavaPlugin {
         addCommand("bindall", new BindAll(), null);
         addCommand("unbindall", new UnbindAll(), null);
 
-        listenerRegistry = new ListenerRegistry();
-        configurableData = new ConfigurableData();
+        this.listenerRegistry = new ListenerRegistry();
+        this.configurableData = new ConfigurableData();
+        this.mouseClickListeners = new MouseClickListeners();
+
         listenerRegistry.addToggleableListener(
                 new PlayerListener(),
                 new AssassinDagger(),
-                new CursedBow()
+                new CursedBow(),
+                mouseClickListeners
         );
         log("Successfully enabled");
     }
@@ -71,10 +74,10 @@ public final class Main extends JavaPlugin {
     @Override
     public void onDisable() {
         saveConfig();
-        disableLogic.forEach(Runnable::run);
+        this.disableLogic.forEach(Runnable::run);
     }
 
-    private void addCommand(@Nonnull String command, @Nonnull CommandExecutor executor, @Nullable TabCompleter tabCompleter) {
+    private void addCommand(String command, CommandExecutor executor, TabCompleter tabCompleter) {
         PluginCommand cmd = getCommand(command);
         if (cmd == null) throw new NullPointerException("Command " + command + "was not found in plugin.yml");
         cmd.setExecutor(executor);
@@ -89,11 +92,18 @@ public final class Main extends JavaPlugin {
         this.disableLogic.remove(runnable);
     }
 
+    @Contract(pure = true)
     public ConfigurableData getConfigurableData() {
         return configurableData;
     }
 
+    @Contract(pure = true)
     public ListenerRegistry getListenerRegistry() {
         return listenerRegistry;
+    }
+
+    @Contract(pure = true)
+    public MouseClickListeners getMouseClickListeners() {
+        return mouseClickListeners;
     }
 }

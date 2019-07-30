@@ -9,6 +9,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -23,11 +24,11 @@ public class ItemUtil {
         throw new UnsupportedOperationException();
     }
 
-    public static ItemStack getItemStack(Supplier<ItemStack> stackSupplier) {
+    public static ItemStack getItemStack(@NotNull Supplier<ItemStack> stackSupplier) {
         return stackSupplier.get();
     }
 
-    public static void setItemMeta(ItemStack itemStack, Consumer<ItemMeta> consumer) {
+    public static void setItemMeta(@NotNull ItemStack itemStack, @NotNull Consumer<ItemMeta> consumer) {
         ItemMeta itemMeta = itemStack.getItemMeta();
         consumer.accept(itemMeta);
         itemStack.setItemMeta(itemMeta);
@@ -41,7 +42,7 @@ public class ItemUtil {
         setItemMeta(itemStack, meta -> meta.setLore(Arrays.asList(lore)));
     }
 
-    public static <T> void setPersistentData(ItemStack itemStack, String key, PersistentDataType<T, T> type, T t) {
+    public static <T> void setPersistentData(@NotNull ItemStack itemStack, String key, PersistentDataType<T, T> type, T t) {
         ItemMeta meta = itemStack.getItemMeta();
         if (itemStack.getType() == Material.AIR) {
             return;
@@ -53,7 +54,7 @@ public class ItemUtil {
         itemStack.setItemMeta(meta);
     }
 
-    public static <T> Optional<T> getPersistentData(ItemStack itemStack, String key, PersistentDataType<T, T> type) {
+    public static <T> Optional<T> getPersistentData(@NotNull ItemStack itemStack, String key, PersistentDataType<T, T> type) {
         ItemMeta meta = itemStack.getItemMeta();
         if (itemStack.getType() == Material.AIR) {
             return Optional.empty();
@@ -64,7 +65,7 @@ public class ItemUtil {
         return container.has(namespacedKey, type) ? Optional.ofNullable(container.get(namespacedKey, type)) : Optional.empty();
     }
 
-    public static <T> boolean hasPersistentData(ItemStack itemStack, String key, PersistentDataType<T, T> type) {
+    public static <T> boolean hasPersistentData(@NotNull ItemStack itemStack, String key, PersistentDataType<T, T> type) {
         ItemMeta meta = itemStack.getItemMeta();
         if (itemStack.getType() == Material.AIR) {
             return false;
@@ -75,7 +76,7 @@ public class ItemUtil {
         return container.has(namespacedKey, type);
     }
 
-    public static void removePersistentData(ItemStack itemStack, String key) {
+    public static void removePersistentData(@NotNull ItemStack itemStack, String key) {
         ItemMeta meta = itemStack.getItemMeta();
         if (itemStack.getType() == Material.AIR) {
             return;

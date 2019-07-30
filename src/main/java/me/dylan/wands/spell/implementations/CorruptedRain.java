@@ -1,13 +1,13 @@
 package me.dylan.wands.spell.implementations;
 
+import me.dylan.wands.ListenerRegistry;
 import me.dylan.wands.Main;
-import me.dylan.wands.pluginmeta.ListenerRegistry;
+import me.dylan.wands.sound.CompoundSound;
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.SpellEffectUtil;
 import me.dylan.wands.spell.handler.Behaviour;
 import me.dylan.wands.spell.handler.SparkSpell;
 import me.dylan.wands.spell.handler.SparkSpell.Target;
-import me.dylan.wands.spell.spelleffect.sound.CompoundSound;
 import me.dylan.wands.util.Common;
 import org.bukkit.*;
 import org.bukkit.block.data.BlockData;
@@ -22,7 +22,6 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import javax.annotation.Nonnull;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -58,7 +57,7 @@ public enum CorruptedRain implements Castable, Listener {
         return behaviour;
     }
 
-    private void spawnArrows(@Nonnull Location location, Player player) {
+    private void spawnArrows(Location location, Player player) {
         location.add(0, 5, 0);
         World world = location.getWorld();
         Location particleLoc = location.clone().add(0, 2, 0);

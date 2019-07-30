@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public abstract class BaseCompleter implements TabCompleter {
-    protected List<String> validCompletions(String value, String... values) {
+    protected List<String> validCompletions(String toComplete, String... values) {
         return Arrays.stream(values)
-                .filter(s -> s.toLowerCase().contains(value))
+                .filter(s -> s.toLowerCase().contains(toComplete))
                 .map(String::toLowerCase)
                 .collect(Collectors.toList());
     }

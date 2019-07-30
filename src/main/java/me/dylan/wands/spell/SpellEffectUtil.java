@@ -9,8 +9,9 @@ import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,7 @@ public class SpellEffectUtil {
     public static final String UNTARGETABLE = UUID.randomUUID().toString();
     private static final Main plugin = Main.getPlugin();
 
+    @Contract(value = " -> fail", pure = true)
     private SpellEffectUtil() {
         throw new UnsupportedOperationException();
     }
@@ -47,7 +49,7 @@ public class SpellEffectUtil {
         return info.getRelativeBlock().getLocation().toCenterLocation();
     }
 
-    public static Location[] getHorizontalCircleFrom(Location location, float radius) {
+    public static Location[] getHorizontalCircleFrom(@NotNull Location location, float radius) {
         int points = (int) Math.ceil(radius * 2 * Math.PI);
         double increment = (2 * Math.PI) / points;
         Location[] locations = new Location[points];
@@ -66,7 +68,7 @@ public class SpellEffectUtil {
     }
 
     @SuppressWarnings("SameParameterValue")
-    public static Location[] getCircleFromPlayerView(@Nonnull Location location, double radius, int points, double distance) {
+    public static Location[] getCircleFromPlayerView(@NotNull Location location, double radius, int points, double distance) {
         World world = location.getWorld();
         Location[] locations = new Location[points];
 
@@ -106,7 +108,7 @@ public class SpellEffectUtil {
         return getNearbyLivingEntities(player, loc, b -> true, radius);
     }
 
-    public static List<LivingEntity> getNearbyLivingEntities(Player player, Location loc, Predicate<LivingEntity> predicate, double radius) {
+    public static List<LivingEntity> getNearbyLivingEntities(Player player, @NotNull Location loc, Predicate<LivingEntity> predicate, double radius) {
         return loc.getWorld()
                 .getNearbyEntities(loc, radius, radius, radius).stream()
                 .filter(entity ->
@@ -120,7 +122,7 @@ public class SpellEffectUtil {
     }
 
 
-    public static void runTaskLater(Runnable runnable, int... delays) {
+    public static void runTaskLater(Runnable runnable, @NotNull int... delays) {
         int delay = 0;
         for (int i : delays) {
             delay += i;
@@ -128,7 +130,7 @@ public class SpellEffectUtil {
         }
     }
 
-    public static void spawnColoredParticle(Particle particle, Location location, int count, double offsetX, double offsetY, double offsetZ, int red, int green, int blue, boolean rainbow) {
+    public static void spawnColoredParticle(@NotNull Particle particle, Location location, int count, double offsetX, double offsetY, double offsetZ, int red, int green, int blue, boolean rainbow) {
         switch (particle) {
             case REDSTONE:
             case SPELL_MOB:
@@ -146,7 +148,8 @@ public class SpellEffectUtil {
         }
     }
 
-    public static Location randomizeLoc(Location location, double x, double y, double z) {
+    @NotNull
+    public static Location randomizeLoc(@NotNull Location location, double x, double y, double z) {
         return location.clone().add(randomize(x), randomize(y), randomize(z));
     }
 
@@ -154,7 +157,7 @@ public class SpellEffectUtil {
         return ThreadLocalRandom.current().nextDouble() * d * 2.0 - d;
     }
 
-    public static void damageEffect(Player attacker, Damageable victim, int amount, @Nonnull String weaponDisplayName) {
+    public static void damageEffect(Player attacker, Damageable victim, int amount, String weaponDisplayName) {
         if (amount != 0) {
             if (victim instanceof Player) {
                 victim.setMetadata("deathMessage", new FixedMetadataValue(plugin,
@@ -179,12 +182,21 @@ public class SpellEffectUtil {
         }
     }
 
-    public static Location getFirstPassableBlockAbove(Location location) {
+    public static Location getFirstPassableBlockAbove(@NotNull Location location) {
         if (location.getBlock().isPassable()) return location;
         Location loc = new Location(location.getWorld(), location.getX(), location.getY(), location.getZ());
         for (int i = (int) loc.getY(); i < 256; i++) {
             loc.add(0, 1, 0);
             if (loc.getBlock().isPassable()) return loc;
+        }
+        return loc;
+    }
+
+    public static Location getFirstGroundBlockUnder(@NotNull Location location) {
+        Location loc = new Location(location.getWorld(), location.getX(), location.getY(), location.getZ());
+        for (int i = (int) loc.getY(); i > 0; i--) {
+            loc.add(0, -1, 0);
+            if (!loc.getBlock().isPassable()) return loc.add(0, 1, 0);
         }
         return loc;
     }

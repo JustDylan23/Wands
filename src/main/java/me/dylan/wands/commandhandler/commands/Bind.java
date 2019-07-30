@@ -8,12 +8,11 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 public class Bind extends BaseCommand {
     @Override
-    public boolean onCommand(@Nonnull CommandSender sender, @Nonnull Command cmd, @Nonnull String label, @Nonnull String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
         if (isPlayer(sender)) {
             if (args.length == 1) {
                 Player player = (Player) sender;
@@ -24,8 +23,9 @@ public class Bind extends BaseCommand {
                     if (spellType != null) {
                         String itemName = itemStack.getItemMeta().getDisplayName();
                         if (!SpellCompoundUtil.containsSpell(itemStack, argument)) {
-                            SpellCompoundUtil.addSpell(itemStack, spellType);
-                            sender.sendMessage(Main.PREFIX + "Successfully added §7§l" + argument.toLowerCase() + "§r to " + itemName);
+                            if (SpellCompoundUtil.addSpell(itemStack, spellType, player, false)) {
+                                sender.sendMessage(Main.PREFIX + "Successfully added §7§l" + argument.toLowerCase() + "§r to " + itemName);
+                            }
                         } else {
                             sender.sendMessage(Main.PREFIX + itemName + "§r already contains §7§l" + argument);
                         }

@@ -1,3 +1,4 @@
 magic-cooldown-time: 0
 allow-magic-use: true
 allow-self-harm: false
+casting-requires-permission: true

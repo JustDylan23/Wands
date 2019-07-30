@@ -1,6 +1,9 @@
 package me.dylan.wands.customitems;
 
 import me.dylan.wands.Main;
+import me.dylan.wands.MouseClickListeners.ClickEvent;
+import me.dylan.wands.MouseClickListeners.RightClickListener;
+import me.dylan.wands.spell.SpellManagementUtil;
 import me.dylan.wands.util.Common;
 import me.dylan.wands.util.ItemUtil;
 import org.bukkit.*;
@@ -18,6 +21,7 @@ import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -26,18 +30,24 @@ import org.bukkit.util.Vector;
 
 import java.util.UUID;
 
-public class AssassinDagger implements Listener {
+public class AssassinDagger implements Listener, RightClickListener {
 
     public static final String ID_TAG = "artifact-dagger";
     private final Main plugin = Main.getPlugin();
     private final String tagLeap = UUID.randomUUID().toString();
     private final String tagSneak = UUID.randomUUID().toString();
     private final String tagSprint = UUID.randomUUID().toString();
-
     private final PotionEffect speed = new PotionEffect(PotionEffectType.SPEED, 10, 4, true);
 
+    public AssassinDagger() {
+        plugin.getMouseClickListeners().addRightClickListener(this);
+    }
+
     private boolean hasDagger(Player player) {
-        return ItemUtil.hasPersistentData(player.getInventory().getItemInMainHand(), ID_TAG, PersistentDataType.BYTE);
+        PlayerInventory inventory = player.getInventory();
+        return SpellManagementUtil.canUse(player)
+                && (ItemUtil.hasPersistentData(inventory.getItemInMainHand(), ID_TAG, PersistentDataType.BYTE)
+                || ItemUtil.hasPersistentData(inventory.getItemInOffHand(), ID_TAG, PersistentDataType.BYTE));
     }
 
     @EventHandler
@@ -92,12 +102,11 @@ public class AssassinDagger implements Listener {
         }
     }
 
-    @EventHandler
-    private void leap(PlayerInteractEvent event) {
+    @Override
+    public void onRightClick(ClickEvent event) {
         Player player = event.getPlayer();
-        if (hasDagger(player) && event.getHand() != null && event.getHand().equals(EquipmentSlot.HAND)) {
-            Action a = event.getAction();
-            if ((a == Action.RIGHT_CLICK_AIR || a == Action.RIGHT_CLICK_BLOCK) && !player.hasMetadata(tagLeap) && !player.hasMetadata(tagSneak)) {
+        if (hasDagger(player)) {
+            if (!player.hasMetadata(tagLeap) && !player.hasMetadata(tagSneak)) {
                 player.setMetadata(tagLeap, Common.METADATA_VALUE_TRUE);
                 event.setCancelled(true);
                 player.getWorld().playSound(player.getLocation(), Sound.ENTITY_LLAMA_SWAG, SoundCategory.MASTER, 3.0F, 1.0F);
@@ -107,11 +116,11 @@ public class AssassinDagger implements Listener {
                     @Override
                     public void run() {
                         if (player.isOnGround()) {
-                            Bukkit.getScheduler().runTaskLater(plugin, () -> player.removeMetadata(tagLeap, plugin), 2);
+                            player.removeMetadata(tagLeap, plugin);
                             cancel();
                         }
                     }
-                }.runTaskTimer(Main.getPlugin(), 2, 2);
+                }.runTaskTimer(Main.getPlugin(), 5, 1);
             }
         }
     }

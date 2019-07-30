@@ -1,10 +1,9 @@
-package me.dylan.wands.spell.spelleffect.sound;
+package me.dylan.wands.sound;
 
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,30 +17,30 @@ public class CompoundSound implements SoundEffect {
         return new CompoundSound();
     }
 
-    public CompoundSound add(@Nonnull Sound sound) {
+    public CompoundSound add(Sound sound) {
         sounds.add(SingularSound.from(sound, 1));
         return this;
     }
 
-    public CompoundSound add(@Nonnull Sound sound, float pitch) {
+    public CompoundSound add(Sound sound, float pitch) {
         sounds.add(SingularSound.from(sound, pitch));
         return this;
     }
 
-    public CompoundSound add(@Nonnull Sound sound, float pitch, int... repeat) {
-        sounds.add(me.dylan.wands.spell.spelleffect.sound.RepeatableSound.from(sound, pitch, repeat));
+    public CompoundSound add(Sound sound, float pitch, int... repeat) {
+        sounds.add(RepeatableSound.from(sound, pitch, repeat));
         return this;
     }
 
     @Override
-    public void play(@Nonnull Location location) {
+    public void play(Location location) {
         for (SoundEffect sound : sounds) {
             sound.play(location);
         }
     }
 
     @Override
-    public void play(@Nonnull Entity entity) {
+    public void play(Entity entity) {
         for (SoundEffect sound : sounds) {
             sound.play(entity);
         }

@@ -1,6 +1,7 @@
 package me.dylan.wands.spell;
 
 import me.dylan.wands.Main;
+import me.dylan.wands.config.ConfigurableData;
 import me.dylan.wands.spell.handler.Behaviour;
 import me.dylan.wands.util.ItemUtil;
 import org.bukkit.Sound;
@@ -9,24 +10,35 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
-@SuppressWarnings("WeakerAccess")
+//@SuppressWarnings("WeakerAccess")
 public class SpellManagementUtil {
+    private static final ConfigurableData data = Main.getPlugin().getConfigurableData();
 
     private static final String TAG_SPELL_INDEX = "SpellIndex";
     private static final String TAG_SPELLS_LIST = "Spells";
     private static final String TAG_VERIFIED = "IsWand";
     private static final String TAG_PARTICLE_SPELL_BROWSE = "SpellBrowseParticles";
     private static final String TAG_UNMODIFIABLE = "BlockModification";
-    private static final String TAG_BLOCK_REGISTERING = "BlockRegistering";
+    private static final String TAG_BLOCK_REGISTRATION = "BlockRegistering";
 
     @Contract(value = " -> fail", pure = true)
     private SpellManagementUtil() {
         throw new UnsupportedOperationException();
+    }
+
+    public static boolean canUse(Player player) {
+        if (data.doesCastingRequirePermission()) {
+            if (!player.hasPermission("wands.use")) {
+                player.sendActionBar("§cinsufficient permissions");
+                return false;
+            }
+        }
+        return true;
     }
 
     public static void setAsWand(ItemStack itemStack) {
@@ -35,7 +47,7 @@ public class SpellManagementUtil {
         }
     }
 
-    public static boolean isWand(@Nonnull ItemStack itemStack) {
+    public static boolean isWand(ItemStack itemStack) {
         return ItemUtil.hasPersistentData(itemStack, TAG_VERIFIED, PersistentDataType.BYTE);
     }
 
@@ -46,15 +58,28 @@ public class SpellManagementUtil {
         ItemUtil.removePersistentData(itemStack, TAG_PARTICLE_SPELL_BROWSE);
     }
 
-    public static void setAsUnregisterable(ItemStack itemStack) {
-        ItemUtil.setPersistentData(itemStack, TAG_BLOCK_REGISTERING, PersistentDataType.BYTE, (byte) 0);
+    public static void blockRegistration(ItemStack itemStack) {
+        ItemUtil.setPersistentData(itemStack, TAG_BLOCK_REGISTRATION, PersistentDataType.BYTE, (byte) 1);
     }
 
-    public static boolean canBeRegistered(@Nonnull ItemStack itemStack) {
-        return !ItemUtil.hasPersistentData(itemStack, TAG_BLOCK_REGISTERING, PersistentDataType.BYTE);
+    public static boolean canBeRegistered(ItemStack itemStack) {
+        return !ItemUtil.hasPersistentData(itemStack, TAG_BLOCK_REGISTRATION, PersistentDataType.BYTE);
     }
 
-    public static void setSpells(ItemStack itemStack, @Nonnull SpellType... spellTypes) {
+    static void blockModification(ItemStack itemStack) {
+        ItemUtil.setPersistentData(itemStack, TAG_UNMODIFIABLE, PersistentDataType.BYTE, (byte) 1);
+    }
+
+    private static boolean canBeModified(ItemStack itemStack, Player player) {
+        if (player.isOp() || ItemUtil.hasPersistentData(itemStack, TAG_UNMODIFIABLE, PersistentDataType.BYTE)) {
+            return true;
+        } else {
+            player.sendMessage(Main.PREFIX + itemStack.getItemMeta().getDisplayName() + "§r couldn't be modified");
+            return false;
+        }
+    }
+
+    static void setSpells(ItemStack itemStack, @NotNull SpellType... spellTypes) {
         StringJoiner stringJoiner = new StringJoiner(", ");
         for (SpellType spellType : spellTypes) {
             stringJoiner.add(spellType.toString());
@@ -62,20 +87,20 @@ public class SpellManagementUtil {
         ItemUtil.setPersistentData(itemStack, TAG_SPELLS_LIST, PersistentDataType.STRING, stringJoiner.toString());
     }
 
-    public static void setSpellBrowseParticles(ItemStack itemStack, @Nonnull BrowseParticle browseParticle) {
+    static void setSpellBrowseParticles(ItemStack itemStack, @NotNull BrowseParticle browseParticle) {
         ItemUtil.setPersistentData(itemStack, TAG_PARTICLE_SPELL_BROWSE, PersistentDataType.STRING, browseParticle.toString());
     }
 
-    private static void setIndex(@Nonnull ItemStack itemStack, int index) {
+    private static void setIndex(ItemStack itemStack, int index) {
         ItemUtil.setPersistentData(itemStack, TAG_SPELL_INDEX, PersistentDataType.INTEGER, index);
     }
 
-    private static int getIndex(@Nonnull ItemStack itemStack) {
+    private static int getIndex(ItemStack itemStack) {
         return ItemUtil.getPersistentData(itemStack, TAG_SPELL_INDEX, PersistentDataType.INTEGER)
                 .orElse(0);
     }
 
-    public static Optional<BrowseParticle> getSpellBrowseParticle(ItemStack itemStack) {
+    private static Optional<BrowseParticle> getSpellBrowseParticle(ItemStack itemStack) {
         Optional<String> stringOptional = ItemUtil.getPersistentData(itemStack, TAG_PARTICLE_SPELL_BROWSE, PersistentDataType.STRING);
         if (stringOptional.isPresent()) {
             try {
@@ -99,10 +124,10 @@ public class SpellManagementUtil {
         }
     }
 
-    private static void removeCorruptedSpell(@Nonnull Player player, ItemStack itemStack, String spell) {
+    private static void removeCorruptedSpell(@NotNull Player player, ItemStack itemStack, String spell) {
         player.sendMessage(Main.PREFIX + "The spell that you tried to cast does not exist,\n" +
                 "it was removed from your wand");
-        SpellCompoundUtil.removeSpell(itemStack, spell);
+        SpellCompoundUtil.removeSpell(itemStack, spell, player, true);
     }
 
     static void nextSpell(Player player, ItemStack itemStack) {
@@ -135,25 +160,29 @@ public class SpellManagementUtil {
         }
     }
 
-    static boolean castSpell(Player player, ItemStack itemStack) {
-        String spell = getSelectedSpell(itemStack);
-        if (spell != null) {
-            // returns null when the spell stored on the item isn't a SpellType
-            Castable castable = SpellType.getSpell(spell);
-            if (castable != null) {
-                Behaviour behaviour = castable.getBehaviour();
-                if (behaviour != null) {
-                    return behaviour.cast(player, itemStack.getItemMeta().getDisplayName());
+    static void castSpell(@NotNull Player player, ItemStack itemStack) {
+        CooldownManager cooldownManager = CooldownManager.INSTANCE;
+        if (cooldownManager.canCast(player)) {
+            String spell = getSelectedSpell(itemStack);
+            if (spell != null) {
+                // returns null when the spell stored on the item isn't a SpellType
+                Castable castable = SpellType.getSpell(spell);
+                if (castable != null) {
+                    Behaviour behaviour = castable.getBehaviour();
+                    if (behaviour != null) {
+                        if (behaviour.cast(player, itemStack.getItemMeta().getDisplayName())) {
+                            cooldownManager.updateLastUsed(player);
+                        }
+                    } else {
+                        player.sendActionBar("No functionality found!");
+                    }
                 } else {
-                    player.sendActionBar("No functionality found!");
+                    removeCorruptedSpell(player, itemStack, spell);
                 }
             } else {
-                removeCorruptedSpell(player, itemStack, spell);
+                player.sendActionBar(Main.PREFIX + "No spells are bound!");
             }
-        } else {
-            player.sendActionBar(Main.PREFIX + "No spells are bound!");
         }
-        return false;
     }
 
     public static class SpellCompoundUtil {
@@ -164,43 +193,58 @@ public class SpellManagementUtil {
                     .orElseGet(ArrayList::new);
         }
 
-        public static boolean containsSpell(ItemStack itemStack, @Nonnull String spell) {
+        public static boolean containsSpell(ItemStack itemStack, @NotNull String spell) {
             return getSpells(itemStack).contains(spell.toUpperCase());
         }
 
-        public static void removeSpell(ItemStack itemStack, String spell) {
-            spell = spell.toUpperCase();
-            List<String> spells = getSpells(itemStack);
-            if (spells.isEmpty()) return;
-            spells.remove(spell);
-            if (!spells.isEmpty()) {
+        public static boolean removeSpell(ItemStack itemStack, String spell, Player player, boolean override) {
+            boolean b = override || canBeModified(itemStack, player);
+            if (b) {
+                spell = spell.toUpperCase();
+                List<String> spells = getSpells(itemStack);
+                if (spells.isEmpty()) return false;
+                spells.remove(spell);
+                if (!spells.isEmpty()) {
+                    StringJoiner stringJoiner = new StringJoiner(", ");
+                    spells.forEach(stringJoiner::add);
+                    ItemUtil.setPersistentData(itemStack, TAG_SPELLS_LIST, PersistentDataType.STRING, stringJoiner.toString());
+                } else {
+                    clearSpells(itemStack, player, false);
+                }
+            }
+            return b;
+        }
+
+        public static boolean addSpell(ItemStack itemStack, @NotNull SpellType spellType, Player player, boolean override) {
+            boolean b = override || canBeModified(itemStack, player);
+            if (b) {
+                Optional<String> spells = ItemUtil.getPersistentData(itemStack, TAG_SPELLS_LIST, PersistentDataType.STRING);
+                String rawList = spells
+                        .map(s -> s + ", " + spellType)
+                        .orElseGet(spellType::toString);
+                ItemUtil.setPersistentData(itemStack, TAG_SPELLS_LIST, PersistentDataType.STRING, rawList);
+            }
+            return b;
+        }
+
+        public static boolean clearSpells(ItemStack itemStack, Player player, boolean override) {
+            boolean b = override || canBeModified(itemStack, player);
+            if (b) {
+                ItemUtil.removePersistentData(itemStack, TAG_SPELLS_LIST);
+            }
+            return b;
+        }
+
+        public static boolean addAllSpells(ItemStack itemStack, Player player, boolean override) {
+            boolean b = override || canBeModified(itemStack, player);
+            if (b) {
                 StringJoiner stringJoiner = new StringJoiner(", ");
-                spells.forEach(stringJoiner::add);
+                for (SpellType spellType : SpellType.values()) {
+                    stringJoiner.add(spellType.toString());
+                }
                 ItemUtil.setPersistentData(itemStack, TAG_SPELLS_LIST, PersistentDataType.STRING, stringJoiner.toString());
-            } else {
-                clearSpells(itemStack);
             }
-        }
-
-        public static void addSpell(ItemStack itemStack, @Nonnull SpellType spellType) {
-            Optional<String> spells = ItemUtil.getPersistentData(itemStack, TAG_SPELLS_LIST, PersistentDataType.STRING);
-            String rawList = spells
-                    .map(s -> s + ", " + spellType)
-                    .orElseGet(spellType::toString);
-            ItemUtil.setPersistentData(itemStack, TAG_SPELLS_LIST, PersistentDataType.STRING, rawList);
-        }
-
-
-        public static void clearSpells(ItemStack itemStack) {
-            ItemUtil.removePersistentData(itemStack, TAG_SPELLS_LIST);
-        }
-
-        public static void addAllSpells(ItemStack itemStack) {
-            StringJoiner stringJoiner = new StringJoiner(", ");
-            for (SpellType spellType : SpellType.values()) {
-                stringJoiner.add(spellType.toString());
-            }
-            ItemUtil.setPersistentData(itemStack, TAG_SPELLS_LIST, PersistentDataType.STRING, stringJoiner.toString());
+            return b;
         }
     }
 }

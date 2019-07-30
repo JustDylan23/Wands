@@ -12,7 +12,7 @@ commands:
     usage: /wands <arguments>
     permission: wands.command
   createwand:
-    aliases: [wd]
+    aliases: [cw]
     description: Transform held item into a wand.
     usage: /createwand <name>
     permission: wands.create
