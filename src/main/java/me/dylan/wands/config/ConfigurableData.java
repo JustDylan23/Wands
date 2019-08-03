@@ -38,13 +38,13 @@ public class ConfigurableData {
         return isMagicUseAllowed;
     }
 
+    public int getMagicCooldownTime() {
+        return magicCooldownTime;
+    }
+
     public void setMagicCooldownTime(int magicCooldownTime) {
         this.magicCooldownTime = magicCooldownTime;
         ConfigUtil.set(MAGIC_COOLDOWN_TIME_KEY, magicCooldownTime);
-    }
-
-    public int getMagicCooldownTime() {
-        return magicCooldownTime;
     }
 
     public void allowSelfHarm(boolean value) {

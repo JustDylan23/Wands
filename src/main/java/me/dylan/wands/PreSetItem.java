@@ -3,8 +3,8 @@ package me.dylan.wands;
 import me.dylan.wands.customitems.AssassinDagger;
 import me.dylan.wands.customitems.CursedBow;
 import me.dylan.wands.spell.BrowseParticle;
+import me.dylan.wands.spell.SpellInstance;
 import me.dylan.wands.spell.SpellManagementUtil;
-import me.dylan.wands.spell.SpellType;
 import me.dylan.wands.spell.WandBuilder;
 import me.dylan.wands.util.ItemUtil;
 import org.bukkit.Bukkit;
@@ -16,7 +16,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -48,12 +47,12 @@ public enum PreSetItem {
             WandBuilder.from(Material.STICK)
                     .named("&7Magic Wand")
                     .withSpells(
-                            SpellType.COMET,
-                            SpellType.SPARK,
-                            SpellType.CONFUSE,
-                            SpellType.LAUNCH,
-                            SpellType.ESCAPE,
-                            SpellType.POISON_WAVE
+                            SpellInstance.COMET,
+                            SpellInstance.SPARK,
+                            SpellInstance.CONFUSE,
+                            SpellInstance.LAUNCH,
+                            SpellInstance.ESCAPE,
+                            SpellInstance.POISON_WAVE
                     )
                     .withSpellBrowseParticles(BrowseParticle.DEFAULT)
                     .build()
@@ -62,11 +61,11 @@ public enum PreSetItem {
             WandBuilder.from(Material.NETHER_WART)
                     .named("&cBlood Magic")
                     .withSpells(
-                            SpellType.BLOOD_WAVE,
-                            SpellType.BLOOD_SPARK,
-                            SpellType.BLOOD_EXPLODE,
-                            SpellType.BLOOD_STUN,
-                            SpellType.BLOOD_BLOCK
+                            SpellInstance.BLOOD_WAVE,
+                            SpellInstance.BLOOD_SPARK,
+                            SpellInstance.BLOOD_EXPLODE,
+                            SpellInstance.BLOOD_STUN,
+                            SpellInstance.BLOOD_BLOCK
                     )
                     .withSpellBrowseParticles(BrowseParticle.PARTICLE_BLOOD)
                     .build()
@@ -76,12 +75,12 @@ public enum PreSetItem {
             WandBuilder.from(Material.BLAZE_ROD)
                     .named("&rIce Wand")
                     .withSpells(
-                            SpellType.THUNDER_ARROW,
-                            SpellType.THUNDER_STRIKE,
-                            SpellType.THUNDER_STORM,
-                            SpellType.THUNDER_RAGE,
-                            SpellType.ICE_FREEZE,
-                            SpellType.ICE_AURA
+                            SpellInstance.THUNDER_ARROW,
+                            SpellInstance.THUNDER_STRIKE,
+                            SpellInstance.THUNDER_STORM,
+                            SpellInstance.THUNDER_RAGE,
+                            SpellInstance.ICE_FREEZE,
+                            SpellInstance.ICE_AURA
                     )
                     .withSpellBrowseParticles(BrowseParticle.PARTICLE_ICE)
                     .build()
@@ -91,12 +90,12 @@ public enum PreSetItem {
             WandBuilder.from(Material.STICK)
                     .named("&8&lDark Wand")
                     .withSpells(
-                            SpellType.DARK_PULSE,
-                            SpellType.DARK_BLOCK,
-                            SpellType.DARK_CIRCLE,
-                            SpellType.DARK_PUSH,
-                            SpellType.DARK_AURA,
-                            SpellType.DARK_SPARK
+                            SpellInstance.DARK_PULSE,
+                            SpellInstance.DARK_BLOCK,
+                            SpellInstance.DARK_CIRCLE,
+                            SpellInstance.DARK_PUSH,
+                            SpellInstance.DARK_AURA,
+                            SpellInstance.DARK_SPARK
                     )
                     .withSpellBrowseParticles(BrowseParticle.PARTICLE_DARK)
                     .build()
@@ -106,12 +105,12 @@ public enum PreSetItem {
             WandBuilder.from(Material.BLAZE_POWDER)
                     .named("&6Celcrius Wand")
                     .withSpells(
-                            SpellType.FIRE_COMET,
-                            SpellType.FIRE_TWISTER,
-                            SpellType.FLAME_WAVE,
-                            SpellType.FLAME_SHOCK_WAVE,
-                            SpellType.FLAME_THROWER,
-                            SpellType.FIRE_SPARK
+                            SpellInstance.FIRE_COMET,
+                            SpellInstance.FIRE_TWISTER,
+                            SpellInstance.FLAME_WAVE,
+                            SpellInstance.FLAME_SHOCK_WAVE,
+                            SpellInstance.FLAME_THROWER,
+                            SpellInstance.FIRE_SPARK
                     )
                     .withSpellBrowseParticles(BrowseParticle.PARTICLE_FIRE)
                     .build()
@@ -121,13 +120,13 @@ public enum PreSetItem {
             WandBuilder.from(Material.STICK)
                     .named("&cCorrupted Wand")
                     .withSpells(
-                            SpellType.CORRUPTED_RAIN,
-                            SpellType.CORRUPTED_WAVE,
-                            SpellType.CORRUPTED_SHOCK_WAVE,
-                            SpellType.CORRUPTED_WOLFS,
-                            SpellType.CORRUPTED_LAUNCH,
-                            SpellType.CORRUPTED_SPARK,
-                            SpellType.POISON_WAVE
+                            SpellInstance.CORRUPTED_RAIN,
+                            SpellInstance.CORRUPTED_WAVE,
+                            SpellInstance.CORRUPTED_SHOCK_WAVE,
+                            SpellInstance.CORRUPTED_WOLFS,
+                            SpellInstance.CORRUPTED_LAUNCH,
+                            SpellInstance.CORRUPTED_SPARK,
+                            SpellInstance.POISON_WAVE
                     )
                     .withSpellBrowseParticles(BrowseParticle.PARTICLE_CORRUPTED)
                     .build()
@@ -137,12 +136,10 @@ public enum PreSetItem {
 
     private final ItemStack itemStack;
 
-    @Contract(pure = true)
     PreSetItem(ItemStack itemStack) {
         this.itemStack = itemStack;
     }
 
-    @Contract(pure = true)
     public static String[] getNames() {
         return names;
     }
@@ -155,7 +152,6 @@ public enum PreSetItem {
         player.openInventory(inventory);
     }
 
-    @Contract(pure = true)
     public ItemStack getItemStack() {
         return itemStack;
     }

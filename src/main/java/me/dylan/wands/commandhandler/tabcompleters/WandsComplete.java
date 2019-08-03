@@ -2,7 +2,7 @@ package me.dylan.wands.commandhandler.tabcompleters;
 
 import me.dylan.wands.PreSetItem;
 import me.dylan.wands.commandhandler.BaseCompleter;
-import me.dylan.wands.spell.SpellType;
+import me.dylan.wands.spell.SpellInstance;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +20,7 @@ public class WandsComplete extends BaseCompleter {
             return validCompletions(value, "enable", "disable", "get", "set", "info", "spells", "getconfig");
         else if (args.length == 2) {
             if (args[0].equalsIgnoreCase("spells")) {
-                String[] str = Arrays.stream(SpellType.values()).map(Enum::toString).toArray(String[]::new);
+                String[] str = Arrays.stream(SpellInstance.values()).map(Enum::toString).toArray(String[]::new);
                 return validCompletions(value, str);
             }
             if (args[0].equalsIgnoreCase("get"))

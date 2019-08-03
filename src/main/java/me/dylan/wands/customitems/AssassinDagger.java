@@ -12,15 +12,12 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
@@ -108,7 +105,7 @@ public class AssassinDagger implements Listener, RightClickListener {
         if (hasDagger(player)) {
             if (!player.hasMetadata(tagLeap) && !player.hasMetadata(tagSneak)) {
                 player.setMetadata(tagLeap, Common.METADATA_VALUE_TRUE);
-                event.setCancelled(true);
+                event.cancel();
                 player.getWorld().playSound(player.getLocation(), Sound.ENTITY_LLAMA_SWAG, SoundCategory.MASTER, 3.0F, 1.0F);
                 Vector direction = player.getLocation().getDirection().setY(0).normalize().setY(1.2);
                 player.setVelocity(direction);

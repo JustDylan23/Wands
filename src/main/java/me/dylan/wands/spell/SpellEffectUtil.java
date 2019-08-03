@@ -2,18 +2,14 @@ package me.dylan.wands.spell;
 
 import com.destroystokyo.paper.block.TargetBlockInfo;
 import me.dylan.wands.Main;
+import me.dylan.wands.config.ConfigurableData;
+import me.dylan.wands.events.MagicDamageEvent;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.*;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.scoreboard.Team;
-import org.bukkit.scoreboard.Team.Option;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -26,9 +22,10 @@ import java.util.stream.Collectors;
 
 public class SpellEffectUtil {
     public static final String UNTARGETABLE = UUID.randomUUID().toString();
+    private static final ConfigurableData CONFIGURABLE_DATA = Main.getPlugin().getConfigurableData();
     private static final Main plugin = Main.getPlugin();
 
-    @Contract(value = " -> fail", pure = true)
+
     private SpellEffectUtil() {
         throw new UnsupportedOperationException();
     }
@@ -71,7 +68,7 @@ public class SpellEffectUtil {
         return locations;
     }
 
-    @SuppressWarnings("SameParameterValue")
+    @SuppressWarnings({"SameParameterValue", "unused"})
     public static Location[] getCircleFromPlayerView(@NotNull Location location, double radius, int points, double distance) {
         World world = location.getWorld();
         Location[] locations = new Location[points];
@@ -108,7 +105,7 @@ public class SpellEffectUtil {
         return locations;
     }
 
-    private static boolean canDamage(Player p1, Player p2) {
+    private static boolean checkFriendlyFireOption(Player p1, Player p2) {
         Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
         Team team = scoreboard.getEntryTeam(p1.getName());
         return team == null || team.allowFriendlyFire() || !team.equals(scoreboard.getEntryTeam(p2.getName()));
@@ -121,17 +118,17 @@ public class SpellEffectUtil {
     public static List<LivingEntity> getNearbyLivingEntities(Player player, @NotNull Location loc, Predicate<LivingEntity> predicate, double radius) {
         return loc.getWorld()
                 .getNearbyEntities(loc, radius, radius, radius).stream()
-                .filter(entity ->
-                        entity instanceof LivingEntity
-                                && !(entity instanceof ArmorStand)
-                                && (Main.getPlugin().getConfigurableData().isSelfHarmAllowed() || !entity.equals(player))
-                                && (!(entity instanceof Player) || canDamage((Player) entity, player))
+                .filter(entity -> entity instanceof LivingEntity
+                        && !(entity instanceof ArmorStand)
+                        && entity.equals(player)
+                        ? CONFIGURABLE_DATA.isSelfHarmAllowed()
+                        : (!(entity instanceof Player)
+                        || checkFriendlyFireOption(player, (Player) entity))
                 )
                 .map(LivingEntity.class::cast)
                 .filter(predicate)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
-
 
     public static void runTaskLater(Runnable runnable, @NotNull int... delays) {
         int delay = 0;
@@ -171,27 +168,19 @@ public class SpellEffectUtil {
     public static void damageEffect(Player attacker, Damageable victim, int amount, String weaponDisplayName) {
         if (amount != 0) {
             if (victim instanceof Player) {
-                victim.setMetadata("deathMessage", new FixedMetadataValue(plugin,
-                        ((Player) victim).getDisplayName()
-                                + " was slain by "
-                                + attacker.getDisplayName()
-                                + " using §7[§r"
-                                + weaponDisplayName
-                                + "§7]"
-                ));
-                victim.setLastDamageCause(new EntityDamageByEntityEvent(attacker, victim, DamageCause.CUSTOM, amount));
-            }
-            double armorDamageReduction = 1;
-            if (victim instanceof Player) {
                 Player player = (Player) victim;
                 AttributeInstance atr = player.getAttribute(Attribute.GENERIC_ARMOR);
+                double armorDamageReduction = 1;
                 if (atr != null) {
                     armorDamageReduction = 1 - (1.75 * atr.getValue()) / 100D;
                 }
-            }
-            victim.damage(Math.round((amount * armorDamageReduction) * 10) / 10);
+                double finalDamage = Math.round((amount * armorDamageReduction) * 10) / 10;
+                player.setLastDamageCause(new MagicDamageEvent(player, attacker, finalDamage, weaponDisplayName));
+                victim.damage(finalDamage);
+            } else victim.damage(amount);
         }
     }
+
 
     public static Location getFirstPassableBlockAbove(@NotNull Location location) {
         if (location.getBlock().isPassable()) return location;

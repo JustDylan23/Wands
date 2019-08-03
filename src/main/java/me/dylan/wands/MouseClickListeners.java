@@ -9,7 +9,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerAnimationEvent;
 import org.bukkit.event.player.PlayerAnimationType;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.jetbrains.annotations.Contract;
+import org.bukkit.inventory.EquipmentSlot;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -32,39 +32,13 @@ public class MouseClickListeners implements Listener {
         rightClickListeners.add(t);
     }
 
-    public interface LeftClickListener {
-        void onLeftClick(ClickEvent event);
-    }
-
-    public interface RightClickListener {
-        void onRightClick(ClickEvent event);
-    }
-
-    public static class ClickEvent {
-        private final Player player;
-        private final Cancellable cancellable;
-
-        @Contract(pure = true)
-        private ClickEvent(Player player, Cancellable cancellable) {
-            this.player = player;
-            this.cancellable = cancellable;
-        }
-
-        public Player getPlayer() {
-            return player;
-        }
-
-        public void setCancelled(boolean cancel) {
-            this.cancellable.setCancelled(cancel);
-        }
-    }
-
     @EventHandler
     private void onPlayerInteract(@NotNull PlayerInteractEvent event) {
         Action action = event.getAction();
         Player player = event.getPlayer();
         GameMode gameMode = player.getGameMode();
-        if (action == Action.PHYSICAL || gameMode == GameMode.SPECTATOR) return;
+        if (action == Action.PHYSICAL || gameMode == GameMode.SPECTATOR || event.getHand() == EquipmentSlot.OFF_HAND)
+            return;
         if (gameMode != GameMode.ADVENTURE && (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK)) {
             ClickEvent clickEvent = new ClickEvent(player, event);
             leftClickListeners.forEach(listener -> listener.onLeftClick(clickEvent));
@@ -80,6 +54,36 @@ public class MouseClickListeners implements Listener {
         if (event.getAnimationType() == PlayerAnimationType.ARM_SWING && player.getGameMode() == GameMode.ADVENTURE) {
             ClickEvent clickEvent = new ClickEvent(player, event);
             leftClickListeners.forEach(listener -> listener.onLeftClick(clickEvent));
+        }
+    }
+
+    public interface LeftClickListener {
+        void onLeftClick(ClickEvent event);
+    }
+
+    public interface RightClickListener {
+        void onRightClick(ClickEvent event);
+    }
+
+    public static class ClickEvent {
+        private final Player player;
+        private final Cancellable cancellable;
+
+        private ClickEvent(Player player, Cancellable cancellable) {
+            this.player = player;
+            this.cancellable = cancellable;
+        }
+
+        public Player getPlayer() {
+            return player;
+        }
+
+        public void cancel() {
+            this.cancellable.setCancelled(true);
+        }
+
+        public boolean isCancelled() {
+            return this.cancellable.isCancelled();
         }
     }
 }

@@ -5,7 +5,7 @@ import org.bukkit.entity.Entity;
 
 @FunctionalInterface
 public interface SoundEffect {
-    SoundEffect EMPTY = location -> {
+    SoundEffect NONE = location -> {
     };
 
     default void play(Entity entity) {

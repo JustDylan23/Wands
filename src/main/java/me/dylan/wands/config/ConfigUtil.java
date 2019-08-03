@@ -2,12 +2,12 @@ package me.dylan.wands.config;
 
 import me.dylan.wands.Main;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.jetbrains.annotations.Contract;
 
-public class ConfigUtil {
+@SuppressWarnings("SameParameterValue")
+class ConfigUtil {
     private static FileConfiguration config = Main.getPlugin().getConfig();
 
-    @Contract(value = " -> fail", pure = true)
+
     private ConfigUtil() {
         throw new UnsupportedOperationException();
     }

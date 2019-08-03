@@ -3,7 +3,6 @@ package me.dylan.wands.spell;
 import me.dylan.wands.util.ItemUtil;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public class WandBuilder {
@@ -15,7 +14,7 @@ public class WandBuilder {
     }
 
     @NotNull
-    @Contract(value = "_ -> new", pure = true)
+
     public static WandBuilder from(Material material) {
         return new WandBuilder(material);
     }
@@ -25,8 +24,8 @@ public class WandBuilder {
         return this;
     }
 
-    public WandBuilder withSpells(SpellType... spells) {
-        SpellManagementUtil.setSpells(itemStack, spells);
+    public WandBuilder withSpells(SpellInstance... spellInstances) {
+        SpellManagementUtil.setSpells(itemStack, spellInstances);
         return this;
     }
 
