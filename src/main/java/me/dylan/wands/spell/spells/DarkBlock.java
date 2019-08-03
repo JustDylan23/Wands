@@ -24,15 +24,15 @@ public enum DarkBlock implements Castable {
                     world.spawnParticle(Particle.SMOKE_LARGE, loc, 20, 1, 1, 1, 0.1, null, true);
                     world.spawnParticle(Particle.BLOCK_CRACK, loc, 15, 1, 1, 1, 0.15, Material.COAL_BLOCK.createBlockData(), true);
                     world.spawnParticle(Particle.EXPLOSION_HUGE, loc, 0, 0.0, 0.0, 0.0, 0.0, null, true);
-                    loc.createExplosion(0);
+                    loc.createExplosion(0.0f);
                 }))
                 .setSpellRelativeEffects((loc, world) -> {
                     world.spawnParticle(Particle.BLOCK_CRACK, loc, 10, 0.5, 0.5, 0.5, 0.15, Material.COAL_BLOCK.createBlockData(), true);
                     world.spawnParticle(Particle.SMOKE_LARGE, loc, 2, 0.2, 0.2, 0.2, 0.1, null, true);
                 })
-                .setSpellEffectRadius(3F)
+                .setSpellEffectRadius(3.5F)
                 .setEntityDamage(12)
-                .setKnockBack(0, 0)
+                .setKnockBack(0.6F, 0.5F)
                 .build();
     }
 

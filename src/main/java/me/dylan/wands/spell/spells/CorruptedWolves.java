@@ -30,11 +30,10 @@ public enum CorruptedWolves implements Castable {
         plugin.addDisableLogic(() -> wolves.forEach(Entity::remove));
 
         this.baseType = Spark.newBuilder(Base.Target.SINGLE)
-                .requireLivingTarget(true)
+                .setSpellEffectRadius(2.0F)
                 .setCastSound(Sound.ENTITY_EVOKER_PREPARE_SUMMON)
                 .setEffectDistance(30)
                 .setEntityEffects(this::accept)
-                .setSpellEffectRadius(1)
                 .build();
     }
 

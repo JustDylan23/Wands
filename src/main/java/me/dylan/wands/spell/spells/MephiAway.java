@@ -15,10 +15,10 @@ public enum MephiAway implements Castable {
         this.baseType = Circle.newBuilder(CirclePlacement.RELATIVE)
                 .setCircleRadius(5)
                 .setEntityDamage(8)
-                .setSpellEffectRadius(4F)
+                .setSpellEffectRadius(5.0F)
                 .setEntityEffects(entity -> {
                     entity.setVelocity(entity.getVelocity().setY(0.5f));
-                    entity.getLocation().createExplosion(0);
+                    entity.getLocation().createExplosion(0.0f);
                 })
                 .setMetersPerTick(3)
                 .setCastSound(Sound.ENTITY_ENDER_DRAGON_FLAP)
@@ -27,7 +27,7 @@ public enum MephiAway implements Castable {
                     world.spawnParticle(Particle.SMOKE_LARGE, loc, 3, 0.3, 0.3, 0.3, 0.1, null, true);
                     world.spawnParticle(Particle.VILLAGER_HAPPY, loc, 2, 0.3, 0.3, 0.3, 0.1, null, true);
                 })
-                .setKnockBack(0, 0)
+                .setKnockBack(1.0F, 0.5F)
                 .setCircleHeight(1)
                 .build();
     }

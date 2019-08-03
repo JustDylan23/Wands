@@ -20,7 +20,6 @@ import org.jetbrains.annotations.Nullable;
 public final class Circle extends Base {
     private final int speed, height, effectDistance, circleRadius;
     private final CirclePlacement circlePlacement;
-    private final boolean requireLivingTarget;
 
     private Circle(@NotNull Builder builder) {
         super(builder.baseProps);
@@ -29,14 +28,12 @@ public final class Circle extends Base {
         this.effectDistance = builder.effectDistance;
         this.circleRadius = builder.circleRadius;
         this.circlePlacement = builder.circlePlacement;
-        this.requireLivingTarget = builder.requireLivingTarget;
 
         addPropertyInfo("Radius", circleRadius, "meters");
         addPropertyInfo("Circle origin", circlePlacement);
         addPropertyInfo("Height", height, "meters");
         addPropertyInfo("Meters per tick", speed, "ticks");
         addPropertyInfo("Effect distance", effectDistance, "meters");
-        addPropertyInfo("Require Living Target", requireLivingTarget);
     }
 
     @NotNull
@@ -80,7 +77,7 @@ public final class Circle extends Base {
     @Nullable
     private Location getCircleCenter(Player player) {
         return (circlePlacement == CirclePlacement.TARGET)
-                ? SpellEffectUtil.getSpellLocation(effectDistance, player, requireLivingTarget)
+                ? SpellEffectUtil.getSpellLocation(effectDistance, player)
                 : player.getLocation();
     }
 
@@ -127,11 +124,6 @@ public final class Circle extends Base {
 
         public Builder setEffectDistance(int distance) {
             this.effectDistance = distance;
-            return this;
-        }
-
-        public Builder requireLivingTarget(boolean b) {
-            this.requireLivingTarget = b;
             return this;
         }
     }

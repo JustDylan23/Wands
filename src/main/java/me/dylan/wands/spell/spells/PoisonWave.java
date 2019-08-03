@@ -16,7 +16,7 @@ public enum PoisonWave implements Castable {
 
     PoisonWave() {
         this.baseType = Wave.newBuilder()
-                .setSpellEffectRadius(2F)
+                .setSpellEffectRadius(2.0F)
                 .setEntityDamage(6)
                 .setEffectDistance(20)
                 .setCastSound(Sound.ENTITY_EVOKER_CAST_SPELL)

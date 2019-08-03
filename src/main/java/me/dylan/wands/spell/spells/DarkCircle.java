@@ -19,10 +19,10 @@ public enum DarkCircle implements Castable {
         this.baseType = Circle.newBuilder(CirclePlacement.RELATIVE)
                 .setCircleRadius(4)
                 .setEntityDamage(8)
-                .setSpellEffectRadius(4F)
+                .setSpellEffectRadius(4.0F)
                 .setEntityEffects(entity -> {
                     entity.setVelocity(entity.getVelocity().setY(0.5f));
-                    entity.getLocation().createExplosion(0);
+                    entity.getLocation().createExplosion(0.0f);
                     entity.addPotionEffect(blind, true);
                 })
                 .setMetersPerTick(2)
@@ -31,7 +31,7 @@ public enum DarkCircle implements Castable {
                     world.spawnParticle(Particle.SMOKE_LARGE, loc, 10, 0.3, 0.3, 0.3, 0.1, null, true);
                     world.spawnParticle(Particle.ENCHANTMENT_TABLE, loc, 8, 0.3, 0.3, 0.3, 0.1, null, true);
                 })
-                .setKnockBack(0, 0)
+                .setKnockBack(1.0F, 0.5F)
                 .setCircleHeight(1)
                 .build();
     }

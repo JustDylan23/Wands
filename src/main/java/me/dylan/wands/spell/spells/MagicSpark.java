@@ -15,7 +15,7 @@ public enum MagicSpark implements Castable {
 
     MagicSpark() {
         this.baseType = Spark.newBuilder(Base.Target.MULTI)
-                .setSpellEffectRadius(2.2F)
+                .setSpellEffectRadius(2.5F)
                 .setEntityDamage(12)
                 .setSpellRelativeEffects((loc, world) -> {
                     world.spawnParticle(Particle.SPELL_WITCH, loc, 30, 0.6, 0.7, 0.6, 0.2, null, true);
@@ -32,5 +32,10 @@ public enum MagicSpark implements Castable {
     @Override
     public Base getBaseType() {
         return baseType;
+    }
+
+    @Override
+    public String getDisplayName() {
+        return "Spark";
     }
 }

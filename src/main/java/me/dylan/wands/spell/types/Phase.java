@@ -29,7 +29,6 @@ import java.util.function.Predicate;
 public final class Phase extends Base {
     private final Target target;
     private int effectDistance;
-    private boolean requireLivingTarget;
     private final String tagPhaseSpell;
     private final Predicate<LivingEntity> condition;
     private final Consumer<LivingEntity> duringPhaseEffect;
@@ -37,9 +36,9 @@ public final class Phase extends Base {
     private final KnockBackFrom knockBackFrom;
 
     private Phase(@NotNull Builder builder) {
+        super(builder.baseProps);
         this.target = builder.target;
         this.effectDistance = builder.effectDistance;
-        this.requireLivingTarget = builder.requireLivingTarget;
         this.condition = builder.condition;
         this.duringPhaseEffect = builder.duringPhaseEffect;
         this.afterPhaseEffect = builder.afterPhaseEffect;
@@ -54,7 +53,7 @@ public final class Phase extends Base {
 
     @Override
     public boolean cast(@NotNull Player player, @NotNull String weaponName) {
-        Location loc = SpellEffectUtil.getSpellLocation(effectDistance, player, requireLivingTarget);
+        Location loc = SpellEffectUtil.getSpellLocation(effectDistance, player);
         if (loc == null) {
             return false;
         }
@@ -87,7 +86,6 @@ public final class Phase extends Base {
     public static final class Builder extends AbstractBuilder<Builder> {
         private final Target target;
         private int effectDistance = 0;
-        private boolean requireLivingTarget = false;
         private Predicate<LivingEntity> condition = Common.emptyPredicate();
         private Consumer<LivingEntity> duringPhaseEffect = Common.emptyConsumer();
         private BiConsumer<LivingEntity, Player> afterPhaseEffect = Common.emptyBiConsumer();
@@ -110,11 +108,6 @@ public final class Phase extends Base {
 
         public Builder setEffectDistance(int effectDistance) {
             this.effectDistance = effectDistance;
-            return this;
-        }
-
-        public Builder requireLivingTarget(boolean b) {
-            this.requireLivingTarget = b;
             return this;
         }
 

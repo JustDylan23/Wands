@@ -2,6 +2,7 @@ package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.SpellEffectUtil;
+import me.dylan.wands.spell.types.Base.KnockBackFrom;
 import me.dylan.wands.spell.types.Phase;
 import me.dylan.wands.spell.types.Base;
 import me.dylan.wands.spell.types.Base.Target;
@@ -19,17 +20,14 @@ public enum DarkPush implements Castable {
 
     private final PotionEffect blind = new PotionEffect(PotionEffectType.BLINDNESS, 40, 0, false);
 
-    // todo fix push from player
-
     DarkPush() {
         this.baseType = Phase.newBuilder(Target.SINGLE)
-                .requireLivingTarget(true)
                 .setEntityDamage(6)
                 .setCastSound(Sound.ENTITY_WITHER_SHOOT)
-                .setKnockBack(0, 0)
+                .setKnockBack(1.2F, 0.6F)
                 .setEffectDistance(30)
-                .setSpellEffectRadius(1.5F)
-                .knockBackFrom(Base.KnockBackFrom.PLAYER)
+                .setSpellEffectRadius(2.0F)
+                .knockBackFrom(KnockBackFrom.PLAYER)
                 .setSpellRelativeEffects((loc, world) -> {
                     world.spawnParticle(Particle.SMOKE_LARGE, loc, 20, 0.4, 0.4, 0.4, 0.1, null, true);
                     world.spawnParticle(Particle.SMOKE_NORMAL, loc, 20, 0.4, 0.4, 0.4, 0.1, null, true);
@@ -44,12 +42,12 @@ public enum DarkPush implements Castable {
                 .setEffectAfterPhase((entity, player) -> {
                     Location loc = entity.getLocation();
                     loc.getWorld().spawnParticle(Particle.SMOKE_LARGE, loc, 15, 2, 0.2, 2, 0.05, null, true);
-                    loc.createExplosion(0);
+                    loc.createExplosion(0.0f);
                     for (LivingEntity loopEntity : SpellEffectUtil.getNearbyLivingEntities(player, loc, 3)) {
                         loopEntity.damage(3);
                         if (!loopEntity.equals(entity)) {
                             loopEntity.setVelocity(loopEntity.getLocation().subtract(loc).toVector().normalize().multiply(0.5F));
-                            loc.createExplosion(0);
+                            loc.createExplosion(0.0f);
                         }
                     }
                 })
