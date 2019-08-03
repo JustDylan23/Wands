@@ -2,10 +2,10 @@ package me.dylan.wands.util;
 
 import me.dylan.wands.Main;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.jetbrains.annotations.Contract;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 public class Common {
     private final static Main plugin = Main.getPlugin();
@@ -14,16 +14,20 @@ public class Common {
     };
     private final static BiConsumer<?, ?> EMPTY_BI_CONSUMER = (t, u) -> {
     };
+    private final static Predicate<?> EMPTY_PREDICATE = t -> true;
 
-    @Contract(pure = true)
     @SuppressWarnings("unchecked")
     public static <T> Consumer<T> emptyConsumer() {
         return (Consumer<T>) EMPTY_CONSUMER;
     }
 
-    @Contract(pure = true)
     @SuppressWarnings("unchecked")
     public static <T, U> BiConsumer<T, U> emptyBiConsumer() {
         return (BiConsumer<T, U>) EMPTY_BI_CONSUMER;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> Predicate<T> emptyPredicate() {
+        return (Predicate<T>) EMPTY_PREDICATE;
     }
 }

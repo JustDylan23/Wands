@@ -14,7 +14,6 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.Contract;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -29,7 +28,6 @@ public final class Main extends JavaPlugin {
     private ListenerRegistry listenerRegistry;
     private MouseClickListeners mouseClickListeners;
 
-    @Contract(pure = true)
     public static Main getPlugin() {
         return plugin;
     }
@@ -92,17 +90,14 @@ public final class Main extends JavaPlugin {
         this.disableLogic.remove(runnable);
     }
 
-    @Contract(pure = true)
     public ConfigurableData getConfigurableData() {
         return configurableData;
     }
 
-    @Contract(pure = true)
     public ListenerRegistry getListenerRegistry() {
         return listenerRegistry;
     }
 
-    @Contract(pure = true)
     public MouseClickListeners getMouseClickListeners() {
         return mouseClickListeners;
     }

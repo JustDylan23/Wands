@@ -6,7 +6,6 @@ import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public class RepeatableSound implements SoundEffect {
@@ -14,7 +13,6 @@ public class RepeatableSound implements SoundEffect {
     private final float pitch;
     private final int[] repeat;
 
-    @Contract(pure = true)
     private RepeatableSound(Sound sound, float pitch, int[] repeat) {
         this.sound = sound;
         this.pitch = pitch;
@@ -22,7 +20,6 @@ public class RepeatableSound implements SoundEffect {
     }
 
     @NotNull
-    @Contract(value = "_, _, _ -> new", pure = true)
     public static RepeatableSound from(Sound sound, float pitch, int... repeat) {
         return new RepeatableSound(sound, pitch, repeat);
     }

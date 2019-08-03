@@ -1,6 +1,6 @@
 package me.dylan.wands.spell;
 
-import me.dylan.wands.spell.handler.Behaviour;
+import me.dylan.wands.spell.types.Base;
 
 @FunctionalInterface
 public interface Castable {
@@ -9,5 +9,5 @@ public interface Castable {
     }
 
 
-    Behaviour getBehaviour();
+    Base getBaseType();
 }

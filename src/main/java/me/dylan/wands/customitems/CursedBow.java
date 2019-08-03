@@ -43,44 +43,47 @@ public class CursedBow implements Listener, RightClickListener {
         plugin.getMouseClickListeners().addRightClickListener(this);
     }
 
-    private boolean hasBow(Player player) {
+    private int hasBow(Player player) {
         PlayerInventory inventory = player.getInventory();
-        return ItemUtil.hasPersistentData(inventory.getItemInMainHand(), ID_TAG, PersistentDataType.BYTE)
-                || ItemUtil.hasPersistentData(inventory.getItemInOffHand(), ID_TAG, PersistentDataType.BYTE);
+        if (ItemUtil.hasPersistentData(inventory.getItemInMainHand(), ID_TAG, PersistentDataType.BYTE)) {
+            return 1;
+        } else if (ItemUtil.hasPersistentData(inventory.getItemInOffHand(), ID_TAG, PersistentDataType.BYTE)) {
+            return 2;
+        } else {
+            return 0;
+        }
     }
 
     @EventHandler
     private void onBlockBreak(BlockBreakEvent event) {
-        if (hasBow(event.getPlayer())) event.setCancelled(true);
+        if (hasBow(event.getPlayer()) == 1) event.setCancelled(true);
     }
 
     @Override
     public void onRightClick(ClickEvent event) {
         Player player = event.getPlayer();
-        if (hasBow(player) && SpellManagementUtil.canUse(player)) {
-            if (player.getGameMode() == GameMode.CREATIVE || player.getInventory().contains(Material.ARROW)) {
-                drawing.add(player);
-                player.sendActionBar("§6Charging [§a|§6|||]");
-                new BukkitRunnable() {
-                    int count;
+        if (hasBow(player) == 1 && SpellManagementUtil.canUse(player) && (player.getGameMode() == GameMode.CREATIVE || player.getInventory().contains(Material.ARROW))) {
+            drawing.add(player);
+            player.sendActionBar("§6Charging [§a|§6|||]");
+            new BukkitRunnable() {
+                int count;
 
-                    @Override
-                    public void run() {
-                        count++;
-                        if (drawing.contains(player)) {
-                            if (count == 10) player.sendActionBar("§6Charging [§a||§6||]");
-                            if (count == 20) player.sendActionBar("§6Charging [§a|||§6|]");
-                            if (count == 30) {
-                                player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.MASTER, 1F, 1F);
-                                player.sendActionBar("§aCharged §6[§a||||§6]");
-                                hasDrawn.add(player);
-                                drawing.remove(player);
-                                cancel();
-                            }
-                        } else cancel();
-                    }
-                }.runTaskTimer(Main.getPlugin(), 1, 1);
-            }
+                @Override
+                public void run() {
+                    count++;
+                    if (drawing.contains(player)) {
+                        if (count == 10) player.sendActionBar("§6Charging [§a||§6||]");
+                        if (count == 20) player.sendActionBar("§6Charging [§a|||§6|]");
+                        if (count == 30) {
+                            player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.MASTER, 1F, 1F);
+                            player.sendActionBar("§aCharged §6[§a||||§6]");
+                            hasDrawn.add(player);
+                            drawing.remove(player);
+                            cancel();
+                        }
+                    } else cancel();
+                }
+            }.runTaskTimer(Main.getPlugin(), 1, 1);
         }
     }
 
@@ -88,9 +91,13 @@ public class CursedBow implements Listener, RightClickListener {
     private void onShoot(EntityShootBowEvent event) {
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
+            if (hasBow(player) == 2) {
+                event.setCancelled(true);
+                player.sendActionBar("§ccan't fire from offhand");
+            }
             if (drawing.contains(player)) {
                 drawing.remove(player);
-                player.sendActionBar("§cCancelled shot");
+                player.sendActionBar("§ccancelled shot");
                 event.setCancelled(true);
             } else if (hasDrawn.contains(player)) {
                 hasDrawn.remove(player);
@@ -106,8 +113,6 @@ public class CursedBow implements Listener, RightClickListener {
                     loc.getWorld().spawnParticle(Particle.SPELL_WITCH, loc, 10, 0.5, 0.5, 0.5, 0.05, null, true);
                     loc.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, loc, 10, 0.5, 0.5, 0.5, 0.15, null, true);
                 });
-            } else if (!SpellManagementUtil.canUse(player) && hasBow(player)) {
-                event.setCancelled(true);
             }
         }
     }
@@ -116,7 +121,7 @@ public class CursedBow implements Listener, RightClickListener {
     private void onChangeSlot(PlayerItemHeldEvent event) {
         Player player = event.getPlayer();
         if (drawing.contains(player)) {
-            player.sendActionBar(" ");
+            player.sendActionBar("§cCancelled shot");
         }
         drawing.remove(player);
     }
