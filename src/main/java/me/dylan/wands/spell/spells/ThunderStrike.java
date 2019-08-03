@@ -17,7 +17,7 @@ public enum ThunderStrike implements Castable {
         this.baseType = Ray.newBuilder(Target.MULTI)
                 .setEffectDistance(40)
                 .setEntityDamage(8)
-                .setKnockBack(0, 0)
+                .setKnockBack(0.6F, 0.5F)
                 .setCastSound(Sound.ENTITY_WITHER_SHOOT)
                 .setEntityEffects(entity -> entity.setFireTicks(80))
                 .setMetersPerTick(3)
@@ -36,7 +36,7 @@ public enum ThunderStrike implements Castable {
                         world.strikeLightningEffect(loc2);
                     }, 1, 2, 3);
                 })
-                .setSpellEffectRadius(4F)
+                .setSpellEffectRadius(4.0F)
                 .build();
     }
 

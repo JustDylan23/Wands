@@ -21,7 +21,7 @@ public enum CorruptedWave implements Castable {
                         .add(Sound.ENTITY_WOLF_GROWL, 0.5F, 4)
                         .add(Sound.ENTITY_ENDER_DRAGON_FLAP, 1, 2, 2, 2, 2, 2, 2, 2, 2)
                 )
-                .setSpellEffectRadius(3F)
+                .setSpellEffectRadius(3.0F)
                 .setEntityDamage(7)
                 .setEffectDistance(20)
                 .setEntityEffects(entity -> entity.addPotionEffect(wither, true))

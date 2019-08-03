@@ -19,10 +19,10 @@ public enum FireComet implements Castable {
                         .add(Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, 1, 10, 5)
                         .add(Sound.ENTITY_FIREWORK_ROCKET_TWINKLE_FAR, 1, 20)
                 )
-                .setSpellEffectRadius(4)
+                .setSpellEffectRadius(4.0F)
                 .setEntityDamage(10)
                 .setEntityEffects(entity -> entity.setFireTicks(100))
-                .setKnockBack(0, 0)
+                .setKnockBack(0.6F, 0.5F)
                 .setLifeTime(20)
                 .setProjectileProps(projectile -> {
                     projectile.setIsIncendiary(false);
@@ -35,7 +35,7 @@ public enum FireComet implements Castable {
                     world.spawnParticle(Particle.LAVA, loc, 5, 1, 1, 1, 0, null, true);
                 })
                 .setHitEffects((loc, world) -> {
-                    loc.createExplosion(0);
+                    loc.createExplosion(0.0f);
                     world.spawnParticle(Particle.EXPLOSION_HUGE, loc, 0, 0.0, 0.0, 0.0, 0.0, null, true);
                 })
                 .build();

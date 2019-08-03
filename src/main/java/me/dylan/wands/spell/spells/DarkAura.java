@@ -24,7 +24,7 @@ public enum DarkAura implements Castable {
                         .add(Sound.ENTITY_EVOKER_PREPARE_SUMMON, 0.2F)
                         .add(Sound.ENTITY_BLAZE_BURN, 0.2F)
                 )
-                .setSpellEffectRadius(5F)
+                .setSpellEffectRadius(5.0F)
                 .setEntityEffects(entity -> {
                     entity.addPotionEffect(wither, true);
                     entity.addPotionEffect(weakness, true);

@@ -48,7 +48,7 @@ public final class Spark extends Base {
 
     @Override
     public boolean cast(@NotNull Player player, @NotNull String weaponName) {
-        Location loc = SpellEffectUtil.getSpellLocation(effectDistance, player, requireLivingTarget);
+        Location loc = SpellEffectUtil.getSpellLocation(effectDistance, player);
         if (loc == null) {
             return false;
         }

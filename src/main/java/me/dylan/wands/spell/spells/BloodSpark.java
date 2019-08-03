@@ -15,7 +15,7 @@ public enum BloodSpark implements Castable {
 
     BloodSpark() {
         this.baseType = Spark.newBuilder(Base.Target.MULTI)
-                .setSpellEffectRadius(2.2F)
+                .setSpellEffectRadius(2.5F)
                 .setEntityDamage(12)
                 .setSpellRelativeEffects((loc, world) -> {
                     world.spawnParticle(Particle.SMOKE_LARGE, loc, 20, 0.2, 0.2, 0.2, 0.1, null, true);

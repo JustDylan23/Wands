@@ -21,7 +21,7 @@ public enum ThunderRage implements Castable {
         this.baseType = Aura.newBuilder(EffectFrequency.ONCE)
                 .setCastSound(Sound.ITEM_TOTEM_USE)
                 .setEntityDamage(7)
-                .setSpellEffectRadius(8F)
+                .setSpellEffectRadius(8.0F)
                 .setEffectDuration(40)
                 .setSpellRelativeEffects((loc, world) -> {
                     world.spawnParticle(Particle.EXPLOSION_NORMAL, loc, 1, 0.4, 0.3, 0.4, 0.1, null, true);

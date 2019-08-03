@@ -17,7 +17,7 @@ public enum ThunderStorm implements Castable {
     ThunderStorm() {
         this.baseType = Circle.newBuilder(CirclePlacement.RELATIVE)
                 .setCircleRadius(10)
-                .setSpellEffectRadius(10F)
+                .setSpellEffectRadius(10.0F)
                 .setCircleHeight(7)
                 .setMetersPerTick(2)
                 .setCastSound(Sound.ENTITY_WITHER_AMBIENT)

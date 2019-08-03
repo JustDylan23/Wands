@@ -64,7 +64,7 @@ public class Escape extends Base implements Castable, Listener {
                         Bukkit.getScheduler().runTaskLater(plugin, () -> player.removeMetadata(tagEscaping, plugin), 10L);
                         leaping.remove(player);
                         Location loc = player.getLocation();
-                        loc.createExplosion(0);
+                        loc.createExplosion(0.0f);
                         world.playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, SoundCategory.MASTER, 4, 1);
                         world.spawnParticle(Particle.EXPLOSION_HUGE, loc, 0, 0.0, 0.0, 0.0, 0.0, null, true);
                         world.spawnParticle(Particle.SPELL_WITCH, loc, 40, 1, 1, 1, 1, null, true);

@@ -52,12 +52,12 @@ public final class ShockWave extends Base {
                     for (Location loc : SpellEffectUtil.getHorizontalCircleFrom(waveCenter, currentRadius)) {
                         spellRelativeEffects.accept(loc, loc.getWorld());
                     }
-                    for (LivingEntity entity : SpellEffectUtil.getNearbyLivingEntities(player, waveCenter, entity -> !entity.hasMetadata(tagShockWave), currentRadius)) {
+                    for (LivingEntity entity : SpellEffectUtil.getNearbyLivingEntities(player, waveCenter, entity -> !entity.hasMetadata(tagShockWave), currentRadius, 2.0, currentRadius)) {
                         entity.setMetadata(tagShockWave, Common.METADATA_VALUE_TRUE);
                         SpellEffectUtil.damageEffect(player, entity, entityDamage, weaponName);
                         entityEffects.accept(entity);
                         knockBack.apply(entity, waveCenter);
-                        Bukkit.getScheduler().runTaskLater(plugin, () -> entity.removeMetadata(tagShockWave, plugin), Math.round((waveRadius - currentRadius) * 2D * delay) + delay);
+                        Bukkit.getScheduler().runTaskLater(plugin, () -> entity.removeMetadata(tagShockWave, plugin), Math.round((waveRadius - currentRadius) * 2.0 * delay) + delay);
                     }
                 }
             }

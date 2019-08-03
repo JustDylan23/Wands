@@ -31,14 +31,11 @@ public class SpellEffectUtil {
     }
 
     @Nullable
-    public static Location getSpellLocation(int effectDistance, Player player, boolean requireLivingTarget) {
+    public static Location getSpellLocation(int effectDistance, Player player) {
         if (effectDistance == 0) return player.getLocation();
         Entity entity = player.getTargetEntity(effectDistance);
         if (entity instanceof LivingEntity && !(entity instanceof ArmorStand) && !entity.hasMetadata(UNTARGETABLE)) {
             return entity.getLocation().add(0, 0.5, 0).toCenterLocation();
-        } else if (requireLivingTarget) {
-            player.sendActionBar("§cselect a valid target");
-            return null;
         }
         TargetBlockInfo info = player.getTargetBlockInfo(effectDistance);
         if (info == null) {
@@ -68,7 +65,7 @@ public class SpellEffectUtil {
         return locations;
     }
 
-    @SuppressWarnings({"SameParameterValue", "unused"})
+    @SuppressWarnings("unused")
     public static Location[] getCircleFromPlayerView(@NotNull Location location, double radius, int points, double distance) {
         World world = location.getWorld();
         Location[] locations = new Location[points];
@@ -112,18 +109,26 @@ public class SpellEffectUtil {
     }
 
     public static List<LivingEntity> getNearbyLivingEntities(Player player, Location loc, double radius) {
-        return getNearbyLivingEntities(player, loc, b -> true, radius);
+        return getNearbyLivingEntities(player, loc, b -> true, radius, radius, radius);
+    }
+
+    public static List<LivingEntity> getNearbyLivingEntities(Player player, Location loc, double rx, double ry, double rz) {
+        return getNearbyLivingEntities(player, loc, b -> true, rx, ry, rz);
     }
 
     public static List<LivingEntity> getNearbyLivingEntities(Player player, @NotNull Location loc, Predicate<LivingEntity> predicate, double radius) {
+        return getNearbyLivingEntities(player, loc, predicate, radius, radius, radius);
+    }
+
+    public static List<LivingEntity> getNearbyLivingEntities(Player player, @NotNull Location loc, Predicate<LivingEntity> predicate, double rx, double ry, double rz) {
         return loc.getWorld()
-                .getNearbyEntities(loc, radius, radius, radius).stream()
-                .filter(entity -> entity instanceof LivingEntity
-                        && !(entity instanceof ArmorStand)
-                        && entity.equals(player)
+                .getNearbyEntities(loc, rx, ry, rz).stream()
+                .filter(LivingEntity.class::isInstance)
+                .filter(entity -> !(entity instanceof ArmorStand))
+                .filter(entity -> entity.equals(player)
                         ? CONFIGURABLE_DATA.isSelfHarmAllowed()
-                        : (!(entity instanceof Player)
-                        || checkFriendlyFireOption(player, (Player) entity))
+                        : ((!(entity instanceof Player)
+                        || checkFriendlyFireOption(player, (Player) entity)))
                 )
                 .map(LivingEntity.class::cast)
                 .filter(predicate)

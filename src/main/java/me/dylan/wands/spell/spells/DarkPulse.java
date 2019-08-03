@@ -22,9 +22,9 @@ public enum DarkPulse implements Castable {
     DarkPulse() {
         this.baseType = Ray.newBuilder(Target.MULTI)
                 .setRayWidth(1)
-                .setSpellEffectRadius(3F)
+                .setSpellEffectRadius(3.0F)
                 .setMetersPerTick(2)
-                .setKnockBack(0, 0)
+                .setKnockBack(0.6F, 0.5F)
                 .setEntityEffects(entity -> {
                     entity.addPotionEffect(blind);
                     entity.addPotionEffect(wither);
@@ -40,7 +40,7 @@ public enum DarkPulse implements Castable {
                 .setEffectDistance(30)
                 .setHitEffects((loc, world) -> {
                     loc.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, loc, 0, 0.0, 0.0, 0.0, 0.0, null, true);
-                    loc.createExplosion(0);
+                    loc.createExplosion(0.0f);
                     loc.getWorld().playSound(loc, Sound.ENTITY_WITHER_HURT, SoundCategory.MASTER, 4.0F, 1.0F);
                 })
                 .build();
