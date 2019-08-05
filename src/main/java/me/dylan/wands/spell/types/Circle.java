@@ -1,6 +1,7 @@
 package me.dylan.wands.spell.types;
 
 import me.dylan.wands.spell.SpellEffectUtil;
+import me.dylan.wands.spell.types.Base.AbstractBuilder.SpellInfo;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -32,7 +33,7 @@ public final class Circle extends Base {
         addPropertyInfo("Radius", circleRadius, "meters");
         addPropertyInfo("Circle origin", circlePlacement);
         addPropertyInfo("Height", height, "meters");
-        addPropertyInfo("Meters per tick", speed, "ticks");
+        addPropertyInfo("Meters per tick", speed, "meters");
         addPropertyInfo("Effect distance", effectDistance, "meters");
     }
 
@@ -49,9 +50,11 @@ public final class Circle extends Base {
             return false;
         }
 
+        SpellInfo spellInfo = new SpellInfo(player, circleCenter, () -> circleCenter);
+
         castSounds.play(player);
 
-        Location[] circlePoints = SpellEffectUtil.getHorizontalCircleFrom(circleCenter.clone().add(0, height, 0), circleRadius);
+        Location[] circlePoints = SpellEffectUtil.getHorizontalCircleFrom(circleCenter.clone().add(0, height, 0), circleRadius, player.getLocation().getYaw(), 1);
 
         new BukkitRunnable() {
             int circlePoint = 0;
@@ -66,6 +69,7 @@ public final class Circle extends Base {
                     } else {
                         Location loc = circlePoints[circlePoint];
                         spellRelativeEffects.accept(loc, loc.getWorld());
+                        extendedSpellRelativeEffects.accept(loc, spellInfo);
                     }
                     circlePoint++;
                 }
@@ -90,7 +94,6 @@ public final class Circle extends Base {
         private final CirclePlacement circlePlacement;
         private int circleRadius, speed = 1;
         private int effectDistance, height;
-        private boolean requireLivingTarget = false;
 
         private Builder(CirclePlacement circlePlacement) {
             this.circlePlacement = circlePlacement;

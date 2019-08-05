@@ -19,10 +19,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scoreboard.Objective;
@@ -91,6 +91,17 @@ public class PlayerListener implements Listener, LeftClickListener, RightClickLi
     }
 
     @EventHandler
+    private void onChangeSlot(PlayerItemHeldEvent event) {
+        Player player = event.getPlayer();
+        Bukkit.getScheduler().runTaskLater(Main.getPlugin(), () -> {
+            ItemStack itemStack = player.getInventory().getItemInMainHand();
+            if (SpellManagementUtil.isWand(itemStack)) {
+                SpellManagementUtil.showSelectedSpell(player, itemStack);
+            }
+        }, 1L);
+    }
+
+    @EventHandler
     private void onEntityDamage(EntityDamageEvent event) {
         Entity entity = event.getEntity();
         if (entity instanceof Player) {
@@ -113,17 +124,6 @@ public class PlayerListener implements Listener, LeftClickListener, RightClickLi
     private void onBlockBreak(BlockBreakEvent event) {
         if (SpellManagementUtil.isWand(event.getPlayer().getInventory().getItemInMainHand())) {
             event.setCancelled(true);
-        }
-    }
-
-    @EventHandler
-    private void onEntityDamageEntity(EntityDamageByEntityEvent event) {
-        Entity attacker = event.getDamager();
-        if (attacker instanceof Player) {
-            Player player = (Player) attacker;
-            if (SpellManagementUtil.isWand(player.getInventory().getItemInMainHand())) {
-                event.setCancelled(true);
-            }
         }
     }
 

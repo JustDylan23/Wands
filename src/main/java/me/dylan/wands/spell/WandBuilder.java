@@ -2,6 +2,7 @@ package me.dylan.wands.spell;
 
 import me.dylan.wands.util.ItemUtil;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,6 +12,10 @@ public class WandBuilder {
     private WandBuilder(Material material) {
         this.itemStack = new ItemStack(material);
         SpellManagementUtil.setAsWand(itemStack);
+        ItemUtil.setItemMeta(itemStack, itemMeta -> {
+            itemMeta.setUnbreakable(true);
+            itemMeta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+        });
     }
 
     @NotNull
@@ -21,6 +26,11 @@ public class WandBuilder {
 
     public WandBuilder named(String name) {
         ItemUtil.setName(itemStack, name);
+        return this;
+    }
+
+    public WandBuilder glowing() {
+        ItemUtil.makeGlow(itemStack);
         return this;
     }
 

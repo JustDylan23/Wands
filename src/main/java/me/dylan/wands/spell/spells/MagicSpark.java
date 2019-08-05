@@ -2,8 +2,8 @@ package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.Main;
 import me.dylan.wands.spell.Castable;
-import me.dylan.wands.spell.types.Spark;
 import me.dylan.wands.spell.types.Base;
+import me.dylan.wands.spell.types.Spark;
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -15,7 +15,7 @@ public enum MagicSpark implements Castable {
 
     MagicSpark() {
         this.baseType = Spark.newBuilder(Base.Target.MULTI)
-                .setSpellEffectRadius(2.5F)
+                .setSpellEffectRadius(2.8F)
                 .setEntityDamage(12)
                 .setSpellRelativeEffects((loc, world) -> {
                     world.spawnParticle(Particle.SPELL_WITCH, loc, 30, 0.6, 0.7, 0.6, 0.2, null, true);

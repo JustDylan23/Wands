@@ -32,6 +32,10 @@ public enum BrowseParticle {
     PARTICLE_CORRUPTED((loc, world) -> {
         world.spawnParticle(Particle.SPELL_MOB, loc, 4, 0.5, 0.5, 0.5, 1, null, false);
         world.spawnParticle(Particle.SPELL_MOB_AMBIENT, loc, 10, 0.5, 0.5, 0.5, 1, null, false);
+    }),
+    PARTICLE_MEPHI((loc, world) -> {
+        world.spawnParticle(Particle.SMOKE_NORMAL, loc, 10, 0.5, 0.5, 0.5, 0.03, null, true);
+        world.spawnParticle(Particle.VILLAGER_HAPPY, loc, 4, 0.5, 0.5, 0.5, 1, null, true);
     });
 
     private final BiConsumer<Location, World> consumer;

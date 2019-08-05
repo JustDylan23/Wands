@@ -2,8 +2,8 @@ package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.SpellEffectUtil;
-import me.dylan.wands.spell.types.Spark;
 import me.dylan.wands.spell.types.Base;
+import me.dylan.wands.spell.types.Spark;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -15,7 +15,7 @@ public enum BloodSpark implements Castable {
 
     BloodSpark() {
         this.baseType = Spark.newBuilder(Base.Target.MULTI)
-                .setSpellEffectRadius(2.5F)
+                .setSpellEffectRadius(2.8F)
                 .setEntityDamage(12)
                 .setSpellRelativeEffects((loc, world) -> {
                     world.spawnParticle(Particle.SMOKE_LARGE, loc, 20, 0.2, 0.2, 0.2, 0.1, null, true);

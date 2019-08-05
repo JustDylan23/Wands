@@ -12,11 +12,11 @@ import org.bukkit.potion.PotionEffectType;
 public enum PoisonWave implements Castable {
     INSTANCE;
     private final Base baseType;
-    private final PotionEffect poison = new PotionEffect(PotionEffectType.POISON, 120, 4, false);
+    private final PotionEffect poison = new PotionEffect(PotionEffectType.POISON, 120, 2, false);
 
     PoisonWave() {
         this.baseType = Wave.newBuilder()
-                .setSpellEffectRadius(2.0F)
+                .setSpellEffectRadius(2.0f)
                 .setEntityDamage(6)
                 .setEffectDistance(20)
                 .setCastSound(Sound.ENTITY_EVOKER_CAST_SPELL)

@@ -1,9 +1,10 @@
 package me.dylan.wands.spell.spells;
 
+import me.dylan.wands.knockback.KnockBack;
 import me.dylan.wands.sound.CompoundSound;
 import me.dylan.wands.spell.Castable;
-import me.dylan.wands.spell.types.LaunchableBlock;
 import me.dylan.wands.spell.types.Base;
+import me.dylan.wands.spell.types.LaunchableBlock;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -21,7 +22,7 @@ public enum BloodBlock implements Castable {
                     world.spawnParticle(Particle.BLOCK_CRACK, loc, 10, 0.5, 0.5, 0.5, 0.15, Material.REDSTONE_BLOCK.createBlockData(), true);
                     world.spawnParticle(Particle.SMOKE_LARGE, loc, 2, 0.2, 0.2, 0.2, 0.1, null, true);
                 })
-                .setKnockBack(0.6F, 0.5F)
+                .setKnockBack(KnockBack.EXPLOSION)
                 .setBlockRelativeSounds(CompoundSound.chain()
                         .add(Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1, 20)
                         .add(Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, 1, 30, 5)

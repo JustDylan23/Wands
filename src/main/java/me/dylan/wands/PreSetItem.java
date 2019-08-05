@@ -44,8 +44,9 @@ public enum PreSetItem {
     })),
 
     MAGIC_WAND(
-            WandBuilder.from(Material.STICK)
-                    .named("&7Magic Wand")
+            WandBuilder.from(Material.BLAZE_ROD)
+                    .named("&5Bewitched Wand")
+                    .glowing()
                     .withSpells(
                             SpellInstance.COMET,
                             SpellInstance.SPARK,
@@ -104,6 +105,7 @@ public enum PreSetItem {
     CELCRIUS_WAND(
             WandBuilder.from(Material.BLAZE_POWDER)
                     .named("&6Celcrius Wand")
+                    .glowing()
                     .withSpells(
                             SpellInstance.FIRE_COMET,
                             SpellInstance.FIRE_TWISTER,
@@ -130,6 +132,20 @@ public enum PreSetItem {
                     )
                     .withSpellBrowseParticles(BrowseParticle.PARTICLE_CORRUPTED)
                     .build()
+    ),
+    MEPHI_WAND(
+            WandBuilder.from(Material.IRON_HOE)
+                    .named("&2Mephi Wand")
+                    .withSpells(
+                    SpellInstance.MEPHI_AURA,
+                    SpellInstance.MEPHI_AWAY,
+                    SpellInstance.MEPHI_GRAB_WAVE,
+                    SpellInstance.MEPHI_CHOKE,
+                    SpellInstance.MEPHI_SPARK,
+                    SpellInstance.POISON_WAVE
+            )
+                    .withSpellBrowseParticles(BrowseParticle.PARTICLE_MEPHI)
+            .build()
     );
 
     private static final String[] names = Arrays.stream(values()).map(Enum::toString).toArray(String[]::new);

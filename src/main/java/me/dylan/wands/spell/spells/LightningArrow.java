@@ -1,8 +1,8 @@
 package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.spell.Castable;
-import me.dylan.wands.spell.types.MagicProjectile;
 import me.dylan.wands.spell.types.Base;
+import me.dylan.wands.spell.types.MagicProjectile;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.Arrow;

@@ -5,8 +5,9 @@ import me.dylan.wands.Main;
 import me.dylan.wands.sound.CompoundSound;
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.SpellEffectUtil;
-import me.dylan.wands.spell.types.Spark;
 import me.dylan.wands.spell.types.Base;
+import me.dylan.wands.spell.types.Base.AbstractBuilder.SpellInfo;
+import me.dylan.wands.spell.types.Spark;
 import me.dylan.wands.util.Common;
 import org.bukkit.*;
 import org.bukkit.block.data.BlockData;
@@ -45,7 +46,7 @@ public enum CorruptedRain implements Castable, Listener {
                         .add(Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1, 1)
                 )
                 .setEffectDistance(30)
-                .setSpellRelativeEffects2(this::spawnArrows)
+                .extendedSetSpellRelativeEffects(this::spawnArrows)
                 .build();
 
         plugin.addDisableLogic(() -> arrows.forEach(Entity::remove));
@@ -56,7 +57,7 @@ public enum CorruptedRain implements Castable, Listener {
         return baseType;
     }
 
-    private void spawnArrows(Location location, Player player) {
+    private void spawnArrows(Location location, SpellInfo spellInfo) {
         location.add(0, 5, 0);
         World world = location.getWorld();
         Location particleLoc = location.clone().add(0, 2, 0);
@@ -75,7 +76,7 @@ public enum CorruptedRain implements Castable, Listener {
                     Arrow arrow = (Arrow) world.spawnEntity(arrowLoc, EntityType.ARROW);
                     arrow.setDamage(6);
                     arrow.setPickupStatus(PickupStatus.ALLOWED);
-                    arrow.setShooter(player);
+                    arrow.setShooter(spellInfo.caster);
                     arrow.addCustomEffect(blind, true);
                     arrow.addCustomEffect(wither, true);
                     arrow.setVelocity(new Vector(SpellEffectUtil.randomize(0.4), -1, SpellEffectUtil.randomize(0.4)));

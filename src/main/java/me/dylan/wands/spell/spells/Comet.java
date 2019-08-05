@@ -1,9 +1,10 @@
 package me.dylan.wands.spell.spells;
 
+import me.dylan.wands.knockback.KnockBack;
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.SpellEffectUtil;
-import me.dylan.wands.spell.types.MagicProjectile;
 import me.dylan.wands.spell.types.Base;
+import me.dylan.wands.spell.types.MagicProjectile;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
@@ -18,7 +19,7 @@ public enum Comet implements Castable {
                 .setSpellEffectRadius(4.0F)
                 .setEntityDamage(10)
                 .setEntityEffects(entity -> entity.setFireTicks(100))
-                .setKnockBack(0.6F, 0.5F)
+                .setKnockBack(KnockBack.EXPLOSION)
                 .setCastSound(Sound.ENTITY_FIREWORK_ROCKET_BLAST)
                 .setSpellRelativeEffects((loc, world) -> {
                     world.spawnParticle(Particle.SPELL_WITCH, loc, 40, 0.8, 0.8, 0.8, 0.15, null, true);

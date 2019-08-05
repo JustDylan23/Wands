@@ -1,6 +1,7 @@
 package me.dylan.wands.spell.types;
 
 import me.dylan.wands.spell.SpellEffectUtil;
+import me.dylan.wands.spell.types.Base.AbstractBuilder.SpellInfo;
 import me.dylan.wands.util.Common;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -13,7 +14,7 @@ import java.util.UUID;
 
 /**
  * Creates circles with increasing size around the player to simulate a shock wave
- *
+ * <p>
  * Configurable:
  * - Radius to which the wave will extend.
  * - The delay before the wave grows half a meter
@@ -40,6 +41,7 @@ public final class ShockWave extends Base {
     public boolean cast(@NotNull Player player, @NotNull String weaponName) {
         castSounds.play(player);
         Location waveCenter = player.getLocation();
+        SpellInfo spellInfo = new SpellInfo(player, waveCenter, () -> waveCenter);
         new BukkitRunnable() {
             float currentRadius = 0;
 
@@ -49,8 +51,9 @@ public final class ShockWave extends Base {
                 if (currentRadius > waveRadius) {
                     cancel();
                 } else {
-                    for (Location loc : SpellEffectUtil.getHorizontalCircleFrom(waveCenter, currentRadius)) {
+                    for (Location loc : SpellEffectUtil.getHorizontalCircleFrom(waveCenter, currentRadius, 0, 1)) {
                         spellRelativeEffects.accept(loc, loc.getWorld());
+                        extendedSpellRelativeEffects.accept(loc, spellInfo);
                     }
                     for (LivingEntity entity : SpellEffectUtil.getNearbyLivingEntities(player, waveCenter, entity -> !entity.hasMetadata(tagShockWave), currentRadius, 2.0, currentRadius)) {
                         entity.setMetadata(tagShockWave, Common.METADATA_VALUE_TRUE);

@@ -1,8 +1,9 @@
 package me.dylan.wands.spell.spells;
 
+import me.dylan.wands.knockback.KnockBack;
 import me.dylan.wands.spell.Castable;
-import me.dylan.wands.spell.types.Spark;
 import me.dylan.wands.spell.types.Base;
+import me.dylan.wands.spell.types.Spark;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -14,7 +15,7 @@ public enum BloodExplode implements Castable {
     BloodExplode() {
         this.baseType = Spark.newBuilder(Base.Target.MULTI)
                 .setEntityDamage(10)
-                .setKnockBack(0.6F, 0.5F)
+                .setKnockBack(KnockBack.EXPLOSION)
                 .setSpellEffectRadius(3.0F)
                 .setEntityEffects(entity -> entity.setFireTicks(80))
                 .setSpellRelativeEffects((loc, world) -> {

@@ -11,6 +11,8 @@ public class KnockBack {
         public void apply(@NotNull LivingEntity livingEntity, @NotNull Location from) {
         }
     };
+    public static final KnockBack EXPLOSION = new KnockBack(0.6f, 0.5f);
+    public static final KnockBack SIDEWAYS = new KnockBack(1.0f, 0.6f);
     private final float xz;
     private final float y;
 
@@ -24,6 +26,21 @@ public class KnockBack {
             return NONE;
         } else {
             return new KnockBack(xz, y);
+        }
+    }
+
+    public static KnockBack from(float xz) {
+        if (xz == 0) {
+            return NONE;
+        } else {
+            return new KnockBack(xz, 0) {
+                @Override
+                public void apply(@NotNull LivingEntity livingEntity, @NotNull Location from) {
+                    Vector direction = livingEntity.getLocation().subtract(from).toVector();
+                    double oldY = livingEntity.getVelocity().getY();
+                    livingEntity.setVelocity(direction.setY(0).normalize().multiply(xz).setY(oldY));
+                }
+            };
         }
     }
 

@@ -1,6 +1,7 @@
 package me.dylan.wands.spell.types;
 
 import me.dylan.wands.spell.SpellEffectUtil;
+import me.dylan.wands.spell.types.Base.AbstractBuilder.SpellInfo;
 import me.dylan.wands.util.Common;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -38,7 +39,7 @@ public final class Ray extends Base {
 
         addPropertyInfo("Effect distance", effectDistance, "meters");
         addPropertyInfo("Ray width", rayWidth, "meters");
-        addPropertyInfo("Meters per tick", rayWidth, "meters");
+        addPropertyInfo("Meters per tick", speed, "meters");
         addPropertyInfo("Target", target);
     }
 
@@ -54,43 +55,46 @@ public final class Ray extends Base {
         Location origin = player.getEyeLocation();
         new BukkitRunnable() {
             int count = 0;
+            Location location = origin.clone();
 
             @Override
             public void run() {
-                for (int i = 0; i < speed; i++) {
-                    count++;
-                    Location loc = origin.add(direction).clone();
-                    if (count >= effectDistance || !loc.getBlock().isPassable()) {
-                        cancel();
-                        effectEntities(loc, player, weaponName);
-                        return;
+                for (int i = 0; i < speed; ++i) {
+                    location.add(direction);
+                    spellRelativeEffects.accept(location, location.getWorld());
+                    if (shouldContinue()) {
+                        continue;
                     }
-                    spellRelativeEffects.accept(loc, loc.getWorld());
-                    List<LivingEntity> entities = SpellEffectUtil.getNearbyLivingEntities(player, loc, rayWidth);
-                    if (entities.size() != 0) {
-                        effectEntities(loc, player, weaponName);
-                        cancel();
-                        return;
-                    }
+                    cancel();
+                    effectEntities(new SpellInfo(player, origin, () -> location), weaponName);
+                    break;
                 }
+            }
+
+            boolean shouldContinue() {
+                if (++count >= effectDistance || !location.getBlock().isPassable())
+                    return false;
+                List<LivingEntity> entities = SpellEffectUtil.getNearbyLivingEntities(player, location, rayWidth);
+                return entities.isEmpty();
             }
         }.runTaskTimer(plugin, 1, 1);
         return true;
     }
 
-    private void effectEntities(Location loc, Player player, String wandDisplayName) {
-        hitEffects.accept(loc, loc.getWorld());
-        for (LivingEntity entity : SpellEffectUtil.getNearbyLivingEntities(player, loc, (target == Target.SINGLE) ? rayWidth : spellEffectRadius)) {
-            knockBack.apply(entity, loc);
+    private void effectEntities(SpellInfo spellInfo, String wandDisplayName) {
+        Location spellLocation = spellInfo.spellLocation.get();
+        hitEffects.accept(spellLocation, spellInfo.world);
+        for (LivingEntity entity : SpellEffectUtil.getNearbyLivingEntities(spellInfo.caster, spellLocation, (target == Target.SINGLE) ? rayWidth : spellEffectRadius)) {
+            knockBack.apply(entity, spellLocation);
             entityEffects.accept(entity);
-            SpellEffectUtil.damageEffect(player, entity, entityDamage, wandDisplayName);
+            extendedEntityEffects.accept(entity, spellInfo);
+            SpellEffectUtil.damageEffect(spellInfo.caster, entity, entityDamage, wandDisplayName);
             if (target == Target.SINGLE) break;
         }
     }
 
     public static final class Builder extends AbstractBuilder<Builder> {
         private final Target target;
-
         private int effectDistance;
         private int speed = 1;
         private float rayWidth;

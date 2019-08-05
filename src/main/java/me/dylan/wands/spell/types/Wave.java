@@ -13,7 +13,7 @@ import java.util.UUID;
 
 /**
  * Shoots a ray which goes through entities
- *
+ * <p>
  * Configurable:
  * - Speed in which the wave moves forward
  * - The maximum distance the wave can travel.

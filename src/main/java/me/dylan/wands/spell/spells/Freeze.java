@@ -2,13 +2,14 @@ package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.Main;
 import me.dylan.wands.spell.Castable;
-import me.dylan.wands.spell.types.Ray;
 import me.dylan.wands.spell.types.Base;
 import me.dylan.wands.spell.types.Base.Target;
+import me.dylan.wands.spell.types.Ray;
 import me.dylan.wands.util.Common;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -42,8 +43,9 @@ public enum Freeze implements Castable {
     }
 
     private void freeze(LivingEntity entity) {
-        Location eLoc = entity.getLocation();
-        eLoc.getWorld().playSound(eLoc, Sound.ENTITY_EVOKER_FANGS_ATTACK, 4, 2);
+        Location loc = entity.getLocation();
+        World world = loc.getWorld();
+        world.playSound(loc, Sound.ENTITY_EVOKER_FANGS_ATTACK, 4, 2);
         if (entity.hasMetadata(metaKey)) return;
         entity.setMetadata(metaKey, Common.METADATA_VALUE_TRUE);
         entity.addPotionEffect(slow, true);
@@ -57,8 +59,8 @@ public enum Freeze implements Castable {
                     entity.removeMetadata(metaKey, Main.getPlugin());
                 } else {
                     Location loc = entity.getLocation().add(0, 3.5, 0);
-                    loc.getWorld().spawnParticle(Particle.SNOW_SHOVEL, loc, 6, 0.5, 0.5, 0.5, 0.01, null, true);
-                    loc.getWorld().spawnParticle(Particle.CLOUD, loc.add(0, 1, 0), 6, 0.5, 0.3, 0.5, 0, null, true);
+                    world.spawnParticle(Particle.SNOW_SHOVEL, loc, 6, 0.5, 0.5, 0.5, 0.01, null, true);
+                    world.spawnParticle(Particle.CLOUD, loc.add(0, 1, 0), 6, 0.5, 0.3, 0.5, 0, null, true);
                 }
             }
         }.runTaskTimer(Main.getPlugin(), 2, 2);

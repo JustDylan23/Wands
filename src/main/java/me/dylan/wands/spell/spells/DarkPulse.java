@@ -1,9 +1,10 @@
 package me.dylan.wands.spell.spells;
 
+import me.dylan.wands.knockback.KnockBack;
 import me.dylan.wands.spell.Castable;
-import me.dylan.wands.spell.types.Ray;
 import me.dylan.wands.spell.types.Base;
 import me.dylan.wands.spell.types.Base.Target;
+import me.dylan.wands.spell.types.Ray;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
@@ -24,7 +25,7 @@ public enum DarkPulse implements Castable {
                 .setRayWidth(1)
                 .setSpellEffectRadius(3.0F)
                 .setMetersPerTick(2)
-                .setKnockBack(0.6F, 0.5F)
+                .setKnockBack(KnockBack.EXPLOSION)
                 .setEntityEffects(entity -> {
                     entity.addPotionEffect(blind);
                     entity.addPotionEffect(wither);

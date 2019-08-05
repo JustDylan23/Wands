@@ -2,8 +2,8 @@ package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.Main;
 import me.dylan.wands.spell.Castable;
-import me.dylan.wands.spell.types.Spark;
 import me.dylan.wands.spell.types.Base;
+import me.dylan.wands.spell.types.Spark;
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -14,7 +14,7 @@ import org.bukkit.potion.PotionEffectType;
 public enum Confuse implements Castable {
     INSTANCE;
     private final Base baseType;
-    private final PotionEffect confusion = new PotionEffect(PotionEffectType.CONFUSION, 240, 4, false);
+    private final PotionEffect confusion = new PotionEffect(PotionEffectType.CONFUSION, 260, 4, false);
 
     Confuse() {
         this.baseType = Spark.newBuilder(Base.Target.MULTI)
