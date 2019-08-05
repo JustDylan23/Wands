@@ -2,9 +2,9 @@ package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.Main;
 import me.dylan.wands.spell.Castable;
-import me.dylan.wands.spell.types.Phase;
 import me.dylan.wands.spell.types.Base;
 import me.dylan.wands.spell.types.Base.Target;
+import me.dylan.wands.spell.types.Phase;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
@@ -15,7 +15,7 @@ public enum Launch implements Castable {
 
     Launch() {
         this.baseType = Phase.newBuilder(Target.MULTI)
-                .setSpellEffectRadius(2.5F)
+                .setSpellEffectRadius(2.8f)
                 .setEntityDamage(7)
                 .setEntityEffects(entity -> entity.setVelocity(new Vector(0, 1.2, 0)))
                 .setSpellRelativeEffects((loc, world) -> {

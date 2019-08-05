@@ -1,10 +1,9 @@
 package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.spell.Castable;
-import me.dylan.wands.spell.types.Ray;
 import me.dylan.wands.spell.types.Base;
 import me.dylan.wands.spell.types.Base.Target;
-import org.bukkit.Location;
+import me.dylan.wands.spell.types.Ray;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -20,11 +19,8 @@ public enum BloodStun implements Castable {
         this.baseType = Ray.newBuilder(Target.SINGLE)
                 .setCastSound(Sound.ENTITY_FIREWORK_ROCKET_BLAST)
                 .setEntityDamage(8)
-                .setEntityEffects(entity -> {
-                    entity.addPotionEffect(slow, true);
-                    Location location = entity.getLocation();
-                    location.getWorld().playSound(location, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, 4, 1);
-                })
+                .setEntityEffects(entity -> entity.addPotionEffect(slow, true))
+                .setHitEffects((location, world) -> world.playSound(location, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, 4, 1))
                 .setRayWidth(1)
                 .setSpellRelativeEffects((loc, world) -> {
                     world.spawnParticle(Particle.SMOKE_NORMAL, loc, 2, 0.2, 0.2, 0.2, 0.04, null, true);

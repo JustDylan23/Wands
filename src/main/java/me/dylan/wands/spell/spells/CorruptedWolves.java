@@ -3,8 +3,8 @@ package me.dylan.wands.spell.spells;
 import me.dylan.wands.Main;
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.SpellEffectUtil;
-import me.dylan.wands.spell.types.Spark;
 import me.dylan.wands.spell.types.Base;
+import me.dylan.wands.spell.types.Spark;
 import me.dylan.wands.util.Common;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
@@ -24,16 +24,20 @@ public enum CorruptedWolves implements Castable {
     private final Base baseType;
     private final Main plugin = Main.getPlugin();
     private final Set<Wolf> wolves = new HashSet<>();
-    private final PotionEffect speed = new PotionEffect(PotionEffectType.SPEED, 150, 1, true);
+    private final PotionEffect speed = new PotionEffect(PotionEffectType.SPEED, 160, 4, true);
 
     CorruptedWolves() {
         plugin.addDisableLogic(() -> wolves.forEach(Entity::remove));
 
         this.baseType = Spark.newBuilder(Base.Target.SINGLE)
-                .setSpellEffectRadius(2.0F)
+                .setSpellEffectRadius(2.5F)
                 .setCastSound(Sound.ENTITY_EVOKER_PREPARE_SUMMON)
                 .setEffectDistance(30)
                 .setEntityEffects(this::accept)
+                .setSpellRelativeEffects((loc, world) -> {
+                    world.spawnParticle(Particle.SMOKE_LARGE, loc, 20, 0.4, 0.4, 0.4, 0.1, null, true);
+                    world.spawnParticle(Particle.SMOKE_NORMAL, loc, 20, 0.4, 0.4, 0.4, 0.1, null, true);
+                })
                 .build();
     }
 
@@ -45,8 +49,9 @@ public enum CorruptedWolves implements Castable {
     private void accept(LivingEntity target) {
         Location loc = target.getLocation();
         World world = loc.getWorld();
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 10; i++) {
             Wolf wolf = (Wolf) world.spawnEntity(SpellEffectUtil.getFirstPassableBlockAbove(SpellEffectUtil.randomizeLoc(loc, 2, 0, 2)), EntityType.WOLF);
+            wolves.add(wolf);
             wolf.setMetadata(SpellEffectUtil.UNTARGETABLE, Common.METADATA_VALUE_TRUE);
             Location location = wolf.getLocation();
             world.playSound(location, Sound.BLOCK_CHORUS_FLOWER_GROW, SoundCategory.MASTER, 4, 1);
@@ -64,8 +69,8 @@ public enum CorruptedWolves implements Castable {
                     }
                 }
             }.runTaskTimer(plugin, 1, 1);
-            Bukkit.getScheduler().runTaskLater(plugin, () -> wolf.damage(0, target), 10);
-            Bukkit.getScheduler().runTaskLater(plugin, wolf::remove, 150);
+            Bukkit.getScheduler().runTaskLater(plugin, () -> wolf.damage(1, target), 10);
+            Bukkit.getScheduler().runTaskLater(plugin, wolf::remove, 160);
         }
     }
 }

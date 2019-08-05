@@ -4,6 +4,8 @@ import me.dylan.wands.Main;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -38,6 +40,13 @@ public class ItemUtil {
 
     public static void setLore(ItemStack itemStack, String... lore) {
         setItemMeta(itemStack, meta -> meta.setLore(Arrays.asList(lore)));
+    }
+
+    public static void makeGlow(ItemStack itemStack) {
+        setItemMeta(itemStack, meta -> {
+            meta.addEnchant(Enchantment.LURE, 0, true);
+            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        });
     }
 
     public static <T> void setPersistentData(@NotNull ItemStack itemStack, String key, PersistentDataType<T, T> type, T t) {

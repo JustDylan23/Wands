@@ -1,8 +1,8 @@
 package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.spell.Castable;
-import me.dylan.wands.spell.types.ShockWave;
 import me.dylan.wands.spell.types.Base;
+import me.dylan.wands.spell.types.ShockWave;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 

@@ -4,6 +4,7 @@ import me.dylan.wands.Main;
 import me.dylan.wands.spell.SpellEffectUtil;
 import me.dylan.wands.util.Common;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -26,6 +27,7 @@ public final class Aura extends Base {
     private final int effectDuration;
     private final String AuraUUID;
     private final Consumer<LivingEntity> playerEffects, reverseAuraEffects;
+    private final AuraParticleType auraParticleType;
 
     private Aura(@NotNull Builder builder) {
         super(builder.baseProps);
@@ -34,9 +36,11 @@ public final class Aura extends Base {
         this.AuraUUID = UUID.randomUUID().toString();
         this.playerEffects = builder.playerEffects;
         this.reverseAuraEffects = builder.reverseAuraEffects;
+        this.auraParticleType = builder.auraParticleType;
 
         addPropertyInfo("Aura duration", effectDuration, "ticks");
         addPropertyInfo("Effect quantity", effectFrequency);
+        addPropertyInfo("Aura particle type", auraParticleType);
     }
 
     @NotNull
@@ -51,6 +55,7 @@ public final class Aura extends Base {
         }
 
         player.setMetadata(AuraUUID, Common.METADATA_VALUE_TRUE);
+        World world = player.getWorld();
 
         castSounds.play(player);
         playerEffects.accept(player);
@@ -70,7 +75,13 @@ public final class Aura extends Base {
                     }
                 } else {
                     Location loc = player.getLocation();
-                    spellRelativeEffects.accept(loc, loc.getWorld());
+                    if (auraParticleType == AuraParticleType.CENTER) {
+                        spellRelativeEffects.accept(loc, world);
+                    } else {
+                        for (Location location : SpellEffectUtil.getHorizontalCircleFrom(loc, spellEffectRadius, 0, 1)) {
+                            spellRelativeEffects.accept(location, world);
+                        }
+                    }
                     if (repeat) {
                         for (LivingEntity livingEntity : SpellEffectUtil.getNearbyLivingEntities(player, loc, spellEffectRadius)) {
                             if (effectFrequency == EffectFrequency.ONCE) {
@@ -93,11 +104,17 @@ public final class Aura extends Base {
         CONSTANT
     }
 
+    public enum AuraParticleType {
+        CENTER,
+        CIRCLE
+    }
+
     public static final class Builder extends AbstractBuilder<Builder> {
         private final EffectFrequency effectFrequency;
         private Consumer<LivingEntity> reverseAuraEffects = Common.emptyConsumer();
         private Consumer<LivingEntity> playerEffects = Common.emptyConsumer();
         private int effectDuration;
+        private AuraParticleType auraParticleType = AuraParticleType.CENTER;
 
         private Builder(EffectFrequency effectFrequency) {
             this.effectFrequency = effectFrequency;
@@ -126,6 +143,11 @@ public final class Aura extends Base {
 
         public Builder setReverseAuraEffects(Consumer<LivingEntity> playerEffects) {
             this.reverseAuraEffects = playerEffects;
+            return this;
+        }
+
+        public Builder setAuraParticleType(AuraParticleType auraParticles) {
+            this.auraParticleType = auraParticles;
             return this;
         }
     }

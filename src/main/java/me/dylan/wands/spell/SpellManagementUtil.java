@@ -159,6 +159,16 @@ public class SpellManagementUtil {
         }
     }
 
+    static void showSelectedSpell(Player player, ItemStack itemStack) {
+        String spell = getSelectedSpell(itemStack);
+        if (spell != null) {
+            Castable castable = SpellInstance.getSpell(spell);
+            if (castable != null) {
+                player.sendActionBar("§6Current spell: §7§l" + castable.getDisplayName());
+            }
+        }
+    }
+
     static void castSpell(@NotNull Player player, ItemStack itemStack) {
         CooldownManager cooldownManager = CooldownManager.INSTANCE;
         if (cooldownManager.canCast(player)) {

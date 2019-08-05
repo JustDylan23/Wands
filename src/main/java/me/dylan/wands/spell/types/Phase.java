@@ -28,12 +28,12 @@ import java.util.function.Predicate;
  */
 public final class Phase extends Base {
     private final Target target;
-    private int effectDistance;
     private final String tagPhaseSpell;
     private final Predicate<LivingEntity> condition;
     private final Consumer<LivingEntity> duringPhaseEffect;
     private final BiConsumer<LivingEntity, Player> afterPhaseEffect;
     private final KnockBackFrom knockBackFrom;
+    private int effectDistance;
 
     private Phase(@NotNull Builder builder) {
         super(builder.baseProps);
@@ -44,6 +44,9 @@ public final class Phase extends Base {
         this.afterPhaseEffect = builder.afterPhaseEffect;
         this.knockBackFrom = builder.knockBackFrom;
         this.tagPhaseSpell = UUID.randomUUID().toString();
+
+        addPropertyInfo("Effect distance", effectDistance, "meters");
+        addPropertyInfo("Target", target);
     }
 
     @NotNull
@@ -121,7 +124,7 @@ public final class Phase extends Base {
             return this;
         }
 
-        public Builder setEffectAfterPhase(BiConsumer<LivingEntity, Player> effect) {
+        public Builder setEffectsAfterPhase(BiConsumer<LivingEntity, Player> effect) {
             this.afterPhaseEffect = effect;
             return this;
         }

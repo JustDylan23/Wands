@@ -1,10 +1,11 @@
 package me.dylan.wands.spell.spells;
 
+import me.dylan.wands.knockback.KnockBack;
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.SpellEffectUtil;
-import me.dylan.wands.spell.types.Ray;
 import me.dylan.wands.spell.types.Base;
 import me.dylan.wands.spell.types.Base.Target;
+import me.dylan.wands.spell.types.Ray;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -17,10 +18,10 @@ public enum ThunderStrike implements Castable {
         this.baseType = Ray.newBuilder(Target.MULTI)
                 .setEffectDistance(40)
                 .setEntityDamage(8)
-                .setKnockBack(0.6F, 0.5F)
+                .setKnockBack(KnockBack.EXPLOSION)
                 .setCastSound(Sound.ENTITY_WITHER_SHOOT)
                 .setEntityEffects(entity -> entity.setFireTicks(80))
-                .setMetersPerTick(3)
+                .setMetersPerTick(2)
                 .setSpellRelativeEffects((loc, world) -> {
                     world.spawnParticle(Particle.CLOUD, loc, 5, 0.2, 0.2, 0.2, 0.05, null, true);
                     world.spawnParticle(Particle.ENCHANTMENT_TABLE, loc, 15, 0.5, 0.5, 0.5, 1, null, true);

@@ -83,6 +83,7 @@ public class Wands extends BaseCommand {
                             item = new ItemStack(Material.BLAZE_ROD);
                             item.setItemMeta(meta);
                             ItemUtil.setName(item, "&cEmpire Wand");
+                            ItemUtil.makeGlow(item);
                             player.getInventory().addItem(item);
                             item = PreSetItem.CURSED_BOW.getItemStack();
                             ItemUtil.setName(item, "&cEmpire Bow");

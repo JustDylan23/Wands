@@ -1,9 +1,10 @@
 package me.dylan.wands.spell.spells;
 
+import me.dylan.wands.knockback.KnockBack;
 import me.dylan.wands.sound.CompoundSound;
 import me.dylan.wands.spell.Castable;
-import me.dylan.wands.spell.types.MagicProjectile;
 import me.dylan.wands.spell.types.Base;
+import me.dylan.wands.spell.types.MagicProjectile;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.SmallFireball;
@@ -22,7 +23,7 @@ public enum FireComet implements Castable {
                 .setSpellEffectRadius(4.0F)
                 .setEntityDamage(10)
                 .setEntityEffects(entity -> entity.setFireTicks(100))
-                .setKnockBack(0.6F, 0.5F)
+                .setKnockBack(KnockBack.EXPLOSION)
                 .setLifeTime(20)
                 .setProjectileProps(projectile -> {
                     projectile.setIsIncendiary(false);

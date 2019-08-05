@@ -2,10 +2,10 @@ package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.SpellEffectUtil;
-import me.dylan.wands.spell.types.Base.KnockBackFrom;
-import me.dylan.wands.spell.types.Phase;
 import me.dylan.wands.spell.types.Base;
+import me.dylan.wands.spell.types.Base.KnockBackFrom;
 import me.dylan.wands.spell.types.Base.Target;
+import me.dylan.wands.spell.types.Phase;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -26,20 +26,17 @@ public enum DarkPush implements Castable {
                 .setCastSound(Sound.ENTITY_WITHER_SHOOT)
                 .setKnockBack(1.2F, 0.6F)
                 .setEffectDistance(30)
-                .setSpellEffectRadius(2.0F)
+                .setSpellEffectRadius(2.5F)
                 .knockBackFrom(KnockBackFrom.PLAYER)
                 .setSpellRelativeEffects((loc, world) -> {
                     world.spawnParticle(Particle.SMOKE_LARGE, loc, 20, 0.4, 0.4, 0.4, 0.1, null, true);
                     world.spawnParticle(Particle.SMOKE_NORMAL, loc, 20, 0.4, 0.4, 0.4, 0.1, null, true);
                     world.spawnParticle(Particle.ENCHANTMENT_TABLE, loc, 40, 0.8, 0.8, 0.8, 0.3, null, true);
                 })
-                .setEntityEffects(entity -> {
-                    entity.setVelocity(entity.getVelocity().setY(0.6));
-                    entity.addPotionEffect(blind, true);
-                })
+                .setEntityEffects(entity -> entity.addPotionEffect(blind, true))
                 .setStagePassCondition(Entity::isOnGround)
                 .setEffectsDuringPhase(entity -> entity.getWorld().spawnParticle(Particle.SMOKE_LARGE, entity.getLocation(), 5, 0.3, 0.3, 0.3, 0.05, null, true))
-                .setEffectAfterPhase((entity, player) -> {
+                .setEffectsAfterPhase((entity, player) -> {
                     Location loc = entity.getLocation();
                     loc.getWorld().spawnParticle(Particle.SMOKE_LARGE, loc, 15, 2, 0.2, 2, 0.05, null, true);
                     loc.createExplosion(0.0f);

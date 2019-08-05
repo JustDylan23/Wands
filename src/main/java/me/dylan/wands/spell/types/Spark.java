@@ -1,6 +1,7 @@
 package me.dylan.wands.spell.types;
 
 import me.dylan.wands.spell.SpellEffectUtil;
+import me.dylan.wands.spell.types.Base.AbstractBuilder.SpellInfo;
 import me.dylan.wands.util.Common;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -21,7 +22,6 @@ import java.util.function.BiConsumer;
 
 public final class Spark extends Base {
     private final int effectDistance;
-    private final boolean requireLivingTarget;
     private final Target target;
     private final BiConsumer<Location, Player> spellRelativeEffects2;
 
@@ -29,13 +29,11 @@ public final class Spark extends Base {
     protected Spark(@NotNull Builder builder) {
         super(builder.baseProps);
         this.effectDistance = builder.effectDistance;
-        this.requireLivingTarget = builder.requireLivingTarget;
         this.target = builder.target;
         this.spellRelativeEffects2 = builder.spellRelativeEffects2;
 
 
         addPropertyInfo("Effect distance", effectDistance, "meters");
-        addPropertyInfo("Require Living Target", requireLivingTarget);
         addPropertyInfo("Target", target);
 
     }
@@ -52,9 +50,11 @@ public final class Spark extends Base {
         if (loc == null) {
             return false;
         }
+        SpellInfo spellInfo = new SpellInfo(player, player.getLocation(), () -> loc);
         castSounds.play(player);
         spellRelativeEffects.accept(loc, loc.getWorld());
         spellRelativeEffects2.accept(loc, player);
+        extendedSpellRelativeEffects.accept(loc, spellInfo);
         for (LivingEntity entity : SpellEffectUtil.getNearbyLivingEntities(player, loc, spellEffectRadius)) {
             knockBack.apply(entity, loc);
             SpellEffectUtil.damageEffect(player, entity, entityDamage, weaponName);
@@ -69,7 +69,6 @@ public final class Spark extends Base {
     public static final class Builder extends AbstractBuilder<Builder> {
         private final Target target;
         private int effectDistance;
-        private boolean requireLivingTarget;
         private BiConsumer<Location, Player> spellRelativeEffects2 = Common.emptyBiConsumer();
 
 
@@ -89,11 +88,6 @@ public final class Spark extends Base {
 
         public Builder setEffectDistance(int effectDistance) {
             this.effectDistance = effectDistance;
-            return this;
-        }
-
-        public Builder requireLivingTarget(boolean b) {
-            this.requireLivingTarget = b;
             return this;
         }
 

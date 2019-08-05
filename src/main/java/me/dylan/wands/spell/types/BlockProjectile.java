@@ -47,10 +47,13 @@ public final class BlockProjectile extends Base implements Listener {
         this.metaTime = amount * delay;
         this.tagBlockProjectile = UUID.randomUUID().toString();
 
+
         ListenerRegistry.addListener(this);
 
         addPropertyInfo("Material", material);
         addPropertyInfo("Speed", speed);
+        addPropertyInfo("Amount", amount);
+        addPropertyInfo("Delay between projectiles", delay);
 
         plugin.addDisableLogic(() -> projectiles.forEach(Entity::remove));
 
@@ -98,6 +101,7 @@ public final class BlockProjectile extends Base implements Listener {
             public void run() {
                 if (fallingBlock.isValid()) {
                     Location location = fallingBlock.getLocation();
+                    spellRelativeEffects.accept(location, location.getWorld());
                     SpellEffectUtil.getNearbyLivingEntities(player, location, entity -> !entity.hasMetadata(tagBlockProjectile), spellEffectRadius)
                             .forEach(entity -> {
                                 entity.setMetadata(tagBlockProjectile, Common.METADATA_VALUE_TRUE);

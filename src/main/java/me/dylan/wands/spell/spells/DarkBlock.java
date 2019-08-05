@@ -1,9 +1,10 @@
 package me.dylan.wands.spell.spells;
 
+import me.dylan.wands.knockback.KnockBack;
 import me.dylan.wands.sound.CompoundSound;
 import me.dylan.wands.spell.Castable;
-import me.dylan.wands.spell.types.LaunchableBlock;
 import me.dylan.wands.spell.types.Base;
+import me.dylan.wands.spell.types.LaunchableBlock;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -32,7 +33,7 @@ public enum DarkBlock implements Castable {
                 })
                 .setSpellEffectRadius(3.5F)
                 .setEntityDamage(12)
-                .setKnockBack(0.6F, 0.5F)
+                .setKnockBack(KnockBack.EXPLOSION)
                 .build();
     }
 

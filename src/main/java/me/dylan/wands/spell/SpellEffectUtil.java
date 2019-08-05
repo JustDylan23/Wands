@@ -47,11 +47,11 @@ public class SpellEffectUtil {
         return info.getRelativeBlock().getLocation().toCenterLocation();
     }
 
-    public static Location[] getHorizontalCircleFrom(@NotNull Location location, float radius) {
-        int points = (int) Math.ceil(radius * 2 * Math.PI);
+    public static Location[] getHorizontalCircleFrom(@NotNull Location location, float radius, float angleOffset, float pointsMultiplier) {
+        int points = (int) Math.ceil(radius * 2 * Math.PI * pointsMultiplier);
         double increment = (2 * Math.PI) / points;
         Location[] locations = new Location[points];
-        double angle = 0;
+        double angle = Math.toRadians(angleOffset + 90);
         World world = location.getWorld();
         double originX = location.getX();
         double originY = location.getY();
@@ -102,10 +102,13 @@ public class SpellEffectUtil {
         return locations;
     }
 
-    private static boolean checkFriendlyFireOption(Player p1, Player p2) {
+    private static boolean checkFriendlyFireOption(Player player, Entity entity) {
         Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
-        Team team = scoreboard.getEntryTeam(p1.getName());
-        return team == null || team.allowFriendlyFire() || !team.equals(scoreboard.getEntryTeam(p2.getName()));
+        Team team = scoreboard.getEntryTeam(player.getName());
+        String entry = (entity instanceof Player)
+                ? entity.getName()
+                : entity.getUniqueId().toString();
+        return team == null || team.allowFriendlyFire() || !team.equals(scoreboard.getEntryTeam(entry));
     }
 
     public static List<LivingEntity> getNearbyLivingEntities(Player player, Location loc, double radius) {
@@ -123,12 +126,12 @@ public class SpellEffectUtil {
     public static List<LivingEntity> getNearbyLivingEntities(Player player, @NotNull Location loc, Predicate<LivingEntity> predicate, double rx, double ry, double rz) {
         return loc.getWorld()
                 .getNearbyEntities(loc, rx, ry, rz).stream()
-                .filter(LivingEntity.class::isInstance)
+                .filter(entity -> entity instanceof LivingEntity)
                 .filter(entity -> !(entity instanceof ArmorStand))
+                .filter(entity -> !entity.hasMetadata(UNTARGETABLE))
                 .filter(entity -> entity.equals(player)
                         ? CONFIGURABLE_DATA.isSelfHarmAllowed()
-                        : ((!(entity instanceof Player)
-                        || checkFriendlyFireOption(player, (Player) entity)))
+                        : checkFriendlyFireOption(player, entity)
                 )
                 .map(LivingEntity.class::cast)
                 .filter(predicate)

@@ -2,8 +2,8 @@ package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.SpellEffectUtil;
-import me.dylan.wands.spell.types.Spark;
 import me.dylan.wands.spell.types.Base;
+import me.dylan.wands.spell.types.Spark;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
@@ -14,7 +14,7 @@ public enum FireSpark implements Castable {
 
     FireSpark() {
         this.baseType = Spark.newBuilder(Base.Target.MULTI)
-                .setSpellEffectRadius(2.5F)
+                .setSpellEffectRadius(2.8F)
                 .setEntityDamage(9)
                 .setEntityEffects(entity -> entity.setFireTicks(100))
                 .setSpellRelativeEffects((loc, world) -> {

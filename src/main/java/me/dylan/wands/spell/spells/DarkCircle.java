@@ -1,9 +1,10 @@
 package me.dylan.wands.spell.spells;
 
+import me.dylan.wands.knockback.KnockBack;
 import me.dylan.wands.spell.Castable;
+import me.dylan.wands.spell.types.Base;
 import me.dylan.wands.spell.types.Circle;
 import me.dylan.wands.spell.types.Circle.CirclePlacement;
-import me.dylan.wands.spell.types.Base;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.potion.PotionEffect;
@@ -21,7 +22,6 @@ public enum DarkCircle implements Castable {
                 .setEntityDamage(8)
                 .setSpellEffectRadius(4.0F)
                 .setEntityEffects(entity -> {
-                    entity.setVelocity(entity.getVelocity().setY(0.5f));
                     entity.getLocation().createExplosion(0.0f);
                     entity.addPotionEffect(blind, true);
                 })
@@ -31,7 +31,7 @@ public enum DarkCircle implements Castable {
                     world.spawnParticle(Particle.SMOKE_LARGE, loc, 10, 0.3, 0.3, 0.3, 0.1, null, true);
                     world.spawnParticle(Particle.ENCHANTMENT_TABLE, loc, 8, 0.3, 0.3, 0.3, 0.1, null, true);
                 })
-                .setKnockBack(1.0F, 0.5F)
+                .setKnockBack(KnockBack.SIDEWAYS)
                 .setCircleHeight(1)
                 .build();
     }
