@@ -26,7 +26,7 @@ import java.util.function.Predicate;
  * - Effects constantly applied during phase.
  * - Effects applied after stage.
  */
-public final class Phase extends Base {
+public final class Phase extends Behaviour {
     private final Target target;
     private final String tagPhaseSpell;
     private final Predicate<LivingEntity> condition;
@@ -105,7 +105,7 @@ public final class Phase extends Base {
 
         @NotNull
         @Override
-        public Base build() {
+        public Behaviour build() {
             return new Phase(this);
         }
 

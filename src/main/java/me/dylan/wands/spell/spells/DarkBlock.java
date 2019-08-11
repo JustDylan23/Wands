@@ -3,7 +3,7 @@ package me.dylan.wands.spell.spells;
 import me.dylan.wands.knockback.KnockBack;
 import me.dylan.wands.sound.CompoundSound;
 import me.dylan.wands.spell.Castable;
-import me.dylan.wands.spell.types.Base;
+import me.dylan.wands.spell.types.Behaviour;
 import me.dylan.wands.spell.types.LaunchableBlock;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -11,10 +11,10 @@ import org.bukkit.Sound;
 
 public enum DarkBlock implements Castable {
     INSTANCE;
-    private final Base baseType;
+    private final Behaviour behaviour;
 
     DarkBlock() {
-        this.baseType = LaunchableBlock.newBuilder(Material.COAL_BLOCK)
+        this.behaviour = LaunchableBlock.newBuilder(Material.COAL_BLOCK)
                 .setCastSound(Sound.ENTITY_FIREWORK_ROCKET_BLAST)
                 .setBlockRelativeSounds(CompoundSound.chain()
                         .add(Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1, 20)
@@ -38,7 +38,7 @@ public enum DarkBlock implements Castable {
     }
 
     @Override
-    public Base getBaseType() {
-        return baseType;
+    public Behaviour getBehaviour() {
+        return behaviour;
     }
 }

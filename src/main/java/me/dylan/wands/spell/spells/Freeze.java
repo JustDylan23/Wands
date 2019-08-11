@@ -2,8 +2,8 @@ package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.Main;
 import me.dylan.wands.spell.Castable;
-import me.dylan.wands.spell.types.Base;
-import me.dylan.wands.spell.types.Base.Target;
+import me.dylan.wands.spell.types.Behaviour;
+import me.dylan.wands.spell.types.Behaviour.Target;
 import me.dylan.wands.spell.types.Ray;
 import me.dylan.wands.util.Common;
 import org.bukkit.Location;
@@ -18,12 +18,12 @@ import org.bukkit.scheduler.BukkitRunnable;
 public enum Freeze implements Castable {
     INSTANCE;
     private final String metaKey = "FREEZE_SPELL";
-    private final Base baseType;
+    private final Behaviour behaviour;
     private final PotionEffect slow = new PotionEffect(PotionEffectType.SLOW, 120, 4, false);
 
 
     Freeze() {
-        this.baseType = Ray.newBuilder(Target.SINGLE)
+        this.behaviour = Ray.newBuilder(Target.SINGLE)
                 .setRayWidth(1)
                 .setEntityDamage(6)
                 .setMetersPerTick(2)
@@ -38,8 +38,8 @@ public enum Freeze implements Castable {
     }
 
     @Override
-    public Base getBaseType() {
-        return baseType;
+    public Behaviour getBehaviour() {
+        return behaviour;
     }
 
     private void freeze(LivingEntity entity) {

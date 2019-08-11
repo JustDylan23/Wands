@@ -2,7 +2,7 @@ package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.knockback.KnockBack;
 import me.dylan.wands.spell.Castable;
-import me.dylan.wands.spell.types.Base;
+import me.dylan.wands.spell.types.Behaviour;
 import me.dylan.wands.spell.types.Spark;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -10,10 +10,10 @@ import org.bukkit.Sound;
 
 public enum BloodExplode implements Castable {
     INSTANCE;
-    private final Base baseType;
+    private final Behaviour behaviour;
 
     BloodExplode() {
-        this.baseType = Spark.newBuilder(Base.Target.MULTI)
+        this.behaviour = Spark.newBuilder(Behaviour.Target.MULTI)
                 .setEntityDamage(10)
                 .setKnockBack(KnockBack.EXPLOSION)
                 .setSpellEffectRadius(3.0F)
@@ -30,7 +30,7 @@ public enum BloodExplode implements Castable {
     }
 
     @Override
-    public Base getBaseType() {
-        return baseType;
+    public Behaviour getBehaviour() {
+        return behaviour;
     }
 }

@@ -5,8 +5,8 @@ import me.dylan.wands.Main;
 import me.dylan.wands.sound.CompoundSound;
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.SpellEffectUtil;
-import me.dylan.wands.spell.types.Base;
-import me.dylan.wands.spell.types.Base.AbstractBuilder.SpellInfo;
+import me.dylan.wands.spell.types.Behaviour;
+import me.dylan.wands.spell.types.Behaviour.AbstractBuilder.SpellInfo;
 import me.dylan.wands.spell.types.Spark;
 import me.dylan.wands.util.Common;
 import org.bukkit.*;
@@ -29,7 +29,7 @@ import java.util.UUID;
 public enum CorruptedRain implements Castable, Listener {
     INSTANCE;
 
-    private final Base baseType;
+    private final Behaviour behaviour;
     private final PotionEffect wither = new PotionEffect(PotionEffectType.WITHER, 40, 2, true);
     private final PotionEffect blind = new PotionEffect(PotionEffectType.BLINDNESS, 160, 0, false);
     private final BlockData obsidian = Material.OBSIDIAN.createBlockData();
@@ -39,7 +39,7 @@ public enum CorruptedRain implements Castable, Listener {
 
     CorruptedRain() {
         ListenerRegistry.addListener(this);
-        this.baseType = Spark.newBuilder(Base.Target.MULTI)
+        this.behaviour = Spark.newBuilder(Behaviour.Target.MULTI)
                 .setCastSound(CompoundSound.chain()
                         .add(Sound.ENTITY_ARROW_SHOOT)
                         .add(Sound.BLOCK_STONE_PLACE)
@@ -53,8 +53,8 @@ public enum CorruptedRain implements Castable, Listener {
     }
 
     @Override
-    public Base getBaseType() {
-        return baseType;
+    public Behaviour getBehaviour() {
+        return behaviour;
     }
 
     private void spawnArrows(Location location, SpellInfo spellInfo) {

@@ -2,7 +2,7 @@ package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.Main;
 import me.dylan.wands.spell.Castable;
-import me.dylan.wands.spell.types.Base;
+import me.dylan.wands.spell.types.Behaviour;
 import me.dylan.wands.spell.types.Spark;
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;
@@ -11,10 +11,10 @@ import org.bukkit.SoundCategory;
 
 public enum MagicSpark implements Castable {
     INSTANCE;
-    private final Base baseType;
+    private final Behaviour behaviour;
 
     MagicSpark() {
-        this.baseType = Spark.newBuilder(Base.Target.MULTI)
+        this.behaviour = Spark.newBuilder(Behaviour.Target.MULTI)
                 .setSpellEffectRadius(2.8F)
                 .setEntityDamage(12)
                 .setSpellRelativeEffects((loc, world) -> {
@@ -30,8 +30,8 @@ public enum MagicSpark implements Castable {
     }
 
     @Override
-    public Base getBaseType() {
-        return baseType;
+    public Behaviour getBehaviour() {
+        return behaviour;
     }
 
     @Override

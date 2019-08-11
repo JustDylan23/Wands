@@ -1,7 +1,7 @@
 package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.spell.Castable;
-import me.dylan.wands.spell.types.Base;
+import me.dylan.wands.spell.types.Behaviour;
 import me.dylan.wands.spell.types.Circle;
 import me.dylan.wands.spell.types.Circle.CirclePlacement;
 import org.bukkit.Particle;
@@ -9,10 +9,10 @@ import org.bukkit.Sound;
 
 public enum MephiAway implements Castable {
     INSTANCE;
-    private final Base baseType;
+    private final Behaviour behaviour;
 
     MephiAway() {
-        this.baseType = Circle.newBuilder(CirclePlacement.RELATIVE)
+        this.behaviour = Circle.newBuilder(CirclePlacement.RELATIVE)
                 .setCircleRadius(5)
                 .setEntityDamage(8)
                 .setSpellEffectRadius(5.0F)
@@ -32,7 +32,7 @@ public enum MephiAway implements Castable {
     }
 
     @Override
-    public Base getBaseType() {
-        return baseType;
+    public Behaviour getBehaviour() {
+        return behaviour;
     }
 }

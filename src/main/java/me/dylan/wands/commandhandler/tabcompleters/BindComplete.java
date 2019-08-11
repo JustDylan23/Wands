@@ -1,7 +1,7 @@
 package me.dylan.wands.commandhandler.tabcompleters;
 
 import me.dylan.wands.commandhandler.BaseCompleter;
-import me.dylan.wands.spell.SpellInstance;
+import me.dylan.wands.spell.SpellType;
 import me.dylan.wands.spell.SpellManagementUtil;
 import me.dylan.wands.spell.SpellManagementUtil.SpellCompoundUtil;
 import org.bukkit.command.Command;
@@ -22,7 +22,7 @@ public class BindComplete extends BaseCompleter {
             ItemStack itemStack = ((Player) sender).getInventory().getItemInMainHand();
             if (SpellManagementUtil.isWand(itemStack)) {
                 List<String> spells = SpellCompoundUtil.getSpells(itemStack);
-                String[] str = Arrays.stream(SpellInstance.values())
+                String[] str = Arrays.stream(SpellType.values())
                         .map(Enum::toString).filter(s -> !spells.contains(s))
                         .toArray(String[]::new);
                 return validCompletions(value, str);

@@ -2,7 +2,7 @@ package me.dylan.wands.spell;
 
 import me.dylan.wands.Main;
 import me.dylan.wands.config.ConfigurableData;
-import me.dylan.wands.spell.types.Base;
+import me.dylan.wands.spell.types.Behaviour;
 import me.dylan.wands.util.ItemUtil;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
@@ -78,10 +78,10 @@ public class SpellManagementUtil {
         }
     }
 
-    static void setSpells(ItemStack itemStack, @NotNull SpellInstance... spellInstances) {
+    static void setSpells(ItemStack itemStack, @NotNull SpellType... spellTypes) {
         StringJoiner stringJoiner = new StringJoiner(", ");
-        for (SpellInstance spellInstance : spellInstances) {
-            stringJoiner.add(spellInstance.toString());
+        for (SpellType spellType : spellTypes) {
+            stringJoiner.add(spellType.toString());
         }
         ItemUtil.setPersistentData(itemStack, TAG_SPELLS_LIST, PersistentDataType.STRING, stringJoiner.toString());
     }
@@ -149,7 +149,7 @@ public class SpellManagementUtil {
         String spell = spells.get(index);
 
         // returns null when the spell stored on the item isn't a SpellType
-        Castable castable = SpellInstance.getSpell(spell);
+        Castable castable = SpellType.getSpell(spell);
         if (castable != null) {
             player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.5F, 0.5F);
             player.sendActionBar("§6Current spell: §7§l" + castable.getDisplayName());
@@ -162,7 +162,7 @@ public class SpellManagementUtil {
     static void showSelectedSpell(Player player, ItemStack itemStack) {
         String spell = getSelectedSpell(itemStack);
         if (spell != null) {
-            Castable castable = SpellInstance.getSpell(spell);
+            Castable castable = SpellType.getSpell(spell);
             if (castable != null) {
                 player.sendActionBar("§6Current spell: §7§l" + castable.getDisplayName());
             }
@@ -175,11 +175,11 @@ public class SpellManagementUtil {
             String spell = getSelectedSpell(itemStack);
             if (spell != null) {
                 // returns null when the spell stored on the item isn't a SpellType
-                Castable castable = SpellInstance.getSpell(spell);
+                Castable castable = SpellType.getSpell(spell);
                 if (castable != null) {
-                    Base baseType = castable.getBaseType();
-                    if (baseType != null) {
-                        if (baseType.cast(player, itemStack.getItemMeta().getDisplayName())) {
+                    Behaviour behaviour = castable.getBehaviour();
+                    if (behaviour != null) {
+                        if (behaviour.cast(player, itemStack.getItemMeta().getDisplayName())) {
                             cooldownManager.updateLastUsed(player);
                         }
                     } else {
@@ -224,13 +224,13 @@ public class SpellManagementUtil {
             return b;
         }
 
-        public static boolean addSpell(ItemStack itemStack, @NotNull SpellInstance spellInstance, Player player, boolean override) {
+        public static boolean addSpell(ItemStack itemStack, @NotNull SpellType spellType, Player player, boolean override) {
             boolean b = override || canBeModified(itemStack, player);
             if (b) {
                 Optional<String> spells = ItemUtil.getPersistentData(itemStack, TAG_SPELLS_LIST, PersistentDataType.STRING);
                 String rawList = spells
-                        .map(s -> s + ", " + spellInstance)
-                        .orElseGet(spellInstance::toString);
+                        .map(s -> s + ", " + spellType)
+                        .orElseGet(spellType::toString);
                 ItemUtil.setPersistentData(itemStack, TAG_SPELLS_LIST, PersistentDataType.STRING, rawList);
             }
             return b;
@@ -248,8 +248,8 @@ public class SpellManagementUtil {
             boolean b = override || canBeModified(itemStack, player);
             if (b) {
                 StringJoiner stringJoiner = new StringJoiner(", ");
-                for (SpellInstance spellInstance : SpellInstance.values()) {
-                    stringJoiner.add(spellInstance.toString());
+                for (SpellType spellType : SpellType.values()) {
+                    stringJoiner.add(spellType.toString());
                 }
                 ItemUtil.setPersistentData(itemStack, TAG_SPELLS_LIST, PersistentDataType.STRING, stringJoiner.toString());
             }

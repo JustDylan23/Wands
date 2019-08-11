@@ -3,7 +3,7 @@ package me.dylan.wands.spell.spells;
 import me.dylan.wands.knockback.KnockBack;
 import me.dylan.wands.sound.CompoundSound;
 import me.dylan.wands.spell.Castable;
-import me.dylan.wands.spell.types.Base;
+import me.dylan.wands.spell.types.Behaviour;
 import me.dylan.wands.spell.types.MagicProjectile;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -11,18 +11,18 @@ import org.bukkit.entity.SmallFireball;
 
 public enum FireComet implements Castable {
     INSTANCE;
-    private final Base baseType;
+    private final Behaviour behaviour;
 
     FireComet() {
-        this.baseType = MagicProjectile.newBuilder(SmallFireball.class, 4)
+        this.behaviour = MagicProjectile.newBuilder(SmallFireball.class, 4)
                 .setCastSound(CompoundSound.chain()
                         .add(Sound.ENTITY_FIREWORK_ROCKET_BLAST)
                         .add(Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, 1, 10, 5)
                         .add(Sound.ENTITY_FIREWORK_ROCKET_TWINKLE_FAR, 1, 20)
                 )
-                .setSpellEffectRadius(4.0F)
-                .setEntityDamage(10)
-                .setEntityEffects(entity -> entity.setFireTicks(100))
+                .setSpellEffectRadius(3.0F)
+                .setEntityDamage(8)
+                .setEntityEffects(entity -> entity.setFireTicks(80))
                 .setKnockBack(KnockBack.EXPLOSION)
                 .setLifeTime(20)
                 .setProjectileProps(projectile -> {
@@ -43,7 +43,7 @@ public enum FireComet implements Castable {
     }
 
     @Override
-    public Base getBaseType() {
-        return baseType;
+    public Behaviour getBehaviour() {
+        return behaviour;
     }
 }

@@ -2,7 +2,7 @@ package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.SpellEffectUtil;
-import me.dylan.wands.spell.types.Base;
+import me.dylan.wands.spell.types.Behaviour;
 import me.dylan.wands.spell.types.Spark;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -13,12 +13,12 @@ import org.bukkit.block.data.BlockData;
 public enum CorruptedSpark implements Castable {
     INSTANCE;
 
-    private final Base baseType;
+    private final Behaviour behaviour;
     private final BlockData obsidian = Material.OBSIDIAN.createBlockData();
 
 
     CorruptedSpark() {
-        this.baseType = Spark.newBuilder(Base.Target.MULTI)
+        this.behaviour = Spark.newBuilder(Behaviour.Target.MULTI)
                 .setSpellEffectRadius(2.8F)
                 .setEntityDamage(12)
                 .setSpellRelativeEffects((loc, world) -> {
@@ -35,7 +35,7 @@ public enum CorruptedSpark implements Castable {
     }
 
     @Override
-    public Base getBaseType() {
-        return baseType;
+    public Behaviour getBehaviour() {
+        return behaviour;
     }
 }

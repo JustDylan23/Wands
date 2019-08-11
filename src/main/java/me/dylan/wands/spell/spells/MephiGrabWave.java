@@ -2,8 +2,8 @@ package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.Main;
 import me.dylan.wands.spell.Castable;
-import me.dylan.wands.spell.types.Base;
-import me.dylan.wands.spell.types.Base.Target;
+import me.dylan.wands.spell.types.Behaviour;
+import me.dylan.wands.spell.types.Behaviour.Target;
 import me.dylan.wands.spell.types.Ray;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -15,14 +15,16 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public enum MephiGrabWave implements Castable {
     INSTANCE;
-    private final Base baseType;
+    private final Behaviour behaviour;
     private final PotionEffect slow = new PotionEffect(PotionEffectType.SLOW, 60, 2, false);
+    private final PotionEffect blind = new PotionEffect(PotionEffectType.BLINDNESS, 60, 2, false);
 
 
     MephiGrabWave() {
-        this.baseType = Ray.newBuilder(Target.MULTI)
+        this.behaviour = Ray.newBuilder(Target.MULTI)
                 .setCastSound(Sound.ENTITY_EVOKER_CAST_SPELL)
                 .setRayWidth(2)
+                .setEntityDamage(5)
                 .setSpellEffectRadius(2)
                 .setSpellRelativeEffects((location, world) -> {
                     world.spawnParticle(Particle.VILLAGER_HAPPY, location, 4, 0.4, 0.4, 0.4, 0.1, null, true);
@@ -35,7 +37,10 @@ public enum MephiGrabWave implements Castable {
                     world.playSound(location, Sound.ENTITY_ILLUSIONER_MIRROR_MOVE, SoundCategory.MASTER, 4, 1);
                 })
                 .setEffectDistance(30)
-                .setEntityEffects(entity -> entity.addPotionEffect(slow, true))
+                .setEntityEffects(entity -> {
+                    entity.addPotionEffect(slow, true);
+                    entity.addPotionEffect(blind, true);
+                })
                 .extendedSetEntityEffects((livingEntity, SpellInfo) -> new BukkitRunnable() {
                     int i = 0;
 
@@ -54,7 +59,7 @@ public enum MephiGrabWave implements Castable {
     }
 
     @Override
-    public Base getBaseType() {
-        return baseType;
+    public Behaviour getBehaviour() {
+        return behaviour;
     }
 }

@@ -1,7 +1,7 @@
 package me.dylan.wands.spell.types;
 
 import me.dylan.wands.spell.SpellEffectUtil;
-import me.dylan.wands.spell.types.Base.AbstractBuilder.SpellInfo;
+import me.dylan.wands.spell.types.Behaviour.AbstractBuilder.SpellInfo;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
  * - Effect distance, only has effect when circle placement is set to target.
  * - Circle drawing speed
  */
-public final class Circle extends Base {
+public final class Circle extends Behaviour {
     private final int speed, height, effectDistance, circleRadius;
     private final CirclePlacement circlePlacement;
 
@@ -106,7 +106,7 @@ public final class Circle extends Base {
 
         @NotNull
         @Override
-        public Base build() {
+        public Behaviour build() {
             return new Circle(this);
         }
 

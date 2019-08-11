@@ -2,7 +2,7 @@ package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.Main;
 import me.dylan.wands.spell.Castable;
-import me.dylan.wands.spell.types.Base;
+import me.dylan.wands.spell.types.Behaviour;
 import me.dylan.wands.spell.types.Phase;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
@@ -11,10 +11,10 @@ import org.bukkit.util.Vector;
 public enum CorruptedLaunch implements Castable {
     INSTANCE;
 
-    private final Base baseType;
+    private final Behaviour behaviour;
 
     CorruptedLaunch() {
-        this.baseType = Phase.newBuilder(Base.Target.MULTI)
+        this.behaviour = Phase.newBuilder(Behaviour.Target.MULTI)
                 .setSpellEffectRadius(2.8f)
                 .setEntityDamage(7)
                 .setEntityEffects(entity -> entity.setVelocity(new Vector(0, 1.2, 0)))
@@ -39,7 +39,7 @@ public enum CorruptedLaunch implements Castable {
     }
 
     @Override
-    public Base getBaseType() {
-        return baseType;
+    public Behaviour getBehaviour() {
+        return behaviour;
     }
 }

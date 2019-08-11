@@ -2,7 +2,7 @@ package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.sound.CompoundSound;
 import me.dylan.wands.spell.Castable;
-import me.dylan.wands.spell.types.Base;
+import me.dylan.wands.spell.types.Behaviour;
 import me.dylan.wands.spell.types.Wave;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -12,11 +12,11 @@ import org.bukkit.potion.PotionEffectType;
 
 public enum BloodWave implements Castable {
     INSTANCE;
-    private final Base baseType;
+    private final Behaviour behaviour;
     private final PotionEffect wither = new PotionEffect(PotionEffectType.WITHER, 80, 4, false);
 
     BloodWave() {
-        this.baseType = Wave.newBuilder()
+        this.behaviour = Wave.newBuilder()
                 .setEffectDistance(30)
                 .setSpellEffectRadius(2.0F)
                 .setEntityDamage(5)
@@ -34,7 +34,7 @@ public enum BloodWave implements Castable {
     }
 
     @Override
-    public Base getBaseType() {
-        return baseType;
+    public Behaviour getBehaviour() {
+        return behaviour;
     }
 }

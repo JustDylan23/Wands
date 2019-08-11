@@ -1,7 +1,7 @@
 package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.spell.Castable;
-import me.dylan.wands.spell.types.Base;
+import me.dylan.wands.spell.types.Behaviour;
 import me.dylan.wands.spell.types.BlockProjectile;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -9,10 +9,10 @@ import org.bukkit.Sound;
 
 public enum FlameThrower implements Castable {
     INSTANCE;
-    private final Base baseType;
+    private final Behaviour behaviour;
 
     FlameThrower() {
-        this.baseType = BlockProjectile.newBuilder(Material.FIRE, 2F)
+        this.behaviour = BlockProjectile.newBuilder(Material.FIRE, 2F)
                 .setCastSound(Sound.ENTITY_BLAZE_SHOOT)
                 .setProjectileAmount(8)
                 .setProjectileShootDelay(3)
@@ -27,7 +27,7 @@ public enum FlameThrower implements Castable {
     }
 
     @Override
-    public Base getBaseType() {
-        return baseType;
+    public Behaviour getBehaviour() {
+        return behaviour;
     }
 }

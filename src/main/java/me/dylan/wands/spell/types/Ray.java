@@ -1,7 +1,7 @@
 package me.dylan.wands.spell.types;
 
 import me.dylan.wands.spell.SpellEffectUtil;
-import me.dylan.wands.spell.types.Base.AbstractBuilder.SpellInfo;
+import me.dylan.wands.spell.types.Behaviour.AbstractBuilder.SpellInfo;
 import me.dylan.wands.util.Common;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -23,7 +23,7 @@ import java.util.function.BiConsumer;
  * - The speed at which the ray moves forward.
  * - The maximum distance the ray can travel.
  */
-public final class Ray extends Base {
+public final class Ray extends Behaviour {
     private final int effectDistance, speed;
     private final float rayWidth;
     private final Target target;
@@ -110,7 +110,7 @@ public final class Ray extends Base {
         }
 
         @Override
-        public Base build() {
+        public Behaviour build() {
             return new Ray(this);
         }
 

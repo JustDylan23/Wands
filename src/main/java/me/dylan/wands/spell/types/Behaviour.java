@@ -5,8 +5,8 @@ import me.dylan.wands.knockback.KnockBack;
 import me.dylan.wands.sound.SingularSound;
 import me.dylan.wands.sound.SoundEffect;
 import me.dylan.wands.spell.SpellEffectUtil;
-import me.dylan.wands.spell.types.Base.AbstractBuilder.BaseProps;
-import me.dylan.wands.spell.types.Base.AbstractBuilder.SpellInfo;
+import me.dylan.wands.spell.types.Behaviour.AbstractBuilder.BaseProps;
+import me.dylan.wands.spell.types.Behaviour.AbstractBuilder.SpellInfo;
 import me.dylan.wands.util.Common;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -25,7 +25,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
- * All spell types inherit the basic properties of the {@link Base}.
+ * All spell types inherit the basic properties of the {@link Behaviour}.
  * <p>
  * Configurable:
  * - Damage direct dealt to affected entities.
@@ -38,7 +38,7 @@ import java.util.function.Supplier;
  * BaseMeta's constructor requires {@link BaseProps}.
  * {@link BaseProps} can be acquired by implementing {@link AbstractBuilder}.
  */
-public abstract class Base implements Listener {
+public abstract class Behaviour implements Listener {
     protected final static Main plugin = Main.getPlugin();
 
     final int entityDamage;
@@ -52,7 +52,7 @@ public abstract class Base implements Listener {
 
     private final List<String> props = new ArrayList<>();
 
-    protected Base(@NotNull BaseProps baseProps) {
+    protected Behaviour(@NotNull BaseProps baseProps) {
         this.entityDamage = baseProps.entityDamage;
         this.spellEffectRadius = baseProps.spellEffectRadius;
         this.castSounds = baseProps.castSounds;
@@ -72,10 +72,10 @@ public abstract class Base implements Listener {
 
     /**
      * @deprecated Indicates bad design.
-     * Use {@link #Base(BaseProps)} when possible.
+     * Use {@link #Behaviour(BaseProps)} when possible.
      */
     @Deprecated
-    protected Base() {
+    protected Behaviour() {
         this(BaseProps.EMPTY);
     }
 
@@ -127,7 +127,7 @@ public abstract class Base implements Listener {
 
         abstract T self();
 
-        public abstract Base build();
+        public abstract Behaviour build();
 
         public T setCastSound(SoundEffect soundPlayer) {
             baseProps.castSounds = soundPlayer;

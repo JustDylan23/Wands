@@ -2,7 +2,7 @@ package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.Main;
 import me.dylan.wands.spell.Castable;
-import me.dylan.wands.spell.types.Base;
+import me.dylan.wands.spell.types.Behaviour;
 import me.dylan.wands.spell.types.Spark;
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;
@@ -13,11 +13,11 @@ import org.bukkit.potion.PotionEffectType;
 
 public enum Confuse implements Castable {
     INSTANCE;
-    private final Base baseType;
+    private final Behaviour behaviour;
     private final PotionEffect confusion = new PotionEffect(PotionEffectType.CONFUSION, 260, 4, false);
 
     Confuse() {
-        this.baseType = Spark.newBuilder(Base.Target.MULTI)
+        this.behaviour = Spark.newBuilder(Behaviour.Target.MULTI)
                 .setSpellEffectRadius(3F)
                 .setEntityDamage(8)
                 .setEntityEffects(entity -> entity.addPotionEffect(confusion, true))
@@ -34,7 +34,7 @@ public enum Confuse implements Castable {
     }
 
     @Override
-    public Base getBaseType() {
-        return baseType;
+    public Behaviour getBehaviour() {
+        return behaviour;
     }
 }

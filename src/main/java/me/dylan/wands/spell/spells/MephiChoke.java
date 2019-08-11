@@ -2,13 +2,11 @@ package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.Main;
 import me.dylan.wands.spell.Castable;
-import me.dylan.wands.spell.SpellEffectUtil;
-import me.dylan.wands.spell.types.Base;
-import me.dylan.wands.spell.types.Base.Target;
+import me.dylan.wands.spell.types.Behaviour;
+import me.dylan.wands.spell.types.Behaviour.Target;
 import me.dylan.wands.spell.types.Phase;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -17,11 +15,11 @@ import org.bukkit.util.Vector;
 
 public enum  MephiChoke implements Castable {
     INSTANCE;
-    private final Base baseType;
-    private final PotionEffect wither = new PotionEffect(PotionEffectType.WITHER, 100, 1);
+    private final Behaviour behaviour;
+    private final PotionEffect wither = new PotionEffect(PotionEffectType.WITHER, 100, 2);
 
     MephiChoke() {
-        this.baseType = Phase.newBuilder(Target.SINGLE)
+        this.behaviour = Phase.newBuilder(Target.SINGLE)
                 .setCastSound(Sound.ENTITY_PHANTOM_BITE)
                 .setEffectDistance(30)
                 .setSpellEffectRadius(2.8F)
@@ -60,7 +58,7 @@ public enum  MephiChoke implements Castable {
         }.runTaskTimer(Main.getPlugin(), 10, 1);
     }
 
-    public Base getBaseType() {
-        return baseType;
+    public Behaviour getBehaviour() {
+        return behaviour;
     }
 }

@@ -2,7 +2,7 @@ package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.SpellEffectUtil;
-import me.dylan.wands.spell.types.Base;
+import me.dylan.wands.spell.types.Behaviour;
 import me.dylan.wands.spell.types.Circle;
 import me.dylan.wands.spell.types.Circle.CirclePlacement;
 import org.bukkit.Location;
@@ -12,10 +12,10 @@ import org.bukkit.World;
 
 public enum ThunderStorm implements Castable {
     INSTANCE;
-    private final Base baseType;
+    private final Behaviour behaviour;
 
     ThunderStorm() {
-        this.baseType = Circle.newBuilder(CirclePlacement.RELATIVE)
+        this.behaviour = Circle.newBuilder(CirclePlacement.RELATIVE)
                 .setCircleRadius(10)
                 .setSpellEffectRadius(10.0F)
                 .setCircleHeight(7)
@@ -41,7 +41,7 @@ public enum ThunderStorm implements Castable {
     }
 
     @Override
-    public Base getBaseType() {
-        return baseType;
+    public Behaviour getBehaviour() {
+        return behaviour;
     }
 }

@@ -1,7 +1,7 @@
 package me.dylan.wands.spell.types;
 
 import me.dylan.wands.spell.SpellEffectUtil;
-import me.dylan.wands.spell.types.Base.AbstractBuilder.SpellInfo;
+import me.dylan.wands.spell.types.Behaviour.AbstractBuilder.SpellInfo;
 import me.dylan.wands.util.Common;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -19,7 +19,7 @@ import java.util.UUID;
  * - Radius to which the wave will extend.
  * - The delay before the wave grows half a meter
  */
-public final class ShockWave extends Base {
+public final class ShockWave extends Behaviour {
     private final int waveRadius, delay;
     private final String tagShockWave;
 
@@ -80,7 +80,7 @@ public final class ShockWave extends Base {
         }
 
         @Override
-        public Base build() {
+        public Behaviour build() {
             return new ShockWave(this);
         }
 

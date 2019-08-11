@@ -4,8 +4,8 @@ import me.dylan.wands.Main;
 import me.dylan.wands.PreSetItem;
 import me.dylan.wands.commandhandler.BaseCommand;
 import me.dylan.wands.config.ConfigurableData;
-import me.dylan.wands.spell.SpellInstance;
-import me.dylan.wands.spell.types.Base;
+import me.dylan.wands.spell.SpellType;
+import me.dylan.wands.spell.types.Behaviour;
 import me.dylan.wands.util.ItemUtil;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -45,12 +45,12 @@ public class Wands extends BaseCommand {
                         return true;
                     case "spells":
                         if (checkPerm(sender, "list")) {
-                            SpellInstance[] spellInstances = SpellInstance.values();
+                            SpellType[] spellTypes = SpellType.values();
                             StringJoiner stringJoiner = new StringJoiner(", ");
-                            for (SpellInstance spellInstance : spellInstances) {
-                                stringJoiner.add(spellInstance.getName());
+                            for (SpellType spellType : spellTypes) {
+                                stringJoiner.add(spellType.getName());
                             }
-                            sender.sendMessage("§6Spells (" + spellInstances.length + "): §r" + stringJoiner);
+                            sender.sendMessage("§6Spells (" + spellTypes.length + "): §r" + stringJoiner);
                         }
                         return true;
                     case "info":
@@ -111,14 +111,14 @@ public class Wands extends BaseCommand {
                 }
                 if (args[0].equalsIgnoreCase("spells")) {
                     if (checkPerm(sender, "list")) {
-                        SpellInstance spellInstance;
+                        SpellType spellType;
                         try {
-                            spellInstance = SpellInstance.valueOf(args[1].toUpperCase());
-                            Base baseType = spellInstance.castable.getBaseType();
-                            if (baseType == null) {
+                            spellType = SpellType.valueOf(args[1].toUpperCase());
+                            Behaviour behaviour = spellType.castable.getBehaviour();
+                            if (behaviour == null) {
                                 sender.sendMessage(Main.PREFIX + "Spell has no behaviour!");
                             } else {
-                                sender.sendMessage("§e ---- §6" + args[1].toUpperCase() + "§e ----§r\n" + baseType);
+                                sender.sendMessage("§e ---- §6" + args[1].toUpperCase() + "§e ----§r\n" + behaviour);
                             }
                         } catch (IllegalArgumentException e) {
                             sender.sendMessage(Main.PREFIX + "Spell does not exist!");

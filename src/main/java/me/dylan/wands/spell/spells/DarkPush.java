@@ -2,9 +2,9 @@ package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.SpellEffectUtil;
-import me.dylan.wands.spell.types.Base;
-import me.dylan.wands.spell.types.Base.KnockBackFrom;
-import me.dylan.wands.spell.types.Base.Target;
+import me.dylan.wands.spell.types.Behaviour;
+import me.dylan.wands.spell.types.Behaviour.KnockBackFrom;
+import me.dylan.wands.spell.types.Behaviour.Target;
 import me.dylan.wands.spell.types.Phase;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -16,12 +16,12 @@ import org.bukkit.potion.PotionEffectType;
 
 public enum DarkPush implements Castable {
     INSTANCE;
-    private final Base baseType;
+    private final Behaviour behaviour;
 
     private final PotionEffect blind = new PotionEffect(PotionEffectType.BLINDNESS, 40, 0, false);
 
     DarkPush() {
-        this.baseType = Phase.newBuilder(Target.SINGLE)
+        this.behaviour = Phase.newBuilder(Target.SINGLE)
                 .setEntityDamage(6)
                 .setCastSound(Sound.ENTITY_WITHER_SHOOT)
                 .setKnockBack(1.2F, 0.6F)
@@ -52,7 +52,7 @@ public enum DarkPush implements Castable {
     }
 
     @Override
-    public Base getBaseType() {
-        return baseType;
+    public Behaviour getBehaviour() {
+        return behaviour;
     }
 }

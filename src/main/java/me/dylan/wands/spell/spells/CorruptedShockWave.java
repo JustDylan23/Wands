@@ -2,7 +2,7 @@ package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.sound.CompoundSound;
 import me.dylan.wands.spell.Castable;
-import me.dylan.wands.spell.types.Base;
+import me.dylan.wands.spell.types.Behaviour;
 import me.dylan.wands.spell.types.ShockWave;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -12,12 +12,12 @@ import org.bukkit.potion.PotionEffectType;
 public enum CorruptedShockWave implements Castable {
     INSTANCE;
 
-    private final Base baseType;
+    private final Behaviour behaviour;
     private final PotionEffect wither = new PotionEffect(PotionEffectType.WITHER, 60, 1, false);
     private final PotionEffect slow = new PotionEffect(PotionEffectType.SLOW, 60, 2, false);
 
     CorruptedShockWave() {
-        this.baseType = ShockWave.newBuilder()
+        this.behaviour = ShockWave.newBuilder()
                 .setCastSound(CompoundSound.chain().add(Sound.ENTITY_WOLF_GROWL, 0.5F).add(Sound.ENTITY_WOLF_WHINE, 0.5F))
                 .setWaveRadius(8)
                 .setEntityDamage(8)
@@ -31,7 +31,7 @@ public enum CorruptedShockWave implements Castable {
     }
 
     @Override
-    public Base getBaseType() {
-        return baseType;
+    public Behaviour getBehaviour() {
+        return behaviour;
     }
 }

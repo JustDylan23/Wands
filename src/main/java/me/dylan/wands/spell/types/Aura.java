@@ -22,7 +22,7 @@ import java.util.function.Consumer;
  * - Effects which player receives on activation
  * - Effects which player receives if aura effected nothing excluding the player
  */
-public final class Aura extends Base {
+public final class Aura extends Behaviour {
     private final EffectFrequency effectFrequency;
     private final int effectDuration;
     private final String AuraUUID;
@@ -127,7 +127,7 @@ public final class Aura extends Base {
 
         @NotNull
         @Override
-        public Base build() {
+        public Behaviour build() {
             return new Aura(this);
         }
 
