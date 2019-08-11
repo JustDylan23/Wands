@@ -3,7 +3,7 @@ package me.dylan.wands.spell.spells;
 import me.dylan.wands.knockback.KnockBack;
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.SpellEffectUtil;
-import me.dylan.wands.spell.types.Base;
+import me.dylan.wands.spell.types.Behaviour;
 import me.dylan.wands.spell.types.MagicProjectile;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -12,13 +12,13 @@ import org.bukkit.entity.SmallFireball;
 
 public enum Comet implements Castable {
     INSTANCE;
-    private final Base baseType;
+    private final Behaviour behaviour;
 
     Comet() {
-        this.baseType = MagicProjectile.newBuilder(SmallFireball.class, 4.0F)
-                .setSpellEffectRadius(4.0F)
-                .setEntityDamage(10)
-                .setEntityEffects(entity -> entity.setFireTicks(100))
+        this.behaviour = MagicProjectile.newBuilder(SmallFireball.class, 4)
+                .setSpellEffectRadius(3.0F)
+                .setEntityDamage(8)
+                .setEntityEffects(entity -> entity.setFireTicks(80))
                 .setKnockBack(KnockBack.EXPLOSION)
                 .setCastSound(Sound.ENTITY_FIREWORK_ROCKET_BLAST)
                 .setSpellRelativeEffects((loc, world) -> {
@@ -43,7 +43,7 @@ public enum Comet implements Castable {
     }
 
     @Override
-    public Base getBaseType() {
-        return baseType;
+    public Behaviour getBehaviour() {
+        return behaviour;
     }
 }

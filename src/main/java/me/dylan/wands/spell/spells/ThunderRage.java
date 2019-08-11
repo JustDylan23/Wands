@@ -4,21 +4,21 @@ import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.SpellEffectUtil;
 import me.dylan.wands.spell.types.Aura;
 import me.dylan.wands.spell.types.Aura.EffectFrequency;
-import me.dylan.wands.spell.types.Base;
+import me.dylan.wands.spell.types.Behaviour;
 import org.bukkit.*;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public enum ThunderRage implements Castable {
     INSTANCE;
-    private final Base baseType;
+    private final Behaviour behaviour;
     private final PotionEffect wither = new PotionEffect(PotionEffectType.WITHER, 80, 1, false);
     private final PotionEffect slow = new PotionEffect(PotionEffectType.SLOW, 80, 3, false);
     private final PotionEffect strength = new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 300, 1, false);
     private final PotionEffect speed = new PotionEffect(PotionEffectType.SPEED, 60, 1, false);
 
     ThunderRage() {
-        this.baseType = Aura.newBuilder(EffectFrequency.ONCE)
+        this.behaviour = Aura.newBuilder(EffectFrequency.ONCE)
                 .setCastSound(Sound.ITEM_TOTEM_USE)
                 .setEntityDamage(7)
                 .setSpellEffectRadius(8.0F)
@@ -52,7 +52,7 @@ public enum ThunderRage implements Castable {
     }
 
     @Override
-    public Base getBaseType() {
-        return baseType;
+    public Behaviour getBehaviour() {
+        return behaviour;
     }
 }

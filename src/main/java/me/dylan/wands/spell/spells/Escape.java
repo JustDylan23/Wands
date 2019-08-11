@@ -5,7 +5,7 @@ import me.dylan.wands.sound.RepeatableSound;
 import me.dylan.wands.sound.SoundEffect;
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.SpellEffectUtil;
-import me.dylan.wands.spell.types.Base;
+import me.dylan.wands.spell.types.Behaviour;
 import me.dylan.wands.util.Common;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
@@ -21,7 +21,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-public class Escape extends Base implements Castable, Listener {
+public class Escape extends Behaviour implements Castable, Listener {
 
     public static final Castable INSTANCE = new Escape();
     private final String tagEscaping = UUID.randomUUID().toString();
@@ -29,14 +29,14 @@ public class Escape extends Base implements Castable, Listener {
 
     private final Set<Player> leaping = new HashSet<>();
 
-    @SuppressWarnings("deprecation")
+//    @SuppressWarnings("deprecation")
     private Escape() {
         ListenerRegistry.addListener(this);
         plugin.addDisableLogic(() -> leaping.forEach(e -> e.teleport(SpellEffectUtil.getFirstGroundBlockUnder(e.getLocation()))));
     }
 
     @Override
-    public Base getBaseType() {
+    public Behaviour getBehaviour() {
         return this;
     }
 

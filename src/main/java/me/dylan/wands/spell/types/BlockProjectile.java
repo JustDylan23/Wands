@@ -30,7 +30,7 @@ import java.util.UUID;
  * - Material of blocks
  * - Speed of blocks
  */
-public final class BlockProjectile extends Base implements Listener {
+public final class BlockProjectile extends Behaviour implements Listener {
     private static final Set<Entity> projectiles = new HashSet<>();
     private final Material material;
     private final float speed;
@@ -141,7 +141,7 @@ public final class BlockProjectile extends Base implements Listener {
 
         @NotNull
         @Override
-        public Base build() {
+        public Behaviour build() {
             return new BlockProjectile(this);
         }
 

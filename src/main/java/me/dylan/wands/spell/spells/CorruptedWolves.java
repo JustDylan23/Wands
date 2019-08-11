@@ -3,7 +3,7 @@ package me.dylan.wands.spell.spells;
 import me.dylan.wands.Main;
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.SpellEffectUtil;
-import me.dylan.wands.spell.types.Base;
+import me.dylan.wands.spell.types.Behaviour;
 import me.dylan.wands.spell.types.Spark;
 import me.dylan.wands.util.Common;
 import org.bukkit.*;
@@ -21,7 +21,7 @@ import java.util.Set;
 public enum CorruptedWolves implements Castable {
     INSTANCE;
 
-    private final Base baseType;
+    private final Behaviour behaviour;
     private final Main plugin = Main.getPlugin();
     private final Set<Wolf> wolves = new HashSet<>();
     private final PotionEffect speed = new PotionEffect(PotionEffectType.SPEED, 160, 4, true);
@@ -29,7 +29,7 @@ public enum CorruptedWolves implements Castable {
     CorruptedWolves() {
         plugin.addDisableLogic(() -> wolves.forEach(Entity::remove));
 
-        this.baseType = Spark.newBuilder(Base.Target.SINGLE)
+        this.behaviour = Spark.newBuilder(Behaviour.Target.SINGLE)
                 .setSpellEffectRadius(2.5F)
                 .setCastSound(Sound.ENTITY_EVOKER_PREPARE_SUMMON)
                 .setEffectDistance(30)
@@ -42,8 +42,8 @@ public enum CorruptedWolves implements Castable {
     }
 
     @Override
-    public Base getBaseType() {
-        return baseType;
+    public Behaviour getBehaviour() {
+        return behaviour;
     }
 
     private void accept(LivingEntity target) {
@@ -52,7 +52,7 @@ public enum CorruptedWolves implements Castable {
         for (int i = 0; i < 10; i++) {
             Wolf wolf = (Wolf) world.spawnEntity(SpellEffectUtil.getFirstPassableBlockAbove(SpellEffectUtil.randomizeLoc(loc, 2, 0, 2)), EntityType.WOLF);
             wolves.add(wolf);
-            wolf.setMetadata(SpellEffectUtil.UNTARGETABLE, Common.METADATA_VALUE_TRUE);
+            wolf.setMetadata(SpellEffectUtil.CAN_DAMAGE_WITH_WANDS, Common.METADATA_VALUE_TRUE);
             Location location = wolf.getLocation();
             world.playSound(location, Sound.BLOCK_CHORUS_FLOWER_GROW, SoundCategory.MASTER, 4, 1);
             world.spawnParticle(Particle.SMOKE_LARGE, location, 2, 0.1, 0.1, 0.05, 0.1, null, true);

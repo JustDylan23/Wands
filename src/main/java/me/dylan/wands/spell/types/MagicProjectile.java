@@ -37,7 +37,7 @@ import java.util.function.Consumer;
  *
  * @param <T> Type of projectile which gets fired
  */
-public final class MagicProjectile<T extends org.bukkit.entity.Projectile> extends Base implements Listener {
+public final class MagicProjectile<T extends org.bukkit.entity.Projectile> extends Behaviour implements Listener {
     private static final Set<org.bukkit.entity.Projectile> projectiles = new HashSet<>();
     private final Class<T> projectile;
     private final Consumer<T> projectileProps;
@@ -89,7 +89,7 @@ public final class MagicProjectile<T extends org.bukkit.entity.Projectile> exten
         applyEntityEffects(player, loc, projectile.getMetadata(tagProjectileSpell).get(0).asString());
     }
 
-    private void activateLifeTimer(org.bukkit.entity.Projectile projectile) {
+    private void activateLifeTimer(Projectile projectile) {
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             if (projectile.isValid()) {
                 hit((Player) projectile.getShooter(), projectile);
@@ -110,7 +110,7 @@ public final class MagicProjectile<T extends org.bukkit.entity.Projectile> exten
 
     @EventHandler
     private void onProjectileHit(ProjectileHitEvent event) {
-        org.bukkit.entity.Projectile projectile = event.getEntity();
+        Projectile projectile = event.getEntity();
         if (projectile.hasMetadata(tagProjectileSpell)) {
             hit((Player) projectile.getShooter(), projectile);
         }
@@ -151,7 +151,7 @@ public final class MagicProjectile<T extends org.bukkit.entity.Projectile> exten
 
         @NotNull
         @Override
-        public Base build() {
+        public Behaviour build() {
             return new MagicProjectile<>(this);
         }
 

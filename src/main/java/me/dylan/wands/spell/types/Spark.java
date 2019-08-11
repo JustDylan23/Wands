@@ -1,7 +1,7 @@
 package me.dylan.wands.spell.types;
 
 import me.dylan.wands.spell.SpellEffectUtil;
-import me.dylan.wands.spell.types.Base.AbstractBuilder.SpellInfo;
+import me.dylan.wands.spell.types.Behaviour.AbstractBuilder.SpellInfo;
 import me.dylan.wands.util.Common;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -20,7 +20,7 @@ import java.util.function.BiConsumer;
  * - Can effect single or multiple entities
  */
 
-public final class Spark extends Base {
+public final class Spark extends Behaviour {
     private final int effectDistance;
     private final Target target;
     private final BiConsumer<Location, Player> spellRelativeEffects2;
@@ -82,7 +82,7 @@ public final class Spark extends Base {
         }
 
         @Override
-        public Base build() {
+        public Behaviour build() {
             return new Spark(this);
         }
 

@@ -34,8 +34,8 @@ public class WandBuilder {
         return this;
     }
 
-    public WandBuilder withSpells(SpellInstance... spellInstances) {
-        SpellManagementUtil.setSpells(itemStack, spellInstances);
+    public WandBuilder withSpells(SpellType... spellTypes) {
+        SpellManagementUtil.setSpells(itemStack, spellTypes);
         return this;
     }
 

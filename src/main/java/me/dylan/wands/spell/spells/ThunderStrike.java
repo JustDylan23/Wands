@@ -3,8 +3,8 @@ package me.dylan.wands.spell.spells;
 import me.dylan.wands.knockback.KnockBack;
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.SpellEffectUtil;
-import me.dylan.wands.spell.types.Base;
-import me.dylan.wands.spell.types.Base.Target;
+import me.dylan.wands.spell.types.Behaviour;
+import me.dylan.wands.spell.types.Behaviour.Target;
 import me.dylan.wands.spell.types.Ray;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -12,10 +12,10 @@ import org.bukkit.Sound;
 
 public enum ThunderStrike implements Castable {
     INSTANCE;
-    private final Base baseType;
+    private final Behaviour behaviour;
 
     ThunderStrike() {
-        this.baseType = Ray.newBuilder(Target.MULTI)
+        this.behaviour = Ray.newBuilder(Target.MULTI)
                 .setEffectDistance(40)
                 .setEntityDamage(8)
                 .setKnockBack(KnockBack.EXPLOSION)
@@ -42,7 +42,7 @@ public enum ThunderStrike implements Castable {
     }
 
     @Override
-    public Base getBaseType() {
-        return baseType;
+    public Behaviour getBehaviour() {
+        return behaviour;
     }
 }

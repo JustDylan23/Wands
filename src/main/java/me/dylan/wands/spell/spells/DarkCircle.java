@@ -2,7 +2,7 @@ package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.knockback.KnockBack;
 import me.dylan.wands.spell.Castable;
-import me.dylan.wands.spell.types.Base;
+import me.dylan.wands.spell.types.Behaviour;
 import me.dylan.wands.spell.types.Circle;
 import me.dylan.wands.spell.types.Circle.CirclePlacement;
 import org.bukkit.Particle;
@@ -12,12 +12,12 @@ import org.bukkit.potion.PotionEffectType;
 
 public enum DarkCircle implements Castable {
     INSTANCE;
-    private final Base baseType;
+    private final Behaviour behaviour;
 
     private final PotionEffect blind = new PotionEffect(PotionEffectType.BLINDNESS, 40, 0, false);
 
     DarkCircle() {
-        this.baseType = Circle.newBuilder(CirclePlacement.RELATIVE)
+        this.behaviour = Circle.newBuilder(CirclePlacement.RELATIVE)
                 .setCircleRadius(4)
                 .setEntityDamage(8)
                 .setSpellEffectRadius(4.0F)
@@ -37,7 +37,7 @@ public enum DarkCircle implements Castable {
     }
 
     @Override
-    public Base getBaseType() {
-        return baseType;
+    public Behaviour getBehaviour() {
+        return behaviour;
     }
 }

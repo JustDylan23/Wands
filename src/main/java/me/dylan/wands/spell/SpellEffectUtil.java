@@ -21,10 +21,9 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class SpellEffectUtil {
-    public static final String UNTARGETABLE = UUID.randomUUID().toString();
+    public static final String CAN_DAMAGE_WITH_WANDS = UUID.randomUUID().toString();
     private static final ConfigurableData CONFIGURABLE_DATA = Main.getPlugin().getConfigurableData();
     private static final Main plugin = Main.getPlugin();
-
 
     private SpellEffectUtil() {
         throw new UnsupportedOperationException();
@@ -34,7 +33,7 @@ public class SpellEffectUtil {
     public static Location getSpellLocation(int effectDistance, Player player) {
         if (effectDistance == 0) return player.getLocation();
         Entity entity = player.getTargetEntity(effectDistance);
-        if (entity instanceof LivingEntity && !(entity instanceof ArmorStand) && !entity.hasMetadata(UNTARGETABLE)) {
+        if (entity instanceof LivingEntity && !(entity instanceof ArmorStand)) {
             return entity.getLocation().add(0, 0.5, 0).toCenterLocation();
         }
         TargetBlockInfo info = player.getTargetBlockInfo(effectDistance);
@@ -128,7 +127,6 @@ public class SpellEffectUtil {
                 .getNearbyEntities(loc, rx, ry, rz).stream()
                 .filter(entity -> entity instanceof LivingEntity)
                 .filter(entity -> !(entity instanceof ArmorStand))
-                .filter(entity -> !entity.hasMetadata(UNTARGETABLE))
                 .filter(entity -> entity.equals(player)
                         ? CONFIGURABLE_DATA.isSelfHarmAllowed()
                         : checkFriendlyFireOption(player, entity)

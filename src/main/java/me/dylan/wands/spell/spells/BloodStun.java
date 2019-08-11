@@ -1,8 +1,8 @@
 package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.spell.Castable;
-import me.dylan.wands.spell.types.Base;
-import me.dylan.wands.spell.types.Base.Target;
+import me.dylan.wands.spell.types.Behaviour;
+import me.dylan.wands.spell.types.Behaviour.Target;
 import me.dylan.wands.spell.types.Ray;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -13,10 +13,10 @@ import org.bukkit.potion.PotionEffectType;
 public enum BloodStun implements Castable {
     INSTANCE;
     private final PotionEffect slow = new PotionEffect(PotionEffectType.SLOW, 180, 3, false);
-    private final Base baseType;
+    private final Behaviour behaviour;
 
     BloodStun() {
-        this.baseType = Ray.newBuilder(Target.SINGLE)
+        this.behaviour = Ray.newBuilder(Target.SINGLE)
                 .setCastSound(Sound.ENTITY_FIREWORK_ROCKET_BLAST)
                 .setEntityDamage(8)
                 .setEntityEffects(entity -> entity.addPotionEffect(slow, true))
@@ -31,7 +31,7 @@ public enum BloodStun implements Castable {
     }
 
     @Override
-    public Base getBaseType() {
-        return baseType;
+    public Behaviour getBehaviour() {
+        return behaviour;
     }
 }

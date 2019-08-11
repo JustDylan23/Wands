@@ -18,7 +18,7 @@ import java.util.UUID;
  * - Speed in which the wave moves forward
  * - The maximum distance the wave can travel.
  */
-public final class Wave extends Base {
+public final class Wave extends Behaviour {
     private final int effectDistance;
     private final int speed;
     private final String tagWaveSpell;

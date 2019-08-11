@@ -1,17 +1,17 @@
 package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.spell.Castable;
-import me.dylan.wands.spell.types.Base;
+import me.dylan.wands.spell.types.Behaviour;
 import me.dylan.wands.spell.types.ShockWave;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 
 public enum FlameShockWave implements Castable {
     INSTANCE;
-    private final Base baseType;
+    private final Behaviour behaviour;
 
     FlameShockWave() {
-        this.baseType = ShockWave.newBuilder()
+        this.behaviour = ShockWave.newBuilder()
                 .setCastSound(Sound.ENTITY_BLAZE_SHOOT)
                 .setWaveRadius(8)
                 .setEntityDamage(6)
@@ -22,7 +22,7 @@ public enum FlameShockWave implements Castable {
     }
 
     @Override
-    public Base getBaseType() {
-        return baseType;
+    public Behaviour getBehaviour() {
+        return behaviour;
     }
 }

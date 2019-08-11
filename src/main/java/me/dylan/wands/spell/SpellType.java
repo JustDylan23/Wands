@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
-public enum SpellInstance {
+public enum SpellType {
     BLOOD_BLOCK(BloodBlock.INSTANCE),
     BLOOD_EXPLODE(BloodExplode.INSTANCE),
     BLOOD_SPARK(BloodSpark.INSTANCE),
@@ -45,27 +45,29 @@ public enum SpellInstance {
     THUNDER_ARROW(LightningArrow.INSTANCE),
     THUNDER_RAGE(ThunderRage.INSTANCE),
     THUNDER_STORM(ThunderStorm.INSTANCE),
-    THUNDER_STRIKE(ThunderStrike.INSTANCE);
+    THUNDER_STRIKE(ThunderStrike.INSTANCE),
+
+    TEST_SPELL(TestSpell.INSTANCE);
 
     public final Castable castable;
 
-    SpellInstance(Castable castable) {
+    SpellType(Castable castable) {
         this.castable = castable;
     }
 
     @Nullable
     public static Castable getSpell(@NotNull String name) {
         try {
-            return SpellInstance.valueOf(name.toUpperCase()).castable;
+            return SpellType.valueOf(name.toUpperCase()).castable;
         } catch (IllegalArgumentException e) {
             return null;
         }
     }
 
     @Nullable
-    public static SpellInstance getSpellType(@NotNull String name) {
+    public static SpellType getSpellType(@NotNull String name) {
         try {
-            return SpellInstance.valueOf(name.toUpperCase());
+            return SpellType.valueOf(name.toUpperCase());
         } catch (IllegalArgumentException e) {
             return null;
         }

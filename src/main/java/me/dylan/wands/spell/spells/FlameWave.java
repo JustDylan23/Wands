@@ -2,17 +2,17 @@ package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.sound.CompoundSound;
 import me.dylan.wands.spell.Castable;
-import me.dylan.wands.spell.types.Base;
+import me.dylan.wands.spell.types.Behaviour;
 import me.dylan.wands.spell.types.Wave;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 
 public enum FlameWave implements Castable {
     INSTANCE;
-    private final Base baseType;
+    private final Behaviour behaviour;
 
     FlameWave() {
-        this.baseType = Wave.newBuilder()
+        this.behaviour = Wave.newBuilder()
                 .setSpellEffectRadius(2.5F)
                 .setEntityDamage(6)
                 .setEffectDistance(20)
@@ -31,7 +31,7 @@ public enum FlameWave implements Castable {
     }
 
     @Override
-    public Base getBaseType() {
-        return baseType;
+    public Behaviour getBehaviour() {
+        return behaviour;
     }
 }

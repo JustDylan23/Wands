@@ -3,7 +3,7 @@ package me.dylan.wands.spell.spells;
 import me.dylan.wands.knockback.KnockBack;
 import me.dylan.wands.sound.CompoundSound;
 import me.dylan.wands.spell.Castable;
-import me.dylan.wands.spell.types.Base;
+import me.dylan.wands.spell.types.Behaviour;
 import me.dylan.wands.spell.types.LaunchableBlock;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -11,10 +11,10 @@ import org.bukkit.Sound;
 
 public enum BloodBlock implements Castable {
     INSTANCE;
-    private final Base baseType;
+    private final Behaviour behaviour;
 
     BloodBlock() {
-        this.baseType = LaunchableBlock.newBuilder(Material.REDSTONE_BLOCK)
+        this.behaviour = LaunchableBlock.newBuilder(Material.REDSTONE_BLOCK)
                 .setCastSound(Sound.ENTITY_FIREWORK_ROCKET_BLAST)
                 .setEntityDamage(12)
                 .setSpellEffectRadius(3.5F)
@@ -38,7 +38,7 @@ public enum BloodBlock implements Castable {
     }
 
     @Override
-    public Base getBaseType() {
-        return baseType;
+    public Behaviour getBehaviour() {
+        return behaviour;
     }
 }

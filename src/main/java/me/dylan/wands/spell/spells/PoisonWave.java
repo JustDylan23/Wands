@@ -2,7 +2,7 @@ package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.SpellEffectUtil;
-import me.dylan.wands.spell.types.Base;
+import me.dylan.wands.spell.types.Behaviour;
 import me.dylan.wands.spell.types.Wave;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -11,11 +11,11 @@ import org.bukkit.potion.PotionEffectType;
 
 public enum PoisonWave implements Castable {
     INSTANCE;
-    private final Base baseType;
-    private final PotionEffect poison = new PotionEffect(PotionEffectType.POISON, 120, 2, false);
+    private final Behaviour behaviour;
+    private final PotionEffect poison = new PotionEffect(PotionEffectType.POISON, 120, 3, false);
 
     PoisonWave() {
-        this.baseType = Wave.newBuilder()
+        this.behaviour = Wave.newBuilder()
                 .setSpellEffectRadius(2.0f)
                 .setEntityDamage(6)
                 .setEffectDistance(20)
@@ -30,7 +30,7 @@ public enum PoisonWave implements Castable {
     }
 
     @Override
-    public Base getBaseType() {
-        return baseType;
+    public Behaviour getBehaviour() {
+        return behaviour;
     }
 }

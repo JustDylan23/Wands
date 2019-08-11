@@ -1,7 +1,7 @@
 package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.spell.Castable;
-import me.dylan.wands.spell.types.Base;
+import me.dylan.wands.spell.types.Behaviour;
 import me.dylan.wands.spell.types.MagicProjectile;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -9,10 +9,10 @@ import org.bukkit.entity.Arrow;
 
 public enum LightningArrow implements Castable {
     INSTANCE;
-    private final Base baseType;
+    private final Behaviour behaviour;
 
     LightningArrow() {
-        this.baseType = MagicProjectile.newBuilder(Arrow.class, 2.2F)
+        this.behaviour = MagicProjectile.newBuilder(Arrow.class, 2.2F)
                 .setHitEffects((loc, world) -> {
                     world.strikeLightningEffect(loc);
                     world.playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, 4, 1);
@@ -31,8 +31,8 @@ public enum LightningArrow implements Castable {
     }
 
     @Override
-    public Base getBaseType() {
-        return baseType;
+    public Behaviour getBehaviour() {
+        return behaviour;
     }
 
     @Override
