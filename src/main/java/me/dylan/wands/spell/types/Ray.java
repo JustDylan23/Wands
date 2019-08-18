@@ -55,7 +55,7 @@ public final class Ray extends Behaviour {
         Location origin = player.getEyeLocation();
         new BukkitRunnable() {
             int count = 0;
-            Location location = origin.clone();
+            final Location location = origin.clone();
 
             @Override
             public void run() {

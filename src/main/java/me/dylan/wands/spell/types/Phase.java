@@ -33,7 +33,7 @@ public final class Phase extends Behaviour {
     private final Consumer<LivingEntity> duringPhaseEffect;
     private final BiConsumer<LivingEntity, Player> afterPhaseEffect;
     private final KnockBackFrom knockBackFrom;
-    private int effectDistance;
+    private final int effectDistance;
 
     private Phase(@NotNull Builder builder) {
         super(builder.baseProps);
