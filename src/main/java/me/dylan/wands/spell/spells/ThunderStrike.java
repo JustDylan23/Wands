@@ -1,7 +1,7 @@
 package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.knockback.KnockBack;
-import me.dylan.wands.spell.Castable;
+import me.dylan.wands.spell.SpellData;
 import me.dylan.wands.spell.SpellEffectUtil;
 import me.dylan.wands.spell.types.Behaviour;
 import me.dylan.wands.spell.types.Behaviour.Target;
@@ -10,11 +10,10 @@ import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 
-public enum ThunderStrike implements Castable {
-    INSTANCE;
+public class ThunderStrike implements SpellData {
     private final Behaviour behaviour;
 
-    ThunderStrike() {
+    public ThunderStrike() {
         this.behaviour = Ray.newBuilder(Target.MULTI)
                 .setEffectDistance(40)
                 .setEntityDamage(8)

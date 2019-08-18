@@ -3,7 +3,7 @@ package me.dylan.wands.spell.spells;
 import me.dylan.wands.ListenerRegistry;
 import me.dylan.wands.Main;
 import me.dylan.wands.sound.CompoundSound;
-import me.dylan.wands.spell.Castable;
+import me.dylan.wands.spell.SpellData;
 import me.dylan.wands.spell.SpellEffectUtil;
 import me.dylan.wands.spell.types.Behaviour;
 import me.dylan.wands.spell.types.Behaviour.AbstractBuilder.SpellInfo;
@@ -26,9 +26,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-public enum CorruptedRain implements Castable, Listener {
-    INSTANCE;
-
+public class CorruptedRain implements SpellData, Listener {
     private final Behaviour behaviour;
     private final PotionEffect wither = new PotionEffect(PotionEffectType.WITHER, 40, 2, true);
     private final PotionEffect blind = new PotionEffect(PotionEffectType.BLINDNESS, 160, 0, false);
@@ -37,7 +35,7 @@ public enum CorruptedRain implements Castable, Listener {
     private final Main plugin = Main.getPlugin();
     private final Set<Arrow> arrows = new HashSet<>();
 
-    CorruptedRain() {
+    public CorruptedRain() {
         ListenerRegistry.addListener(this);
         this.behaviour = Spark.newBuilder(Behaviour.Target.MULTI)
                 .setCastSound(CompoundSound.chain()

@@ -1,17 +1,16 @@
 package me.dylan.wands.spell.spells;
 
-import me.dylan.wands.spell.Castable;
+import me.dylan.wands.spell.SpellData;
 import me.dylan.wands.spell.types.Behaviour;
 import me.dylan.wands.spell.types.BlockProjectile;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 
-public enum FlameThrower implements Castable {
-    INSTANCE;
+public class FlameThrower implements SpellData {
     private final Behaviour behaviour;
 
-    FlameThrower() {
+    public FlameThrower() {
         this.behaviour = BlockProjectile.newBuilder(Material.FIRE, 2F)
                 .setCastSound(Sound.ENTITY_BLAZE_SHOOT)
                 .setProjectileAmount(8)

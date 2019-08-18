@@ -1,7 +1,7 @@
 package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.knockback.KnockBack;
-import me.dylan.wands.spell.Castable;
+import me.dylan.wands.spell.SpellData;
 import me.dylan.wands.spell.types.Behaviour;
 import me.dylan.wands.spell.types.Circle;
 import me.dylan.wands.spell.types.Circle.CirclePlacement;
@@ -10,13 +10,12 @@ import org.bukkit.Sound;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public enum DarkCircle implements Castable {
-    INSTANCE;
+public class DarkCircle implements SpellData {
     private final Behaviour behaviour;
 
     private final PotionEffect blind = new PotionEffect(PotionEffectType.BLINDNESS, 40, 0, false);
 
-    DarkCircle() {
+    public DarkCircle() {
         this.behaviour = Circle.newBuilder(CirclePlacement.RELATIVE)
                 .setCircleRadius(4)
                 .setEntityDamage(8)

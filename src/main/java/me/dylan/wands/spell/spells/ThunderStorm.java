@@ -1,6 +1,6 @@
 package me.dylan.wands.spell.spells;
 
-import me.dylan.wands.spell.Castable;
+import me.dylan.wands.spell.SpellData;
 import me.dylan.wands.spell.SpellEffectUtil;
 import me.dylan.wands.spell.types.Behaviour;
 import me.dylan.wands.spell.types.Circle;
@@ -10,11 +10,10 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;
 
-public enum ThunderStorm implements Castable {
-    INSTANCE;
+public class ThunderStorm implements SpellData {
     private final Behaviour behaviour;
 
-    ThunderStorm() {
+    public ThunderStorm() {
         this.behaviour = Circle.newBuilder(CirclePlacement.RELATIVE)
                 .setCircleRadius(10)
                 .setSpellEffectRadius(10.0F)

@@ -1,17 +1,16 @@
 package me.dylan.wands.spell.spells;
 
-import me.dylan.wands.spell.Castable;
+import me.dylan.wands.spell.SpellData;
 import me.dylan.wands.spell.types.Behaviour;
 import me.dylan.wands.spell.types.MagicProjectile;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.Arrow;
 
-public enum LightningArrow implements Castable {
-    INSTANCE;
+public class LightningArrow implements SpellData {
     private final Behaviour behaviour;
 
-    LightningArrow() {
+    public LightningArrow() {
         this.behaviour = MagicProjectile.newBuilder(Arrow.class, 2.2F)
                 .setHitEffects((loc, world) -> {
                     world.strikeLightningEffect(loc);

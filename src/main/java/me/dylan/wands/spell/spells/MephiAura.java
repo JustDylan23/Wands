@@ -1,6 +1,6 @@
 package me.dylan.wands.spell.spells;
 
-import me.dylan.wands.spell.Castable;
+import me.dylan.wands.spell.SpellData;
 import me.dylan.wands.spell.types.Aura;
 import me.dylan.wands.spell.types.Aura.AuraParticleType;
 import me.dylan.wands.spell.types.Aura.EffectFrequency;
@@ -8,11 +8,10 @@ import me.dylan.wands.spell.types.Behaviour;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 
-public enum MephiAura implements Castable {
-    INSTANCE;
+public class MephiAura implements SpellData {
     private final Behaviour behaviour;
 
-    MephiAura() {
+    public MephiAura() {
         this.behaviour = Aura.newBuilder(EffectFrequency.CONSTANT)
                 .setSpellEffectRadius(3.5f)
                 .setEffectDuration(160)

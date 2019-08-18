@@ -1,17 +1,16 @@
 package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.sound.CompoundSound;
-import me.dylan.wands.spell.Castable;
+import me.dylan.wands.spell.SpellData;
 import me.dylan.wands.spell.types.Behaviour;
 import me.dylan.wands.spell.types.Wave;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 
-public enum FlameWave implements Castable {
-    INSTANCE;
+public class FlameWave implements SpellData {
     private final Behaviour behaviour;
 
-    FlameWave() {
+    public FlameWave() {
         this.behaviour = Wave.newBuilder()
                 .setSpellEffectRadius(2.5F)
                 .setEntityDamage(6)

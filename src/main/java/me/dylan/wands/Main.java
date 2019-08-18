@@ -7,6 +7,7 @@ import me.dylan.wands.commandhandler.tabcompleters.WandsComplete;
 import me.dylan.wands.config.ConfigurableData;
 import me.dylan.wands.customitems.AssassinDagger;
 import me.dylan.wands.customitems.CursedBow;
+import me.dylan.wands.spell.CooldownManager;
 import me.dylan.wands.spell.PlayerListener;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
@@ -27,6 +28,7 @@ public final class Main extends JavaPlugin {
     private ConfigurableData configurableData;
     private ListenerRegistry listenerRegistry;
     private MouseClickListeners mouseClickListeners;
+    private CooldownManager cooldownManager;
 
     public static Main getPlugin() {
         return plugin;
@@ -59,6 +61,7 @@ public final class Main extends JavaPlugin {
         this.listenerRegistry = new ListenerRegistry();
         this.configurableData = new ConfigurableData();
         this.mouseClickListeners = new MouseClickListeners();
+        this.cooldownManager = new CooldownManager();
 
         listenerRegistry.addToggleableListener(
                 new PlayerListener(),
@@ -100,5 +103,9 @@ public final class Main extends JavaPlugin {
 
     public MouseClickListeners getMouseClickListeners() {
         return mouseClickListeners;
+    }
+
+    public CooldownManager getCooldownManager() {
+        return cooldownManager;
     }
 }

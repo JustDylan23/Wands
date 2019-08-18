@@ -2,14 +2,13 @@ package me.dylan.wands.commandhandler.commands;
 
 import me.dylan.wands.Main;
 import me.dylan.wands.commandhandler.BaseCommand;
-import me.dylan.wands.spell.SpellManagementUtil.SpellCompoundUtil;
+import me.dylan.wands.spell.SpellCompound;
+import me.dylan.wands.spell.SpellType;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 public class Unbind extends BaseCommand {
     @Override
@@ -20,14 +19,18 @@ public class Unbind extends BaseCommand {
                 String argument = args[0].toUpperCase();
                 ItemStack itemStack = player.getInventory().getItemInMainHand();
                 if (isWand(player, itemStack)) {
-                    List<String> spells = SpellCompoundUtil.getSpells(itemStack);
-                    String itemName = itemStack.getItemMeta().getDisplayName();
-                    if (spells.contains(argument.toUpperCase())) {
-                        if (SpellCompoundUtil.removeSpell(itemStack, argument, player, false)) {
+                    SpellType spellType = SpellType.getSpellType(argument);
+                    if (spellType != null) {
+                        String itemName = itemStack.getItemMeta().getDisplayName();
+                        SpellCompound compound = new SpellCompound(itemStack);
+                        if (compound.remove(spellType)) {
+                            compound.apply(itemStack);
                             sender.sendMessage(Main.PREFIX + "Successfully removed §7§l" + argument.toLowerCase() + "§r from " + itemName);
+                        } else {
+                            sender.sendMessage(Main.PREFIX + itemName + "§r doesn't contain spell §7§l" + argument.toLowerCase());
                         }
                     } else {
-                        sender.sendMessage(Main.PREFIX + itemName + "§r doesn't contain spell §7§l" + argument.toLowerCase());
+                        sender.sendMessage(Main.PREFIX + "§7§l" + argument + " §ris not a spell!");
                     }
                 }
             } else return false;

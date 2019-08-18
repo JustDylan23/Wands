@@ -3,7 +3,7 @@ package me.dylan.wands.spell.spells;
 import me.dylan.wands.ListenerRegistry;
 import me.dylan.wands.sound.RepeatableSound;
 import me.dylan.wands.sound.SoundEffect;
-import me.dylan.wands.spell.Castable;
+import me.dylan.wands.spell.SpellData;
 import me.dylan.wands.spell.SpellEffectUtil;
 import me.dylan.wands.spell.types.Behaviour;
 import me.dylan.wands.util.Common;
@@ -21,16 +21,16 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-public class Escape extends Behaviour implements Castable, Listener {
+public class Escape extends Behaviour implements SpellData, Listener {
 
-    public static final Castable INSTANCE = new Escape();
+    public static final SpellData INSTANCE = new Escape();
     private final String tagEscaping = UUID.randomUUID().toString();
     private final SoundEffect sound = RepeatableSound.from(Sound.ENTITY_ENDER_DRAGON_FLAP, 1, 0, 4, 4, 4, 4, 4);
 
     private final Set<Player> leaping = new HashSet<>();
 
-//    @SuppressWarnings("deprecation")
-    private Escape() {
+    //    @SuppressWarnings("deprecation")
+    public Escape() {
         ListenerRegistry.addListener(this);
         plugin.addDisableLogic(() -> leaping.forEach(e -> e.teleport(SpellEffectUtil.getFirstGroundBlockUnder(e.getLocation()))));
     }

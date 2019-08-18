@@ -2,18 +2,17 @@ package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.knockback.KnockBack;
 import me.dylan.wands.sound.CompoundSound;
-import me.dylan.wands.spell.Castable;
+import me.dylan.wands.spell.SpellData;
 import me.dylan.wands.spell.types.Behaviour;
 import me.dylan.wands.spell.types.LaunchableBlock;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 
-public enum DarkBlock implements Castable {
-    INSTANCE;
+public class DarkBlock implements SpellData {
     private final Behaviour behaviour;
 
-    DarkBlock() {
+    public DarkBlock() {
         this.behaviour = LaunchableBlock.newBuilder(Material.COAL_BLOCK)
                 .setCastSound(Sound.ENTITY_FIREWORK_ROCKET_BLAST)
                 .setBlockRelativeSounds(CompoundSound.chain()

@@ -3,8 +3,8 @@ package me.dylan.wands;
 import me.dylan.wands.customitems.AssassinDagger;
 import me.dylan.wands.customitems.CursedBow;
 import me.dylan.wands.spell.BrowseParticle;
-import me.dylan.wands.spell.SpellType;
 import me.dylan.wands.spell.SpellManagementUtil;
+import me.dylan.wands.spell.SpellType;
 import me.dylan.wands.spell.WandBuilder;
 import me.dylan.wands.util.ItemUtil;
 import org.bukkit.Bukkit;
@@ -137,15 +137,15 @@ public enum PreSetItem {
             WandBuilder.from(Material.IRON_HOE)
                     .named("&2Mephi Wand")
                     .withSpells(
-                    SpellType.MEPHI_AURA,
-                    SpellType.MEPHI_AWAY,
-                    SpellType.MEPHI_GRAB_WAVE,
-                    SpellType.MEPHI_CHOKE,
-                    SpellType.MEPHI_SPARK,
-                    SpellType.POISON_WAVE
-            )
+                            SpellType.MEPHI_AURA,
+                            SpellType.MEPHI_AWAY,
+                            SpellType.MEPHI_GRAB_WAVE,
+                            SpellType.MEPHI_CHOKE,
+                            SpellType.MEPHI_SPARK,
+                            SpellType.POISON_WAVE
+                    )
                     .withSpellBrowseParticles(BrowseParticle.PARTICLE_MEPHI)
-            .build()
+                    .build()
     );
 
     private static final String[] names = Arrays.stream(values()).map(Enum::toString).toArray(String[]::new);
@@ -161,7 +161,7 @@ public enum PreSetItem {
     }
 
     public static void openInventory(Player player) {
-        Inventory inventory = Bukkit.createInventory(null, InventoryType.CHEST, Main.PREFIX);
+        Inventory inventory = Bukkit.createInventory(null, InventoryType.SHULKER_BOX, Main.PREFIX);
         for (PreSetItem preSetItem : PreSetItem.values()) {
             inventory.addItem(preSetItem.itemStack);
         }

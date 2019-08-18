@@ -114,7 +114,7 @@ public class Wands extends BaseCommand {
                         SpellType spellType;
                         try {
                             spellType = SpellType.valueOf(args[1].toUpperCase());
-                            Behaviour behaviour = spellType.castable.getBehaviour();
+                            Behaviour behaviour = spellType.spellData.getBehaviour();
                             if (behaviour == null) {
                                 sender.sendMessage(Main.PREFIX + "Spell has no behaviour!");
                             } else {

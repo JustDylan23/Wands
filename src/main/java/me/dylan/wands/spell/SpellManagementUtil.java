@@ -12,9 +12,9 @@ import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
-//@SuppressWarnings("WeakerAccess")
 public class SpellManagementUtil {
     private static final ConfigurableData data = Main.getPlugin().getConfigurableData();
 
@@ -50,6 +50,7 @@ public class SpellManagementUtil {
     }
 
     // todo implement
+    @SuppressWarnings("unused")
     public static void undoWand(ItemStack itemStack) {
         ItemUtil.removePersistentData(itemStack, TAG_VERIFIED);
         ItemUtil.removePersistentData(itemStack, TAG_SPELL_INDEX);
@@ -69,21 +70,10 @@ public class SpellManagementUtil {
         ItemUtil.setPersistentData(itemStack, TAG_UNMODIFIABLE, PersistentDataType.BYTE, (byte) 1);
     }
 
-    private static boolean canBeModified(ItemStack itemStack, Player player) {
-        if (player.isOp() || ItemUtil.hasPersistentData(itemStack, TAG_UNMODIFIABLE, PersistentDataType.BYTE)) {
-            return true;
-        } else {
-            player.sendMessage(Main.PREFIX + itemStack.getItemMeta().getDisplayName() + "§r couldn't be modified");
-            return false;
-        }
-    }
-
-    static void setSpells(ItemStack itemStack, @NotNull SpellType... spellTypes) {
-        StringJoiner stringJoiner = new StringJoiner(", ");
-        for (SpellType spellType : spellTypes) {
-            stringJoiner.add(spellType.toString());
-        }
-        ItemUtil.setPersistentData(itemStack, TAG_SPELLS_LIST, PersistentDataType.STRING, stringJoiner.toString());
+    static void setSpells(ItemStack itemStack, @NotNull SpellType... spells) {
+        SpellCompound compound = new SpellCompound(itemStack);
+        compound.add(spells);
+        compound.apply(itemStack);
     }
 
     static void setSpellBrowseParticles(ItemStack itemStack, @NotNull BrowseParticle browseParticle) {
@@ -111,27 +101,21 @@ public class SpellManagementUtil {
     }
 
     @Nullable
-    private static String getSelectedSpell(ItemStack itemStack) {
-        List<String> spells = SpellCompoundUtil.getSpells(itemStack);
-        if (spells.isEmpty()) return null;
+    private static SpellType getSelectedSpell(ItemStack itemStack) {
+        SpellCompound compound = new SpellCompound(itemStack);
+        if (compound.isEmpty()) return null;
         int index = getIndex(itemStack);
-        if (index <= spells.size()) {
-            return spells.get(index);
+        if (index <= compound.size()) {
+            return compound.get(index);
         } else {
             setIndex(itemStack, 0);
-            return spells.get(0);
+            return compound.get(0);
         }
-    }
-
-    private static void removeCorruptedSpell(@NotNull Player player, ItemStack itemStack, String spell) {
-        player.sendMessage(Main.PREFIX + "The spell that you tried to cast does not exist,\n" +
-                "it was removed from your wand");
-        SpellCompoundUtil.removeSpell(itemStack, spell, player, true);
     }
 
     static void nextSpell(Player player, ItemStack itemStack) {
         int index = getIndex(itemStack);
-        List<String> spells = SpellCompoundUtil.getSpells(itemStack);
+        List<SpellType> spells = new SpellCompound(itemStack).getSpells();
         int length = spells.size();
         if (length == 0) {
             player.sendActionBar(Main.PREFIX + "No spells are bound!");
@@ -140,120 +124,39 @@ public class SpellManagementUtil {
         length--;
 
         if (player.isSneaking()) {
-            index = (index >= 1) ? --index : length;
+            setIndex(itemStack, index >= 1 ? --index : length);
         } else {
-            index = (index < length) ? ++index : 0;
+            setIndex(itemStack, index < length ? ++index : 0);
         }
 
-        setIndex(itemStack, index);
-        String spell = spells.get(index);
-
-        // returns null when the spell stored on the item isn't a SpellType
-        Castable castable = SpellType.getSpell(spell);
-        if (castable != null) {
-            player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.5F, 0.5F);
-            player.sendActionBar("§6Current spell: §7§l" + castable.getDisplayName());
-            getSpellBrowseParticle(itemStack).ifPresent(particle -> particle.spawn(player.getLocation()));
-        } else {
-            removeCorruptedSpell(player, itemStack, spell);
-        }
+        player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.5F, 0.5F);
+        player.sendActionBar("§6Current spell: §7§l" + spells.get(index).spellData.getDisplayName());
+        getSpellBrowseParticle(itemStack).ifPresent(particle -> particle.spawn(player.getLocation()));
     }
 
     static void showSelectedSpell(Player player, ItemStack itemStack) {
-        String spell = getSelectedSpell(itemStack);
+        SpellType spell = getSelectedSpell(itemStack);
         if (spell != null) {
-            Castable castable = SpellType.getSpell(spell);
-            if (castable != null) {
-                player.sendActionBar("§6Current spell: §7§l" + castable.getDisplayName());
-            }
+            player.sendActionBar("§6Current spell: §7§l" + spell.spellData.getDisplayName());
         }
     }
 
     static void castSpell(@NotNull Player player, ItemStack itemStack) {
-        CooldownManager cooldownManager = CooldownManager.INSTANCE;
+        CooldownManager cooldownManager = Main.getPlugin().getCooldownManager();
         if (cooldownManager.canCast(player)) {
-            String spell = getSelectedSpell(itemStack);
+            SpellType spell = getSelectedSpell(itemStack);
             if (spell != null) {
-                // returns null when the spell stored on the item isn't a SpellType
-                Castable castable = SpellType.getSpell(spell);
-                if (castable != null) {
-                    Behaviour behaviour = castable.getBehaviour();
-                    if (behaviour != null) {
-                        if (behaviour.cast(player, itemStack.getItemMeta().getDisplayName())) {
-                            cooldownManager.updateLastUsed(player);
-                        }
-                    } else {
-                        player.sendActionBar("No functionality found!");
+                Behaviour behaviour = spell.spellData.getBehaviour();
+                if (behaviour != null) {
+                    if (behaviour.cast(player, itemStack.getItemMeta().getDisplayName())) {
+                        cooldownManager.updateLastUsed(player);
                     }
                 } else {
-                    removeCorruptedSpell(player, itemStack, spell);
+                    player.sendActionBar("Not yet implemented!");
                 }
             } else {
                 player.sendActionBar(Main.PREFIX + "No spells are bound!");
             }
-        }
-    }
-
-    public static class SpellCompoundUtil {
-        public static List<String> getSpells(ItemStack itemStack) {
-            return ItemUtil.getPersistentData(itemStack, TAG_SPELLS_LIST, PersistentDataType.STRING)
-                    .filter(s -> !s.isEmpty())
-                    .map(s -> new ArrayList<>(Arrays.asList(s.split(", "))))
-                    .orElseGet(ArrayList::new);
-        }
-
-        public static boolean containsSpell(ItemStack itemStack, @NotNull String spell) {
-            return getSpells(itemStack).contains(spell.toUpperCase());
-        }
-
-        public static boolean removeSpell(ItemStack itemStack, String spell, Player player, boolean override) {
-            boolean b = override || canBeModified(itemStack, player);
-            if (b) {
-                spell = spell.toUpperCase();
-                List<String> spells = getSpells(itemStack);
-                if (spells.isEmpty()) return false;
-                spells.remove(spell);
-                if (!spells.isEmpty()) {
-                    StringJoiner stringJoiner = new StringJoiner(", ");
-                    spells.forEach(stringJoiner::add);
-                    ItemUtil.setPersistentData(itemStack, TAG_SPELLS_LIST, PersistentDataType.STRING, stringJoiner.toString());
-                } else {
-                    clearSpells(itemStack, player, false);
-                }
-            }
-            return b;
-        }
-
-        public static boolean addSpell(ItemStack itemStack, @NotNull SpellType spellType, Player player, boolean override) {
-            boolean b = override || canBeModified(itemStack, player);
-            if (b) {
-                Optional<String> spells = ItemUtil.getPersistentData(itemStack, TAG_SPELLS_LIST, PersistentDataType.STRING);
-                String rawList = spells
-                        .map(s -> s + ", " + spellType)
-                        .orElseGet(spellType::toString);
-                ItemUtil.setPersistentData(itemStack, TAG_SPELLS_LIST, PersistentDataType.STRING, rawList);
-            }
-            return b;
-        }
-
-        public static boolean clearSpells(ItemStack itemStack, Player player, boolean override) {
-            boolean b = override || canBeModified(itemStack, player);
-            if (b) {
-                ItemUtil.removePersistentData(itemStack, TAG_SPELLS_LIST);
-            }
-            return b;
-        }
-
-        public static boolean addAllSpells(ItemStack itemStack, Player player, boolean override) {
-            boolean b = override || canBeModified(itemStack, player);
-            if (b) {
-                StringJoiner stringJoiner = new StringJoiner(", ");
-                for (SpellType spellType : SpellType.values()) {
-                    stringJoiner.add(spellType.toString());
-                }
-                ItemUtil.setPersistentData(itemStack, TAG_SPELLS_LIST, PersistentDataType.STRING, stringJoiner.toString());
-            }
-            return b;
         }
     }
 }

@@ -1,6 +1,6 @@
 package me.dylan.wands.spell.spells;
 
-import me.dylan.wands.spell.Castable;
+import me.dylan.wands.spell.SpellData;
 import me.dylan.wands.spell.SpellEffectUtil;
 import me.dylan.wands.spell.types.Behaviour;
 import me.dylan.wands.spell.types.Spark;
@@ -8,11 +8,10 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 
-public enum MephiSpark implements Castable {
-    INSTANCE;
+public class MephiSpark implements SpellData {
     private final Behaviour behaviour;
 
-    MephiSpark() {
+    public MephiSpark() {
         this.behaviour = Spark.newBuilder(Behaviour.Target.MULTI)
                 .setSpellEffectRadius(2.8F)
                 .setEntityDamage(12)

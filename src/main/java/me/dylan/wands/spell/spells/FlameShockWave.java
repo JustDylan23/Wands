@@ -1,16 +1,15 @@
 package me.dylan.wands.spell.spells;
 
-import me.dylan.wands.spell.Castable;
+import me.dylan.wands.spell.SpellData;
 import me.dylan.wands.spell.types.Behaviour;
 import me.dylan.wands.spell.types.ShockWave;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 
-public enum FlameShockWave implements Castable {
-    INSTANCE;
+public class FlameShockWave implements SpellData {
     private final Behaviour behaviour;
 
-    FlameShockWave() {
+    public FlameShockWave() {
         this.behaviour = ShockWave.newBuilder()
                 .setCastSound(Sound.ENTITY_BLAZE_SHOOT)
                 .setWaveRadius(8)
