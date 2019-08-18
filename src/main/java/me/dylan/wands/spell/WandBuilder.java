@@ -19,7 +19,6 @@ public class WandBuilder {
     }
 
     @NotNull
-
     public static WandBuilder from(Material material) {
         return new WandBuilder(material);
     }

@@ -2,18 +2,17 @@ package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.knockback.KnockBack;
 import me.dylan.wands.sound.CompoundSound;
-import me.dylan.wands.spell.Castable;
+import me.dylan.wands.spell.SpellData;
 import me.dylan.wands.spell.types.Behaviour;
 import me.dylan.wands.spell.types.MagicProjectile;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.SmallFireball;
 
-public enum FireComet implements Castable {
-    INSTANCE;
+public class FireComet implements SpellData {
     private final Behaviour behaviour;
 
-    FireComet() {
+    public FireComet() {
         this.behaviour = MagicProjectile.newBuilder(SmallFireball.class, 4)
                 .setCastSound(CompoundSound.chain()
                         .add(Sound.ENTITY_FIREWORK_ROCKET_BLAST)

@@ -1,6 +1,6 @@
 package me.dylan.wands.spell.spells;
 
-import me.dylan.wands.spell.Castable;
+import me.dylan.wands.spell.SpellData;
 import me.dylan.wands.spell.types.Behaviour;
 import me.dylan.wands.spell.types.Behaviour.Target;
 import me.dylan.wands.spell.types.Ray;
@@ -10,12 +10,11 @@ import org.bukkit.Sound;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public enum BloodStun implements Castable {
-    INSTANCE;
+public class BloodStun implements SpellData {
     private final PotionEffect slow = new PotionEffect(PotionEffectType.SLOW, 180, 3, false);
     private final Behaviour behaviour;
 
-    BloodStun() {
+    public BloodStun() {
         this.behaviour = Ray.newBuilder(Target.SINGLE)
                 .setCastSound(Sound.ENTITY_FIREWORK_ROCKET_BLAST)
                 .setEntityDamage(8)

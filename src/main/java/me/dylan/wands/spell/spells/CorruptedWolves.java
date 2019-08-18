@@ -1,7 +1,7 @@
 package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.Main;
-import me.dylan.wands.spell.Castable;
+import me.dylan.wands.spell.SpellData;
 import me.dylan.wands.spell.SpellEffectUtil;
 import me.dylan.wands.spell.types.Behaviour;
 import me.dylan.wands.spell.types.Spark;
@@ -18,15 +18,14 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.HashSet;
 import java.util.Set;
 
-public enum CorruptedWolves implements Castable {
-    INSTANCE;
+public class CorruptedWolves implements SpellData {
 
     private final Behaviour behaviour;
     private final Main plugin = Main.getPlugin();
     private final Set<Wolf> wolves = new HashSet<>();
     private final PotionEffect speed = new PotionEffect(PotionEffectType.SPEED, 160, 4, true);
 
-    CorruptedWolves() {
+    public CorruptedWolves() {
         plugin.addDisableLogic(() -> wolves.forEach(Entity::remove));
 
         this.behaviour = Spark.newBuilder(Behaviour.Target.SINGLE)

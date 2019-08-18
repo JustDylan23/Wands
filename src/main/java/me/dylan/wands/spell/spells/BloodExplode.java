@@ -1,18 +1,17 @@
 package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.knockback.KnockBack;
-import me.dylan.wands.spell.Castable;
+import me.dylan.wands.spell.SpellData;
 import me.dylan.wands.spell.types.Behaviour;
 import me.dylan.wands.spell.types.Spark;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 
-public enum BloodExplode implements Castable {
-    INSTANCE;
+public class BloodExplode implements SpellData {
     private final Behaviour behaviour;
 
-    BloodExplode() {
+    public BloodExplode() {
         this.behaviour = Spark.newBuilder(Behaviour.Target.MULTI)
                 .setEntityDamage(10)
                 .setKnockBack(KnockBack.EXPLOSION)

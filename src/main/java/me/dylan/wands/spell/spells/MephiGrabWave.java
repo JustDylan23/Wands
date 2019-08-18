@@ -1,7 +1,7 @@
 package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.Main;
-import me.dylan.wands.spell.Castable;
+import me.dylan.wands.spell.SpellData;
 import me.dylan.wands.spell.types.Behaviour;
 import me.dylan.wands.spell.types.Behaviour.Target;
 import me.dylan.wands.spell.types.Ray;
@@ -13,14 +13,13 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public enum MephiGrabWave implements Castable {
-    INSTANCE;
+public class MephiGrabWave implements SpellData {
     private final Behaviour behaviour;
     private final PotionEffect slow = new PotionEffect(PotionEffectType.SLOW, 60, 2, false);
     private final PotionEffect blind = new PotionEffect(PotionEffectType.BLINDNESS, 60, 2, false);
 
 
-    MephiGrabWave() {
+    public MephiGrabWave() {
         this.behaviour = Ray.newBuilder(Target.MULTI)
                 .setCastSound(Sound.ENTITY_EVOKER_CAST_SPELL)
                 .setRayWidth(2)

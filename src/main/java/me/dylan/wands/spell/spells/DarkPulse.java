@@ -1,7 +1,7 @@
 package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.knockback.KnockBack;
-import me.dylan.wands.spell.Castable;
+import me.dylan.wands.spell.SpellData;
 import me.dylan.wands.spell.types.Behaviour;
 import me.dylan.wands.spell.types.Behaviour.Target;
 import me.dylan.wands.spell.types.Ray;
@@ -11,8 +11,7 @@ import org.bukkit.SoundCategory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public enum DarkPulse implements Castable {
-    INSTANCE;
+public class DarkPulse implements SpellData {
     private final Behaviour behaviour;
 
     private final PotionEffect blind = new PotionEffect(PotionEffectType.BLINDNESS, 40, 0, false);
@@ -20,7 +19,7 @@ public enum DarkPulse implements Castable {
     private final PotionEffect wither = new PotionEffect(PotionEffectType.WITHER, 40, 2, false);
 
 
-    DarkPulse() {
+    public DarkPulse() {
         this.behaviour = Ray.newBuilder(Target.MULTI)
                 .setRayWidth(1)
                 .setSpellEffectRadius(3.0F)

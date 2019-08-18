@@ -1,7 +1,7 @@
 package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.sound.CompoundSound;
-import me.dylan.wands.spell.Castable;
+import me.dylan.wands.spell.SpellData;
 import me.dylan.wands.spell.types.Behaviour;
 import me.dylan.wands.spell.types.Wave;
 import org.bukkit.Particle;
@@ -9,13 +9,12 @@ import org.bukkit.Sound;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public enum CorruptedWave implements Castable {
-    INSTANCE;
+public class CorruptedWave implements SpellData {
 
     private final Behaviour behaviour;
     private final PotionEffect wither = new PotionEffect(PotionEffectType.WITHER, 80, 1, false);
 
-    CorruptedWave() {
+    public CorruptedWave() {
         this.behaviour = Wave.newBuilder()
                 .setCastSound(CompoundSound.chain()
                         .add(Sound.ENTITY_WOLF_GROWL, 0.5F, 4)

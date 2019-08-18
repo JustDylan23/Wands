@@ -1,17 +1,16 @@
 package me.dylan.wands.spell.spells;
 
-import me.dylan.wands.spell.Castable;
+import me.dylan.wands.spell.SpellData;
 import me.dylan.wands.spell.types.Behaviour;
 import me.dylan.wands.spell.types.Circle;
 import me.dylan.wands.spell.types.Circle.CirclePlacement;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 
-public enum MephiAway implements Castable {
-    INSTANCE;
+public class MephiAway implements SpellData {
     private final Behaviour behaviour;
 
-    MephiAway() {
+    public MephiAway() {
         this.behaviour = Circle.newBuilder(CirclePlacement.RELATIVE)
                 .setCircleRadius(5)
                 .setEntityDamage(8)

@@ -1,7 +1,7 @@
 package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.Main;
-import me.dylan.wands.spell.Castable;
+import me.dylan.wands.spell.SpellData;
 import me.dylan.wands.spell.types.Behaviour;
 import me.dylan.wands.spell.types.Behaviour.Target;
 import me.dylan.wands.spell.types.Phase;
@@ -9,11 +9,10 @@ import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
 
-public enum Launch implements Castable {
-    INSTANCE;
+public class Launch implements SpellData {
     private final Behaviour behaviour;
 
-    Launch() {
+    public Launch() {
         this.behaviour = Phase.newBuilder(Target.MULTI)
                 .setSpellEffectRadius(2.8f)
                 .setEntityDamage(7)

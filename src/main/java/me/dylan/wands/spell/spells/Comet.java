@@ -1,7 +1,7 @@
 package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.knockback.KnockBack;
-import me.dylan.wands.spell.Castable;
+import me.dylan.wands.spell.SpellData;
 import me.dylan.wands.spell.SpellEffectUtil;
 import me.dylan.wands.spell.types.Behaviour;
 import me.dylan.wands.spell.types.MagicProjectile;
@@ -10,11 +10,10 @@ import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.SmallFireball;
 
-public enum Comet implements Castable {
-    INSTANCE;
+public class Comet implements SpellData {
     private final Behaviour behaviour;
 
-    Comet() {
+    public Comet() {
         this.behaviour = MagicProjectile.newBuilder(SmallFireball.class, 4)
                 .setSpellEffectRadius(3.0F)
                 .setEntityDamage(8)

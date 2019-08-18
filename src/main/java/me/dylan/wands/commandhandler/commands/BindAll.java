@@ -2,7 +2,7 @@ package me.dylan.wands.commandhandler.commands;
 
 import me.dylan.wands.Main;
 import me.dylan.wands.commandhandler.BaseCommand;
-import me.dylan.wands.spell.SpellManagementUtil.SpellCompoundUtil;
+import me.dylan.wands.spell.SpellCompound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -16,9 +16,10 @@ public class BindAll extends BaseCommand {
             Player player = (Player) sender;
             ItemStack itemStack = player.getInventory().getItemInMainHand();
             if (isWand(sender, itemStack)) {
-                if (SpellCompoundUtil.addAllSpells(itemStack, player, false)) {
-                    sender.sendMessage(Main.PREFIX + "Successfully added all spells to " + itemStack.getItemMeta().getDisplayName());
-                }
+                SpellCompound compound = new SpellCompound(itemStack);
+                compound.addAll();
+                compound.apply(itemStack);
+                sender.sendMessage(Main.PREFIX + "Successfully added all spells to " + itemStack.getItemMeta().getDisplayName());
             }
         }
         return true;

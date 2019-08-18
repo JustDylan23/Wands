@@ -180,7 +180,7 @@ public class SpellEffectUtil {
                 if (atr != null) {
                     armorDamageReduction = 1 - (1.75 * atr.getValue()) / 100D;
                 }
-                double finalDamage = Math.round((amount * armorDamageReduction) * 10) / 10;
+                double finalDamage = Math.round((amount * armorDamageReduction) * 10D) / 10D;
                 player.setLastDamageCause(new MagicDamageEvent(player, attacker, finalDamage, weaponDisplayName));
                 victim.damage(finalDamage);
             } else victim.damage(amount);

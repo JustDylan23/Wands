@@ -10,19 +10,16 @@ import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.Statistic;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
@@ -103,10 +100,17 @@ public class PlayerListener implements Listener, LeftClickListener, RightClickLi
     }
 
     @EventHandler
-    private void onEntityDamage1(EntityDamageByEntityEvent event) {
+    private void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         Entity attacker = event.getDamager();
+        Entity victim = event.getEntity();
+        if (victim instanceof LivingEntity) {
+            LivingEntity v = (LivingEntity) victim;
+            if (v.getMaximumNoDamageTicks() != 0) {
+                v.setMaximumNoDamageTicks(0);
+            }
+        }
         if (attacker instanceof Player
-                && !event.getEntity().hasMetadata(SpellEffectUtil.CAN_DAMAGE_WITH_WANDS)
+                && !victim.hasMetadata(SpellEffectUtil.CAN_DAMAGE_WITH_WANDS)
                 && SpellManagementUtil.isWand(((Player) attacker).getInventory().getItemInMainHand())
         ) {
             event.setCancelled(true);
@@ -114,7 +118,7 @@ public class PlayerListener implements Listener, LeftClickListener, RightClickLi
     }
 
     @EventHandler
-    private void onEntityDamage2(EntityDamageEvent event) {
+    private void onEntityDamage(EntityDamageEvent event) {
         Entity entity = event.getEntity();
         if (entity instanceof Player) {
             Player victim = (Player) event.getEntity();
@@ -136,16 +140,6 @@ public class PlayerListener implements Listener, LeftClickListener, RightClickLi
     private void onBlockBreak(BlockBreakEvent event) {
         if (SpellManagementUtil.isWand(event.getPlayer().getInventory().getItemInMainHand())) {
             event.setCancelled(true);
-        }
-    }
-
-    @EventHandler
-    public void noUproot(PlayerInteractEvent event) {
-        if (event.getAction() == Action.PHYSICAL) {
-            Block block = event.getClickedBlock();
-            if (block != null && block.getType() == Material.FARMLAND) {
-                event.setCancelled(true);
-            }
         }
     }
 }

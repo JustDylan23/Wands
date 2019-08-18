@@ -11,12 +11,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.jetbrains.annotations.NotNull;
 
-public enum CooldownManager implements Listener {
-    INSTANCE;
+public class CooldownManager implements Listener {
     private final Object2LongMap<Player> map = new Object2LongOpenHashMap<>();
     private final ConfigurableData configurableData = Main.getPlugin().getConfigurableData();
 
-    CooldownManager() {
+    public CooldownManager() {
         map.defaultReturnValue(0);
     }
 
@@ -27,7 +26,7 @@ public enum CooldownManager implements Listener {
      *
      * @param player Player.
      */
-    public boolean canCast(Player player) {
+    boolean canCast(Player player) {
         long remainingTime = getRemainingTime(player);
         if (remainingTime <= 0) {
             return true;
@@ -37,7 +36,7 @@ public enum CooldownManager implements Listener {
         }
     }
 
-    public void updateLastUsed(Player player) {
+    void updateLastUsed(Player player) {
         map.put(player, System.currentTimeMillis());
     }
 

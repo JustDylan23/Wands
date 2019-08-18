@@ -38,6 +38,7 @@ public class CursedBow implements Listener, RightClickListener {
     private final Main plugin = Main.getPlugin();
     private final Set<Player> drawing = new HashSet<>();
     private final Set<Player> hasDrawn = new HashSet<>();
+    private final PotionEffect slow = new PotionEffect(PotionEffectType.SLOW, 60, 3, false);
 
     public CursedBow() {
         plugin.getMouseClickListeners().addRightClickListener(this);
@@ -156,7 +157,7 @@ public class CursedBow implements Listener, RightClickListener {
                 SpellEffectUtil.getNearbyLivingEntities((Player) projectile.getShooter(), location, 3)
                         .forEach(entity -> {
                             SpellEffectUtil.damageEffect((Player) projectile.getShooter(), entity, 8, projectile.getMetadata(cursedArrow).get(0).asString());
-                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 80, 3, false), true);
+                            entity.addPotionEffect(slow, true);
                         });
                 projectile.remove();
             }

@@ -1,7 +1,7 @@
 package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.Main;
-import me.dylan.wands.spell.Castable;
+import me.dylan.wands.spell.SpellData;
 import me.dylan.wands.spell.types.Behaviour;
 import me.dylan.wands.spell.types.Behaviour.Target;
 import me.dylan.wands.spell.types.Ray;
@@ -15,14 +15,13 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public enum Freeze implements Castable {
-    INSTANCE;
+public class Freeze implements SpellData {
     private final String metaKey = "FREEZE_SPELL";
     private final Behaviour behaviour;
     private final PotionEffect slow = new PotionEffect(PotionEffectType.SLOW, 120, 4, false);
 
 
-    Freeze() {
+    public Freeze() {
         this.behaviour = Ray.newBuilder(Target.SINGLE)
                 .setRayWidth(1)
                 .setEntityDamage(6)

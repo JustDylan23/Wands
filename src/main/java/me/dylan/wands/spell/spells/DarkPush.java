@@ -1,6 +1,6 @@
 package me.dylan.wands.spell.spells;
 
-import me.dylan.wands.spell.Castable;
+import me.dylan.wands.spell.SpellData;
 import me.dylan.wands.spell.SpellEffectUtil;
 import me.dylan.wands.spell.types.Behaviour;
 import me.dylan.wands.spell.types.Behaviour.KnockBackFrom;
@@ -14,13 +14,12 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public enum DarkPush implements Castable {
-    INSTANCE;
+public class DarkPush implements SpellData {
     private final Behaviour behaviour;
 
     private final PotionEffect blind = new PotionEffect(PotionEffectType.BLINDNESS, 40, 0, false);
 
-    DarkPush() {
+    public DarkPush() {
         this.behaviour = Phase.newBuilder(Target.SINGLE)
                 .setEntityDamage(6)
                 .setCastSound(Sound.ENTITY_WITHER_SHOOT)

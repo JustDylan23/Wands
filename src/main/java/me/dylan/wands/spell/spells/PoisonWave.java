@@ -1,6 +1,6 @@
 package me.dylan.wands.spell.spells;
 
-import me.dylan.wands.spell.Castable;
+import me.dylan.wands.spell.SpellData;
 import me.dylan.wands.spell.SpellEffectUtil;
 import me.dylan.wands.spell.types.Behaviour;
 import me.dylan.wands.spell.types.Wave;
@@ -9,12 +9,11 @@ import org.bukkit.Sound;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public enum PoisonWave implements Castable {
-    INSTANCE;
+public class PoisonWave implements SpellData {
     private final Behaviour behaviour;
     private final PotionEffect poison = new PotionEffect(PotionEffectType.POISON, 120, 3, false);
 
-    PoisonWave() {
+    public PoisonWave() {
         this.behaviour = Wave.newBuilder()
                 .setSpellEffectRadius(2.0f)
                 .setEntityDamage(6)

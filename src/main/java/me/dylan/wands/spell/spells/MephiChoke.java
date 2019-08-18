@@ -1,7 +1,7 @@
 package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.Main;
-import me.dylan.wands.spell.Castable;
+import me.dylan.wands.spell.SpellData;
 import me.dylan.wands.spell.types.Behaviour;
 import me.dylan.wands.spell.types.Behaviour.Target;
 import me.dylan.wands.spell.types.Phase;
@@ -13,12 +13,11 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-public enum  MephiChoke implements Castable {
-    INSTANCE;
+public class MephiChoke implements SpellData {
     private final Behaviour behaviour;
     private final PotionEffect wither = new PotionEffect(PotionEffectType.WITHER, 100, 2);
 
-    MephiChoke() {
+    public MephiChoke() {
         this.behaviour = Phase.newBuilder(Target.SINGLE)
                 .setCastSound(Sound.ENTITY_PHANTOM_BITE)
                 .setEffectDistance(30)
@@ -40,6 +39,7 @@ public enum  MephiChoke implements Castable {
         entity.addPotionEffect(wither, true);
         new BukkitRunnable() {
             int i;
+
             @Override
             public void run() {
                 if (i++ == 90) {

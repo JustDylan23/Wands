@@ -2,8 +2,8 @@ package me.dylan.wands.commandhandler.commands;
 
 import me.dylan.wands.Main;
 import me.dylan.wands.commandhandler.BaseCommand;
+import me.dylan.wands.spell.SpellCompound;
 import me.dylan.wands.spell.SpellType;
-import me.dylan.wands.spell.SpellManagementUtil.SpellCompoundUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -22,10 +22,10 @@ public class Bind extends BaseCommand {
                     SpellType spellType = SpellType.getSpellType(argument);
                     if (spellType != null) {
                         String itemName = itemStack.getItemMeta().getDisplayName();
-                        if (!SpellCompoundUtil.containsSpell(itemStack, argument)) {
-                            if (SpellCompoundUtil.addSpell(itemStack, spellType, player, false)) {
-                                sender.sendMessage(Main.PREFIX + "Successfully added §7§l" + argument.toLowerCase() + "§r to " + itemName);
-                            }
+                        SpellCompound compound = new SpellCompound(itemStack);
+                        if (compound.add(spellType)) {
+                            compound.apply(itemStack);
+                            sender.sendMessage(Main.PREFIX + "Successfully added §7§l" + argument.toLowerCase() + "§r to " + itemName);
                         } else {
                             sender.sendMessage(Main.PREFIX + itemName + "§r already contains §7§l" + argument);
                         }
@@ -37,5 +37,4 @@ public class Bind extends BaseCommand {
         }
         return true;
     }
-
 }

@@ -1,6 +1,6 @@
 package me.dylan.wands.spell.spells;
 
-import me.dylan.wands.spell.Castable;
+import me.dylan.wands.spell.SpellData;
 import me.dylan.wands.spell.SpellEffectUtil;
 import me.dylan.wands.spell.types.Behaviour;
 import me.dylan.wands.spell.types.Spark;
@@ -10,14 +10,12 @@ import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.block.data.BlockData;
 
-public enum CorruptedSpark implements Castable {
-    INSTANCE;
+public class CorruptedSpark implements SpellData {
 
     private final Behaviour behaviour;
     private final BlockData obsidian = Material.OBSIDIAN.createBlockData();
 
-
-    CorruptedSpark() {
+    public CorruptedSpark() {
         this.behaviour = Spark.newBuilder(Behaviour.Target.MULTI)
                 .setSpellEffectRadius(2.8F)
                 .setEntityDamage(12)

@@ -1,18 +1,17 @@
 package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.knockback.KnockBack;
-import me.dylan.wands.spell.Castable;
+import me.dylan.wands.spell.SpellData;
 import me.dylan.wands.spell.types.Behaviour;
 import me.dylan.wands.spell.types.Circle;
 import me.dylan.wands.spell.types.Circle.CirclePlacement;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 
-public enum FireTwister implements Castable {
-    INSTANCE;
+public class FireTwister implements SpellData {
     private final Behaviour behaviour;
 
-    FireTwister() {
+    public FireTwister() {
         this.behaviour = Circle.newBuilder(CirclePlacement.TARGET)
                 .setCircleRadius(3)
                 .setEntityDamage(7)

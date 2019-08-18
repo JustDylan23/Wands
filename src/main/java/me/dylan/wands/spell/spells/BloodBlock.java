@@ -2,18 +2,17 @@ package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.knockback.KnockBack;
 import me.dylan.wands.sound.CompoundSound;
-import me.dylan.wands.spell.Castable;
+import me.dylan.wands.spell.SpellData;
 import me.dylan.wands.spell.types.Behaviour;
 import me.dylan.wands.spell.types.LaunchableBlock;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 
-public enum BloodBlock implements Castable {
-    INSTANCE;
+public class BloodBlock implements SpellData {
     private final Behaviour behaviour;
 
-    BloodBlock() {
+    public BloodBlock() {
         this.behaviour = LaunchableBlock.newBuilder(Material.REDSTONE_BLOCK)
                 .setCastSound(Sound.ENTITY_FIREWORK_ROCKET_BLAST)
                 .setEntityDamage(12)

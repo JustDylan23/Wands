@@ -51,7 +51,7 @@ public class MouseClickListeners implements Listener {
     @EventHandler
     private void onLeftClick(@NotNull PlayerAnimationEvent event) {
         Player player = event.getPlayer();
-        if (event.getAnimationType() == PlayerAnimationType.ARM_SWING && player.getGameMode() == GameMode.ADVENTURE) {
+        if (player.getGameMode() == GameMode.ADVENTURE) {
             ClickEvent clickEvent = new ClickEvent(player, event);
             leftClickListeners.forEach(listener -> listener.onLeftClick(clickEvent));
         }

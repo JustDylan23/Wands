@@ -2,7 +2,7 @@ package me.dylan.wands.commandhandler.commands;
 
 import me.dylan.wands.Main;
 import me.dylan.wands.commandhandler.BaseCommand;
-import me.dylan.wands.spell.SpellManagementUtil.SpellCompoundUtil;
+import me.dylan.wands.spell.SpellCompound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -17,12 +17,12 @@ public class UnbindAll extends BaseCommand {
             ItemStack itemStack = player.getInventory().getItemInMainHand();
             if (isWand(sender, itemStack)) {
                 String itemName = itemStack.getItemMeta().getDisplayName();
-                if (SpellCompoundUtil.getSpells(itemStack).isEmpty()) {
-                    sender.sendMessage(Main.PREFIX + itemName + " §ris already empty!");
+                SpellCompound compound = new SpellCompound(itemStack);
+                if (compound.clear()) {
+                    compound.apply(itemStack);
+                    sender.sendMessage(Main.PREFIX + "Successfully removed all spells from " + itemName);
                 } else {
-                    if (SpellCompoundUtil.clearSpells(itemStack, player, false)) {
-                        sender.sendMessage(Main.PREFIX + "Successfully removed all spells from " + itemName);
-                    }
+                    sender.sendMessage(Main.PREFIX + itemName + " §ris already empty!");
                 }
             }
         }
