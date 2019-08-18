@@ -26,7 +26,7 @@ public final class Spark extends Behaviour {
     private final BiConsumer<Location, Player> spellRelativeEffects2;
 
 
-    protected Spark(@NotNull Builder builder) {
+    private Spark(@NotNull Builder builder) {
         super(builder.baseProps);
         this.effectDistance = builder.effectDistance;
         this.target = builder.target;
@@ -72,7 +72,7 @@ public final class Spark extends Behaviour {
         private BiConsumer<Location, Player> spellRelativeEffects2 = Common.emptyBiConsumer();
 
 
-        protected Builder(Target target) {
+        private Builder(Target target) {
             this.target = target;
         }
 

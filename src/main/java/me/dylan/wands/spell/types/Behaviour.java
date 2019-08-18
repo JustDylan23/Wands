@@ -52,7 +52,7 @@ public abstract class Behaviour implements Listener {
 
     private final List<String> props = new ArrayList<>();
 
-    protected Behaviour(@NotNull BaseProps baseProps) {
+    Behaviour(@NotNull BaseProps baseProps) {
         this.entityDamage = baseProps.entityDamage;
         this.spellEffectRadius = baseProps.spellEffectRadius;
         this.castSounds = baseProps.castSounds;
