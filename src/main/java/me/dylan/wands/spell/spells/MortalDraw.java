@@ -8,16 +8,11 @@ import org.bukkit.*;
 import org.bukkit.Particle.DustOptions;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.concurrent.ThreadLocalRandom;
-
-public class MortalDraw extends Behaviour implements SpellData, Listener {
-    private final KnockBack knockBack = KnockBack.from(0.3f);
-
+public class MortalDraw extends Behaviour implements SpellData {
     @Override
     public Behaviour getBehaviour() {
         return this;
@@ -25,14 +20,40 @@ public class MortalDraw extends Behaviour implements SpellData, Listener {
 
     @Override
     public boolean cast(@NotNull Player player, @NotNull String weaponName) {
-        double radius = 3;
+        new BukkitRunnable() {
+            int count = 0;
+            @Override
+            public void run() {
+                if (++count > 3) {
+                    cancel();
+                } else {
+                    int degrees = 0;
+                    switch (count) {
+                        case 1:
+                            degrees = 180;
+                            break;
+                        case 2:
+                            degrees = 75;
+                            break;
+                        case 3:
+                            degrees = 285;
+                    }
+                    draw(player, weaponName, degrees, 3);
+                }
+            }
+        }.runTaskTimer(plugin, 0, 10);
+        return true;
+    }
+
+    public static void draw(Player player, String weaponName, double degrees, double radius) {
+        double deg = degrees - 90;
         Location location = player.getEyeLocation();
         World world = location.getWorld();
 
-        for (LivingEntity entity : SpellEffectUtil.getNearbyLivingEntities(player, location, 4)) {
+        for (LivingEntity entity : SpellEffectUtil.getNearbyLivingEntities(player, location, radius + 0.5)) {
             SpellEffectUtil.damageEffect(player, entity, 5, weaponName);
             entity.playEffect(EntityEffect.HURT);
-            knockBack.apply(entity, location);
+            KnockBack.from(0.3f).apply(entity, location);
         }
 
         DustOptions red = new DustOptions(Color.fromRGB(255, 0, 0), 1);
@@ -42,21 +63,19 @@ public class MortalDraw extends Behaviour implements SpellData, Listener {
 
         int points = 40;
 
-        double oldX = location.getX();
-        double oldY = location.getY();
-        double oldZ = location.getZ();
-
-        double xzRotation = Math.toRadians(location.getYaw());
+        double xzRotation = Math.toRadians(90 + location.getYaw());
         double rotXZSin = Math.sin(xzRotation);
         double rotXZCos = Math.cos(xzRotation);
 
-        double yRotation = Math.toRadians(ThreadLocalRandom.current().nextFloat() * 360.0f);
+        double yRotation = Math.toRadians(270 + location.getPitch());
         double rotYSin = Math.sin(yRotation);
         double rotYCos = Math.cos(yRotation);
 
+        Vector direction = location.getDirection();
+
         double angleIncrement = (2 * Math.PI) / points / 2;
         new BukkitRunnable() {
-            double angle = 0;
+            double angle = Math.toRadians(90);
             int count = 0;
             @Override
             public void run() {
@@ -70,13 +89,15 @@ public class MortalDraw extends Behaviour implements SpellData, Listener {
                         double x = radius * sin;
                         double y = radius * cos;
 
-                        double yRotatedY = y * rotYCos + oldY;
+                        double yRotatedY = y * rotYCos;
                         double yRotatedZ = y * rotYSin;
 
-                        double xyzRotatedX = yRotatedZ * rotXZCos - x * rotXZSin + oldX;
-                        double xyzRotatedZ = yRotatedZ * rotXZSin + x * rotXZCos + oldZ;
+                        double xyzRotatedX = yRotatedZ * rotXZCos - x * rotXZSin;
+                        double xyzRotatedZ = yRotatedZ * rotXZSin + x * rotXZCos;
 
-                        Location dustLoc = new Location(world, xyzRotatedX, yRotatedY, xyzRotatedZ);
+                        Vector vector = rotate(new Vector(xyzRotatedX, yRotatedY, xyzRotatedZ), direction, deg);
+
+                        Location dustLoc = location.clone().add(vector);
 
                         Location dustSpread = dustLoc.clone().subtract(location).multiply(0.1);
 
@@ -92,28 +113,25 @@ public class MortalDraw extends Behaviour implements SpellData, Listener {
                 }
             }
         }.runTaskTimer(plugin, 0, 1);
-
-        return false;
     }
 
-    private void rotateX(Vector point, double cos, double sin) {
-        double y = point.getY();
-        double z = point.getZ();
-        point.setY(y * cos - z * sin);
-        point.setZ(y * sin + z * cos);
-    }
-
-    private void rotateY(Vector point, double cos, double sin) {
-        double z = point.getZ();
-        double x = point.getX();
-        point.setZ(z * cos - x * sin);
-        point.setX(z * sin + x * cos);
-    }
-
-    private void rotateZ(Vector point, double cos, double sin) {
-        double x = point.getX();
-        double y = point.getY();
-        point.setX(x * cos - y * sin);
-        point.setY(x * sin + y * cos);
+    private static Vector rotate(Vector vector, Vector axis, double degrees) {
+        degrees *= Math.PI / 180d;
+        double u = axis.getX();
+        double v = axis.getY();
+        double w = axis.getZ();
+        double cos = Math.cos(degrees);
+        double sin = Math.sin(degrees);
+        double x = vector.getX();
+        double y = vector.getY();
+        double z = vector.getZ();
+        double v1 = (u * x + v * y + w * z) * (1 - cos);
+        double xPrime = u * v1 + x * cos + (-w * y + v * z) * sin;
+        double yPrime = v * v1 + y * cos + (w * x - u * z) * sin;
+        double zPrime = w * v1 + z * cos + (-v * x + u * y) * sin;
+        vector.setX(xPrime);
+        vector.setY(yPrime);
+        vector.setZ(zPrime);
+        return vector;
     }
 }

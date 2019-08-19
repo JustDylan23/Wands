@@ -47,6 +47,8 @@ public enum SpellType {
     THUNDER_STORM(new ThunderStorm()),
     THUNDER_STRIKE(new ThunderStrike()),
 
+    CROSS_BLADE(new CrossBlades()),
+    INFINITY_BLADE(new InfinityBlade()),
     MORTAL_DRAW(new MortalDraw());
 
     public final SpellData spellData;
