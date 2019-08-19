@@ -71,10 +71,8 @@ public abstract class Behaviour implements Listener {
     }
 
     /**
-     * @deprecated Indicates bad design.
      * Use {@link #Behaviour(BaseProps)} when possible.
      */
-    @Deprecated
     protected Behaviour() {
         this(BaseProps.EMPTY);
     }

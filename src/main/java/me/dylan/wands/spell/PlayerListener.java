@@ -43,7 +43,6 @@ public class PlayerListener implements Listener, LeftClickListener, RightClickLi
         Player player = event.getPlayer();
         ItemStack itemStack = player.getInventory().getItemInMainHand();
         if (SpellManagementUtil.isWand(itemStack) && SpellManagementUtil.canUse(player)) {
-            event.cancel();
             SpellManagementUtil.castSpell(player, itemStack);
         }
     }

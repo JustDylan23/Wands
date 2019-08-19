@@ -23,13 +23,11 @@ import java.util.UUID;
 
 public class Escape extends Behaviour implements SpellData, Listener {
 
-    public static final SpellData INSTANCE = new Escape();
     private final String tagEscaping = UUID.randomUUID().toString();
     private final SoundEffect sound = RepeatableSound.from(Sound.ENTITY_ENDER_DRAGON_FLAP, 1, 0, 4, 4, 4, 4, 4);
 
     private final Set<Player> leaping = new HashSet<>();
 
-    //    @SuppressWarnings("deprecation")
     public Escape() {
         ListenerRegistry.addListener(this);
         plugin.addDisableLogic(() -> leaping.forEach(e -> e.teleport(SpellEffectUtil.getFirstGroundBlockUnder(e.getLocation()))));
