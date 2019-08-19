@@ -59,8 +59,6 @@ public class MortalDraw extends Behaviour implements SpellData {
         DustOptions red = new DustOptions(Color.fromRGB(255, 0, 0), 1);
         DustOptions black = new DustOptions(Color.fromRGB(0, 0, 0), 1);
 
-        world.playSound(location, Sound.ENTITY_WITHER_SHOOT, 3, 2);
-
         int points = 40;
 
         double xzRotation = Math.toRadians(90 + location.getYaw());
@@ -77,6 +75,7 @@ public class MortalDraw extends Behaviour implements SpellData {
         new BukkitRunnable() {
             double angle = Math.toRadians(90);
             int count = 0;
+            boolean first = false;
             @Override
             public void run() {
                 if (++count > 8) {
@@ -103,6 +102,10 @@ public class MortalDraw extends Behaviour implements SpellData {
 
                         for (int j = 0; j < 10; j++) {
                             if (j == 3) {
+                                if (!first) {
+                                    first = true;
+                                    world.playSound(dustLoc, Sound.ENTITY_WITHER_SHOOT, 2, 2);
+                                }
                                 world.spawnParticle(Particle.REDSTONE, dustLoc.add(dustSpread), 2, 0, 0, 0, 0, red, true);
                             } else {
                                 world.spawnParticle(Particle.REDSTONE, dustLoc.add(dustSpread), 1, 0.05, 0.05, 0.05, 0, black, true);
