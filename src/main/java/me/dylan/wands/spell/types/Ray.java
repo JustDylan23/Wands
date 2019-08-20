@@ -54,8 +54,8 @@ public final class Ray extends Behaviour {
         castSounds.play(player);
         Location origin = player.getEyeLocation();
         new BukkitRunnable() {
-            int count = 0;
             final Location location = origin.clone();
+            int count = 0;
 
             @Override
             public void run() {

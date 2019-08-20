@@ -156,7 +156,7 @@ public enum PreSetItem {
                             SpellType.WHIRLWIND_SLASH,
                             SpellType.FLOATING_PASSAGE,
                             SpellType.SPIRAL_CLOUD_PASSAGE
-                            )
+                    )
                     .withSpellBrowseParticles(BrowseParticle.MORTAL_BLADE)
                     .build()
     );

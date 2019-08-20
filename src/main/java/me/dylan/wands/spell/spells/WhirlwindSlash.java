@@ -2,6 +2,7 @@ package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.knockback.KnockBack;
 import me.dylan.wands.spell.SpellData;
+import me.dylan.wands.spell.SpellEffectUtil;
 import me.dylan.wands.spell.types.Behaviour;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -30,7 +31,7 @@ public class WhirlwindSlash extends Behaviour implements SpellData {
                 } else {
                     Location location = player.getLocation();
                     OneMind.draw(player, weaponName, ThreadLocalRandom.current().nextInt(0, 360), 2, entity -> {
-                        entity.damage(3);
+                        SpellEffectUtil.damageEffect(player, entity, 3, weaponName);
                         knockBack.apply(entity, location);
                     }, 0, false);
                 }
