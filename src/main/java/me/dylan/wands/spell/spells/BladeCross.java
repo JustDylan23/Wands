@@ -1,6 +1,7 @@
 package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.spell.SpellData;
+import me.dylan.wands.spell.SpellEffectUtil;
 import me.dylan.wands.spell.types.Behaviour;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -31,9 +32,8 @@ public class BladeCross extends Behaviour implements SpellData {
                     } else {
                         degrees = 90 + offSet;
                     }
-                    OneMind.draw(player, weaponName, degrees, 3.3, entity -> {
-                        entity.damage(7);
-                    }, 0, false);
+                    OneMind.draw(player, weaponName, degrees, 3.3, entity ->
+                            SpellEffectUtil.damageEffect(player, entity, 7, weaponName), 0, false);
 
                 }
             }
