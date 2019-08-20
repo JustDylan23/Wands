@@ -44,12 +44,13 @@ public class CooldownManager implements Listener {
 
     /**
      * @param player Player.
-     * @return Amount of time since player last tried to cast a @link #ba.
+     * @return Amount of time since last updated cooldown {@link #updateLastUsed(Player)}.
      */
     private int getRemainingTime(Player player) {
         int cooldown = configurableData.getMagicCooldownTime();
-        if (cooldown == 0) return 0;
-        long elapsed = System.currentTimeMillis() - map.getLong(player);
+        long lastUsed = map.getLong(player);
+        if (cooldown == 0 || lastUsed == 0) return 0;
+        long elapsed = System.currentTimeMillis() - lastUsed;
         return (int) (cooldown - elapsed);
     }
 

@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public class InfinityBlade extends Behaviour implements SpellData {
+public class BladeCross extends Behaviour implements SpellData {
     @Override
     public Behaviour getBehaviour() {
         return this;
@@ -18,15 +18,26 @@ public class InfinityBlade extends Behaviour implements SpellData {
     public boolean cast(@NotNull Player player, @NotNull String weaponName) {
         new BukkitRunnable() {
             int count = 0;
+            int offSet = ThreadLocalRandom.current().nextInt(0, 20);
+
             @Override
             public void run() {
-                if (++count > 8) {
+                if (++count > 2) {
                     cancel();
                 } else {
-                    MortalDraw.draw(player, weaponName, ThreadLocalRandom.current().nextDouble() * 360, 5 - ThreadLocalRandom.current().nextDouble() * 3);
+                    double degrees;
+                    if (count == 1) {
+                        degrees = 250 + offSet;
+                    } else {
+                        degrees = 90 + offSet;
+                    }
+                    OneMind.draw(player, weaponName, degrees, 3.3, entity -> {
+                        entity.damage(7);
+                    }, 0, false);
+
                 }
             }
-        }.runTaskTimer(plugin, 0, 3);
+        }.runTaskTimer(plugin, 0, 4);
         return true;
     }
 }
