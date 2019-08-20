@@ -36,6 +36,10 @@ public enum BrowseParticle {
     PARTICLE_MEPHI((loc, world) -> {
         world.spawnParticle(Particle.SMOKE_NORMAL, loc, 10, 0.5, 0.5, 0.5, 0.03, null, true);
         world.spawnParticle(Particle.VILLAGER_HAPPY, loc, 4, 0.5, 0.5, 0.5, 1, null, true);
+    }),
+    MORTAL_BLADE((loc, world) -> {
+        world.spawnParticle(Particle.BLOCK_CRACK, loc, 10, 0.5, 0.5, 0.5, 1, Material.REDSTONE_BLOCK.createBlockData(), true);
+        world.spawnParticle(Particle.SMOKE_NORMAL, loc, 10, 0.5, 0.5, 0.5, 0.03, null, true);
     });
 
     private final BiConsumer<Location, World> consumer;

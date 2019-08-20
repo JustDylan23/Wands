@@ -47,9 +47,11 @@ public enum SpellType {
     THUNDER_STORM(new ThunderStorm()),
     THUNDER_STRIKE(new ThunderStrike()),
 
-    CROSS_BLADE(new CrossBlades()),
-    INFINITY_BLADE(new InfinityBlade()),
-    MORTAL_DRAW(new MortalDraw());
+    ONE_MIND(new OneMind()),
+    BLADE_CROSS(new BladeCross()),
+    WHIRLWIND_SLASH(new WhirlwindSlash()),
+    FLOATING_PASSAGE(new FloatingPassage()),
+    SPIRAL_CLOUD_PASSAGE(new SpiralCloudPassage());
 
     public final SpellData spellData;
 

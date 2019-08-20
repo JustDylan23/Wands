@@ -146,6 +146,19 @@ public enum PreSetItem {
                     )
                     .withSpellBrowseParticles(BrowseParticle.PARTICLE_MEPHI)
                     .build()
+    ),
+    MORTAL_BLADE(
+            WandBuilder.from(Material.IRON_SWORD)
+                    .named("&0&k&l|| &cMortal Blade &0&k&l||")
+                    .withSpells(
+                            SpellType.ONE_MIND,
+                            SpellType.BLADE_CROSS,
+                            SpellType.WHIRLWIND_SLASH,
+                            SpellType.FLOATING_PASSAGE,
+                            SpellType.SPIRAL_CLOUD_PASSAGE
+                            )
+                    .withSpellBrowseParticles(BrowseParticle.MORTAL_BLADE)
+                    .build()
     );
 
     private static final String[] names = Arrays.stream(values()).map(Enum::toString).toArray(String[]::new);
