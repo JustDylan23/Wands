@@ -30,10 +30,10 @@ public class SpiralCloudPassage extends Behaviour implements SpellData {
                     cancel();
                 } else {
                     Location location = player.getLocation();
-                    OneMind.draw(player, weaponName, ThreadLocalRandom.current().nextInt(0, 360), ThreadLocalRandom.current().nextInt(1, 4), entity -> {
+                    MortalDraw.draw(player, ThreadLocalRandom.current().nextInt(0, 360), ThreadLocalRandom.current().nextInt(1, 4), entity -> {
                         SpellEffectUtil.damageEffect(player, entity, 4, weaponName);
                         knockBack.apply(entity, location);
-                    }, ThreadLocalRandom.current().nextInt(0, 360), ThreadLocalRandom.current().nextBoolean());
+                    }, ThreadLocalRandom.current().nextInt(0, 360), true);
                 }
             }
         }.runTaskTimer(plugin, 0, 3);

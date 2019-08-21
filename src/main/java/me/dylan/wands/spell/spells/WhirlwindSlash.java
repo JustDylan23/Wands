@@ -30,7 +30,7 @@ public class WhirlwindSlash extends Behaviour implements SpellData {
                     cancel();
                 } else {
                     Location location = player.getLocation();
-                    OneMind.draw(player, weaponName, ThreadLocalRandom.current().nextInt(0, 360), 2, entity -> {
+                    MortalDraw.draw(player, ThreadLocalRandom.current().nextInt(0, 360), 2, entity -> {
                         SpellEffectUtil.damageEffect(player, entity, 3, weaponName);
                         knockBack.apply(entity, location);
                     }, 0, false);
