@@ -16,6 +16,8 @@ import java.util.function.Consumer;
 
 public class MortalDraw {
     private static final Main plugin = Main.getPlugin();
+    private static final DustOptions RED = new DustOptions(Color.fromRGB(255, 0, 0), 1);
+    private static final DustOptions BLACK = new DustOptions(Color.fromRGB(0, 0, 0), 1);
 
     private MortalDraw() {
         throw new UnsupportedOperationException();
@@ -25,9 +27,6 @@ public class MortalDraw {
         double deg = degrees - 90;
         Location location = player.getEyeLocation();
         World world = location.getWorld();
-
-        DustOptions red = new DustOptions(Color.fromRGB(255, 0, 0), 1);
-        DustOptions black = new DustOptions(Color.fromRGB(0, 0, 0), 1);
 
         double xzRotation = Math.toRadians(90 + location.getYaw());
         double rotXZSin = Math.sin(xzRotation);
@@ -66,7 +65,8 @@ public class MortalDraw {
                     double xyzRotatedX = yRotatedZ * rotXZCos - x * rotXZSin;
                     double xyzRotatedZ = yRotatedZ * rotXZSin + x * rotXZCos;
 
-                    Vector vector = new Vector(xyzRotatedX, yRotatedY, xyzRotatedZ).rotateAroundAxis(direction, Math.toRadians(deg));
+                    Vector vector = new Vector(xyzRotatedX, yRotatedY, xyzRotatedZ)
+                            .rotateAroundAxis(direction, Math.toRadians(deg));
 
                     Location dustLoc = location.clone().add(vector);
                     Location dustSpread = dustLoc.clone().subtract(location).multiply(0.1);
@@ -77,9 +77,9 @@ public class MortalDraw {
                                 first = true;
                                 world.playSound(dustLoc, Sound.ENTITY_WITHER_SHOOT, 2, 2);
                             }
-                            world.spawnParticle(Particle.REDSTONE, dustLoc.add(dustSpread), 2, 0, 0, 0, 0, red, true);
+                            world.spawnParticle(Particle.REDSTONE, dustLoc.add(dustSpread), 2, 0, 0, 0, 0, RED, true);
                         } else {
-                            world.spawnParticle(Particle.REDSTONE, dustLoc.add(dustSpread), 1, 0.05, 0.05, 0.05, 0, black, true);
+                            world.spawnParticle(Particle.REDSTONE, dustLoc.add(dustSpread), 1, 0.05, 0.05, 0.05, 0, BLACK, true);
                             if (j == 5) {
                                 List<LivingEntity> effected = SpellEffectUtil.getNearbyLivingEntities(player, dustLoc, entity -> !entity.hasMetadata(uuid), 1.5);
                                 for (LivingEntity entity : effected) {
