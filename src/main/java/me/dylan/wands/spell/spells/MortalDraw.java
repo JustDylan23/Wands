@@ -31,51 +31,43 @@ public class MortalDraw {
         double rotY = Math.toRadians(-location.getPitch());
         double rotZ = Math.toRadians(270 - location.getYaw());
 
+        world.playSound(location.clone().add(newVector(rotation, radius, rotX, rotY, rotZ)),
+                Sound.ENTITY_WITHER_SHOOT, 2, 2);
+
         new BukkitRunnable() {
             double angle = Math.toRadians(rotation);
-            int pointsToDisplay = (int) Math.floor(12 * radius) * (fullCircle ? 2 : 1);
+            int pointsToDisplay = (int) Math.floor(20 * radius) * (fullCircle ? 2 : 1);
             double angleIncrement = (2 * Math.PI) / pointsToDisplay / (fullCircle ? 1 : 2);
-            boolean first = false;
             String uuid = UUID.randomUUID().toString();
 
             @Override
             public void run() {
-                for (int i = 0; i < 8; ++i) {
-                    pointsToDisplay--;
-                    if (pointsToDisplay < 0) {
+                for (int i = 0; i < 10; ++i) {
+                    if (pointsToDisplay-- < 0) {
                         cancel();
                         return;
                     }
 
-                    double x = radius * Math.sin(angle);
-                    double y = radius * Math.cos(angle);
-                    Vector vector = new Vector(x, y, 0)
-                            .rotateAroundX(rotX)
-                            .rotateAroundZ(rotY)
-                            .rotateAroundY(rotZ);
+                    Vector vector = newVector(angle, radius, rotX, rotY, rotZ);
 
                     Location dustLoc = location.clone().add(vector);
-                    Location dustSpread = dustLoc.clone().subtract(location).multiply(0.1);
+                    vector.normalize().multiply(0.2);
 
-                    for (int j = 0; j < 10; j++) {
-                        if (j == 3) {
-                            if (!first) {
-                                first = true;
-                                world.playSound(dustLoc, Sound.ENTITY_WITHER_SHOOT, 2, 2);
-                            }
-                            world.spawnParticle(Particle.REDSTONE, dustLoc.add(dustSpread), 2, 0, 0, 0, 0, RED, true);
-                        } else {
-                            world.spawnParticle(Particle.REDSTONE, dustLoc.add(dustSpread), 1, 0.05, 0.05, 0.05, 0, BLACK, true);
-                            if (j == 5) {
-                                List<LivingEntity> effected = SpellEffectUtil.getNearbyLivingEntities(player, dustLoc, entity -> !entity.hasMetadata(uuid), 1.5);
+                    for (int j = 0; j < 6; j++) {
+                        dustLoc.add(vector);
+                        if (j == 2) {
+                            world.spawnParticle(Particle.REDSTONE, dustLoc, 2, 0, 0, 0, 0, RED, true);
+                        }
+                        world.spawnParticle(Particle.REDSTONE, dustLoc.add(vector), 1, 0.1, 0.1, 0.1, 0, BLACK, true);
+                        if (j == 2) {
+                            List<LivingEntity> effected = SpellEffectUtil.getNearbyLivingEntities(player, dustLoc, entity -> !entity.hasMetadata(uuid), 0.6);
+                            if (!effected.isEmpty()) {
                                 for (LivingEntity entity : effected) {
                                     entityEffects.accept(entity);
                                     entity.setMetadata(uuid, Common.METADATA_VALUE_TRUE);
                                 }
-                                if (!effected.isEmpty()) {
-                                    Bukkit.getScheduler().runTaskLater(plugin, () ->
-                                            effected.forEach(entity -> entity.removeMetadata(uuid, plugin)), 10);
-                                }
+                                Bukkit.getScheduler().runTaskLater(plugin, () ->
+                                        effected.forEach(entity -> entity.removeMetadata(uuid, plugin)), 10);
                             }
                         }
                     }
@@ -83,5 +75,15 @@ public class MortalDraw {
                 }
             }
         }.runTaskTimer(plugin, 0, 1);
+    }
+
+    private static Vector newVector(double angle, double radius, double rotX, double rotY, double rotZ) {
+        double x = radius * Math.sin(angle);
+        double y = radius * Math.cos(angle);
+
+        return new Vector(x, y, 0)
+                .rotateAroundX(rotX)
+                .rotateAroundZ(rotY)
+                .rotateAroundY(rotZ);
     }
 }
