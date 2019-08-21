@@ -32,7 +32,7 @@ public class BladeCross extends Behaviour implements SpellData {
                     } else {
                         degrees = 90 + offSet;
                     }
-                    OneMind.draw(player, weaponName, degrees, 3.3, entity ->
+                    MortalDraw.draw(player, degrees, 3.3, entity ->
                             SpellEffectUtil.damageEffect(player, entity, 7, weaponName), 0, false);
 
                 }

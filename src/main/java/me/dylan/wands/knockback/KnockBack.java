@@ -37,9 +37,8 @@ public class KnockBack {
                 @Override
                 public void apply(@NotNull LivingEntity livingEntity, @NotNull Location from) {
                     Vector direction = livingEntity.getLocation().subtract(from).toVector();
-                    Vector vector = livingEntity.getVelocity();
-                    double oldY = vector.getY();
-                    livingEntity.setVelocity(vector.add(direction.setY(0).normalize().multiply(xz).setY(oldY)));
+                    double oldY = livingEntity.getVelocity().getY();
+                    livingEntity.setVelocity(direction.setY(0).normalize().multiply(xz).setY(oldY));
                 }
             };
         }
