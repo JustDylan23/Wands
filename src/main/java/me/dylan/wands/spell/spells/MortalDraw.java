@@ -24,22 +24,15 @@ public class MortalDraw {
     }
 
     static void draw(Player player, double degrees, double radius, Consumer<LivingEntity> entityEffects, int rotation, boolean fullCircle) {
-        double deg = degrees - 90;
         Location location = player.getEyeLocation();
         World world = location.getWorld();
 
-        double xzRotation = Math.toRadians(90 + location.getYaw());
-        double rotXZSin = Math.sin(xzRotation);
-        double rotXZCos = Math.cos(xzRotation);
-
-        double yRotation = Math.toRadians(270 + location.getPitch());
-        double rotYSin = Math.sin(yRotation);
-        double rotYCos = Math.cos(yRotation);
-
-        Vector direction = location.getDirection();
+        double rotX = Math.toRadians(degrees);
+        double rotY = Math.toRadians(-location.getPitch());
+        double rotZ = Math.toRadians(270 - location.getYaw());
 
         new BukkitRunnable() {
-            double angle = Math.toRadians(90 + rotation);
+            double angle = Math.toRadians(rotation);
             int pointsToDisplay = (int) Math.floor(12 * radius) * (fullCircle ? 2 : 1);
             double angleIncrement = (2 * Math.PI) / pointsToDisplay / (fullCircle ? 1 : 2);
             boolean first = false;
@@ -53,20 +46,13 @@ public class MortalDraw {
                         cancel();
                         return;
                     }
-                    double sin = Math.sin(angle);
-                    double cos = Math.cos(angle);
 
-                    double x = radius * sin;
-                    double y = radius * cos;
-
-                    double yRotatedY = y * rotYCos;
-                    double yRotatedZ = y * rotYSin;
-
-                    double xyzRotatedX = yRotatedZ * rotXZCos - x * rotXZSin;
-                    double xyzRotatedZ = yRotatedZ * rotXZSin + x * rotXZCos;
-
-                    Vector vector = new Vector(xyzRotatedX, yRotatedY, xyzRotatedZ)
-                            .rotateAroundAxis(direction, Math.toRadians(deg));
+                    double x = radius * Math.sin(angle);
+                    double y = radius * Math.cos(angle);
+                    Vector vector = new Vector(x, y, 0)
+                            .rotateAroundX(rotX)
+                            .rotateAroundZ(rotY)
+                            .rotateAroundY(rotZ);
 
                     Location dustLoc = location.clone().add(vector);
                     Location dustSpread = dustLoc.clone().subtract(location).multiply(0.1);
