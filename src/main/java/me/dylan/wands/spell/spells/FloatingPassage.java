@@ -31,7 +31,7 @@ public class FloatingPassage extends Behaviour implements SpellData {
                 } else {
                     Location location = player.getLocation();
                     MortalDraw.draw(player, ThreadLocalRandom.current().nextInt(0, 360), 2, entity -> {
-                        SpellEffectUtil.damageEffect(player, entity, 4, weaponName);
+                        SpellEffectUtil.damageEffect(player, entity, 5, weaponName);
                         knockBack.apply(entity, location);
                     }, 90, false);
                 }

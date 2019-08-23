@@ -25,10 +25,10 @@ public class CooldownManager implements Listener {
      * This method handles the cooldown which the player
      * has to wait for after casting a implementations before a new
      * implementations may be cast.
+     *  @param player       Player.
      *
-     * @param player Player.
      */
-    boolean canCast(Player player) {
+    public boolean canCast(Player player) {
         long remainingTime = getRemainingTime(player);
         if (remainingTime <= 0) {
             return true;
@@ -38,7 +38,7 @@ public class CooldownManager implements Listener {
         }
     }
 
-    void updateLastUsed(Player player) {
+    public void updateLastUsed(Player player) {
         map.put(player, System.currentTimeMillis());
     }
 

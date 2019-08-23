@@ -2,6 +2,7 @@ package me.dylan.wands;
 
 import me.dylan.wands.customitems.AssassinDagger;
 import me.dylan.wands.customitems.CursedBow;
+import me.dylan.wands.customitems.MortalBlade;
 import me.dylan.wands.spell.BrowseParticle;
 import me.dylan.wands.spell.SpellManagementUtil;
 import me.dylan.wands.spell.SpellType;
@@ -25,6 +26,7 @@ public enum PreSetItem {
     ASSASSINS_DAGGER(ItemUtil.getItemStack(() -> {
         ItemStack itemStack = new ItemStack(Material.MUSIC_DISC_MALL);
         SpellManagementUtil.blockRegistration(itemStack);
+        ItemUtil.setItemMeta(itemStack, meta -> meta.addItemFlags(ItemFlag.values()));
         ItemUtil.setName(itemStack, "&dAssassin's &8Dagger");
         ItemUtil.setPersistentData(itemStack, AssassinDagger.ID_TAG, PersistentDataType.BYTE, (byte) 1);
         return itemStack;
@@ -148,17 +150,18 @@ public enum PreSetItem {
                     .build()
     ),
     MORTAL_BLADE(
-            WandBuilder.from(Material.IRON_SWORD)
-                    .named("&0&k&l|| &cMortal Blade &0&k&l||")
-                    .withSpells(
-                            SpellType.ONE_MIND,
-                            SpellType.BLADE_CROSS,
-                            SpellType.WHIRLWIND_SLASH,
-                            SpellType.FLOATING_PASSAGE,
-                            SpellType.SPIRAL_CLOUD_PASSAGE
-                    )
-                    .withSpellBrowseParticles(BrowseParticle.MORTAL_BLADE)
-                    .build()
+            ItemUtil.getItemStack(() -> {
+                ItemStack itemStack = new ItemStack(Material.IRON_SWORD);
+                SpellManagementUtil.blockRegistration(itemStack);
+                ItemUtil.setItemMeta(itemStack, meta -> {
+                    meta.setUnbreakable(true);
+                    meta.addEnchant(Enchantment.KNOCKBACK, 1, true);
+                    meta.addItemFlags(ItemFlag.values());
+                });
+                ItemUtil.setName(itemStack, "&0&k&l|| &cMortal Blade &0&k&l||");
+                ItemUtil.setPersistentData(itemStack, MortalBlade.ID_TAG, PersistentDataType.BYTE, (byte) 1);
+                return itemStack;
+            })
     );
 
     private static final String[] names = Arrays.stream(values()).map(Enum::toString).toArray(String[]::new);
