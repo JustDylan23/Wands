@@ -87,8 +87,6 @@ public class AssassinDagger implements Listener, RightClickListener {
             if (event.getEntity() instanceof LivingEntity) {
                 LivingEntity victim = (LivingEntity) event.getEntity();
                 if (hasDagger(player)) {
-                    victim.removePotionEffect(PotionEffectType.SPEED);
-                    victim.removePotionEffect(PotionEffectType.BLINDNESS);
                     victim.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 100, 0, false), true);
                     victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 100, 5, true), true);
                     event.setDamage(8);

@@ -16,14 +16,14 @@ import java.util.function.Consumer;
 
 public class MortalDraw {
     private static final Main plugin = Main.getPlugin();
-    private static final DustOptions RED = new DustOptions(Color.fromRGB(255, 0, 0), 1);
-    private static final DustOptions BLACK = new DustOptions(Color.fromRGB(0, 0, 0), 1);
+    public static final DustOptions RED = new DustOptions(Color.fromRGB(255, 0, 0), 1);
+    public static final DustOptions BLACK = new DustOptions(Color.fromRGB(0, 0, 0), 1);
 
     private MortalDraw() {
         throw new UnsupportedOperationException();
     }
 
-    static void draw(Player player, double degrees, double radius, Consumer<LivingEntity> entityEffects, int rotation, boolean fullCircle) {
+    public static void draw(Player player, double degrees, double radius, Consumer<LivingEntity> entityEffects, int rotation, boolean fullCircle) {
         Location location = player.getEyeLocation();
         World world = location.getWorld();
 
@@ -47,9 +47,7 @@ public class MortalDraw {
                         cancel();
                         return;
                     }
-
                     Vector vector = newVector(angle, radius, rotX, rotY, rotZ);
-
                     Location dustLoc = location.clone().add(vector);
                     vector.normalize().multiply(0.2);
 
@@ -60,7 +58,7 @@ public class MortalDraw {
                         }
                         world.spawnParticle(Particle.REDSTONE, dustLoc.add(vector), 1, 0.1, 0.1, 0.1, 0, BLACK, true);
                         if (j == 2) {
-                            List<LivingEntity> effected = SpellEffectUtil.getNearbyLivingEntities(player, dustLoc, entity -> !entity.hasMetadata(uuid), 0.6);
+                            List<LivingEntity> effected = SpellEffectUtil.getNearbyLivingEntities(player, dustLoc, entity -> !entity.hasMetadata(uuid), 0.8);
                             if (!effected.isEmpty()) {
                                 for (LivingEntity entity : effected) {
                                     entityEffects.accept(entity);

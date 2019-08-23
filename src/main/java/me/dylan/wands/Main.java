@@ -7,6 +7,7 @@ import me.dylan.wands.commandhandler.tabcompleters.WandsComplete;
 import me.dylan.wands.config.ConfigurableData;
 import me.dylan.wands.customitems.AssassinDagger;
 import me.dylan.wands.customitems.CursedBow;
+import me.dylan.wands.customitems.MortalBlade;
 import me.dylan.wands.spell.CooldownManager;
 import me.dylan.wands.spell.PlayerListener;
 import org.bukkit.Bukkit;
@@ -67,6 +68,7 @@ public final class Main extends JavaPlugin {
                 new PlayerListener(),
                 new AssassinDagger(),
                 new CursedBow(),
+                new MortalBlade(),
                 mouseClickListeners
         );
         log("Successfully enabled");

@@ -38,8 +38,8 @@ public class OneMind extends Behaviour implements SpellData {
                             degrees = 285;
                     }
                     Location location = player.getLocation();
-                    MortalDraw.draw(player, degrees, 3, entity -> {
-                        SpellEffectUtil.damageEffect(player, entity, 3, weaponName);
+                    MortalDraw.draw(player, degrees, 2, entity -> {
+                        SpellEffectUtil.damageEffect(player, entity, 4, weaponName);
                         knockBack.apply(entity, location);
                     }, 0, false);
                 }
