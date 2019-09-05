@@ -1,17 +1,17 @@
 package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.spell.SpellData;
-import me.dylan.wands.spell.types.Behaviour;
+import me.dylan.wands.spell.types.Behavior;
 import me.dylan.wands.spell.types.MagicProjectile;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.Arrow;
 
 public class LightningArrow implements SpellData {
-    private final Behaviour behaviour;
+    private final Behavior behavior;
 
     public LightningArrow() {
-        this.behaviour = MagicProjectile.newBuilder(Arrow.class, 2.2F)
+        this.behavior = MagicProjectile.newBuilder(Arrow.class, 2.2F)
                 .setHitEffects((loc, world) -> {
                     world.strikeLightningEffect(loc);
                     world.playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, 4, 1);
@@ -30,12 +30,7 @@ public class LightningArrow implements SpellData {
     }
 
     @Override
-    public Behaviour getBehaviour() {
-        return behaviour;
-    }
-
-    @Override
-    public String getDisplayName() {
-        return "Lightning Arrow";
+    public Behavior getBehavior() {
+        return behavior;
     }
 }

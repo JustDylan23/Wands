@@ -1,9 +1,10 @@
 package me.dylan.wands.spell.types;
 
-import me.dylan.wands.spell.SpellEffectUtil;
-import me.dylan.wands.util.Common;
+import me.dylan.wands.miscellaneous.utils.Common;
+import me.dylan.wands.spell.util.SpellEffectUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
@@ -18,23 +19,19 @@ import java.util.UUID;
  * - Speed in which the wave moves forward
  * - The maximum distance the wave can travel.
  */
-public final class Wave extends Behaviour {
+public final class Wave extends Behavior {
     private final int effectDistance;
-    private final int speed;
     private final String tagWaveSpell;
 
     private Wave(@NotNull Builder builder) {
         super(builder.baseProps);
         this.effectDistance = builder.effectDistance;
-        this.speed = builder.speed;
         this.tagWaveSpell = UUID.randomUUID().toString();
 
-        addPropertyInfo("Effect distance", effectDistance, "meters");
-        addPropertyInfo("Meters per tick", speed, "meters");
+        this.addPropertyInfo("Effect distance", this.effectDistance, "meters");
     }
 
-    @NotNull
-    public static Builder newBuilder() {
+    public static @NotNull Builder newBuilder() {
         return new Builder();
     }
 
@@ -44,29 +41,27 @@ public final class Wave extends Behaviour {
         castSounds.play(player.getLocation().add(direction.clone().multiply(5)));
         Location origin = player.getEyeLocation();
         new BukkitRunnable() {
-            int count = 0;
+            private int count;
 
             @Override
             public void run() {
-                for (int i = 0; i < speed; i++) {
-                    count++;
-                    if (count >= effectDistance) cancel();
-                    Location loc = origin.add(direction).clone();
-                    if (!loc.getBlock().isPassable()) {
-                        cancel();
-                        return;
-                    }
-                    spellRelativeEffects.accept(loc, loc.getWorld());
-                    SpellEffectUtil.getNearbyLivingEntities(player, loc, entity -> !entity.hasMetadata(tagWaveSpell), spellEffectRadius).forEach(entity -> {
-                        entity.setMetadata(tagWaveSpell, Common.METADATA_VALUE_TRUE);
-                        SpellEffectUtil.damageEffect(player, entity, entityDamage, weaponName);
-                        entityEffects.accept(entity);
-                        Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                            if (entity.isValid()) {
-                                entity.removeMetadata(tagWaveSpell, plugin);
-                            }
-                        }, effectDistance - count);
-                    });
+                count++;
+                if (count >= effectDistance) this.cancel();
+                Location loc = origin.add(direction).clone();
+                if (!loc.getBlock().isPassable()) {
+                    this.cancel();
+                    return;
+                }
+                spellRelativeEffects.accept(loc, loc.getWorld());
+                for (LivingEntity livingEntity : SpellEffectUtil.getNearbyLivingEntities(player, loc, entity -> !entity.hasMetadata(tagWaveSpell), spellEffectRadius)) {
+                    livingEntity.setMetadata(tagWaveSpell, Common.METADATA_VALUE_TRUE);
+                    SpellEffectUtil.damageEffect(player, livingEntity, entityDamage, weaponName);
+                    entityEffects.accept(livingEntity);
+                    Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                        if (livingEntity.isValid()) {
+                            livingEntity.removeMetadata(tagWaveSpell, plugin);
+                        }
+                    }, effectDistance - count);
                 }
             }
         }.runTaskTimer(plugin, 1, 1);
@@ -75,7 +70,6 @@ public final class Wave extends Behaviour {
 
     public static final class Builder extends AbstractBuilder<Builder> {
         private int effectDistance;
-        private int speed = 1;
 
         private Builder() {
         }
@@ -85,8 +79,7 @@ public final class Wave extends Behaviour {
             return this;
         }
 
-        @NotNull
-        public Wave build() {
+        public @NotNull Wave build() {
             return new Wave(this);
         }
 
@@ -95,9 +88,5 @@ public final class Wave extends Behaviour {
             return this;
         }
 
-        public Builder setMetersPerTick(int speed) {
-            this.speed = Math.max(1, speed);
-            return this;
-        }
     }
 }

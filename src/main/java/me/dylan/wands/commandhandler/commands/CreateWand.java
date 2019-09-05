@@ -2,8 +2,8 @@ package me.dylan.wands.commandhandler.commands;
 
 import me.dylan.wands.Main;
 import me.dylan.wands.commandhandler.BaseCommand;
-import me.dylan.wands.spell.SpellManagementUtil;
-import me.dylan.wands.util.ItemUtil;
+import me.dylan.wands.miscellaneous.utils.ItemUtil;
+import me.dylan.wands.spell.ItemTag;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -15,18 +15,18 @@ import java.util.StringJoiner;
 
 public class CreateWand extends BaseCommand {
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (isPlayer(sender)) {
             if (args.length >= 1) {
                 Player player = (Player) sender;
                 ItemStack itemStack = player.getInventory().getItemInMainHand();
                 if (itemStack.getType() != Material.AIR) {
                     String displayName = itemStack.getItemMeta().getDisplayName();
-                    if (SpellManagementUtil.isWand(itemStack)) {
+                    if (ItemTag.IS_WAND.isTagged(itemStack)) {
                         sender.sendMessage(Main.PREFIX + displayName + "§r is already a wand!");
                     } else {
-                        if (SpellManagementUtil.canBeRegistered(itemStack)) {
-                            SpellManagementUtil.setAsWand(itemStack);
+                        if (!ItemTag.CANNOT_REGISTER.isTagged(itemStack)) {
+                            ItemTag.IS_WAND.tag(itemStack);
                             StringJoiner stringJoiner = new StringJoiner(" ");
                             for (String arg : args) {
                                 stringJoiner.add(arg);

@@ -1,8 +1,8 @@
 package me.dylan.wands.spell.spells;
 
-import me.dylan.wands.sound.CompoundSound;
 import me.dylan.wands.spell.SpellData;
-import me.dylan.wands.spell.types.Behaviour;
+import me.dylan.wands.spell.tools.sound.CompoundSound;
+import me.dylan.wands.spell.types.Behavior;
 import me.dylan.wands.spell.types.ShockWave;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -11,12 +11,12 @@ import org.bukkit.potion.PotionEffectType;
 
 public class CorruptedShockWave implements SpellData {
 
-    private final Behaviour behaviour;
+    private final Behavior behavior;
     private final PotionEffect wither = new PotionEffect(PotionEffectType.WITHER, 60, 1, false);
     private final PotionEffect slow = new PotionEffect(PotionEffectType.SLOW, 60, 2, false);
 
     public CorruptedShockWave() {
-        this.behaviour = ShockWave.newBuilder()
+        this.behavior = ShockWave.newBuilder()
                 .setCastSound(CompoundSound.chain().add(Sound.ENTITY_WOLF_GROWL, 0.5F).add(Sound.ENTITY_WOLF_WHINE, 0.5F))
                 .setWaveRadius(8)
                 .setEntityDamage(8)
@@ -30,7 +30,7 @@ public class CorruptedShockWave implements SpellData {
     }
 
     @Override
-    public Behaviour getBehaviour() {
-        return behaviour;
+    public Behavior getBehavior() {
+        return behavior;
     }
 }

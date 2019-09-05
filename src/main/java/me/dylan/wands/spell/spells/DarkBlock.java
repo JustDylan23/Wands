@@ -1,24 +1,24 @@
 package me.dylan.wands.spell.spells;
 
-import me.dylan.wands.knockback.KnockBack;
-import me.dylan.wands.sound.CompoundSound;
 import me.dylan.wands.spell.SpellData;
-import me.dylan.wands.spell.types.Behaviour;
+import me.dylan.wands.spell.tools.KnockBack;
+import me.dylan.wands.spell.tools.sound.CompoundSound;
+import me.dylan.wands.spell.types.Behavior;
 import me.dylan.wands.spell.types.LaunchableBlock;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 
 public class DarkBlock implements SpellData {
-    private final Behaviour behaviour;
+    private final Behavior behavior;
 
     public DarkBlock() {
-        this.behaviour = LaunchableBlock.newBuilder(Material.COAL_BLOCK)
+        this.behavior = LaunchableBlock.newBuilder(Material.COAL_BLOCK)
                 .setCastSound(Sound.ENTITY_FIREWORK_ROCKET_BLAST)
                 .setBlockRelativeSounds(CompoundSound.chain()
-                        .add(Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1, 20)
-                        .add(Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, 1, 30, 5)
-                        .add(Sound.ENTITY_FIREWORK_ROCKET_TWINKLE_FAR, 1, 40)
+                        .addAll(Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1, 20)
+                        .addAll(Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, 1, 30, 5)
+                        .addAll(Sound.ENTITY_FIREWORK_ROCKET_TWINKLE_FAR, 1, 40)
                 )
                 .setHitEffects(((loc, world) -> {
                     world.spawnParticle(Particle.SMOKE_LARGE, loc, 20, 1, 1, 1, 0.1, null, true);
@@ -37,7 +37,7 @@ public class DarkBlock implements SpellData {
     }
 
     @Override
-    public Behaviour getBehaviour() {
-        return behaviour;
+    public Behavior getBehavior() {
+        return behavior;
     }
 }

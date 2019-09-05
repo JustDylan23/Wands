@@ -1,29 +1,33 @@
 package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.Main;
-import me.dylan.wands.spell.SpellEffectUtil;
-import me.dylan.wands.util.Common;
+import me.dylan.wands.miscellaneous.utils.Common;
+import me.dylan.wands.spell.tools.KnockBack;
+import me.dylan.wands.spell.util.SpellEffectUtil;
 import org.bukkit.*;
 import org.bukkit.Particle.DustOptions;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.function.Consumer;
 
-public class MortalDraw {
+public final class MortalDraw {
     private static final Main plugin = Main.getPlugin();
-    public static final DustOptions RED = new DustOptions(Color.fromRGB(255, 0, 0), 1);
-    public static final DustOptions BLACK = new DustOptions(Color.fromRGB(0, 0, 0), 1);
+    private static final KnockBack knockBack = KnockBack.from(0.3f, 0.2f);
+    private static final DustOptions RED = new DustOptions(Color.RED, 1);
+    private static final DustOptions BLACK = new DustOptions(Color.BLACK, 1);
 
     private MortalDraw() {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("");
     }
 
-    public static void draw(Player player, double degrees, double radius, Consumer<LivingEntity> entityEffects, int rotation, boolean fullCircle) {
+    public static void draw(@NotNull Player player, double degrees, double radius, int damage, int rotation, boolean fullCircle) {
+        String weaponName = player.getInventory().getItemInMainHand().getItemMeta().getDisplayName();
         Location location = player.getEyeLocation();
         World world = location.getWorld();
 
@@ -35,47 +39,58 @@ public class MortalDraw {
                 Sound.ENTITY_WITHER_SHOOT, 2, 2);
 
         new BukkitRunnable() {
+            final String uuid = UUID.randomUUID().toString();
+            final List<LivingEntity> affectedEntities = new ArrayList<>();
             double angle = Math.toRadians(rotation);
             int pointsToDisplay = (int) Math.floor(20 * radius) * (fullCircle ? 2 : 1);
-            double angleIncrement = (2 * Math.PI) / pointsToDisplay / (fullCircle ? 1 : 2);
-            String uuid = UUID.randomUUID().toString();
+            final double angleIncrement = (2 * Math.PI) / pointsToDisplay / (fullCircle ? 1 : 2);
 
             @Override
             public void run() {
-                for (int i = 0; i < 10; ++i) {
-                    if (pointsToDisplay-- < 0) {
+                for (int i = 0; i < 8; ++i) {
+                    if (pointsToDisplay < 0) {
                         cancel();
+                        affectedEntities.forEach(entity -> entity.removeMetadata(uuid, plugin));
                         return;
                     }
+                    pointsToDisplay--;
                     Vector vector = newVector(angle, radius, rotX, rotY, rotZ);
+                    angle += angleIncrement;
                     Location dustLoc = location.clone().add(vector);
-                    vector.normalize().multiply(0.2);
 
-                    for (int j = 0; j < 6; j++) {
+                    vector.normalize().multiply(0.2);
+                    dustLoc.add(vector);
+                    world.spawnParticle(
+                            Particle.REDSTONE,
+                            dustLoc.clone().add(vector.clone().multiply(4)),
+                            1, 0, 0, 0, 0,
+                            RED,
+                            false
+                    );
+                    for (int j = 0; j < 10; j++) {
                         dustLoc.add(vector);
-                        if (j == 2) {
-                            world.spawnParticle(Particle.REDSTONE, dustLoc, 2, 0, 0, 0, 0, RED, true);
-                        }
-                        world.spawnParticle(Particle.REDSTONE, dustLoc.add(vector), 1, 0.1, 0.1, 0.1, 0, BLACK, true);
-                        if (j == 2) {
-                            List<LivingEntity> effected = SpellEffectUtil.getNearbyLivingEntities(player, dustLoc, entity -> !entity.hasMetadata(uuid), 0.8);
-                            if (!effected.isEmpty()) {
-                                for (LivingEntity entity : effected) {
-                                    entityEffects.accept(entity);
-                                    entity.setMetadata(uuid, Common.METADATA_VALUE_TRUE);
-                                }
-                                Bukkit.getScheduler().runTaskLater(plugin, () ->
-                                        effected.forEach(entity -> entity.removeMetadata(uuid, plugin)), 10);
+                        if (j == 3) {
+                            world.spawnParticle(Particle.REDSTONE, dustLoc, 1, 0, 0, 0, 0, RED, false);
+                        } else if (i % 2 == 0) {
+                            world.spawnParticle(Particle.REDSTONE, dustLoc, 1, 0.1, 0.1, 0.1, 0, BLACK, false);
+                            if (j == 4 && damage != 0) {
+                                SpellEffectUtil.getNearbyLivingEntities(player, dustLoc, entity -> !entity.hasMetadata(uuid), 1).forEach(
+                                        entity -> {
+                                            SpellEffectUtil.damageEffect(player, entity, damage, weaponName);
+                                            knockBack.apply(entity, location);
+                                            entity.setMetadata(uuid, Common.METADATA_VALUE_TRUE);
+                                            affectedEntities.add(entity);
+                                        }
+                                );
                             }
                         }
                     }
-                    angle += angleIncrement;
                 }
             }
         }.runTaskTimer(plugin, 0, 1);
     }
 
-    private static Vector newVector(double angle, double radius, double rotX, double rotY, double rotZ) {
+    private static @NotNull Vector newVector(double angle, double radius, double rotX, double rotY, double rotZ) {
         double x = radius * Math.sin(angle);
         double y = radius * Math.cos(angle);
 

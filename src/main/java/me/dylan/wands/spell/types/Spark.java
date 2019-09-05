@@ -1,15 +1,12 @@
 package me.dylan.wands.spell.types;
 
-import me.dylan.wands.spell.SpellEffectUtil;
-import me.dylan.wands.spell.types.Behaviour.AbstractBuilder.SpellInfo;
-import me.dylan.wands.util.Common;
+import me.dylan.wands.spell.tools.SpellInfo;
+import me.dylan.wands.spell.util.SpellEffectUtil;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.function.BiConsumer;
 
 /**
  * Deals direct effects to entities near target
@@ -20,17 +17,15 @@ import java.util.function.BiConsumer;
  * - Can effect single or multiple entities
  */
 
-public final class Spark extends Behaviour {
+public final class Spark extends Behavior {
     private final int effectDistance;
     private final Target target;
-    private final BiConsumer<Location, Player> spellRelativeEffects2;
 
 
     private Spark(@NotNull Builder builder) {
         super(builder.baseProps);
         this.effectDistance = builder.effectDistance;
         this.target = builder.target;
-        this.spellRelativeEffects2 = builder.spellRelativeEffects2;
 
 
         addPropertyInfo("Effect distance", effectDistance, "meters");
@@ -38,8 +33,7 @@ public final class Spark extends Behaviour {
 
     }
 
-    @NotNull
-    public static Builder newBuilder(Target target) {
+    public static @NotNull Builder newBuilder(Target target) {
         new Builder(Target.MULTI).setCastSound(Sound.ENTITY_ARROW_HIT_PLAYER).setEffectDistance(3);
         return new Builder(target);
     }
@@ -50,10 +44,9 @@ public final class Spark extends Behaviour {
         if (loc == null) {
             return false;
         }
-        SpellInfo spellInfo = new SpellInfo(player, player.getLocation(), () -> loc);
+        SpellInfo spellInfo = new SpellInfo(player, player.getLocation(), loc);
         castSounds.play(player);
         spellRelativeEffects.accept(loc, loc.getWorld());
-        spellRelativeEffects2.accept(loc, player);
         extendedSpellRelativeEffects.accept(loc, spellInfo);
         for (LivingEntity entity : SpellEffectUtil.getNearbyLivingEntities(player, loc, spellEffectRadius)) {
             knockBack.apply(entity, loc);
@@ -69,8 +62,6 @@ public final class Spark extends Behaviour {
     public static final class Builder extends AbstractBuilder<Builder> {
         private final Target target;
         private int effectDistance;
-        private BiConsumer<Location, Player> spellRelativeEffects2 = Common.emptyBiConsumer();
-
 
         private Builder(Target target) {
             this.target = target;
@@ -82,7 +73,7 @@ public final class Spark extends Behaviour {
         }
 
         @Override
-        public Behaviour build() {
+        public @NotNull Behavior build() {
             return new Spark(this);
         }
 
@@ -91,9 +82,5 @@ public final class Spark extends Behaviour {
             return this;
         }
 
-        public Builder setSpellRelativeEffects2(BiConsumer<Location, Player> effects) {
-            spellRelativeEffects2 = effects;
-            return this;
-        }
     }
 }

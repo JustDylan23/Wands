@@ -1,8 +1,8 @@
 package me.dylan.wands.spell.types;
 
 import me.dylan.wands.Main;
-import me.dylan.wands.spell.SpellEffectUtil;
-import me.dylan.wands.util.Common;
+import me.dylan.wands.miscellaneous.utils.Common;
+import me.dylan.wands.spell.util.SpellEffectUtil;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.LivingEntity;
@@ -22,7 +22,7 @@ import java.util.function.Consumer;
  * - Effects which player receives on activation
  * - Effects which player receives if aura effected nothing excluding the player
  */
-public final class Aura extends Behaviour {
+public final class Aura extends Behavior {
     private final EffectFrequency effectFrequency;
     private final int effectDuration;
     private final String AuraUUID;
@@ -43,8 +43,7 @@ public final class Aura extends Behaviour {
         addPropertyInfo("Aura particle type", auraParticleType);
     }
 
-    @NotNull
-    public static Builder newBuilder(EffectFrequency effectFrequency) {
+    public static @NotNull Builder newBuilder(EffectFrequency effectFrequency) {
         return new Builder(effectFrequency);
     }
 
@@ -61,13 +60,14 @@ public final class Aura extends Behaviour {
         playerEffects.accept(player);
 
         new BukkitRunnable() {
-            int count = 0;
+            int count;
             boolean repeat = true;
-            boolean hasAffected = false;
+            boolean hasAffected;
 
             @Override
             public void run() {
-                if (++count > effectDuration) {
+                ++count;
+                if (count > effectDuration) {
                     cancel();
                     player.removeMetadata(AuraUUID, plugin);
                     if (!hasAffected) {
@@ -125,9 +125,8 @@ public final class Aura extends Behaviour {
             return this;
         }
 
-        @NotNull
         @Override
-        public Behaviour build() {
+        public @NotNull Behavior build() {
             return new Aura(this);
         }
 

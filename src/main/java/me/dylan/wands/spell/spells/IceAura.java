@@ -3,21 +3,21 @@ package me.dylan.wands.spell.spells;
 import me.dylan.wands.spell.SpellData;
 import me.dylan.wands.spell.types.Aura;
 import me.dylan.wands.spell.types.Aura.EffectFrequency;
-import me.dylan.wands.spell.types.Behaviour;
+import me.dylan.wands.spell.types.Behavior;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class IceAura implements SpellData {
-    private final Behaviour behaviour;
+    private final Behavior behavior;
     private final PotionEffect slow = new PotionEffect(PotionEffectType.SLOW, 80, 2, false);
     private final PotionEffect speed = new PotionEffect(PotionEffectType.SPEED, 40, 0, false);
 
     private final PotionEffect weak = new PotionEffect(PotionEffectType.WEAKNESS, 60, 0, false);
 
     public IceAura() {
-        this.behaviour = Aura.newBuilder(EffectFrequency.CONSTANT)
+        this.behavior = Aura.newBuilder(EffectFrequency.CONSTANT)
                 .setSpellEffectRadius(3.5F)
                 .setEffectDuration(100)
                 .setPlayerEffects(player -> player.addPotionEffect(speed, true))
@@ -31,7 +31,7 @@ public class IceAura implements SpellData {
     }
 
     @Override
-    public Behaviour getBehaviour() {
-        return behaviour;
+    public Behavior getBehavior() {
+        return behavior;
     }
 }

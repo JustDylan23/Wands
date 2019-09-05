@@ -1,5 +1,6 @@
 package me.dylan.wands.events;
 
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -10,15 +11,14 @@ public final class MagicDamageEvent extends EntityDamageEvent {
     private final Player attacker;
     private final String weaponDisplayName;
 
-    public MagicDamageEvent(Player victim, Player attacker, double amount, String weaponName) {
+    public MagicDamageEvent(Entity victim, Player attacker, double amount, String weaponName) {
         super(victim, DamageCause.CUSTOM, amount);
         this.attacker = attacker;
         this.weaponDisplayName = weaponName;
     }
 
     @Override
-    @NotNull
-    public Player getEntity() {
+    public @NotNull Player getEntity() {
         return (Player) entity;
     }
 
@@ -30,9 +30,8 @@ public final class MagicDamageEvent extends EntityDamageEvent {
         return weaponDisplayName;
     }
 
-    @NotNull
     @Override
-    public HandlerList getHandlers() {
+    public @NotNull HandlerList getHandlers() {
         return handlers;
     }
 }

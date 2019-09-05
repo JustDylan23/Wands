@@ -1,6 +1,6 @@
 package me.dylan.wands.spell;
 
-import me.dylan.wands.spell.types.Behaviour;
+import me.dylan.wands.spell.types.Behavior;
 
 @FunctionalInterface
 public interface SpellData {
@@ -8,6 +8,5 @@ public interface SpellData {
         return getClass().getSimpleName();
     }
 
-
-    Behaviour getBehaviour();
+    Behavior getBehavior();
 }

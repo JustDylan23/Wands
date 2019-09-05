@@ -2,7 +2,7 @@ package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.Main;
 import me.dylan.wands.spell.SpellData;
-import me.dylan.wands.spell.types.Behaviour;
+import me.dylan.wands.spell.types.Behavior;
 import me.dylan.wands.spell.types.Spark;
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;
@@ -12,12 +12,12 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class Confuse implements SpellData {
-    private final Behaviour behaviour;
+    private final Behavior behavior;
     private final PotionEffect confusion = new PotionEffect(PotionEffectType.CONFUSION, 260, 4, false);
 
     public Confuse() {
-        this.behaviour = Spark.newBuilder(Behaviour.Target.MULTI)
-                .setSpellEffectRadius(3F)
+        this.behavior = Spark.newBuilder(Behavior.Target.MULTI)
+                .setSpellEffectRadius(3.0F)
                 .setEntityDamage(8)
                 .setEntityEffects(entity -> entity.addPotionEffect(confusion, true))
                 .setSpellRelativeEffects((loc, world) -> {
@@ -33,7 +33,7 @@ public class Confuse implements SpellData {
     }
 
     @Override
-    public Behaviour getBehaviour() {
-        return behaviour;
+    public Behavior getBehavior() {
+        return behavior;
     }
 }

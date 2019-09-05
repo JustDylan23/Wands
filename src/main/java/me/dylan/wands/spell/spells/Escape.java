@@ -1,12 +1,12 @@
 package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.ListenerRegistry;
-import me.dylan.wands.sound.RepeatableSound;
-import me.dylan.wands.sound.SoundEffect;
+import me.dylan.wands.miscellaneous.utils.Common;
 import me.dylan.wands.spell.SpellData;
-import me.dylan.wands.spell.SpellEffectUtil;
-import me.dylan.wands.spell.types.Behaviour;
-import me.dylan.wands.util.Common;
+import me.dylan.wands.spell.tools.sound.RepeatableSound;
+import me.dylan.wands.spell.tools.sound.SoundEffect;
+import me.dylan.wands.spell.types.Behavior;
+import me.dylan.wands.spell.util.SpellEffectUtil;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -21,7 +21,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-public class Escape extends Behaviour implements SpellData, Listener {
+public class Escape extends Behavior implements SpellData, Listener {
 
     private final String tagEscaping = UUID.randomUUID().toString();
     private final SoundEffect sound = RepeatableSound.from(Sound.ENTITY_ENDER_DRAGON_FLAP, 1, 0, 4, 4, 4, 4, 4);
@@ -34,7 +34,7 @@ public class Escape extends Behaviour implements SpellData, Listener {
     }
 
     @Override
-    public Behaviour getBehaviour() {
+    public Behavior getBehavior() {
         return this;
     }
 
@@ -77,8 +77,8 @@ public class Escape extends Behaviour implements SpellData, Listener {
                         world.spawnParticle(Particle.SPELL_WITCH, ploc, 10, 0.5, 0.5, 0.5, 0.15, null, true);
                         world.spawnParticle(Particle.SMOKE_LARGE, ploc, 4, 0.2, 0.22, 0.2, 0.08, null, true);
                         if (count == 20) {
-                            Vector vector = ploc.getDirection().normalize().multiply(3);
-                            player.setVelocity(vector);
+                            Vector newVelocity = ploc.getDirection().normalize().multiply(3);
+                            player.setVelocity(newVelocity);
                         }
                     }
                 }

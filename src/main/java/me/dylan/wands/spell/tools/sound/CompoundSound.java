@@ -1,4 +1,4 @@
-package me.dylan.wands.sound;
+package me.dylan.wands.spell.tools.sound;
 
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -7,7 +7,7 @@ import org.bukkit.entity.Entity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CompoundSound implements SoundEffect {
+public final class CompoundSound implements SoundEffect {
     private final List<SoundEffect> sounds = new ArrayList<>();
 
     private CompoundSound() {
@@ -27,7 +27,7 @@ public class CompoundSound implements SoundEffect {
         return this;
     }
 
-    public CompoundSound add(Sound sound, float pitch, int... repeat) {
+    public CompoundSound addAll(Sound sound, float pitch, int... repeat) {
         sounds.add(RepeatableSound.from(sound, pitch, repeat));
         return this;
     }

@@ -2,7 +2,7 @@ package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.Main;
 import me.dylan.wands.spell.SpellData;
-import me.dylan.wands.spell.types.Behaviour;
+import me.dylan.wands.spell.types.Behavior;
 import me.dylan.wands.spell.types.Phase;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
@@ -10,10 +10,10 @@ import org.bukkit.util.Vector;
 
 public class CorruptedLaunch implements SpellData {
 
-    private final Behaviour behaviour;
+    private final Behavior behavior;
 
     public CorruptedLaunch() {
-        this.behaviour = Phase.newBuilder(Behaviour.Target.MULTI)
+        this.behavior = Phase.newBuilder(Behavior.Target.MULTI)
                 .setSpellEffectRadius(2.8f)
                 .setEntityDamage(7)
                 .setEntityEffects(entity -> entity.setVelocity(new Vector(0, 1.2, 0)))
@@ -38,7 +38,7 @@ public class CorruptedLaunch implements SpellData {
     }
 
     @Override
-    public Behaviour getBehaviour() {
-        return behaviour;
+    public Behavior getBehavior() {
+        return behavior;
     }
 }

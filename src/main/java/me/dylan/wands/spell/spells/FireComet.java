@@ -1,23 +1,23 @@
 package me.dylan.wands.spell.spells;
 
-import me.dylan.wands.knockback.KnockBack;
-import me.dylan.wands.sound.CompoundSound;
 import me.dylan.wands.spell.SpellData;
-import me.dylan.wands.spell.types.Behaviour;
+import me.dylan.wands.spell.tools.KnockBack;
+import me.dylan.wands.spell.tools.sound.CompoundSound;
+import me.dylan.wands.spell.types.Behavior;
 import me.dylan.wands.spell.types.MagicProjectile;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.SmallFireball;
 
 public class FireComet implements SpellData {
-    private final Behaviour behaviour;
+    private final Behavior behavior;
 
     public FireComet() {
-        this.behaviour = MagicProjectile.newBuilder(SmallFireball.class, 4)
+        this.behavior = MagicProjectile.newBuilder(SmallFireball.class, 4)
                 .setCastSound(CompoundSound.chain()
                         .add(Sound.ENTITY_FIREWORK_ROCKET_BLAST)
-                        .add(Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, 1, 10, 5)
-                        .add(Sound.ENTITY_FIREWORK_ROCKET_TWINKLE_FAR, 1, 20)
+                        .addAll(Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, 1, 10, 5)
+                        .addAll(Sound.ENTITY_FIREWORK_ROCKET_TWINKLE_FAR, 1, 20)
                 )
                 .setSpellEffectRadius(3.0F)
                 .setEntityDamage(8)
@@ -42,7 +42,7 @@ public class FireComet implements SpellData {
     }
 
     @Override
-    public Behaviour getBehaviour() {
-        return behaviour;
+    public Behavior getBehavior() {
+        return behavior;
     }
 }

@@ -1,15 +1,12 @@
 package me.dylan.wands.spell.types;
 
 import me.dylan.wands.ListenerRegistry;
-import me.dylan.wands.spell.SpellEffectUtil;
-import me.dylan.wands.util.Common;
+import me.dylan.wands.miscellaneous.utils.Common;
+import me.dylan.wands.spell.util.SpellEffectUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.FallingBlock;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
@@ -30,7 +27,7 @@ import java.util.UUID;
  * - Material of blocks
  * - Speed of blocks
  */
-public final class BlockProjectile extends Behaviour implements Listener {
+public final class BlockProjectile extends Behavior implements Listener {
     private static final Set<Entity> projectiles = new HashSet<>();
     private final Material material;
     private final float speed;
@@ -59,19 +56,19 @@ public final class BlockProjectile extends Behaviour implements Listener {
 
     }
 
-    @NotNull
-    public static Builder newBuilder(Material material, float speed) {
+    public static @NotNull Builder newBuilder(Material material, float speed) {
         return new Builder(material, speed);
     }
 
     @Override
     public boolean cast(@NotNull Player player, @NotNull String weaponName) {
         new BukkitRunnable() {
-            int count = 0;
+            int count;
 
             @Override
             public void run() {
-                if (++count > amount) {
+                ++count;
+                if (count > amount) {
                     cancel();
                 } else {
                     castSounds.play(player);
@@ -79,40 +76,40 @@ public final class BlockProjectile extends Behaviour implements Listener {
                     handleSpellEffects(fallingBlock, player, weaponName);
                 }
             }
+
+            @NotNull FallingBlock shootBlockProjectile(@NotNull LivingEntity player) {
+                Vector velocity = player.getLocation().getDirection().multiply(speed);
+                Location location = player.getEyeLocation();
+                FallingBlock fallingBlock = location.getWorld().spawnFallingBlock(location, Bukkit.createBlockData(material));
+                fallingBlock.setVelocity(velocity);
+                fallingBlock.setMetadata(tagBlockProjectile, Common.METADATA_VALUE_TRUE);
+                fallingBlock.setDropItem(false);
+                projectiles.add(fallingBlock);
+                return fallingBlock;
+            }
+
+            void handleSpellEffects(Entity fallingBlock, Player player, String wandDisplayName) {
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        if (fallingBlock.isValid()) {
+                            Location location = fallingBlock.getLocation();
+                            spellRelativeEffects.accept(location, location.getWorld());
+                            SpellEffectUtil.getNearbyLivingEntities(player, location, entity -> !entity.hasMetadata(tagBlockProjectile), spellEffectRadius)
+                                    .forEach(entity -> {
+                                        entity.setMetadata(tagBlockProjectile, Common.METADATA_VALUE_TRUE);
+                                        Bukkit.getScheduler().runTaskLater(plugin, () -> entity.removeMetadata(tagBlockProjectile, plugin), metaTime);
+                                        entityEffects.accept(entity);
+                                        knockBack.apply(entity, location.toCenterLocation());
+                                        SpellEffectUtil.damageEffect(player, entity, entityDamage, wandDisplayName);
+                                    });
+                        } else cancel();
+                    }
+                }.runTaskTimer(plugin, 1, 1);
+            }
+
         }.runTaskTimer(plugin, 0, delay);
         return true;
-    }
-
-    @NotNull
-    private FallingBlock shootBlockProjectile(@NotNull Player player) {
-        Vector velocity = player.getLocation().getDirection().multiply(speed);
-        Location location = player.getEyeLocation();
-        FallingBlock fallingBlock = location.getWorld().spawnFallingBlock(location, Bukkit.createBlockData(material));
-        fallingBlock.setVelocity(velocity);
-        fallingBlock.setMetadata(tagBlockProjectile, Common.METADATA_VALUE_TRUE);
-        fallingBlock.setDropItem(false);
-        projectiles.add(fallingBlock);
-        return fallingBlock;
-    }
-
-    private void handleSpellEffects(FallingBlock fallingBlock, Player player, String wandDisplayName) {
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (fallingBlock.isValid()) {
-                    Location location = fallingBlock.getLocation();
-                    spellRelativeEffects.accept(location, location.getWorld());
-                    SpellEffectUtil.getNearbyLivingEntities(player, location, entity -> !entity.hasMetadata(tagBlockProjectile), spellEffectRadius)
-                            .forEach(entity -> {
-                                entity.setMetadata(tagBlockProjectile, Common.METADATA_VALUE_TRUE);
-                                Bukkit.getScheduler().runTaskLater(plugin, () -> entity.removeMetadata(tagBlockProjectile, plugin), metaTime);
-                                entityEffects.accept(entity);
-                                knockBack.apply(entity, location.toCenterLocation());
-                                SpellEffectUtil.damageEffect(player, entity, entityDamage, wandDisplayName);
-                            });
-                } else cancel();
-            }
-        }.runTaskTimer(plugin, 1, 1);
     }
 
     @EventHandler
@@ -129,7 +126,7 @@ public final class BlockProjectile extends Behaviour implements Listener {
         private final Material material;
         private int delay, amount = 1;
 
-        private Builder(Material material, float speed) throws NullPointerException {
+        private Builder(Material material, float speed) {
             this.material = material;
             this.speed = speed;
         }
@@ -139,9 +136,8 @@ public final class BlockProjectile extends Behaviour implements Listener {
             return this;
         }
 
-        @NotNull
         @Override
-        public Behaviour build() {
+        public @NotNull Behavior build() {
             return new BlockProjectile(this);
         }
 

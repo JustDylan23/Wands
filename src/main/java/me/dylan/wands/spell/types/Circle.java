@@ -1,7 +1,7 @@
 package me.dylan.wands.spell.types;
 
-import me.dylan.wands.spell.SpellEffectUtil;
-import me.dylan.wands.spell.types.Behaviour.AbstractBuilder.SpellInfo;
+import me.dylan.wands.spell.tools.SpellInfo;
+import me.dylan.wands.spell.util.SpellEffectUtil;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
  * - Effect distance, only has effect when circle placement is set to target.
  * - Circle drawing speed
  */
-public final class Circle extends Behaviour {
+public final class Circle extends Behavior {
     private final int speed, height, effectDistance, circleRadius;
     private final CirclePlacement circlePlacement;
 
@@ -37,8 +37,7 @@ public final class Circle extends Behaviour {
         addPropertyInfo("Effect distance", effectDistance, "meters");
     }
 
-    @NotNull
-    public static Builder newBuilder(CirclePlacement circlePlacement) {
+    public static @NotNull Builder newBuilder(CirclePlacement circlePlacement) {
         return new Builder(circlePlacement);
     }
 
@@ -50,14 +49,14 @@ public final class Circle extends Behaviour {
             return false;
         }
 
-        SpellInfo spellInfo = new SpellInfo(player, circleCenter, () -> circleCenter);
+        SpellInfo spellInfo = new SpellInfo(player, circleCenter, circleCenter);
 
         castSounds.play(player);
 
         Location[] circlePoints = SpellEffectUtil.getHorizontalCircleFrom(circleCenter.clone().add(0, height, 0), circleRadius, player.getLocation().getYaw(), 1);
 
         new BukkitRunnable() {
-            int circlePoint = 0;
+            int circlePoint;
 
             @Override
             public void run() {
@@ -78,8 +77,7 @@ public final class Circle extends Behaviour {
         return true;
     }
 
-    @Nullable
-    private Location getCircleCenter(Player player) {
+    private @Nullable Location getCircleCenter(Player player) {
         return (circlePlacement == CirclePlacement.TARGET)
                 ? SpellEffectUtil.getSpellLocation(effectDistance, player)
                 : player.getLocation();
@@ -104,9 +102,8 @@ public final class Circle extends Behaviour {
             return this;
         }
 
-        @NotNull
         @Override
-        public Behaviour build() {
+        public @NotNull Behavior build() {
             return new Circle(this);
         }
 

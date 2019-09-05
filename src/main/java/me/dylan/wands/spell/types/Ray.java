@@ -1,8 +1,8 @@
 package me.dylan.wands.spell.types;
 
-import me.dylan.wands.spell.SpellEffectUtil;
-import me.dylan.wands.spell.types.Behaviour.AbstractBuilder.SpellInfo;
-import me.dylan.wands.util.Common;
+import me.dylan.wands.miscellaneous.utils.Common;
+import me.dylan.wands.spell.tools.SpellInfo;
+import me.dylan.wands.spell.util.SpellEffectUtil;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.LivingEntity;
@@ -23,7 +23,7 @@ import java.util.function.BiConsumer;
  * - The speed at which the ray moves forward.
  * - The maximum distance the ray can travel.
  */
-public final class Ray extends Behaviour {
+public final class Ray extends Behavior {
     private final int effectDistance, speed;
     private final float rayWidth;
     private final Target target;
@@ -43,8 +43,7 @@ public final class Ray extends Behaviour {
         addPropertyInfo("Target", target);
     }
 
-    @NotNull
-    public static Builder newBuilder(Target target) {
+    public static @NotNull Builder newBuilder(Target target) {
         return new Builder(target);
     }
 
@@ -55,7 +54,7 @@ public final class Ray extends Behaviour {
         Location origin = player.getEyeLocation();
         new BukkitRunnable() {
             final Location location = origin.clone();
-            int count = 0;
+            int count;
 
             @Override
             public void run() {
@@ -66,31 +65,32 @@ public final class Ray extends Behaviour {
                         continue;
                     }
                     cancel();
-                    effectEntities(new SpellInfo(player, origin, () -> location), weaponName);
+                    effectEntities(new SpellInfo(player, origin, location), weaponName);
                     break;
                 }
             }
 
             boolean shouldContinue() {
-                if (++count >= effectDistance || !location.getBlock().isPassable())
+                ++count;
+                if (count >= effectDistance || !location.getBlock().isPassable())
                     return false;
                 List<LivingEntity> entities = SpellEffectUtil.getNearbyLivingEntities(player, location, rayWidth);
                 return entities.isEmpty();
             }
+
+            void effectEntities(SpellInfo spellInfo, String wandDisplayName) {
+                Location spellLocation = spellInfo.spellLocation;
+                hitEffects.accept(spellLocation, spellInfo.world);
+                for (LivingEntity entity : SpellEffectUtil.getNearbyLivingEntities(spellInfo.caster, spellLocation, (target == Target.SINGLE) ? rayWidth : spellEffectRadius)) {
+                    knockBack.apply(entity, spellLocation);
+                    entityEffects.accept(entity);
+                    extendedEntityEffects.accept(entity, spellInfo);
+                    SpellEffectUtil.damageEffect(spellInfo.caster, entity, entityDamage, wandDisplayName);
+                    if (target == Target.SINGLE) break;
+                }
+            }
         }.runTaskTimer(plugin, 1, 1);
         return true;
-    }
-
-    private void effectEntities(SpellInfo spellInfo, String wandDisplayName) {
-        Location spellLocation = spellInfo.spellLocation.get();
-        hitEffects.accept(spellLocation, spellInfo.world);
-        for (LivingEntity entity : SpellEffectUtil.getNearbyLivingEntities(spellInfo.caster, spellLocation, (target == Target.SINGLE) ? rayWidth : spellEffectRadius)) {
-            knockBack.apply(entity, spellLocation);
-            entityEffects.accept(entity);
-            extendedEntityEffects.accept(entity, spellInfo);
-            SpellEffectUtil.damageEffect(spellInfo.caster, entity, entityDamage, wandDisplayName);
-            if (target == Target.SINGLE) break;
-        }
     }
 
     public static final class Builder extends AbstractBuilder<Builder> {
@@ -110,7 +110,7 @@ public final class Ray extends Behaviour {
         }
 
         @Override
-        public Behaviour build() {
+        public @NotNull Behavior build() {
             return new Ray(this);
         }
 

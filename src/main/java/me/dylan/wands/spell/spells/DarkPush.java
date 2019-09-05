@@ -1,11 +1,11 @@
 package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.spell.SpellData;
-import me.dylan.wands.spell.SpellEffectUtil;
-import me.dylan.wands.spell.types.Behaviour;
-import me.dylan.wands.spell.types.Behaviour.KnockBackFrom;
-import me.dylan.wands.spell.types.Behaviour.Target;
+import me.dylan.wands.spell.types.Behavior;
+import me.dylan.wands.spell.types.Behavior.KnockBackFrom;
+import me.dylan.wands.spell.types.Behavior.Target;
 import me.dylan.wands.spell.types.Phase;
+import me.dylan.wands.spell.util.SpellEffectUtil;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -15,12 +15,12 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class DarkPush implements SpellData {
-    private final Behaviour behaviour;
+    private final Behavior behavior;
 
     private final PotionEffect blind = new PotionEffect(PotionEffectType.BLINDNESS, 40, 0, false);
 
     public DarkPush() {
-        this.behaviour = Phase.newBuilder(Target.SINGLE)
+        this.behavior = Phase.newBuilder(Target.SINGLE)
                 .setEntityDamage(6)
                 .setCastSound(Sound.ENTITY_WITHER_SHOOT)
                 .setKnockBack(1.2F, 0.6F)
@@ -51,7 +51,7 @@ public class DarkPush implements SpellData {
     }
 
     @Override
-    public Behaviour getBehaviour() {
-        return behaviour;
+    public Behavior getBehavior() {
+        return behavior;
     }
 }

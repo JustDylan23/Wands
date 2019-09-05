@@ -47,8 +47,11 @@ public enum SpellType {
     THUNDER_STORM(new ThunderStorm()),
     THUNDER_STRIKE(new ThunderStrike()),
 
+    SPIRIT_THRUST(new SpiritThrust()),
+    SPIRIT_FURY(new SpiritFury()),
+
     ONE_MIND(new OneMind()),
-    BLADE_CROSS(new BladeCross()),
+    DUAL_DRAW(new DualDraw()),
     WHIRLWIND_SLASH(new WhirlwindSlash()),
     FLOATING_PASSAGE(new FloatingPassage()),
     SPIRAL_CLOUD_PASSAGE(new SpiralCloudPassage());
@@ -62,7 +65,7 @@ public enum SpellType {
     @Nullable
     public static SpellType getSpellType(@NotNull String name) {
         try {
-            return SpellType.valueOf(name.toUpperCase());
+            return valueOf(name.toUpperCase());
         } catch (IllegalArgumentException e) {
             return null;
         }

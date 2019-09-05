@@ -4,12 +4,12 @@ import me.dylan.wands.Main;
 import org.bukkit.configuration.file.FileConfiguration;
 
 @SuppressWarnings("SameParameterValue")
-class ConfigUtil {
+final class ConfigUtil {
     private static FileConfiguration config = Main.getPlugin().getConfig();
 
 
     private ConfigUtil() {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Instantiating util class");
     }
 
     public static void reloadConfig() {

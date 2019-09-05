@@ -1,29 +1,27 @@
 package me.dylan.wands.spell.spells;
 
-import me.dylan.wands.knockback.KnockBack;
 import me.dylan.wands.spell.SpellData;
-import me.dylan.wands.spell.SpellEffectUtil;
-import me.dylan.wands.spell.types.Behaviour;
-import org.bukkit.Location;
+import me.dylan.wands.spell.types.Behavior;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
-public class OneMind extends Behaviour implements SpellData {
-    private KnockBack knockBack = KnockBack.from(0.3f);
+public class OneMind extends Behavior implements SpellData {
 
     @Override
-    public Behaviour getBehaviour() {
+    public Behavior getBehavior() {
         return this;
     }
 
     @Override
     public boolean cast(@NotNull Player player, @NotNull String weaponName) {
         new BukkitRunnable() {
-            int count = 0;
+            int count;
+
             @Override
             public void run() {
-                if (++count > 3) {
+                ++count;
+                if (count > 3) {
                     cancel();
                 } else {
                     int degrees = 0;
@@ -37,11 +35,7 @@ public class OneMind extends Behaviour implements SpellData {
                         case 3:
                             degrees = 285;
                     }
-                    Location location = player.getLocation();
-                    MortalDraw.draw(player, degrees, 2, entity -> {
-                        SpellEffectUtil.damageEffect(player, entity, 4, weaponName);
-                        knockBack.apply(entity, location);
-                    }, 0, false);
+                    MortalDraw.draw(player, degrees, 2, 4, 0, false);
                 }
             }
         }.runTaskTimer(plugin, 0, 10);

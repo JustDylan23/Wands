@@ -1,17 +1,17 @@
 package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.spell.SpellData;
-import me.dylan.wands.spell.types.Behaviour;
+import me.dylan.wands.spell.types.Behavior;
 import me.dylan.wands.spell.types.BlockProjectile;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 
 public class FlameThrower implements SpellData {
-    private final Behaviour behaviour;
+    private final Behavior behavior;
 
     public FlameThrower() {
-        this.behaviour = BlockProjectile.newBuilder(Material.FIRE, 2F)
+        this.behavior = BlockProjectile.newBuilder(Material.FIRE, 2.0F)
                 .setCastSound(Sound.ENTITY_BLAZE_SHOOT)
                 .setProjectileAmount(8)
                 .setProjectileShootDelay(3)
@@ -26,7 +26,7 @@ public class FlameThrower implements SpellData {
     }
 
     @Override
-    public Behaviour getBehaviour() {
-        return behaviour;
+    public Behavior getBehavior() {
+        return behavior;
     }
 }

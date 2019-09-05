@@ -1,9 +1,9 @@
 package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.spell.SpellData;
-import me.dylan.wands.spell.SpellEffectUtil;
-import me.dylan.wands.spell.types.Behaviour;
+import me.dylan.wands.spell.types.Behavior;
 import me.dylan.wands.spell.types.Spark;
+import me.dylan.wands.spell.util.SpellEffectUtil;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -12,11 +12,11 @@ import org.bukkit.block.data.BlockData;
 
 public class CorruptedSpark implements SpellData {
 
-    private final Behaviour behaviour;
+    private final Behavior behavior;
     private final BlockData obsidian = Material.OBSIDIAN.createBlockData();
 
     public CorruptedSpark() {
-        this.behaviour = Spark.newBuilder(Behaviour.Target.MULTI)
+        this.behavior = Spark.newBuilder(Behavior.Target.MULTI)
                 .setSpellEffectRadius(2.8F)
                 .setEntityDamage(12)
                 .setSpellRelativeEffects((loc, world) -> {
@@ -33,7 +33,7 @@ public class CorruptedSpark implements SpellData {
     }
 
     @Override
-    public Behaviour getBehaviour() {
-        return behaviour;
+    public Behavior getBehavior() {
+        return behavior;
     }
 }

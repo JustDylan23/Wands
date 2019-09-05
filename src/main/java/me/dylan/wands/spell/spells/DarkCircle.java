@@ -1,8 +1,8 @@
 package me.dylan.wands.spell.spells;
 
-import me.dylan.wands.knockback.KnockBack;
 import me.dylan.wands.spell.SpellData;
-import me.dylan.wands.spell.types.Behaviour;
+import me.dylan.wands.spell.tools.KnockBack;
+import me.dylan.wands.spell.types.Behavior;
 import me.dylan.wands.spell.types.Circle;
 import me.dylan.wands.spell.types.Circle.CirclePlacement;
 import org.bukkit.Particle;
@@ -11,12 +11,12 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class DarkCircle implements SpellData {
-    private final Behaviour behaviour;
+    private final Behavior behavior;
 
     private final PotionEffect blind = new PotionEffect(PotionEffectType.BLINDNESS, 40, 0, false);
 
     public DarkCircle() {
-        this.behaviour = Circle.newBuilder(CirclePlacement.RELATIVE)
+        this.behavior = Circle.newBuilder(CirclePlacement.RELATIVE)
                 .setCircleRadius(4)
                 .setEntityDamage(8)
                 .setSpellEffectRadius(4.0F)
@@ -36,7 +36,7 @@ public class DarkCircle implements SpellData {
     }
 
     @Override
-    public Behaviour getBehaviour() {
-        return behaviour;
+    public Behavior getBehavior() {
+        return behavior;
     }
 }

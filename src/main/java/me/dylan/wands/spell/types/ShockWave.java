@@ -1,8 +1,8 @@
 package me.dylan.wands.spell.types;
 
-import me.dylan.wands.spell.SpellEffectUtil;
-import me.dylan.wands.spell.types.Behaviour.AbstractBuilder.SpellInfo;
-import me.dylan.wands.util.Common;
+import me.dylan.wands.miscellaneous.utils.Common;
+import me.dylan.wands.spell.tools.SpellInfo;
+import me.dylan.wands.spell.util.SpellEffectUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
@@ -19,7 +19,7 @@ import java.util.UUID;
  * - Radius to which the wave will extend.
  * - The delay before the wave grows half a meter
  */
-public final class ShockWave extends Behaviour {
+public final class ShockWave extends Behavior {
     private final int waveRadius, delay;
     private final String tagShockWave;
 
@@ -32,8 +32,7 @@ public final class ShockWave extends Behaviour {
         addPropertyInfo("Radius", waveRadius, "meters");
     }
 
-    @NotNull
-    public static Builder newBuilder() {
+    public static @NotNull Builder newBuilder() {
         return new Builder();
     }
 
@@ -41,9 +40,9 @@ public final class ShockWave extends Behaviour {
     public boolean cast(@NotNull Player player, @NotNull String weaponName) {
         castSounds.play(player);
         Location waveCenter = player.getLocation();
-        SpellInfo spellInfo = new SpellInfo(player, waveCenter, () -> waveCenter);
+        SpellInfo spellInfo = new SpellInfo(player, waveCenter, waveCenter);
         new BukkitRunnable() {
-            float currentRadius = 0;
+            float currentRadius;
 
             @Override
             public void run() {
@@ -80,7 +79,7 @@ public final class ShockWave extends Behaviour {
         }
 
         @Override
-        public Behaviour build() {
+        public @NotNull Behavior build() {
             return new ShockWave(this);
         }
 

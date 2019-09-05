@@ -1,7 +1,7 @@
 package me.dylan.wands.spell.types;
 
 import me.dylan.wands.ListenerRegistry;
-import me.dylan.wands.util.Common;
+import me.dylan.wands.miscellaneous.utils.Common;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -37,7 +37,7 @@ import java.util.function.Consumer;
  *
  * @param <T> Type of projectile which gets fired
  */
-public final class MagicProjectile<T extends org.bukkit.entity.Projectile> extends Behaviour implements Listener {
+public final class MagicProjectile<T extends org.bukkit.entity.Projectile> extends Behavior implements Listener {
     private static final Set<org.bukkit.entity.Projectile> projectiles = new HashSet<>();
     private final Class<T> projectile;
     private final Consumer<T> projectileProps;
@@ -63,8 +63,7 @@ public final class MagicProjectile<T extends org.bukkit.entity.Projectile> exten
         plugin.addDisableLogic(() -> projectiles.forEach(Entity::remove));
     }
 
-    @NotNull
-    public static <T extends org.bukkit.entity.Projectile> Builder<T> newBuilder(Class<T> projectileClass, float speed) {
+    public static @NotNull <T extends org.bukkit.entity.Projectile> Builder<T> newBuilder(Class<T> projectileClass, float speed) {
         return new Builder<>(projectileClass, speed);
     }
 
@@ -72,12 +71,12 @@ public final class MagicProjectile<T extends org.bukkit.entity.Projectile> exten
     public boolean cast(@NotNull Player player, @NotNull String weaponName) {
         castSounds.play(player);
         Vector velocity = player.getLocation().getDirection().multiply(speed);
-        T projectile = player.launchProjectile(this.projectile, velocity);
-        projectiles.add(projectile);
-        trail(projectile);
-        projectileProps.accept(projectile);
-        projectile.setMetadata(tagProjectileSpell, new FixedMetadataValue(plugin, weaponName));
-        activateLifeTimer(projectile);
+        T firedProjectile = player.launchProjectile(this.projectile, velocity);
+        projectiles.add(firedProjectile);
+        trail(firedProjectile);
+        projectileProps.accept(firedProjectile);
+        firedProjectile.setMetadata(tagProjectileSpell, new FixedMetadataValue(plugin, weaponName));
+        activateLifeTimer(firedProjectile);
         return true;
     }
 
@@ -110,9 +109,9 @@ public final class MagicProjectile<T extends org.bukkit.entity.Projectile> exten
 
     @EventHandler
     private void onProjectileHit(ProjectileHitEvent event) {
-        Projectile projectile = event.getEntity();
-        if (projectile.hasMetadata(tagProjectileSpell)) {
-            hit((Player) projectile.getShooter(), projectile);
+        Projectile eventProjectile = event.getEntity();
+        if (eventProjectile.hasMetadata(tagProjectileSpell)) {
+            hit((Player) eventProjectile.getShooter(), eventProjectile);
         }
     }
 
@@ -139,7 +138,7 @@ public final class MagicProjectile<T extends org.bukkit.entity.Projectile> exten
         private BiConsumer<Location, World> hitEffects = Common.emptyBiConsumer();
         private int lifeTime = 20;
 
-        private Builder(Class<T> projectileClass, float speed) throws NullPointerException {
+        private Builder(Class<T> projectileClass, float speed) {
             this.projectile = projectileClass;
             this.speed = speed;
         }
@@ -149,9 +148,8 @@ public final class MagicProjectile<T extends org.bukkit.entity.Projectile> exten
             return this;
         }
 
-        @NotNull
         @Override
-        public Behaviour build() {
+        public @NotNull Behavior build() {
             return new MagicProjectile<>(this);
         }
 

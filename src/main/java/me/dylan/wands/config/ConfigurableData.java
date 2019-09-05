@@ -12,13 +12,13 @@ public class ConfigurableData {
     private boolean isMagicUseAllowed;
     private boolean allowSelfHarm;
     private int magicCooldownTime;
-    private boolean castringRequiresPermission;
+    private boolean doesSpellCastingRequiresPermission;
 
     public ConfigurableData() {
         isMagicUseAllowed = ConfigUtil.getBoolean(ALLOW_MAGIC_USE_KEY);
         allowSelfHarm = ConfigUtil.getBoolean(ALLOW_SELF_HARM);
         magicCooldownTime = ConfigUtil.getInt(MAGIC_COOLDOWN_TIME_KEY);
-        castringRequiresPermission = ConfigUtil.getBoolean(CASTING_REQUIRES_PERMISSION);
+        doesSpellCastingRequiresPermission = ConfigUtil.getBoolean(CASTING_REQUIRES_PERMISSION);
     }
 
     public void allowMagicUse(boolean value) {
@@ -57,12 +57,12 @@ public class ConfigurableData {
     }
 
     public void requirePermissionForCasting(boolean value) {
-        this.castringRequiresPermission = value;
+        this.doesSpellCastingRequiresPermission = value;
         ConfigUtil.set(CASTING_REQUIRES_PERMISSION, value);
     }
 
     public boolean doesCastingRequirePermission() {
-        return castringRequiresPermission;
+        return doesSpellCastingRequiresPermission;
     }
 }
 
