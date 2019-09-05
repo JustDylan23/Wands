@@ -25,15 +25,15 @@ public class CooldownManager implements Listener {
      * This method handles the cooldown which the player
      * has to wait for after casting a implementations before a new
      * implementations may be cast.
-     *  @param player       Player.
      *
+     * @param player Player.
      */
     public boolean canCast(Player player) {
-        long remainingTime = getRemainingTime(player);
+        int remainingTime = getRemainingTime(player);
         if (remainingTime <= 0) {
             return true;
         } else {
-            sendRemainingTime(player, (int) Math.ceil(remainingTime / 1000D));
+            sendRemainingTime(player, (remainingTime - 1) / 1000 + 1);
             return false;
         }
     }
@@ -50,12 +50,12 @@ public class CooldownManager implements Listener {
         int cooldown = configurableData.getMagicCooldownTime();
         long lastUsed = map.getLong(player);
         if (cooldown == 0 || lastUsed == 0) return 0;
-        long elapsed = System.currentTimeMillis() - lastUsed;
-        return (int) (cooldown - elapsed);
+        int elapsed = (int) (System.currentTimeMillis() - lastUsed);
+        return cooldown - elapsed;
     }
 
     private void sendRemainingTime(@NotNull Player player, int remaining) {
-        player.sendActionBar("§6Wait §7" + remaining + " §6second" + ((remaining != 1) ? "s" : ""));
+        player.sendActionBar("§6Wait§7 " + remaining + " §6second" + ((remaining != 1) ? "s" : ""));
         player.playSound(player.getLocation(), Sound.ENTITY_BLAZE_AMBIENT, 0.3F, 1);
     }
 

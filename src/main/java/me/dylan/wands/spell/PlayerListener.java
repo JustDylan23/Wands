@@ -5,6 +5,9 @@ import me.dylan.wands.MouseClickListeners.ClickEvent;
 import me.dylan.wands.MouseClickListeners.LeftClickListener;
 import me.dylan.wands.MouseClickListeners.RightClickListener;
 import me.dylan.wands.events.MagicDamageEvent;
+import me.dylan.wands.miscellaneous.utils.ItemUtil;
+import me.dylan.wands.spell.util.SpellEffectUtil;
+import me.dylan.wands.spell.util.SpellInteractionUtil;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -12,7 +15,6 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Statistic;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -42,8 +44,11 @@ public class PlayerListener implements Listener, LeftClickListener, RightClickLi
     public void onLeftClick(@NotNull ClickEvent event) {
         Player player = event.getPlayer();
         ItemStack itemStack = player.getInventory().getItemInMainHand();
-        if (SpellManagementUtil.isWand(itemStack) && SpellManagementUtil.canUse(player)) {
-            SpellManagementUtil.castSpell(player, itemStack);
+        if (ItemTag.IS_WAND.isTagged(itemStack) && SpellInteractionUtil.canUse(player)) {
+            SpellType spell = SpellInteractionUtil.getSelectedSpell(itemStack);
+            if (spell != null) {
+                SpellInteractionUtil.castSpell(player, ItemUtil.getName(itemStack), spell);
+            }
         }
     }
 
@@ -51,9 +56,9 @@ public class PlayerListener implements Listener, LeftClickListener, RightClickLi
     public void onRightClick(@NotNull ClickEvent event) {
         Player player = event.getPlayer();
         ItemStack itemStack = player.getInventory().getItemInMainHand();
-        if (SpellManagementUtil.isWand(itemStack) && SpellManagementUtil.canUse(player)) {
+        if (ItemTag.IS_WAND.isTagged(itemStack) && SpellInteractionUtil.canUse(player)) {
             event.cancel();
-            SpellManagementUtil.nextSpell(player, itemStack);
+            SpellInteractionUtil.nextSpell(player, itemStack);
         }
     }
 
@@ -92,8 +97,8 @@ public class PlayerListener implements Listener, LeftClickListener, RightClickLi
         Player player = event.getPlayer();
         Bukkit.getScheduler().runTaskLater(Main.getPlugin(), () -> {
             ItemStack itemStack = player.getInventory().getItemInMainHand();
-            if (SpellManagementUtil.isWand(itemStack)) {
-                SpellManagementUtil.showSelectedSpell(player, itemStack);
+            if (ItemTag.IS_WAND.isTagged(itemStack)) {
+                SpellInteractionUtil.showSelectedSpell(player, itemStack);
             }
         }, 1L);
     }
@@ -101,16 +106,9 @@ public class PlayerListener implements Listener, LeftClickListener, RightClickLi
     @EventHandler
     private void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         Entity attacker = event.getDamager();
-        Entity victim = event.getEntity();
-        if (victim instanceof LivingEntity) {
-            LivingEntity v = (LivingEntity) victim;
-            if (v.getMaximumNoDamageTicks() != 0) {
-                v.setMaximumNoDamageTicks(0);
-            }
-        }
         if (attacker instanceof Player
-                && !victim.hasMetadata(SpellEffectUtil.CAN_DAMAGE_WITH_WANDS)
-                && SpellManagementUtil.isWand(((Player) attacker).getInventory().getItemInMainHand())
+                && !event.getEntity().hasMetadata(SpellEffectUtil.CAN_DAMAGE_WITH_WANDS)
+                && ItemTag.IS_WAND.isTagged(((Player) attacker).getInventory().getItemInMainHand())
         ) {
             event.setCancelled(true);
         }
@@ -137,7 +135,7 @@ public class PlayerListener implements Listener, LeftClickListener, RightClickLi
 
     @EventHandler
     private void onBlockBreak(BlockBreakEvent event) {
-        if (SpellManagementUtil.isWand(event.getPlayer().getInventory().getItemInMainHand())) {
+        if (ItemTag.IS_WAND.isTagged(event.getPlayer().getInventory().getItemInMainHand())) {
             event.setCancelled(true);
         }
     }

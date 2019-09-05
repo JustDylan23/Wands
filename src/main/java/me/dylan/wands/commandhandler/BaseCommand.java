@@ -1,7 +1,7 @@
 package me.dylan.wands.commandhandler;
 
 import me.dylan.wands.Main;
-import me.dylan.wands.spell.SpellManagementUtil;
+import me.dylan.wands.spell.ItemTag;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -19,7 +19,7 @@ public abstract class BaseCommand implements CommandExecutor {
     }
 
     protected boolean isWand(CommandSender sender, ItemStack itemStack) {
-        if (SpellManagementUtil.isWand(itemStack)) {
+        if (ItemTag.IS_WAND.isTagged(itemStack)) {
             return true;
         } else {
             sender.sendMessage(Main.PREFIX + "Held item is not a wand!");

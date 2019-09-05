@@ -1,11 +1,11 @@
 package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.Main;
+import me.dylan.wands.miscellaneous.utils.Common;
 import me.dylan.wands.spell.SpellData;
-import me.dylan.wands.spell.SpellEffectUtil;
-import me.dylan.wands.spell.types.Behaviour;
+import me.dylan.wands.spell.types.Behavior;
 import me.dylan.wands.spell.types.Spark;
-import me.dylan.wands.util.Common;
+import me.dylan.wands.spell.util.SpellEffectUtil;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -20,7 +20,7 @@ import java.util.Set;
 
 public class CorruptedWolves implements SpellData {
 
-    private final Behaviour behaviour;
+    private final Behavior behavior;
     private final Main plugin = Main.getPlugin();
     private final Set<Wolf> wolves = new HashSet<>();
     private final PotionEffect speed = new PotionEffect(PotionEffectType.SPEED, 160, 4, true);
@@ -28,7 +28,7 @@ public class CorruptedWolves implements SpellData {
     public CorruptedWolves() {
         plugin.addDisableLogic(() -> wolves.forEach(Entity::remove));
 
-        this.behaviour = Spark.newBuilder(Behaviour.Target.SINGLE)
+        this.behavior = Spark.newBuilder(Behavior.Target.SINGLE)
                 .setSpellEffectRadius(2.5F)
                 .setCastSound(Sound.ENTITY_EVOKER_PREPARE_SUMMON)
                 .setEffectDistance(30)
@@ -41,8 +41,8 @@ public class CorruptedWolves implements SpellData {
     }
 
     @Override
-    public Behaviour getBehaviour() {
-        return behaviour;
+    public Behavior getBehavior() {
+        return behavior;
     }
 
     private void accept(LivingEntity target) {

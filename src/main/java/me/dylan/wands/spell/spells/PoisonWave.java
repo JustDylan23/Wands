@@ -1,20 +1,20 @@
 package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.spell.SpellData;
-import me.dylan.wands.spell.SpellEffectUtil;
-import me.dylan.wands.spell.types.Behaviour;
+import me.dylan.wands.spell.types.Behavior;
 import me.dylan.wands.spell.types.Wave;
+import me.dylan.wands.spell.util.SpellEffectUtil;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class PoisonWave implements SpellData {
-    private final Behaviour behaviour;
+    private final Behavior behavior;
     private final PotionEffect poison = new PotionEffect(PotionEffectType.POISON, 120, 3, false);
 
     public PoisonWave() {
-        this.behaviour = Wave.newBuilder()
+        this.behavior = Wave.newBuilder()
                 .setSpellEffectRadius(2.0f)
                 .setEntityDamage(6)
                 .setEffectDistance(20)
@@ -29,7 +29,7 @@ public class PoisonWave implements SpellData {
     }
 
     @Override
-    public Behaviour getBehaviour() {
-        return behaviour;
+    public Behavior getBehavior() {
+        return behavior;
     }
 }

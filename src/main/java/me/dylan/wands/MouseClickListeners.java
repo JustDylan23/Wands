@@ -56,15 +56,17 @@ public class MouseClickListeners implements Listener {
         }
     }
 
+    @FunctionalInterface
     public interface LeftClickListener {
         void onLeftClick(ClickEvent event);
     }
 
+    @FunctionalInterface
     public interface RightClickListener {
         void onRightClick(ClickEvent event);
     }
 
-    public static class ClickEvent {
+    public static final class ClickEvent {
         private final Player player;
         private final Cancellable cancellable;
 
@@ -79,10 +81,6 @@ public class MouseClickListeners implements Listener {
 
         public void cancel() {
             this.cancellable.setCancelled(true);
-        }
-
-        public boolean isCancelled() {
-            return this.cancellable.isCancelled();
         }
     }
 }

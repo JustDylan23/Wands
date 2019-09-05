@@ -1,8 +1,8 @@
 package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.spell.SpellData;
-import me.dylan.wands.spell.types.Behaviour;
-import me.dylan.wands.spell.types.Behaviour.Target;
+import me.dylan.wands.spell.types.Behavior;
+import me.dylan.wands.spell.types.Behavior.Target;
 import me.dylan.wands.spell.types.Ray;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -12,10 +12,10 @@ import org.bukkit.potion.PotionEffectType;
 
 public class BloodStun implements SpellData {
     private final PotionEffect slow = new PotionEffect(PotionEffectType.SLOW, 180, 3, false);
-    private final Behaviour behaviour;
+    private final Behavior behavior;
 
     public BloodStun() {
-        this.behaviour = Ray.newBuilder(Target.SINGLE)
+        this.behavior = Ray.newBuilder(Target.SINGLE)
                 .setCastSound(Sound.ENTITY_FIREWORK_ROCKET_BLAST)
                 .setEntityDamage(8)
                 .setEntityEffects(entity -> entity.addPotionEffect(slow, true))
@@ -30,7 +30,7 @@ public class BloodStun implements SpellData {
     }
 
     @Override
-    public Behaviour getBehaviour() {
-        return behaviour;
+    public Behavior getBehavior() {
+        return behavior;
     }
 }

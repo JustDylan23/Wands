@@ -6,10 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.concurrent.ThreadLocalRandom;
-
-public class WhirlwindSlash extends Behavior implements SpellData {
-
+public class DualDraw extends Behavior implements SpellData {
     @Override
     public Behavior getBehavior() {
         return this;
@@ -23,13 +20,17 @@ public class WhirlwindSlash extends Behavior implements SpellData {
             @Override
             public void run() {
                 ++count;
-                if (count > 5) {
+                if (count > 2) {
                     cancel();
                 } else {
-                    MortalDraw.draw(player, ThreadLocalRandom.current().nextInt(0, 360), 1.8, 4, 0, false);
+                    if (count == 1) {
+                        MortalDraw.draw(player, 255, 2.6, 7, 0, false);
+                    } else {
+                        MortalDraw.draw(player, 285, 2.2, 7, -30, false);
+                    }
                 }
             }
-        }.runTaskTimer(plugin, 0, 3);
+        }.runTaskTimer(plugin, 0, 7);
         return true;
     }
 }

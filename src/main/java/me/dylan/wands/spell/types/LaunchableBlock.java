@@ -1,8 +1,8 @@
 package me.dylan.wands.spell.types;
 
 import me.dylan.wands.ListenerRegistry;
-import me.dylan.wands.sound.SoundEffect;
-import me.dylan.wands.util.Common;
+import me.dylan.wands.miscellaneous.utils.Common;
+import me.dylan.wands.spell.tools.sound.SoundEffect;
 import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.block.data.BlockData;
@@ -14,6 +14,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
@@ -29,9 +30,9 @@ import java.util.function.BiConsumer;
  * Configurable:
  * - Material of block which gets launched.
  * - Effects displayed when the block lands.
- * - Block relative sounds, unlike {@link Behaviour#castSounds} this sound is played at the location of the block when launched.
+ * - Block relative sounds, unlike {@link Behavior#castSounds} this sound is played at the location of the block when launched.
  */
-public final class LaunchableBlock extends Behaviour implements Listener {
+public final class LaunchableBlock extends Behavior implements Listener {
     private static final Set<Block> effectedBlocks = new HashSet<>();
     private static final Set<BlockRestorer> pending = new HashSet<>();
     private final String tagUnbreakable, tagFallingBlock;
@@ -55,8 +56,7 @@ public final class LaunchableBlock extends Behaviour implements Listener {
         plugin.addDisableLogic(() -> pending.forEach(BlockRestorer::cancel));
     }
 
-    @NotNull
-    public static Builder newBuilder(Material material) {
+    public static @NotNull Builder newBuilder(Material material) {
         return new Builder(material);
     }
 
@@ -74,13 +74,13 @@ public final class LaunchableBlock extends Behaviour implements Listener {
                 if (oldState instanceof Container) {
                     if (oldState instanceof Chest) {
                         ((Chest) oldState).getBlockInventory().clear();
-                        Inventory inventory = ((Chest) oldState).getInventory();
+                        Inventory inventory = ((InventoryHolder) oldState).getInventory();
                         if (inventory.getHolder() instanceof DoubleChest) {
                             player.sendActionBar("§ccan't be used on double chests");
                             return false;
                         } else inventory.clear();
                     } else {
-                        ((Container) oldState).getInventory().clear();
+                        ((InventoryHolder) oldState).getInventory().clear();
                     }
                 }
                 block.setType(material, false);
@@ -230,9 +230,8 @@ public final class LaunchableBlock extends Behaviour implements Listener {
             return this;
         }
 
-        @NotNull
         @Override
-        public Behaviour build() {
+        public @NotNull Behavior build() {
             return new LaunchableBlock(this);
         }
 

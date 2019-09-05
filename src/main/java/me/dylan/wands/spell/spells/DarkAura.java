@@ -1,23 +1,23 @@
 package me.dylan.wands.spell.spells;
 
-import me.dylan.wands.sound.CompoundSound;
 import me.dylan.wands.spell.SpellData;
+import me.dylan.wands.spell.tools.sound.CompoundSound;
 import me.dylan.wands.spell.types.Aura;
 import me.dylan.wands.spell.types.Aura.EffectFrequency;
-import me.dylan.wands.spell.types.Behaviour;
+import me.dylan.wands.spell.types.Behavior;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class DarkAura implements SpellData {
-    private final Behaviour behaviour;
+    private final Behavior behavior;
     private final PotionEffect wither = new PotionEffect(PotionEffectType.WITHER, 60, 1);
     private final PotionEffect weakness = new PotionEffect(PotionEffectType.WEAKNESS, 40, 2);
     private final PotionEffect slow = new PotionEffect(PotionEffectType.SLOW, 40, 0);
 
     public DarkAura() {
-        this.behaviour = Aura.newBuilder(EffectFrequency.CONSTANT)
+        this.behavior = Aura.newBuilder(EffectFrequency.CONSTANT)
                 .setEffectDuration(120)
                 .setCastSound(CompoundSound.chain()
                         .add(Sound.ENTITY_EVOKER_PREPARE_SUMMON, 0.2F)
@@ -34,7 +34,7 @@ public class DarkAura implements SpellData {
     }
 
     @Override
-    public Behaviour getBehaviour() {
-        return behaviour;
+    public Behavior getBehavior() {
+        return behavior;
     }
 }

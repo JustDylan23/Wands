@@ -2,8 +2,8 @@ package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.Main;
 import me.dylan.wands.spell.SpellData;
-import me.dylan.wands.spell.types.Behaviour;
-import me.dylan.wands.spell.types.Behaviour.Target;
+import me.dylan.wands.spell.types.Behavior;
+import me.dylan.wands.spell.types.Behavior.Target;
 import me.dylan.wands.spell.types.Phase;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
@@ -14,11 +14,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 public class MephiChoke implements SpellData {
-    private final Behaviour behaviour;
+    private final Behavior behavior;
     private final PotionEffect wither = new PotionEffect(PotionEffectType.WITHER, 100, 2);
 
     public MephiChoke() {
-        this.behaviour = Phase.newBuilder(Target.SINGLE)
+        this.behavior = Phase.newBuilder(Target.SINGLE)
                 .setCastSound(Sound.ENTITY_PHANTOM_BITE)
                 .setEffectDistance(30)
                 .setSpellEffectRadius(2.8F)
@@ -58,7 +58,7 @@ public class MephiChoke implements SpellData {
         }.runTaskTimer(Main.getPlugin(), 10, 1);
     }
 
-    public Behaviour getBehaviour() {
-        return behaviour;
+    public Behavior getBehavior() {
+        return behavior;
     }
 }

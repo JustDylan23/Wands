@@ -1,16 +1,16 @@
 package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.spell.SpellData;
-import me.dylan.wands.spell.types.Behaviour;
+import me.dylan.wands.spell.types.Behavior;
 import me.dylan.wands.spell.types.ShockWave;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 
 public class FlameShockWave implements SpellData {
-    private final Behaviour behaviour;
+    private final Behavior behavior;
 
     public FlameShockWave() {
-        this.behaviour = ShockWave.newBuilder()
+        this.behavior = ShockWave.newBuilder()
                 .setCastSound(Sound.ENTITY_BLAZE_SHOOT)
                 .setWaveRadius(8)
                 .setEntityDamage(6)
@@ -21,7 +21,7 @@ public class FlameShockWave implements SpellData {
     }
 
     @Override
-    public Behaviour getBehaviour() {
-        return behaviour;
+    public Behavior getBehavior() {
+        return behavior;
     }
 }

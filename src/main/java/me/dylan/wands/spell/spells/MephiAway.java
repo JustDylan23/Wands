@@ -1,23 +1,21 @@
 package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.spell.SpellData;
-import me.dylan.wands.spell.types.Behaviour;
+import me.dylan.wands.spell.types.Behavior;
 import me.dylan.wands.spell.types.Circle;
 import me.dylan.wands.spell.types.Circle.CirclePlacement;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 
 public class MephiAway implements SpellData {
-    private final Behaviour behaviour;
+    private final Behavior behavior;
 
     public MephiAway() {
-        this.behaviour = Circle.newBuilder(CirclePlacement.RELATIVE)
+        this.behavior = Circle.newBuilder(CirclePlacement.RELATIVE)
                 .setCircleRadius(5)
                 .setEntityDamage(8)
                 .setSpellEffectRadius(5.0F)
-                .setEntityEffects(entity -> {
-                    entity.getLocation().createExplosion(0.0f);
-                })
+                .setEntityEffects(entity -> entity.getLocation().createExplosion(0.0f))
                 .setMetersPerTick(3)
                 .setCastSound(Sound.ENTITY_ENDER_DRAGON_FLAP)
                 .setSpellRelativeEffects((loc, world) -> {
@@ -31,7 +29,7 @@ public class MephiAway implements SpellData {
     }
 
     @Override
-    public Behaviour getBehaviour() {
-        return behaviour;
+    public Behavior getBehavior() {
+        return behavior;
     }
 }

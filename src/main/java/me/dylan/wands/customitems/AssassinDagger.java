@@ -3,9 +3,9 @@ package me.dylan.wands.customitems;
 import me.dylan.wands.Main;
 import me.dylan.wands.MouseClickListeners.ClickEvent;
 import me.dylan.wands.MouseClickListeners.RightClickListener;
-import me.dylan.wands.spell.SpellManagementUtil;
-import me.dylan.wands.util.Common;
-import me.dylan.wands.util.ItemUtil;
+import me.dylan.wands.miscellaneous.utils.Common;
+import me.dylan.wands.miscellaneous.utils.ItemUtil;
+import me.dylan.wands.spell.util.SpellInteractionUtil;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -42,7 +42,7 @@ public class AssassinDagger implements Listener, RightClickListener {
 
     private boolean hasDagger(Player player) {
         PlayerInventory inventory = player.getInventory();
-        return SpellManagementUtil.canUse(player)
+        return SpellInteractionUtil.canUse(player)
                 && (ItemUtil.hasPersistentData(inventory.getItemInMainHand(), ID_TAG, PersistentDataType.BYTE)
                 || ItemUtil.hasPersistentData(inventory.getItemInOffHand(), ID_TAG, PersistentDataType.BYTE));
     }
@@ -158,7 +158,7 @@ public class AssassinDagger implements Listener, RightClickListener {
         if (!player.hasMetadata(tagSneak)) {
             player.setMetadata(tagSneak, Common.METADATA_VALUE_TRUE);
             Location location = player.getLocation();
-            location.getWorld().playSound(location, Sound.ENTITY_ZOMBIE_VILLAGER_CURE, 1.0f, 2f);
+            location.getWorld().playSound(location, Sound.ENTITY_ZOMBIE_VILLAGER_CURE, 1.0f, 2.00f);
             location.getWorld().spawnParticle(Particle.SMOKE_LARGE, location, 15, 0.5, 0.2, 0.5, 0.1, null, true);
             location.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, location, 20, 0.5, 0.5, 0.5, 0.1, null, true);
             player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 6000, 0, true), true);

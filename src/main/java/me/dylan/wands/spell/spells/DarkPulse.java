@@ -1,9 +1,9 @@
 package me.dylan.wands.spell.spells;
 
-import me.dylan.wands.knockback.KnockBack;
 import me.dylan.wands.spell.SpellData;
-import me.dylan.wands.spell.types.Behaviour;
-import me.dylan.wands.spell.types.Behaviour.Target;
+import me.dylan.wands.spell.tools.KnockBack;
+import me.dylan.wands.spell.types.Behavior;
+import me.dylan.wands.spell.types.Behavior.Target;
 import me.dylan.wands.spell.types.Ray;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -12,7 +12,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class DarkPulse implements SpellData {
-    private final Behaviour behaviour;
+    private final Behavior behavior;
 
     private final PotionEffect blind = new PotionEffect(PotionEffectType.BLINDNESS, 40, 0, false);
     private final PotionEffect slow = new PotionEffect(PotionEffectType.SLOW, 40, 2, false);
@@ -20,7 +20,7 @@ public class DarkPulse implements SpellData {
 
 
     public DarkPulse() {
-        this.behaviour = Ray.newBuilder(Target.MULTI)
+        this.behavior = Ray.newBuilder(Target.MULTI)
                 .setRayWidth(1)
                 .setSpellEffectRadius(3.0F)
                 .setMetersPerTick(2)
@@ -47,7 +47,7 @@ public class DarkPulse implements SpellData {
     }
 
     @Override
-    public Behaviour getBehaviour() {
-        return behaviour;
+    public Behavior getBehavior() {
+        return behavior;
     }
 }

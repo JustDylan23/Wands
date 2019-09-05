@@ -1,18 +1,18 @@
 package me.dylan.wands.spell.spells;
 
-import me.dylan.wands.knockback.KnockBack;
 import me.dylan.wands.spell.SpellData;
-import me.dylan.wands.spell.types.Behaviour;
+import me.dylan.wands.spell.tools.KnockBack;
+import me.dylan.wands.spell.types.Behavior;
 import me.dylan.wands.spell.types.Spark;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 
 public class BloodExplode implements SpellData {
-    private final Behaviour behaviour;
+    private final Behavior behavior;
 
     public BloodExplode() {
-        this.behaviour = Spark.newBuilder(Behaviour.Target.MULTI)
+        this.behavior = Spark.newBuilder(Behavior.Target.MULTI)
                 .setEntityDamage(10)
                 .setKnockBack(KnockBack.EXPLOSION)
                 .setSpellEffectRadius(3.0F)
@@ -29,7 +29,7 @@ public class BloodExplode implements SpellData {
     }
 
     @Override
-    public Behaviour getBehaviour() {
-        return behaviour;
+    public Behavior getBehavior() {
+        return behavior;
     }
 }

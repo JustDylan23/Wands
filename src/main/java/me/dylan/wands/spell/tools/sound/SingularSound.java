@@ -1,10 +1,10 @@
-package me.dylan.wands.sound;
+package me.dylan.wands.spell.tools.sound;
 
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 
-public class SingularSound implements SoundEffect {
+public final class SingularSound implements SoundEffect {
     private final Sound sound;
     private final float pitch;
 

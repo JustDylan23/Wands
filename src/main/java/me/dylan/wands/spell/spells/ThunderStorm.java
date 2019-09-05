@@ -1,20 +1,20 @@
 package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.spell.SpellData;
-import me.dylan.wands.spell.SpellEffectUtil;
-import me.dylan.wands.spell.types.Behaviour;
+import me.dylan.wands.spell.types.Behavior;
 import me.dylan.wands.spell.types.Circle;
 import me.dylan.wands.spell.types.Circle.CirclePlacement;
+import me.dylan.wands.spell.util.SpellEffectUtil;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;
 
 public class ThunderStorm implements SpellData {
-    private final Behaviour behaviour;
+    private final Behavior behavior;
 
     public ThunderStorm() {
-        this.behaviour = Circle.newBuilder(CirclePlacement.RELATIVE)
+        this.behavior = Circle.newBuilder(CirclePlacement.RELATIVE)
                 .setCircleRadius(10)
                 .setSpellEffectRadius(10.0F)
                 .setCircleHeight(7)
@@ -40,7 +40,7 @@ public class ThunderStorm implements SpellData {
     }
 
     @Override
-    public Behaviour getBehaviour() {
-        return behaviour;
+    public Behavior getBehavior() {
+        return behavior;
     }
 }

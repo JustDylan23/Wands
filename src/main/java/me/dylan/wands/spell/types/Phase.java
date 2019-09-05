@@ -1,7 +1,7 @@
 package me.dylan.wands.spell.types;
 
-import me.dylan.wands.spell.SpellEffectUtil;
-import me.dylan.wands.util.Common;
+import me.dylan.wands.miscellaneous.utils.Common;
+import me.dylan.wands.spell.util.SpellEffectUtil;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -26,7 +26,7 @@ import java.util.function.Predicate;
  * - Effects constantly applied during phase.
  * - Effects applied after stage.
  */
-public final class Phase extends Behaviour {
+public final class Phase extends Behavior {
     private final Target target;
     private final String tagPhaseSpell;
     private final Predicate<LivingEntity> condition;
@@ -49,8 +49,7 @@ public final class Phase extends Behaviour {
         addPropertyInfo("Target", target);
     }
 
-    @NotNull
-    public static Builder newBuilder(Target target) {
+    public static @NotNull Builder newBuilder(Target target) {
         return new Builder(target);
     }
 
@@ -88,7 +87,7 @@ public final class Phase extends Behaviour {
 
     public static final class Builder extends AbstractBuilder<Builder> {
         private final Target target;
-        private int effectDistance = 0;
+        private int effectDistance;
         private Predicate<LivingEntity> condition = Common.emptyPredicate();
         private Consumer<LivingEntity> duringPhaseEffect = Common.emptyConsumer();
         private BiConsumer<LivingEntity, Player> afterPhaseEffect = Common.emptyBiConsumer();
@@ -103,9 +102,8 @@ public final class Phase extends Behaviour {
             return this;
         }
 
-        @NotNull
         @Override
-        public Behaviour build() {
+        public @NotNull Behavior build() {
             return new Phase(this);
         }
 

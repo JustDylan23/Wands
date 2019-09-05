@@ -13,23 +13,33 @@ import java.util.List;
 
 public class WandsComplete extends BaseCompleter {
 
+    private final String[] itemNames;
+
+    public WandsComplete() {
+        PreSetItem[] items = PreSetItem.values();
+        itemNames = new String[items.length];
+        for (int i = 0; i < items.length; i++) {
+            itemNames[i] = items[i].toString();
+        }
+    }
+
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         String value = args[args.length - 1];
         if (args.length == 1)
             return validCompletions(value, "enable", "disable", "get", "set", "info", "spells", "getconfig");
         else if (args.length == 2) {
-            if (args[0].equalsIgnoreCase("spells")) {
-                String[] str = Arrays.stream(SpellType.values()).map(Enum::toString).toArray(String[]::new);
-                return validCompletions(value, str);
+            if ("spells".equalsIgnoreCase(args[0])) {
+                String[] completions = Arrays.stream(SpellType.values()).map(Enum::toString).toArray(String[]::new);
+                return validCompletions(value, completions);
             }
-            if (args[0].equalsIgnoreCase("get"))
-                return validCompletions(value, PreSetItem.getNames());
-            if (args[0].equalsIgnoreCase("set"))
+            if ("get".equalsIgnoreCase(args[0]))
+                return validCompletions(value, itemNames);
+            if ("set".equalsIgnoreCase(args[0]))
                 return validCompletions(value, "cooldown", "selfharm", "restriction");
         } else if (args.length == 3) {
-            if (args[0].equalsIgnoreCase("set"))
-                if (args[1].equalsIgnoreCase("selfharm") || args[1].equalsIgnoreCase("restriction"))
+            if ("set".equalsIgnoreCase(args[0]))
+                if ("selfharm".equalsIgnoreCase(args[1]) || "restriction".equalsIgnoreCase(args[1]))
                     return validCompletions(value, "true", "false");
         }
         return Collections.emptyList();

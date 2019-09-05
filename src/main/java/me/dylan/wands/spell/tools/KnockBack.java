@@ -1,4 +1,4 @@
-package me.dylan.wands.knockback;
+package me.dylan.wands.spell.tools;
 
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;

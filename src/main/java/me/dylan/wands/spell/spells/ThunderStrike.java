@@ -1,20 +1,20 @@
 package me.dylan.wands.spell.spells;
 
-import me.dylan.wands.knockback.KnockBack;
 import me.dylan.wands.spell.SpellData;
-import me.dylan.wands.spell.SpellEffectUtil;
-import me.dylan.wands.spell.types.Behaviour;
-import me.dylan.wands.spell.types.Behaviour.Target;
+import me.dylan.wands.spell.tools.KnockBack;
+import me.dylan.wands.spell.types.Behavior;
+import me.dylan.wands.spell.types.Behavior.Target;
 import me.dylan.wands.spell.types.Ray;
+import me.dylan.wands.spell.util.SpellEffectUtil;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 
 public class ThunderStrike implements SpellData {
-    private final Behaviour behaviour;
+    private final Behavior behavior;
 
     public ThunderStrike() {
-        this.behaviour = Ray.newBuilder(Target.MULTI)
+        this.behavior = Ray.newBuilder(Target.MULTI)
                 .setEffectDistance(40)
                 .setEntityDamage(8)
                 .setKnockBack(KnockBack.EXPLOSION)
@@ -41,7 +41,7 @@ public class ThunderStrike implements SpellData {
     }
 
     @Override
-    public Behaviour getBehaviour() {
-        return behaviour;
+    public Behavior getBehavior() {
+        return behavior;
     }
 }

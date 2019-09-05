@@ -1,19 +1,17 @@
 package me.dylan.wands.spell.types;
 
 import me.dylan.wands.Main;
-import me.dylan.wands.knockback.KnockBack;
-import me.dylan.wands.sound.SingularSound;
-import me.dylan.wands.sound.SoundEffect;
-import me.dylan.wands.spell.SpellEffectUtil;
-import me.dylan.wands.spell.types.Behaviour.AbstractBuilder.BaseProps;
-import me.dylan.wands.spell.types.Behaviour.AbstractBuilder.SpellInfo;
-import me.dylan.wands.util.Common;
+import me.dylan.wands.miscellaneous.utils.Common;
+import me.dylan.wands.spell.tools.KnockBack;
+import me.dylan.wands.spell.tools.SpellInfo;
+import me.dylan.wands.spell.tools.sound.SingularSound;
+import me.dylan.wands.spell.tools.sound.SoundEffect;
+import me.dylan.wands.spell.util.SpellEffectUtil;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -22,10 +20,9 @@ import java.util.List;
 import java.util.StringJoiner;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 /**
- * All spell types inherit the basic properties of the {@link Behaviour}.
+ * All spell types inherit the basic properties of the {@link Behavior}.
  * <p>
  * Configurable:
  * - Damage direct dealt to affected entities.
@@ -38,8 +35,8 @@ import java.util.function.Supplier;
  * BaseMeta's constructor requires {@link BaseProps}.
  * {@link BaseProps} can be acquired by implementing {@link AbstractBuilder}.
  */
-public abstract class Behaviour implements Listener {
-    protected final static Main plugin = Main.getPlugin();
+public abstract class Behavior {
+    protected static final Main plugin = Main.getPlugin();
 
     final int entityDamage;
     final float spellEffectRadius;
@@ -52,7 +49,7 @@ public abstract class Behaviour implements Listener {
 
     private final List<String> props = new ArrayList<>();
 
-    Behaviour(@NotNull BaseProps baseProps) {
+    Behavior(@NotNull BaseProps baseProps) {
         this.entityDamage = baseProps.entityDamage;
         this.spellEffectRadius = baseProps.spellEffectRadius;
         this.castSounds = baseProps.castSounds;
@@ -62,7 +59,7 @@ public abstract class Behaviour implements Listener {
         this.extendedEntityEffects = baseProps.extendedEntityEffects;
         this.extendedSpellRelativeEffects = baseProps.extendedSpellRelativeEffects;
 
-        if (!baseProps.isEmpty) {
+        if (!baseProps.isEmpty()) {
             addPropertyInfo("Entity damage", entityDamage);
             addPropertyInfo("Effect radius", spellEffectRadius, "meters");
             addPropertyInfo("Knock Back xy", knockBack.getXz());
@@ -71,9 +68,9 @@ public abstract class Behaviour implements Listener {
     }
 
     /**
-     * Use {@link #Behaviour(BaseProps)} when possible.
+     * Use {@link #Behavior(BaseProps)} when possible.
      */
-    protected Behaviour() {
+    protected Behavior() {
         this(BaseProps.EMPTY);
     }
 
@@ -97,12 +94,12 @@ public abstract class Behaviour implements Listener {
 
     @Override
     public final String toString() {
-        StringJoiner sj = new StringJoiner("\n");
+        StringJoiner stringJoiner = new StringJoiner("\n");
         Collections.sort(props);
-        for (String string : props) {
-            sj.add(string);
+        for (String prop : props) {
+            stringJoiner.add(prop);
         }
-        return sj.toString();
+        return stringJoiner.toString();
     }
 
     public enum Target {
@@ -116,16 +113,16 @@ public abstract class Behaviour implements Listener {
     }
 
     @SuppressWarnings("unused")
-    public static abstract class AbstractBuilder<T extends AbstractBuilder<T>> {
+    public abstract static class AbstractBuilder<T extends AbstractBuilder<T>> {
 
-        final BaseProps baseProps = new BaseProps();
+        final Behavior.BaseProps baseProps = new Behavior.BaseProps();
 
         AbstractBuilder() {
         }
 
         abstract T self();
 
-        public abstract Behaviour build();
+        public abstract @NotNull Behavior build();
 
         public T setCastSound(SoundEffect soundPlayer) {
             baseProps.castSounds = soundPlayer;
@@ -170,7 +167,6 @@ public abstract class Behaviour implements Listener {
         public T extendedSetSpellRelativeEffects(BiConsumer<Location, SpellInfo> effects) {
             baseProps.extendedSpellRelativeEffects = effects;
             return self();
-
         }
 
         public T setKnockBack(float xz, float y) {
@@ -188,39 +184,27 @@ public abstract class Behaviour implements Listener {
             return self();
         }
 
-        public static class SpellInfo {
-            public final Player caster;
-            public final Location origination;
-            public final World world;
-            public final Supplier<Location> spellLocation;
+    }
 
-            public SpellInfo(@NotNull Player caster, @NotNull Location origination, @NotNull Supplier<Location> spellLocation) {
-                this.caster = caster;
-                this.origination = origination;
-                this.world = origination.getWorld();
-                this.spellLocation = spellLocation;
+    private static class BaseProps {
+        static final BaseProps EMPTY = new BaseProps() {
+            @Override
+            public boolean isEmpty() {
+                return true;
             }
-        }
+        };
 
-        static class BaseProps {
-            private final static BaseProps EMPTY = new BaseProps(true);
-            private final boolean isEmpty;
-            private int entityDamage = 0;
-            private float spellEffectRadius;
-            private SoundEffect castSounds = SoundEffect.NONE;
-            private BiConsumer<Location, World> spellRelativeEffects = Common.emptyBiConsumer();
-            private BiConsumer<Location, SpellInfo> extendedSpellRelativeEffects = Common.emptyBiConsumer();
-            private Consumer<LivingEntity> entityEffects = Common.emptyConsumer();
-            private BiConsumer<LivingEntity, SpellInfo> extendedEntityEffects = Common.emptyBiConsumer();
-            private KnockBack knockBack = KnockBack.NONE;
+        int entityDamage;
+        float spellEffectRadius;
+        SoundEffect castSounds = SoundEffect.NONE;
+        BiConsumer<Location, World> spellRelativeEffects = Common.emptyBiConsumer();
+        BiConsumer<Location, SpellInfo> extendedSpellRelativeEffects = Common.emptyBiConsumer();
+        Consumer<LivingEntity> entityEffects = Common.emptyConsumer();
+        BiConsumer<LivingEntity, SpellInfo> extendedEntityEffects = Common.emptyBiConsumer();
+        KnockBack knockBack = KnockBack.NONE;
 
-            private BaseProps() {
-                this.isEmpty = false;
-            }
-
-            private BaseProps(boolean isEmpty) {
-                this.isEmpty = isEmpty;
-            }
+        boolean isEmpty() {
+            return false;
         }
     }
 }

@@ -1,23 +1,23 @@
 package me.dylan.wands.spell.spells;
 
-import me.dylan.wands.sound.CompoundSound;
 import me.dylan.wands.spell.SpellData;
-import me.dylan.wands.spell.types.Behaviour;
+import me.dylan.wands.spell.tools.sound.CompoundSound;
+import me.dylan.wands.spell.types.Behavior;
 import me.dylan.wands.spell.types.Wave;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 
 public class FlameWave implements SpellData {
-    private final Behaviour behaviour;
+    private final Behavior behavior;
 
     public FlameWave() {
-        this.behaviour = Wave.newBuilder()
+        this.behavior = Wave.newBuilder()
                 .setSpellEffectRadius(2.5F)
                 .setEntityDamage(6)
                 .setEffectDistance(20)
                 .setCastSound(CompoundSound.chain()
                         .add(Sound.ENTITY_BLAZE_SHOOT)
-                        .add(Sound.ENTITY_ENDER_DRAGON_FLAP, 1, 0, 3, 3, 3, 3, 3)
+                        .addAll(Sound.ENTITY_ENDER_DRAGON_FLAP, 1, 0, 3, 3, 3, 3, 3)
                 )
                 .setEntityEffects(entity -> entity.setFireTicks(140))
                 .setSpellRelativeEffects((loc, world) -> {
@@ -30,7 +30,7 @@ public class FlameWave implements SpellData {
     }
 
     @Override
-    public Behaviour getBehaviour() {
-        return behaviour;
+    public Behavior getBehavior() {
+        return behavior;
     }
 }

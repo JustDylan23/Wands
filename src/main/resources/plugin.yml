@@ -13,11 +13,17 @@ commands:
     permission: wands.command
   createwand:
     aliases: [cw]
-    description: Transform held item into a wand.
+    description: Transforms held item into a wand.
     usage: /createwand <name>
     permission: wands.create
+    # todo implement
+  undowandcreation:
+    aliases: [uw]
+    description: Transforms wand into normal item.
+    usage: /undowandcreation
+    permission: wands.create
   bind:
-    description: Bind spells to a wand.
+    description: Binds spells to a wand.
     usage: /bind <spell>
     permission: wands.bind
   bindall:
@@ -25,7 +31,7 @@ commands:
     usage: /bindall <spell>
     permission: wands.bind
   unbind:
-    description: Unbind spells from a wand.
+    description: Unbinds spells from a wand.
     usage: /unbind <spell>
     permission: wands.unbind
   unbindall:

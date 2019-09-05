@@ -1,11 +1,11 @@
 package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.Main;
+import me.dylan.wands.miscellaneous.utils.Common;
 import me.dylan.wands.spell.SpellData;
-import me.dylan.wands.spell.types.Behaviour;
-import me.dylan.wands.spell.types.Behaviour.Target;
+import me.dylan.wands.spell.types.Behavior;
+import me.dylan.wands.spell.types.Behavior.Target;
 import me.dylan.wands.spell.types.Ray;
-import me.dylan.wands.util.Common;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -16,13 +16,13 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class Freeze implements SpellData {
-    private final String metaKey = "FREEZE_SPELL";
-    private final Behaviour behaviour;
+    private static final String metaKey = "FREEZE_SPELL";
+    private final Behavior behavior;
     private final PotionEffect slow = new PotionEffect(PotionEffectType.SLOW, 120, 4, false);
 
 
     public Freeze() {
-        this.behaviour = Ray.newBuilder(Target.SINGLE)
+        this.behavior = Ray.newBuilder(Target.SINGLE)
                 .setRayWidth(1)
                 .setEntityDamage(6)
                 .setMetersPerTick(2)
@@ -37,8 +37,8 @@ public class Freeze implements SpellData {
     }
 
     @Override
-    public Behaviour getBehaviour() {
-        return behaviour;
+    public Behavior getBehavior() {
+        return behavior;
     }
 
     private void freeze(LivingEntity entity) {
@@ -49,7 +49,7 @@ public class Freeze implements SpellData {
         entity.setMetadata(metaKey, Common.METADATA_VALUE_TRUE);
         entity.addPotionEffect(slow, true);
         new BukkitRunnable() {
-            int count = 0;
+            int count;
 
             @Override
             public void run() {

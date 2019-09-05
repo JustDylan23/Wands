@@ -1,6 +1,7 @@
-package me.dylan.wands.spell;
+package me.dylan.wands.spell.tools;
 
-import me.dylan.wands.util.ItemUtil;
+import me.dylan.wands.miscellaneous.utils.ItemUtil;
+import me.dylan.wands.spell.SpellType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
@@ -15,7 +16,7 @@ public class SpellCompound {
     public SpellCompound(ItemStack itemStack) {
         Optional<String> persistentData = ItemUtil.getPersistentData(itemStack, TAG_SPELLS_LIST, PersistentDataType.STRING);
         if (persistentData.isPresent()) {
-            for (String spell : persistentData.get().split(", ")) {
+            for (String spell : persistentData.get().split(",")) {
                 SpellType spellType = SpellType.getSpellType(spell);
                 if (spellType != null) {
                     spells.add(spellType);
@@ -25,10 +26,10 @@ public class SpellCompound {
     }
 
     public void apply(ItemStack itemStack) {
-        if (spells.size() == 0) {
+        if (spells.isEmpty()) {
             ItemUtil.removePersistentData(itemStack, TAG_SPELLS_LIST);
         } else {
-            StringJoiner stringJoiner = new StringJoiner(", ");
+            StringJoiner stringJoiner = new StringJoiner(",");
             spells.forEach(spell -> stringJoiner.add(spell.toString()));
             ItemUtil.setPersistentData(itemStack, TAG_SPELLS_LIST, PersistentDataType.STRING, stringJoiner.toString());
         }
@@ -48,6 +49,7 @@ public class SpellCompound {
         return true;
     }
 
+    @SuppressWarnings("OverloadedVarargsMethod")
     public void add(@NotNull SpellType... spells) {
         for (SpellType spell : spells) {
             add(spell);

@@ -18,6 +18,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashSet;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 public final class Main extends JavaPlugin {
@@ -50,6 +51,7 @@ public final class Main extends JavaPlugin {
             log("§cDisabling plugin...");
             return;
         }
+
         plugin = this;
 
         addCommand("wands", new Wands(), new WandsComplete());
@@ -82,17 +84,13 @@ public final class Main extends JavaPlugin {
 
     private void addCommand(String command, CommandExecutor executor, TabCompleter tabCompleter) {
         PluginCommand cmd = getCommand(command);
-        if (cmd == null) throw new NullPointerException("Command " + command + "was not found in plugin.yml");
+        if (cmd == null) throw new NoSuchElementException("Command " + command + "was not found in plugin.yml");
         cmd.setExecutor(executor);
         cmd.setTabCompleter(tabCompleter);
     }
 
     public void addDisableLogic(Runnable runnable) {
         this.disableLogic.add(runnable);
-    }
-
-    public void removeDisableLogic(Runnable runnable) {
-        this.disableLogic.remove(runnable);
     }
 
     public ConfigurableData getConfigurableData() {

@@ -2,13 +2,13 @@ package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.ListenerRegistry;
 import me.dylan.wands.Main;
-import me.dylan.wands.sound.CompoundSound;
+import me.dylan.wands.miscellaneous.utils.Common;
 import me.dylan.wands.spell.SpellData;
-import me.dylan.wands.spell.SpellEffectUtil;
-import me.dylan.wands.spell.types.Behaviour;
-import me.dylan.wands.spell.types.Behaviour.AbstractBuilder.SpellInfo;
+import me.dylan.wands.spell.tools.SpellInfo;
+import me.dylan.wands.spell.tools.sound.CompoundSound;
+import me.dylan.wands.spell.types.Behavior;
 import me.dylan.wands.spell.types.Spark;
-import me.dylan.wands.util.Common;
+import me.dylan.wands.spell.util.SpellEffectUtil;
 import org.bukkit.*;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.AbstractArrow.PickupStatus;
@@ -27,7 +27,7 @@ import java.util.Set;
 import java.util.UUID;
 
 public class CorruptedRain implements SpellData, Listener {
-    private final Behaviour behaviour;
+    private final Behavior behavior;
     private final PotionEffect wither = new PotionEffect(PotionEffectType.WITHER, 40, 2, true);
     private final PotionEffect blind = new PotionEffect(PotionEffectType.BLINDNESS, 160, 0, false);
     private final BlockData obsidian = Material.OBSIDIAN.createBlockData();
@@ -37,11 +37,11 @@ public class CorruptedRain implements SpellData, Listener {
 
     public CorruptedRain() {
         ListenerRegistry.addListener(this);
-        this.behaviour = Spark.newBuilder(Behaviour.Target.MULTI)
+        this.behavior = Spark.newBuilder(Behavior.Target.MULTI)
                 .setCastSound(CompoundSound.chain()
                         .add(Sound.ENTITY_ARROW_SHOOT)
                         .add(Sound.BLOCK_STONE_PLACE)
-                        .add(Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1, 1)
+                        .addAll(Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1, 1)
                 )
                 .setEffectDistance(30)
                 .extendedSetSpellRelativeEffects(this::spawnArrows)
@@ -51,8 +51,8 @@ public class CorruptedRain implements SpellData, Listener {
     }
 
     @Override
-    public Behaviour getBehaviour() {
-        return behaviour;
+    public Behavior getBehavior() {
+        return behavior;
     }
 
     private void spawnArrows(Location location, SpellInfo spellInfo) {
@@ -63,7 +63,7 @@ public class CorruptedRain implements SpellData, Listener {
         world.spawnParticle(Particle.BLOCK_CRACK, particleLoc, 50, 0.8, 0.3, 0.8, 0, obsidian, true);
         world.spawnParticle(Particle.SMOKE_NORMAL, particleLoc, 70, 1, 1, 1, 0, null, true);
         new BukkitRunnable() {
-            int count = 0;
+            int count;
 
             @Override
             public void run() {

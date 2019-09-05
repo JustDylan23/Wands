@@ -1,8 +1,8 @@
 package me.dylan.wands.spell.spells;
 
-import me.dylan.wands.sound.CompoundSound;
 import me.dylan.wands.spell.SpellData;
-import me.dylan.wands.spell.types.Behaviour;
+import me.dylan.wands.spell.tools.sound.CompoundSound;
+import me.dylan.wands.spell.types.Behavior;
 import me.dylan.wands.spell.types.Wave;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -11,17 +11,17 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class BloodWave implements SpellData {
-    private final Behaviour behaviour;
+    private final Behavior behavior;
     private final PotionEffect wither = new PotionEffect(PotionEffectType.WITHER, 80, 4, false);
 
     public BloodWave() {
-        this.behaviour = Wave.newBuilder()
+        this.behavior = Wave.newBuilder()
                 .setEffectDistance(30)
                 .setSpellEffectRadius(2.0F)
                 .setEntityDamage(5)
                 .setCastSound(CompoundSound.chain()
                         .add(Sound.ENTITY_FIREWORK_ROCKET_BLAST)
-                        .add(Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, 1, 20, 5, 3)
+                        .addAll(Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, 1, 20, 5, 3)
                 )
                 .setEntityEffects(entity -> entity.addPotionEffect(wither, true))
                 .setSpellRelativeEffects((loc, world) -> {
@@ -33,7 +33,7 @@ public class BloodWave implements SpellData {
     }
 
     @Override
-    public Behaviour getBehaviour() {
-        return behaviour;
+    public Behavior getBehavior() {
+        return behavior;
     }
 }

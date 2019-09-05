@@ -4,15 +4,15 @@ import me.dylan.wands.spell.SpellData;
 import me.dylan.wands.spell.types.Aura;
 import me.dylan.wands.spell.types.Aura.AuraParticleType;
 import me.dylan.wands.spell.types.Aura.EffectFrequency;
-import me.dylan.wands.spell.types.Behaviour;
+import me.dylan.wands.spell.types.Behavior;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 
 public class MephiAura implements SpellData {
-    private final Behaviour behaviour;
+    private final Behavior behavior;
 
     public MephiAura() {
-        this.behaviour = Aura.newBuilder(EffectFrequency.CONSTANT)
+        this.behavior = Aura.newBuilder(EffectFrequency.CONSTANT)
                 .setSpellEffectRadius(3.5f)
                 .setEffectDuration(160)
                 .setAuraParticleType(AuraParticleType.CIRCLE)
@@ -26,7 +26,7 @@ public class MephiAura implements SpellData {
     }
 
     @Override
-    public Behaviour getBehaviour() {
-        return behaviour;
+    public Behavior getBehavior() {
+        return behavior;
     }
 }

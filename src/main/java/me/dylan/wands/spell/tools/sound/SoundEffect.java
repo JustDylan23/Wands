@@ -1,4 +1,4 @@
-package me.dylan.wands.sound;
+package me.dylan.wands.spell.tools.sound;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;

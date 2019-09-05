@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.World;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.BiConsumer;
 
@@ -48,7 +49,7 @@ public enum BrowseParticle {
         this.consumer = consumer;
     }
 
-    void spawn(Location location) {
+    public void displayAt(@NotNull Location location) {
         location.add(0, 1, 0);
         consumer.accept(location, location.getWorld());
     }

@@ -1,6 +1,6 @@
-package me.dylan.wands.sound;
+package me.dylan.wands.spell.tools.sound;
 
-import me.dylan.wands.spell.SpellEffectUtil;
+import me.dylan.wands.spell.util.SpellEffectUtil;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
@@ -8,7 +8,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
-public class RepeatableSound implements SoundEffect {
+public final class RepeatableSound implements SoundEffect {
     private final Sound sound;
     private final float pitch;
     private final int[] repeat;
@@ -19,8 +19,7 @@ public class RepeatableSound implements SoundEffect {
         this.repeat = repeat;
     }
 
-    @NotNull
-    public static RepeatableSound from(Sound sound, float pitch, int... repeat) {
+    public static @NotNull RepeatableSound from(Sound sound, float pitch, int... repeat) {
         return new RepeatableSound(sound, pitch, repeat);
     }
 
