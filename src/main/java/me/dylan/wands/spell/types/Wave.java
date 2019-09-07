@@ -1,11 +1,12 @@
 package me.dylan.wands.spell.types;
 
 import me.dylan.wands.miscellaneous.utils.Common;
+import me.dylan.wands.spell.tools.SpellInfo;
 import me.dylan.wands.spell.util.SpellEffectUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
@@ -40,31 +41,36 @@ public final class Wave extends Behavior {
         Vector direction = player.getLocation().getDirection().normalize();
         castSounds.play(player.getLocation().add(direction.clone().multiply(5)));
         Location origin = player.getEyeLocation();
-        new BukkitRunnable() {
+        Location spellLoc = origin.clone();
+        SpellInfo spellInfo = new SpellInfo(player, origin, spellLoc);
+        BukkitRunnable bukkitRunnable = new BukkitRunnable() {
             private int count;
 
             @Override
             public void run() {
                 count++;
                 if (count >= effectDistance) this.cancel();
-                Location loc = origin.add(direction).clone();
-                if (!loc.getBlock().isPassable()) {
+                spellLoc.add(direction);
+                if (!spellLoc.getBlock().isPassable()) {
                     this.cancel();
                     return;
                 }
-                spellRelativeEffects.accept(loc, loc.getWorld());
-                for (LivingEntity livingEntity : SpellEffectUtil.getNearbyLivingEntities(player, loc, entity -> !entity.hasMetadata(tagWaveSpell), spellEffectRadius)) {
-                    livingEntity.setMetadata(tagWaveSpell, Common.METADATA_VALUE_TRUE);
+                spellRelativeEffects.accept(spellLoc, spellInfo);
+                for (LivingEntity livingEntity : SpellEffectUtil.getNearbyLivingEntities(player, spellLoc, entity -> !entity.hasMetadata(tagWaveSpell), spellEffectRadius)) {
+                    livingEntity.setMetadata(tagWaveSpell, Common.getMetadataValueTrue());
                     SpellEffectUtil.damageEffect(player, livingEntity, entityDamage, weaponName);
-                    entityEffects.accept(livingEntity);
-                    Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                        if (livingEntity.isValid()) {
-                            livingEntity.removeMetadata(tagWaveSpell, plugin);
-                        }
+                    entityEffects.accept(livingEntity, spellInfo);
+                    for (PotionEffect potionEffect : potionEffects) {
+                        livingEntity.addPotionEffect(potionEffect, true);
+                    }
+                    Common.runTaskLater(() -> {
+                        if (livingEntity.isValid())
+                            Common.removeMetaData(livingEntity, tagWaveSpell);
                     }, effectDistance - count);
                 }
             }
-        }.runTaskTimer(plugin, 1, 1);
+        };
+        Common.runTaskTimer(bukkitRunnable, 1, 1);
         return true;
     }
 

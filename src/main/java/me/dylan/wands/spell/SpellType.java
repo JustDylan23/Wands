@@ -1,6 +1,7 @@
 package me.dylan.wands.spell;
 
 import me.dylan.wands.spell.spells.*;
+import me.dylan.wands.spell.types.Behavior;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -56,10 +57,12 @@ public enum SpellType {
     FLOATING_PASSAGE(new FloatingPassage()),
     SPIRAL_CLOUD_PASSAGE(new SpiralCloudPassage());
 
-    public final SpellData spellData;
+    public final Behavior behavior;
+    public final String name;
 
-    SpellType(@NotNull SpellData spellData) {
-        this.spellData = spellData;
+    SpellType(@NotNull Castable castable) {
+        this.behavior = castable.createBehaviour();
+        this.name = castable.getDisplayName();
     }
 
     @Nullable
@@ -69,9 +72,5 @@ public enum SpellType {
         } catch (IllegalArgumentException e) {
             return null;
         }
-    }
-
-    public String getName() {
-        return spellData.getDisplayName();
     }
 }

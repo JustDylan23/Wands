@@ -1,10 +1,8 @@
 package me.dylan.wands;
 
-import me.dylan.wands.customitems.AssassinDagger;
-import me.dylan.wands.customitems.CursedBow;
-import me.dylan.wands.customitems.MortalBlade;
 import me.dylan.wands.spell.BrowseParticle;
 import me.dylan.wands.spell.ItemBuilder;
+import me.dylan.wands.spell.ItemTag;
 import me.dylan.wands.spell.SpellType;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -23,7 +21,7 @@ public enum PreSetItem {
             ItemBuilder.from(Material.MUSIC_DISC_MALL)
                     .named("&dAssassin's &8Dagger")
                     .hideFlags()
-                    .tag(AssassinDagger.ID_TAG)
+                    .tag(ItemTag.IS_DAGGER)
                     .blockWandRegistration()
                     .build()
     ),
@@ -33,7 +31,7 @@ public enum PreSetItem {
                     .unbreakable()
                     .hideFlags()
                     .enchant(Enchantment.ARROW_INFINITE, 1, true)
-                    .tag(CursedBow.ID_TAG)
+                    .tag(ItemTag.IS_CURSED_BOW)
                     .blockWandRegistration()
                     .build()
     ),
@@ -42,8 +40,11 @@ public enum PreSetItem {
                     .named("&0&k&l|| &cMortal Blade &0&k&l||")
                     .unbreakable()
                     .hideFlags()
-                    .tag(MortalBlade.ID_TAG)
-                    .blockWandRegistration()
+                    .withSpells(
+                            SpellType.ONE_MIND,
+                            SpellType.SPIRIT_THRUST
+                    )
+                    .withSpellBrowseParticles(BrowseParticle.MORTAL_BLADE)
                     .build()
     ),
     MAGIC_WAND(
@@ -156,7 +157,7 @@ public enum PreSetItem {
     }
 
     public static void openInventory(Player player) {
-        Inventory inventory = Bukkit.createInventory(null, InventoryType.SHULKER_BOX, Main.PREFIX);
+        Inventory inventory = Bukkit.createInventory(null, InventoryType.SHULKER_BOX, WandsPlugin.PREFIX);
         for (PreSetItem preSetItem : PreSetItem.values()) {
             inventory.addItem(preSetItem.itemStack);
         }

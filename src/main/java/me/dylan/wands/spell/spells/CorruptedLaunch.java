@@ -1,29 +1,26 @@
 package me.dylan.wands.spell.spells;
 
-import me.dylan.wands.Main;
-import me.dylan.wands.spell.SpellData;
+import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.types.Behavior;
 import me.dylan.wands.spell.types.Phase;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
 
-public class CorruptedLaunch implements SpellData {
-
-    private final Behavior behavior;
-
-    public CorruptedLaunch() {
-        this.behavior = Phase.newBuilder(Behavior.Target.MULTI)
+public class CorruptedLaunch implements Castable {
+    @Override
+    public Behavior createBehaviour() {
+        return Phase.newBuilder(Behavior.Target.MULTI)
                 .setSpellEffectRadius(2.8f)
                 .setEntityDamage(7)
-                .setEntityEffects(entity -> entity.setVelocity(new Vector(0, 1.2, 0)))
-                .setSpellRelativeEffects((loc, world) -> {
+                .setEntityEffects((entity, spellInfo) -> entity.setVelocity(new Vector(0, 1.2, 0)))
+                .setSpellRelativeEffects((loc, spellInfo) -> {
+                    World world = spellInfo.world();
                     world.spawnParticle(Particle.SMOKE_NORMAL, loc, 15, 0.5, 0.5, 0.5, 0.05, null, true);
                     world.spawnParticle(Particle.SPELL_MOB, loc, 10, 1, 1, 1, 1, null, true);
                     world.spawnParticle(Particle.SPELL_MOB_AMBIENT, loc, 30, 1, 1, 1, 1, null, true);
                     world.playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_BLAST, SoundCategory.MASTER, 4.0F, 1.0F);
-                    Bukkit.getScheduler().runTaskLater(Main.getPlugin(), () ->
-                            world.playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, SoundCategory.MASTER, 4.0F, 1.0F), 10L);
+                    MagicSpark.SPARK_SOUND.play(loc);
                 })
                 .setStagePassCondition(Entity::isOnGround)
                 .setEffectsDuringPhase(entity -> {
@@ -35,10 +32,5 @@ public class CorruptedLaunch implements SpellData {
                 })
                 .setEffectDistance(30)
                 .build();
-    }
-
-    @Override
-    public Behavior getBehavior() {
-        return behavior;
     }
 }

@@ -1,6 +1,6 @@
 package me.dylan.wands.commandhandler.commands;
 
-import me.dylan.wands.Main;
+import me.dylan.wands.WandsPlugin;
 import me.dylan.wands.commandhandler.BaseCommand;
 import me.dylan.wands.spell.tools.SpellCompound;
 import org.bukkit.command.Command;
@@ -19,7 +19,7 @@ public class BindAll extends BaseCommand {
                 SpellCompound compound = new SpellCompound(itemStack);
                 compound.addAll();
                 compound.apply(itemStack);
-                sender.sendMessage(Main.PREFIX + "Successfully added all spells to " + itemStack.getItemMeta().getDisplayName());
+                sender.sendMessage(WandsPlugin.PREFIX + "Successfully added all spells to " + itemStack.getItemMeta().getDisplayName());
             }
         }
         return true;

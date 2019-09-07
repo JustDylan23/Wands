@@ -1,6 +1,7 @@
 package me.dylan.wands.spell.spells;
 
-import me.dylan.wands.spell.SpellData;
+import me.dylan.wands.miscellaneous.utils.Common;
+import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.types.Behavior;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -8,16 +9,16 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public class SpiralCloudPassage extends Behavior implements SpellData {
+public class SpiralCloudPassage extends Behavior implements Castable {
 
     @Override
-    public Behavior getBehavior() {
+    public Behavior createBehaviour() {
         return this;
     }
 
     @Override
     public boolean cast(@NotNull Player player, @NotNull String weaponName) {
-        new BukkitRunnable() {
+        BukkitRunnable bukkitRunnable = new BukkitRunnable() {
             int count;
 
             @Override
@@ -32,7 +33,8 @@ public class SpiralCloudPassage extends Behavior implements SpellData {
                             ThreadLocalRandom.current().nextInt(0, 360), true);
                 }
             }
-        }.runTaskTimer(plugin, 0, 3);
+        };
+        Common.runTaskTimer(bukkitRunnable, 0, 3);
         return true;
     }
 }

@@ -1,12 +1,14 @@
 package me.dylan.wands.customitems;
 
-import me.dylan.wands.Main;
 import me.dylan.wands.MouseClickListeners.ClickEvent;
 import me.dylan.wands.MouseClickListeners.RightClickListener;
 import me.dylan.wands.miscellaneous.utils.Common;
-import me.dylan.wands.miscellaneous.utils.ItemUtil;
+import me.dylan.wands.spell.ItemTag;
 import me.dylan.wands.spell.util.SpellInteractionUtil;
-import org.bukkit.*;
+import org.bukkit.Location;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -18,8 +20,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
-import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -28,23 +29,17 @@ import org.bukkit.util.Vector;
 import java.util.UUID;
 
 public class AssassinDagger implements Listener, RightClickListener {
-
-    public static final String ID_TAG = "artifact-dagger";
-    private final Main plugin = Main.getPlugin();
     private final String tagLeap = UUID.randomUUID().toString();
     private final String tagSneak = UUID.randomUUID().toString();
     private final String tagSprint = UUID.randomUUID().toString();
     private final PotionEffect speed = new PotionEffect(PotionEffectType.SPEED, 10, 4, true);
 
-    public AssassinDagger() {
-        plugin.getMouseClickListeners().addRightClickListener(this);
+    private boolean hasDagger(Player player) {
+        return SpellInteractionUtil.canUse(player) && isDagger(player.getInventory().getItemInMainHand());
     }
 
-    private boolean hasDagger(Player player) {
-        PlayerInventory inventory = player.getInventory();
-        return SpellInteractionUtil.canUse(player)
-                && (ItemUtil.hasPersistentData(inventory.getItemInMainHand(), ID_TAG, PersistentDataType.BYTE)
-                || ItemUtil.hasPersistentData(inventory.getItemInOffHand(), ID_TAG, PersistentDataType.BYTE));
+    private boolean isDagger(ItemStack itemStack) {
+        return ItemTag.IS_DAGGER.isTagged(itemStack);
     }
 
     @EventHandler
@@ -62,8 +57,8 @@ public class AssassinDagger implements Listener, RightClickListener {
 
     private void sprintEffect(Player player) {
         if (!player.hasMetadata(tagSprint)) {
-            player.setMetadata(tagSprint, Common.METADATA_VALUE_TRUE);
-            new BukkitRunnable() {
+            player.setMetadata(tagSprint, Common.getMetadataValueTrue());
+            BukkitRunnable bukkitRunnable = new BukkitRunnable() {
                 public void run() {
                     if (player.isSprinting()) {
                         Location loc = player.getLocation();
@@ -72,11 +67,12 @@ public class AssassinDagger implements Listener, RightClickListener {
                         player.addPotionEffect(speed, true);
                     } else {
                         cancel();
-                        player.removeMetadata(tagSprint, plugin);
+                        Common.removeMetaData(player, tagSprint);
                         player.removePotionEffect(PotionEffectType.SPEED);
                     }
                 }
-            }.runTaskTimer(Main.getPlugin(), 1, 1);
+            };
+            Common.runTaskTimer(bukkitRunnable, 1, 1);
         }
     }
 
@@ -102,20 +98,21 @@ public class AssassinDagger implements Listener, RightClickListener {
         Player player = event.getPlayer();
         if (hasDagger(player)) {
             if (!player.hasMetadata(tagLeap) && !player.hasMetadata(tagSneak)) {
-                player.setMetadata(tagLeap, Common.METADATA_VALUE_TRUE);
+                player.setMetadata(tagLeap, Common.getMetadataValueTrue());
                 event.cancel();
                 player.getWorld().playSound(player.getLocation(), Sound.ENTITY_LLAMA_SWAG, SoundCategory.MASTER, 3.0F, 1.0F);
                 Vector direction = player.getLocation().getDirection().setY(0).normalize().setY(1.2);
                 player.setVelocity(direction);
-                new BukkitRunnable() {
+                BukkitRunnable bukkitRunnable = new BukkitRunnable() {
                     @Override
                     public void run() {
                         if (player.isOnGround()) {
-                            player.removeMetadata(tagLeap, plugin);
+                            Common.removeMetaData(player, tagLeap);
                             cancel();
                         }
                     }
-                }.runTaskTimer(Main.getPlugin(), 5, 1);
+                };
+                Common.runTaskTimer(bukkitRunnable, 5, 1);
             }
         }
     }
@@ -156,7 +153,7 @@ public class AssassinDagger implements Listener, RightClickListener {
 
     private void cover(Player player) {
         if (!player.hasMetadata(tagSneak)) {
-            player.setMetadata(tagSneak, Common.METADATA_VALUE_TRUE);
+            player.setMetadata(tagSneak, Common.getMetadataValueTrue());
             Location location = player.getLocation();
             location.getWorld().playSound(location, Sound.ENTITY_ZOMBIE_VILLAGER_CURE, 1.0f, 2.00f);
             location.getWorld().spawnParticle(Particle.SMOKE_LARGE, location, 15, 0.5, 0.2, 0.5, 0.1, null, true);
@@ -168,7 +165,7 @@ public class AssassinDagger implements Listener, RightClickListener {
     }
 
     private void uncover(Player player, String message) {
-        player.removeMetadata(tagSneak, plugin);
+        Common.removeMetaData(player, tagSneak);
         player.removePotionEffect(PotionEffectType.INVISIBILITY);
         player.removePotionEffect(PotionEffectType.REGENERATION);
         Location location = player.getLocation();
@@ -179,14 +176,12 @@ public class AssassinDagger implements Listener, RightClickListener {
     @EventHandler
     private void onChangeSlot(PlayerItemHeldEvent event) {
         Player player = event.getPlayer();
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            if (hasDagger(player)) {
-                if (player.isSneaking()) {
-                    cover(player);
-                } else if (player.isSprinting()) {
-                    sprintEffect(player);
-                }
+        if (isDagger(player.getInventory().getItem(event.getNewSlot()))) {
+            if (player.isSneaking()) {
+                cover(player);
+            } else if (player.isSprinting()) {
+                sprintEffect(player);
             }
-        }, 1);
+        }
     }
 }

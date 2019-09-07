@@ -1,6 +1,6 @@
 package me.dylan.wands.commandhandler.commands;
 
-import me.dylan.wands.Main;
+import me.dylan.wands.WandsPlugin;
 import me.dylan.wands.commandhandler.BaseCommand;
 import me.dylan.wands.spell.SpellType;
 import me.dylan.wands.spell.tools.SpellCompound;
@@ -25,12 +25,12 @@ public class Bind extends BaseCommand {
                         SpellCompound compound = new SpellCompound(itemStack);
                         if (compound.add(spellType)) {
                             compound.apply(itemStack);
-                            sender.sendMessage(Main.PREFIX + "Successfully added §7§l" + argument.toLowerCase() + "§r to " + itemName);
+                            sender.sendMessage(WandsPlugin.PREFIX + "Successfully added §7§l" + argument.toLowerCase() + "§r to " + itemName);
                         } else {
-                            sender.sendMessage(Main.PREFIX + itemName + "§r already contains §7§l" + argument);
+                            sender.sendMessage(WandsPlugin.PREFIX + itemName + "§r already contains §7§l" + argument);
                         }
                     } else {
-                        sender.sendMessage(Main.PREFIX + "§7§l" + argument + " §ris not a spell!");
+                        sender.sendMessage(WandsPlugin.PREFIX + "§7§l" + argument + " §ris not a spell!");
                     }
                 }
             } else return false;

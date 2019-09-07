@@ -1,6 +1,5 @@
 package me.dylan.wands.spell.spells;
 
-import me.dylan.wands.Main;
 import me.dylan.wands.miscellaneous.utils.Common;
 import me.dylan.wands.spell.tools.KnockBack;
 import me.dylan.wands.spell.util.SpellEffectUtil;
@@ -16,8 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public final class MortalDraw {
-    private static final Main plugin = Main.getPlugin();
+final class MortalDraw {
     private static final KnockBack knockBack = KnockBack.from(0.3f, 0.2f);
     private static final DustOptions RED = new DustOptions(Color.RED, 1);
     private static final DustOptions BLACK = new DustOptions(Color.BLACK, 1);
@@ -26,7 +24,7 @@ public final class MortalDraw {
         throw new UnsupportedOperationException("");
     }
 
-    public static void draw(@NotNull Player player, double degrees, double radius, int damage, int rotation, boolean fullCircle) {
+    static void draw(@NotNull Player player, double degrees, double radius, int damage, int rotation, boolean fullCircle) {
         String weaponName = player.getInventory().getItemInMainHand().getItemMeta().getDisplayName();
         Location location = player.getEyeLocation();
         World world = location.getWorld();
@@ -38,7 +36,7 @@ public final class MortalDraw {
         world.playSound(location.clone().add(newVector(rotation, radius, rotX, rotY, rotZ)),
                 Sound.ENTITY_WITHER_SHOOT, 2, 2);
 
-        new BukkitRunnable() {
+        BukkitRunnable bukkitRunnable = new BukkitRunnable() {
             final String uuid = UUID.randomUUID().toString();
             final List<LivingEntity> affectedEntities = new ArrayList<>();
             double angle = Math.toRadians(rotation);
@@ -50,7 +48,7 @@ public final class MortalDraw {
                 for (int i = 0; i < 8; ++i) {
                     if (pointsToDisplay < 0) {
                         cancel();
-                        affectedEntities.forEach(entity -> entity.removeMetadata(uuid, plugin));
+                        affectedEntities.forEach(entity -> Common.removeMetaData(entity, uuid));
                         return;
                     }
                     pointsToDisplay--;
@@ -78,7 +76,7 @@ public final class MortalDraw {
                                         entity -> {
                                             SpellEffectUtil.damageEffect(player, entity, damage, weaponName);
                                             knockBack.apply(entity, location);
-                                            entity.setMetadata(uuid, Common.METADATA_VALUE_TRUE);
+                                            entity.setMetadata(uuid, Common.getMetadataValueTrue());
                                             affectedEntities.add(entity);
                                         }
                                 );
@@ -87,7 +85,8 @@ public final class MortalDraw {
                     }
                 }
             }
-        }.runTaskTimer(plugin, 0, 1);
+        };
+        Common.runTaskTimer(bukkitRunnable, 0, 1);
     }
 
     private static @NotNull Vector newVector(double angle, double radius, double rotX, double rotY, double rotZ) {

@@ -1,35 +1,35 @@
 package me.dylan.wands.config;
 
 import me.dylan.wands.ListenerRegistry;
-import me.dylan.wands.Main;
 
 public class ConfigurableData {
-
     private static final String ALLOW_MAGIC_USE_KEY = "allow-magic-use";
     private static final String ALLOW_SELF_HARM = "allow-self-harm";
     private static final String MAGIC_COOLDOWN_TIME_KEY = "magic-cooldown-time";
-    private static final String CASTING_REQUIRES_PERMISSION = "casting-requires-permission";
-    private boolean isMagicUseAllowed;
-    private boolean allowSelfHarm;
-    private int magicCooldownTime;
-    private boolean doesSpellCastingRequiresPermission;
+    private static final String spellsRequirePermission = "casting-requires-permission";
 
-    public ConfigurableData() {
-        isMagicUseAllowed = ConfigUtil.getBoolean(ALLOW_MAGIC_USE_KEY);
-        allowSelfHarm = ConfigUtil.getBoolean(ALLOW_SELF_HARM);
-        magicCooldownTime = ConfigUtil.getInt(MAGIC_COOLDOWN_TIME_KEY);
-        doesSpellCastingRequiresPermission = ConfigUtil.getBoolean(CASTING_REQUIRES_PERMISSION);
+    private final ListenerRegistry listenerRegistry;
+    private boolean isMagicUseAllowed;
+    private boolean isSelfHarmAllowed;
+    private int magicCooldownTime;
+    private boolean doesSpellCastingRequirePermission;
+
+    public ConfigurableData(ListenerRegistry listenerRegistry) {
+        this.listenerRegistry = listenerRegistry;
+        this.isMagicUseAllowed = ConfigUtil.getBoolean(ALLOW_MAGIC_USE_KEY);
+        this.isSelfHarmAllowed = ConfigUtil.getBoolean(ALLOW_SELF_HARM);
+        this.magicCooldownTime = ConfigUtil.getInt(MAGIC_COOLDOWN_TIME_KEY);
+        this.doesSpellCastingRequirePermission = ConfigUtil.getBoolean(spellsRequirePermission);
     }
 
     public void allowMagicUse(boolean value) {
         if (this.isMagicUseAllowed != value) {
             this.isMagicUseAllowed = value;
             ConfigUtil.set(ALLOW_MAGIC_USE_KEY, value);
-            ListenerRegistry lg = Main.getPlugin().getListenerRegistry();
             if (value) {
-                lg.enableListeners();
+                listenerRegistry.enableListeners();
             } else {
-                lg.disableListeners();
+                listenerRegistry.disableListeners();
             }
         }
     }
@@ -48,21 +48,21 @@ public class ConfigurableData {
     }
 
     public void allowSelfHarm(boolean value) {
-        this.allowSelfHarm = value;
+        this.isSelfHarmAllowed = value;
         ConfigUtil.set(ALLOW_SELF_HARM, value);
     }
 
     public boolean isSelfHarmAllowed() {
-        return allowSelfHarm;
+        return isSelfHarmAllowed;
     }
 
     public void requirePermissionForCasting(boolean value) {
-        this.doesSpellCastingRequiresPermission = value;
-        ConfigUtil.set(CASTING_REQUIRES_PERMISSION, value);
+        this.doesSpellCastingRequirePermission = value;
+        ConfigUtil.set(spellsRequirePermission, value);
     }
 
     public boolean doesCastingRequirePermission() {
-        return doesSpellCastingRequiresPermission;
+        return doesSpellCastingRequirePermission;
     }
 }
 

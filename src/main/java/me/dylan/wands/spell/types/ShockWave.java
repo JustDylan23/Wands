@@ -3,10 +3,10 @@ package me.dylan.wands.spell.types;
 import me.dylan.wands.miscellaneous.utils.Common;
 import me.dylan.wands.spell.tools.SpellInfo;
 import me.dylan.wands.spell.util.SpellEffectUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
@@ -41,7 +41,7 @@ public final class ShockWave extends Behavior {
         castSounds.play(player);
         Location waveCenter = player.getLocation();
         SpellInfo spellInfo = new SpellInfo(player, waveCenter, waveCenter);
-        new BukkitRunnable() {
+        BukkitRunnable bukkitRunnable = new BukkitRunnable() {
             float currentRadius;
 
             @Override
@@ -51,19 +51,24 @@ public final class ShockWave extends Behavior {
                     cancel();
                 } else {
                     for (Location loc : SpellEffectUtil.getHorizontalCircleFrom(waveCenter, currentRadius, 0, 1)) {
-                        spellRelativeEffects.accept(loc, loc.getWorld());
-                        extendedSpellRelativeEffects.accept(loc, spellInfo);
+                        spellRelativeEffects.accept(loc, spellInfo);
                     }
+                    int cooldownTime = (int) ((waveRadius - currentRadius) * delay + 1);
+
                     for (LivingEntity entity : SpellEffectUtil.getNearbyLivingEntities(player, waveCenter, entity -> !entity.hasMetadata(tagShockWave), currentRadius, 2.0, currentRadius)) {
-                        entity.setMetadata(tagShockWave, Common.METADATA_VALUE_TRUE);
+                        entity.setMetadata(tagShockWave, Common.getMetadataValueTrue());
                         SpellEffectUtil.damageEffect(player, entity, entityDamage, weaponName);
-                        entityEffects.accept(entity);
+                        entityEffects.accept(entity, spellInfo);
+                        for (PotionEffect potionEffect : potionEffects) {
+                            entity.addPotionEffect(potionEffect, true);
+                        }
                         knockBack.apply(entity, waveCenter);
-                        Bukkit.getScheduler().runTaskLater(plugin, () -> entity.removeMetadata(tagShockWave, plugin), Math.round((waveRadius - currentRadius) * 2.0 * delay) + delay);
+                        Common.runTaskLater(() -> Common.removeMetaData(entity, tagShockWave), cooldownTime);
                     }
                 }
             }
-        }.runTaskTimer(plugin, 0, delay);
+        };
+        Common.runTaskTimer(bukkitRunnable, 0, delay);
         return true;
     }
 

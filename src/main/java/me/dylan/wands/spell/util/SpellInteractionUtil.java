@@ -1,6 +1,6 @@
 package me.dylan.wands.spell.util;
 
-import me.dylan.wands.Main;
+import me.dylan.wands.WandsPlugin;
 import me.dylan.wands.config.ConfigurableData;
 import me.dylan.wands.miscellaneous.utils.ItemUtil;
 import me.dylan.wands.spell.BrowseParticle;
@@ -14,6 +14,7 @@ import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -22,9 +23,16 @@ import java.util.Optional;
 
 public final class SpellInteractionUtil {
     public static final String TAG_SPELL_BROWSE_PARTICLES = "SpellBrowseParticles";
-    private static final ConfigurableData config = Main.getPlugin().getConfigurableData();
+    private static final ConfigurableData config;
+    private static final CooldownManager cooldownManager;
     private static final String TAG_SPELL_INDEX = "SpellIndex";
     private static final String TAG_SPELLS_LIST = "Spells";
+
+    static {
+        WandsPlugin wandsPlugin = JavaPlugin.getPlugin(WandsPlugin.class);
+        config = wandsPlugin.getConfigurableData();
+        cooldownManager = wandsPlugin.getCooldownManager();
+    }
 
     private SpellInteractionUtil() {
         throw new UnsupportedOperationException("Instantiating util class");
@@ -86,7 +94,7 @@ public final class SpellInteractionUtil {
         List<SpellType> spells = new SpellCompound(itemStack).getSpells();
         int length = spells.size();
         if (length == 0) {
-            player.sendActionBar(Main.PREFIX + "No spells are bound!");
+            player.sendActionBar(WandsPlugin.PREFIX + "No spells are bound!");
             return;
         }
 
@@ -102,21 +110,20 @@ public final class SpellInteractionUtil {
         setIndex(itemStack, index);
 
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.5F, 0.5F);
-        player.sendActionBar("§6Current spell: §7§l" + spells.get(index).spellData.getDisplayName());
+        player.sendActionBar("§6Current spell: §7§l" + spells.get(index).name);
         getSpellBrowseParticle(itemStack).ifPresent(particle -> particle.displayAt(player.getLocation()));
     }
 
     public static void showSelectedSpell(Player player, ItemStack itemStack) {
         SpellType spell = getSelectedSpell(itemStack);
         if (spell != null) {
-            player.sendActionBar("§6Current spell: §7§l" + spell.spellData.getDisplayName());
+            player.sendActionBar("§6Current spell: §7§l" + spell.name);
         }
     }
 
     public static void castSpell(@NotNull Player caster, String wandDisplayName, @NotNull SpellType spell) {
-        CooldownManager cooldownManager = Main.getPlugin().getCooldownManager();
         if (cooldownManager.canCast(caster)) {
-            Behavior behavior = spell.spellData.getBehavior();
+            Behavior behavior = spell.behavior;
             if (behavior != null) {
                 if (behavior.cast(caster, wandDisplayName)) {
                     cooldownManager.updateLastUsed(caster);

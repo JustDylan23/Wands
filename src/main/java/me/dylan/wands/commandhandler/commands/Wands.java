@@ -1,7 +1,7 @@
 package me.dylan.wands.commandhandler.commands;
 
-import me.dylan.wands.Main;
 import me.dylan.wands.PreSetItem;
+import me.dylan.wands.WandsPlugin;
 import me.dylan.wands.commandhandler.BaseCommand;
 import me.dylan.wands.config.ConfigurableData;
 import me.dylan.wands.miscellaneous.utils.ItemUtil;
@@ -20,6 +20,14 @@ import org.jetbrains.annotations.NotNull;
 import java.util.StringJoiner;
 
 public class Wands extends BaseCommand {
+    private final ConfigurableData configurableData;
+    private final String version;
+
+    public Wands(ConfigurableData configurableData, String version) {
+        this.configurableData = configurableData;
+        this.version = version;
+    }
+
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         switch (args.length) {
@@ -34,14 +42,14 @@ public class Wands extends BaseCommand {
                         return true;
                     case "disable":
                         if (checkPerm(sender, "toggle")) {
-                            Main.getPlugin().getConfigurableData().allowMagicUse(false);
-                            sender.sendMessage(Main.PREFIX + "All wands are now disabled.");
+                            configurableData.allowMagicUse(false);
+                            sender.sendMessage(WandsPlugin.PREFIX + "All wands are now disabled.");
                         }
                         return true;
                     case "enable":
                         if (checkPerm(sender, "toggle")) {
-                            Main.getPlugin().getConfigurableData().allowMagicUse(true);
-                            sender.sendMessage(Main.PREFIX + "All wands are now enabled.");
+                            configurableData.allowMagicUse(true);
+                            sender.sendMessage(WandsPlugin.PREFIX + "All wands are now enabled.");
                         }
                         return true;
                     case "spells":
@@ -49,7 +57,7 @@ public class Wands extends BaseCommand {
                             SpellType[] spellTypes = SpellType.values();
                             StringJoiner stringJoiner = new StringJoiner(", ");
                             for (SpellType spellType : spellTypes) {
-                                stringJoiner.add(spellType.getName());
+                                stringJoiner.add(spellType.name);
                             }
                             sender.sendMessage("§6Spells (" + spellTypes.length + "):§r " + stringJoiner);
                         }
@@ -57,19 +65,19 @@ public class Wands extends BaseCommand {
                     case "info":
                         sender.sendMessage("§e---- §6Wands§e ----");
                         sender.sendMessage("§6Created by: §e_JustDylan_");
-                        sender.sendMessage("§6Current version:§e " + Main.getPlugin().getDescription().getVersion());
+                        sender.sendMessage("§6Current version:§e " + version);
                         return true;
                     case "get":
                         if (checkPerm(sender, "get")) {
                             if (sender instanceof Player) {
                                 PreSetItem.openInventory((Player) sender);
                             } else
-                                sender.sendMessage(Main.PREFIX + "You must be a player in order to perform this action!");
+                                sender.sendMessage(WandsPlugin.PREFIX + "You must be a player in order to perform this action!");
                         }
                         return true;
                     case "getconfig":
                         if (checkPerm(sender, "viewconfig")) {
-                            ConfigurableData cd = Main.getPlugin().getConfigurableData();
+                            ConfigurableData cd = configurableData;
                             sender.sendMessage("§6magic cooldown time:§r " + (cd.getMagicCooldownTime() / 1000) + " seconds");
                             sender.sendMessage("§6allow magic use:§r " + (cd.isMagicUseAllowed() ? "§a" : "§c") + cd.isMagicUseAllowed());
                             sender.sendMessage("§6allow self harm use:§r " + (cd.isSelfHarmAllowed() ? "§a" : "§c") + cd.isSelfHarmAllowed());
@@ -101,10 +109,10 @@ public class Wands extends BaseCommand {
                             if (sender instanceof Player)
                                 ((InventoryHolder) sender).getInventory().addItem(value.getItemStack());
                             else {
-                                sender.sendMessage(Main.PREFIX + "You must be a player in order to perform this action!");
+                                sender.sendMessage(WandsPlugin.PREFIX + "You must be a player in order to perform this action!");
                             }
                         } catch (IllegalArgumentException e) {
-                            sender.sendMessage(Main.PREFIX + "Wand does not exist!");
+                            sender.sendMessage(WandsPlugin.PREFIX + "Wand does not exist!");
                         }
                     }
                     return true;
@@ -114,14 +122,14 @@ public class Wands extends BaseCommand {
                         SpellType spellType;
                         try {
                             spellType = SpellType.valueOf(args[1].toUpperCase());
-                            Behavior behavior = spellType.spellData.getBehavior();
+                            Behavior behavior = spellType.behavior;
                             if (behavior == null) {
-                                sender.sendMessage(Main.PREFIX + "Spell has no behaviour!");
+                                sender.sendMessage(WandsPlugin.PREFIX + "Spell has no behaviour!");
                             } else {
                                 sender.sendMessage("§e ---- §6" + args[1].toUpperCase() + "§e ----§r\n" + behavior);
                             }
                         } catch (IllegalArgumentException e) {
-                            sender.sendMessage(Main.PREFIX + "Spell does not exist!");
+                            sender.sendMessage(WandsPlugin.PREFIX + "Spell does not exist!");
                         }
                     }
                     return true;
@@ -136,16 +144,16 @@ public class Wands extends BaseCommand {
                                 int x = i * 1000;
                                 if (args[2].length() <= 2) {
                                     if (i >= 0) {
-                                        Main.getPlugin().getConfigurableData().setMagicCooldownTime(x);
-                                        sender.sendMessage(Main.PREFIX + "Cooldown has been set to " + i + " second" + ((i != 1) ? "s" : ""));
+                                        configurableData.setMagicCooldownTime(x);
+                                        sender.sendMessage(WandsPlugin.PREFIX + "Cooldown has been set to " + i + " second" + ((i != 1) ? "s" : ""));
                                     } else {
-                                        sender.sendMessage(Main.PREFIX + "Number can't be negative!");
+                                        sender.sendMessage(WandsPlugin.PREFIX + "Number can't be negative!");
                                     }
                                 } else {
-                                    sender.sendMessage(Main.PREFIX + "Max value is 99");
+                                    sender.sendMessage(WandsPlugin.PREFIX + "Max value is 99");
                                 }
                             } catch (NumberFormatException e) {
-                                sender.sendMessage(Main.PREFIX + "Cooldown can only be set to a full number!");
+                                sender.sendMessage(WandsPlugin.PREFIX + "Cooldown can only be set to a full number!");
                             }
                         }
                         return true;
@@ -153,22 +161,22 @@ public class Wands extends BaseCommand {
                         if (checkPerm(sender, "setselfharm")) {
                             boolean result = Boolean.parseBoolean(args[2]);
                             if (result) {
-                                sender.sendMessage(Main.PREFIX + "Player can now harm himself with wands");
+                                sender.sendMessage(WandsPlugin.PREFIX + "Player can now harm himself with wands");
                             } else {
-                                sender.sendMessage(Main.PREFIX + "Player can no longer harm himself with wands");
+                                sender.sendMessage(WandsPlugin.PREFIX + "Player can no longer harm himself with wands");
                             }
-                            Main.getPlugin().getConfigurableData().allowSelfHarm(result);
+                            configurableData.allowSelfHarm(result);
                         }
                         return true;
                     } else if ("restriction".equalsIgnoreCase(args[1])) {
                         if (checkPerm(sender, "restrict")) {
                             boolean result = Boolean.parseBoolean(args[2]);
                             if (result) {
-                                sender.sendMessage(Main.PREFIX + "Only players with §7wands.use §rcan use wands now");
+                                sender.sendMessage(WandsPlugin.PREFIX + "Only players with §7wands.use §rcan use wands now");
                             } else {
-                                sender.sendMessage(Main.PREFIX + "All players can use wands now");
+                                sender.sendMessage(WandsPlugin.PREFIX + "All players can use wands now");
                             }
-                            Main.getPlugin().getConfigurableData().requirePermissionForCasting(result);
+                            configurableData.requirePermissionForCasting(result);
                         }
                         return true;
                     }

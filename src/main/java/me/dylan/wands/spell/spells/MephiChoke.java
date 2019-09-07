@@ -1,7 +1,8 @@
 package me.dylan.wands.spell.spells;
 
-import me.dylan.wands.Main;
-import me.dylan.wands.spell.SpellData;
+import me.dylan.wands.miscellaneous.utils.Common;
+import me.dylan.wands.spell.Castable;
+import me.dylan.wands.spell.tools.SpellInfo;
 import me.dylan.wands.spell.types.Behavior;
 import me.dylan.wands.spell.types.Behavior.Target;
 import me.dylan.wands.spell.types.Phase;
@@ -13,31 +14,29 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-public class MephiChoke implements SpellData {
-    private final Behavior behavior;
-    private final PotionEffect wither = new PotionEffect(PotionEffectType.WITHER, 100, 2);
-
-    public MephiChoke() {
-        this.behavior = Phase.newBuilder(Target.SINGLE)
+public class MephiChoke implements Castable {
+    public Behavior createBehaviour() {
+        return Phase.newBuilder(Target.SINGLE)
                 .setCastSound(Sound.ENTITY_PHANTOM_BITE)
                 .setEffectDistance(30)
                 .setSpellEffectRadius(2.8F)
-                .setSpellRelativeEffects((loc, world) -> {
+                .setSpellRelativeEffects((loc, spellInfo) -> {
+                    World world = spellInfo.world();
                     world.spawnParticle(Particle.SMOKE_NORMAL, loc, 5, 0.8, 0.8, 0.8, 0.1, null, true);
                     world.spawnParticle(Particle.SMOKE_LARGE, loc, 3, 0.8, 0.8, 0.8, 0.1, null, true);
                     world.spawnParticle(Particle.VILLAGER_HAPPY, loc, 5, 0.8, 0.8, 0.8, 0.1, null, true);
                 })
                 .setStagePassCondition(Entity::isOnGround)
+                .setPotionEffects(new PotionEffect(PotionEffectType.WITHER, 100, 2))
                 .setEntityEffects(this::entityEffects)
                 .build();
     }
 
-    private void entityEffects(LivingEntity entity) {
+    private void entityEffects(LivingEntity entity, SpellInfo ignored) {
         entity.setVelocity(new Vector(0, 0.5, 0));
         Vector vector = new Vector(0, 0.02, 0);
         World world = entity.getWorld();
-        entity.addPotionEffect(wither, true);
-        new BukkitRunnable() {
+        BukkitRunnable bukkitRunnable = new BukkitRunnable() {
             int i;
 
             @Override
@@ -55,10 +54,7 @@ public class MephiChoke implements SpellData {
                     }
                 }
             }
-        }.runTaskTimer(Main.getPlugin(), 10, 1);
-    }
-
-    public Behavior getBehavior() {
-        return behavior;
+        };
+        Common.runTaskTimer(bukkitRunnable, 10, 1);
     }
 }

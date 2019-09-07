@@ -1,6 +1,7 @@
 package me.dylan.wands.spell.spells;
 
-import me.dylan.wands.spell.SpellData;
+import me.dylan.wands.miscellaneous.utils.Common;
+import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.tools.KnockBack;
 import me.dylan.wands.spell.types.Behavior;
 import me.dylan.wands.spell.util.SpellEffectUtil;
@@ -12,13 +13,13 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
-public class SpiritThrust extends Behavior implements SpellData {
+public class SpiritThrust extends Behavior implements Castable {
     private static final DustOptions BLACK = new DustOptions(Color.BLACK, 1);
     private static final DustOptions RED = new DustOptions(Color.RED, 1);
     private static final KnockBack knockBack = KnockBack.from(0.4f, 0.2f);
 
     @Override
-    public Behavior getBehavior() {
+    public Behavior createBehaviour() {
         return this;
     }
 
@@ -31,7 +32,7 @@ public class SpiritThrust extends Behavior implements SpellData {
         Location[] points = SpellEffectUtil.getCircleFromPlayerView(location, 0.5, 18, 0);
         Vector increment = player.getLocation().getDirection().normalize().multiply(0.2);
         Vector incrementDistance = new Vector(0, 0, 0);
-        new BukkitRunnable() {
+        BukkitRunnable bukkitRunnable = new BukkitRunnable() {
             int count;
             int length;
 
@@ -64,7 +65,8 @@ public class SpiritThrust extends Behavior implements SpellData {
                     }
                 }
             }
-        }.runTaskTimer(plugin, 0, 1);
+        };
+        Common.runTaskTimer(bukkitRunnable, 0, 1);
         return true;
     }
 }

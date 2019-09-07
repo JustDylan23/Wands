@@ -4,9 +4,9 @@ import me.dylan.wands.miscellaneous.utils.Common;
 import me.dylan.wands.spell.tools.SpellInfo;
 import me.dylan.wands.spell.util.SpellEffectUtil;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
@@ -27,7 +27,7 @@ public final class Ray extends Behavior {
     private final int effectDistance, speed;
     private final float rayWidth;
     private final Target target;
-    private final BiConsumer<Location, World> hitEffects;
+    private final BiConsumer<Location, SpellInfo> hitEffects;
 
     private Ray(@NotNull Builder builder) {
         super(builder.baseProps);
@@ -52,44 +52,48 @@ public final class Ray extends Behavior {
         Vector direction = player.getLocation().getDirection().normalize();
         castSounds.play(player);
         Location origin = player.getEyeLocation();
-        new BukkitRunnable() {
-            final Location location = origin.clone();
+        Location spellLoc = origin.clone();
+        SpellInfo spellInfo = new SpellInfo(player, origin, spellLoc);
+        BukkitRunnable bukkitRunnable = new BukkitRunnable() {
             int count;
 
             @Override
             public void run() {
                 for (int i = 0; i < speed; ++i) {
-                    location.add(direction);
-                    spellRelativeEffects.accept(location, location.getWorld());
+                    spellLoc.add(direction);
+                    spellRelativeEffects.accept(spellLoc, spellInfo);
                     if (shouldContinue()) {
                         continue;
                     }
                     cancel();
-                    effectEntities(new SpellInfo(player, origin, location), weaponName);
+                    effectEntities(spellInfo, weaponName);
                     break;
                 }
             }
 
             boolean shouldContinue() {
                 ++count;
-                if (count >= effectDistance || !location.getBlock().isPassable())
+                if (count >= effectDistance || !spellLoc.getBlock().isPassable())
                     return false;
-                List<LivingEntity> entities = SpellEffectUtil.getNearbyLivingEntities(player, location, rayWidth);
+                List<LivingEntity> entities = SpellEffectUtil.getNearbyLivingEntities(player, spellLoc, rayWidth);
                 return entities.isEmpty();
             }
 
             void effectEntities(SpellInfo spellInfo, String wandDisplayName) {
-                Location spellLocation = spellInfo.spellLocation;
-                hitEffects.accept(spellLocation, spellInfo.world);
-                for (LivingEntity entity : SpellEffectUtil.getNearbyLivingEntities(spellInfo.caster, spellLocation, (target == Target.SINGLE) ? rayWidth : spellEffectRadius)) {
+                Location spellLocation = spellInfo.spellLocation();
+                hitEffects.accept(spellLocation, spellInfo);
+                for (LivingEntity entity : SpellEffectUtil.getNearbyLivingEntities(spellInfo.caster(), spellLocation, (target == Target.SINGLE) ? rayWidth : spellEffectRadius)) {
                     knockBack.apply(entity, spellLocation);
-                    entityEffects.accept(entity);
-                    extendedEntityEffects.accept(entity, spellInfo);
-                    SpellEffectUtil.damageEffect(spellInfo.caster, entity, entityDamage, wandDisplayName);
+                    entityEffects.accept(entity, spellInfo);
+                    for (PotionEffect potionEffect : potionEffects) {
+                        entity.addPotionEffect(potionEffect, true);
+                    }
+                    SpellEffectUtil.damageEffect(spellInfo.caster(), entity, entityDamage, wandDisplayName);
                     if (target == Target.SINGLE) break;
                 }
             }
-        }.runTaskTimer(plugin, 1, 1);
+        };
+        Common.runTaskTimer(bukkitRunnable, 1, 1);
         return true;
     }
 
@@ -98,7 +102,7 @@ public final class Ray extends Behavior {
         private int effectDistance;
         private int speed = 1;
         private float rayWidth;
-        private BiConsumer<Location, World> hitEffects = Common.emptyBiConsumer();
+        private BiConsumer<Location, SpellInfo> hitEffects = Common.emptyBiConsumer();
 
         private Builder(Target target) {
             this.target = target;
@@ -129,7 +133,7 @@ public final class Ray extends Behavior {
             return this;
         }
 
-        public Builder setHitEffects(BiConsumer<Location, World> hitEffects) {
+        public Builder setHitEffects(BiConsumer<Location, SpellInfo> hitEffects) {
             this.hitEffects = hitEffects;
             return this;
         }

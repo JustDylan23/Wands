@@ -1,8 +1,9 @@
 package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.ListenerRegistry;
+import me.dylan.wands.WandsPlugin;
 import me.dylan.wands.miscellaneous.utils.Common;
-import me.dylan.wands.spell.SpellData;
+import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.tools.sound.RepeatableSound;
 import me.dylan.wands.spell.tools.sound.SoundEffect;
 import me.dylan.wands.spell.types.Behavior;
@@ -21,20 +22,18 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-public class Escape extends Behavior implements SpellData, Listener {
-
+public class Escape extends Behavior implements Castable, Listener {
     private final String tagEscaping = UUID.randomUUID().toString();
     private final SoundEffect sound = RepeatableSound.from(Sound.ENTITY_ENDER_DRAGON_FLAP, 1, 0, 4, 4, 4, 4, 4);
-
     private final Set<Player> leaping = new HashSet<>();
 
     public Escape() {
         ListenerRegistry.addListener(this);
-        plugin.addDisableLogic(() -> leaping.forEach(e -> e.teleport(SpellEffectUtil.getFirstGroundBlockUnder(e.getLocation()))));
+        WandsPlugin.addDisableLogic(() -> leaping.forEach(e -> e.teleport(SpellEffectUtil.getFirstGroundBlockUnder(e.getLocation()))));
     }
 
     @Override
-    public Behavior getBehavior() {
+    public Behavior createBehaviour() {
         return this;
     }
 
@@ -43,7 +42,7 @@ public class Escape extends Behavior implements SpellData, Listener {
         if (player.hasMetadata(tagEscaping)) {
             return false;
         } else {
-            player.setMetadata(tagEscaping, Common.METADATA_VALUE_TRUE);
+            player.setMetadata(tagEscaping, Common.getMetadataValueTrue());
             leaping.add(player);
             World world = player.getWorld();
             Vector vector = player.getLocation().getDirection().normalize().multiply(3);
@@ -51,7 +50,7 @@ public class Escape extends Behavior implements SpellData, Listener {
             vector.setY(y <= 0 ? 1.5 : 1.5 + (y * 0.2));
             player.setVelocity(vector);
             sound.play(player);
-            new BukkitRunnable() {
+            BukkitRunnable bukkitRunnable = new BukkitRunnable() {
                 int count;
 
                 @Override
@@ -59,10 +58,10 @@ public class Escape extends Behavior implements SpellData, Listener {
                     count++;
                     if (!player.isValid() || player.isOnGround()) {
                         cancel();
-                        Bukkit.getScheduler().runTaskLater(plugin, () -> player.removeMetadata(tagEscaping, plugin), 10L);
+                        Common.runTaskLater(() -> Common.removeMetaData(player, tagEscaping), 10);
                         leaping.remove(player);
                         Location loc = player.getLocation();
-                        loc.createExplosion(0.0f);
+                        world.createExplosion(loc, 0.0f);
                         world.playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, SoundCategory.MASTER, 4, 1);
                         world.spawnParticle(Particle.EXPLOSION_HUGE, loc, 0, 0.0, 0.0, 0.0, 0.0, null, true);
                         world.spawnParticle(Particle.SPELL_WITCH, loc, 40, 1, 1, 1, 1, null, true);
@@ -82,7 +81,8 @@ public class Escape extends Behavior implements SpellData, Listener {
                         }
                     }
                 }
-            }.runTaskTimer(plugin, 5, 1);
+            };
+            Common.runTaskTimer(bukkitRunnable, 5, 1);
         }
         return true;
     }

@@ -23,8 +23,8 @@ public final class ItemBuilder {
         return new ItemBuilder(new ItemStack(material));
     }
 
-    public ItemBuilder tag(String tag) {
-        ItemUtil.setPersistentData(itemStack, tag, PersistentDataType.BYTE, (byte) 1);
+    public ItemBuilder tag(ItemTag itemTag) {
+        itemTag.tag(itemStack);
         return this;
     }
 

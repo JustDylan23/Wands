@@ -3,7 +3,6 @@ package me.dylan.wands.spell;
 import it.unimi.dsi.fastutil.objects.Object2LongMap;
 import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
 import me.dylan.wands.ListenerRegistry;
-import me.dylan.wands.Main;
 import me.dylan.wands.config.ConfigurableData;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -14,9 +13,10 @@ import org.jetbrains.annotations.NotNull;
 
 public class CooldownManager implements Listener {
     private final Object2LongMap<Player> map = new Object2LongOpenHashMap<>();
-    private final ConfigurableData configurableData = Main.getPlugin().getConfigurableData();
+    private final ConfigurableData configurableData;
 
-    public CooldownManager() {
+    public CooldownManager(ConfigurableData configurableData) {
+        this.configurableData = configurableData;
         map.defaultReturnValue(0);
         ListenerRegistry.addListener(this);
     }
