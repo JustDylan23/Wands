@@ -1,11 +1,13 @@
 package me.dylan.wands.spell.types;
 
 import me.dylan.wands.ListenerRegistry;
+import me.dylan.wands.WandsPlugin;
 import me.dylan.wands.miscellaneous.utils.Common;
-import org.bukkit.Bukkit;
+import me.dylan.wands.spell.tools.SpellInfo;
+import me.dylan.wands.spell.util.SpellEffectUtil;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -14,14 +16,12 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
-import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -37,11 +37,12 @@ import java.util.function.Consumer;
  *
  * @param <T> Type of projectile which gets fired
  */
-public final class MagicProjectile<T extends org.bukkit.entity.Projectile> extends Behavior implements Listener {
-    private static final Set<org.bukkit.entity.Projectile> projectiles = new HashSet<>();
+public final class MagicProjectile<T extends Projectile> extends Behavior implements Listener {
+    private static final Set<Projectile> projectiles = new HashSet<>();
+    private final Map<Projectile, SpellInfo> caster = new HashMap<>();
     private final Class<T> projectile;
     private final Consumer<T> projectileProps;
-    private final BiConsumer<Location, World> hitEffects;
+    private final BiConsumer<Location, SpellInfo> hitEffects;
     private final float speed;
     private final int lifeTime;
     private final String tagProjectileSpell;
@@ -60,51 +61,70 @@ public final class MagicProjectile<T extends org.bukkit.entity.Projectile> exten
         addPropertyInfo("Speed", speed);
         addPropertyInfo("Life time", lifeTime, "ticks");
 
-        plugin.addDisableLogic(() -> projectiles.forEach(Entity::remove));
+        WandsPlugin.addDisableLogic(() -> projectiles.forEach(Entity::remove));
     }
 
-    public static @NotNull <T extends org.bukkit.entity.Projectile> Builder<T> newBuilder(Class<T> projectileClass, float speed) {
+    public static @NotNull <T extends Projectile> Builder<T> newBuilder(Class<T> projectileClass, float speed) {
         return new Builder<>(projectileClass, speed);
     }
 
     @Override
     public boolean cast(@NotNull Player player, @NotNull String weaponName) {
         castSounds.play(player);
-        Vector velocity = player.getLocation().getDirection().multiply(speed);
+        Location origin = player.getLocation();
+        Vector velocity = origin.getDirection().multiply(speed);
         T firedProjectile = player.launchProjectile(this.projectile, velocity);
         projectiles.add(firedProjectile);
-        trail(firedProjectile);
+        SpellInfo spellInfo = new SpellInfo(player, origin, null) {
+            public Location spellLocation() {
+                return firedProjectile.getLocation();
+            }
+        };
+        caster.put(firedProjectile, spellInfo);
+        trail(firedProjectile, spellInfo);
         projectileProps.accept(firedProjectile);
-        firedProjectile.setMetadata(tagProjectileSpell, new FixedMetadataValue(plugin, weaponName));
+        firedProjectile.setMetadata(tagProjectileSpell, Common.metadataValue(weaponName));
         activateLifeTimer(firedProjectile);
         return true;
     }
 
     private void hit(Player player, @NotNull Projectile projectile) {
-        projectile.remove();
         projectiles.remove(projectile);
-        Location loc = projectile.getLocation();
-        hitEffects.accept(loc, loc.getWorld());
-        applyEntityEffects(player, loc, projectile.getMetadata(tagProjectileSpell).get(0).asString());
+        projectile.remove();
+        SpellInfo spellInfo = caster.remove(projectile);
+        if (spellInfo != null) {
+            Location loc = projectile.getLocation();
+            hitEffects.accept(loc, spellInfo);
+            String weaponName = projectile.getMetadata(tagProjectileSpell).get(0).asString();
+            for (LivingEntity entity : SpellEffectUtil.getNearbyLivingEntities(player, loc, spellEffectRadius)) {
+                knockBack.apply(entity, loc);
+                SpellEffectUtil.damageEffect(player, entity, entityDamage, weaponName);
+                entityEffects.accept(entity, spellInfo);
+                for (PotionEffect potionEffect : potionEffects) {
+                    entity.addPotionEffect(potionEffect, true);
+                }
+            }
+        }
     }
 
     private void activateLifeTimer(Projectile projectile) {
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+        Common.runTaskLater(() -> {
             if (projectile.isValid()) {
                 hit((Player) projectile.getShooter(), projectile);
             }
         }, lifeTime);
     }
 
-    private void trail(Entity entity) {
-        new BukkitRunnable() {
+    private void trail(Entity entity, SpellInfo spellInfo) {
+        BukkitRunnable bukkitRunnable = new BukkitRunnable() {
             @Override
             public void run() {
                 if (entity.isValid()) {
-                    spellRelativeEffects.accept(entity.getLocation(), entity.getWorld());
+                    spellRelativeEffects.accept(entity.getLocation(), spellInfo);
                 } else cancel();
             }
-        }.runTaskTimer(plugin, 0, 1);
+        };
+        Common.runTaskTimer(bukkitRunnable, 0, 1);
     }
 
     @EventHandler
@@ -129,13 +149,13 @@ public final class MagicProjectile<T extends org.bukkit.entity.Projectile> exten
         }
     }
 
-    public static final class Builder<T extends org.bukkit.entity.Projectile> extends AbstractBuilder<Builder<T>> {
+    public static final class Builder<T extends Projectile> extends AbstractBuilder<Builder<T>> {
 
         private final Class<T> projectile;
         private final float speed;
 
         private Consumer<T> projectileProps = Common.emptyConsumer();
-        private BiConsumer<Location, World> hitEffects = Common.emptyBiConsumer();
+        private BiConsumer<Location, SpellInfo> hitEffects = Common.emptyBiConsumer();
         private int lifeTime = 20;
 
         private Builder(Class<T> projectileClass, float speed) {
@@ -158,7 +178,7 @@ public final class MagicProjectile<T extends org.bukkit.entity.Projectile> exten
             return this;
         }
 
-        public Builder<T> setHitEffects(BiConsumer<Location, World> hitEffects) {
+        public Builder<T> setHitEffects(BiConsumer<Location, SpellInfo> hitEffects) {
             this.hitEffects = hitEffects;
             return this;
         }

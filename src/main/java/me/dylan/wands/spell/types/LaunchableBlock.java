@@ -1,13 +1,17 @@
 package me.dylan.wands.spell.types;
 
 import me.dylan.wands.ListenerRegistry;
+import me.dylan.wands.WandsPlugin;
 import me.dylan.wands.miscellaneous.utils.Common;
+import me.dylan.wands.spell.tools.SpellInfo;
 import me.dylan.wands.spell.tools.sound.SoundEffect;
+import me.dylan.wands.spell.util.SpellEffectUtil;
 import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.FallingBlock;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,7 +19,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
@@ -37,9 +41,9 @@ public final class LaunchableBlock extends Behavior implements Listener {
     private static final Set<BlockRestorer> pending = new HashSet<>();
     private final String tagUnbreakable, tagFallingBlock;
     private final Material material;
-    private final BiConsumer<Location, World> hitEffects;
+    private final BiConsumer<Location, SpellInfo> hitEffects;
     private final Map<Player, BlockRestorer> selectedBlock = new HashMap<>();
-    private final Map<FallingBlock, Player> caster = new HashMap<>();
+    private final Map<FallingBlock, SpellInfo> caster = new HashMap<>();
     private final SoundEffect blockRelativeSounds;
 
     private LaunchableBlock(@NotNull Builder builder) {
@@ -53,7 +57,7 @@ public final class LaunchableBlock extends Behavior implements Listener {
 
         addPropertyInfo("Material", material);
 
-        plugin.addDisableLogic(() -> pending.forEach(BlockRestorer::cancel));
+        WandsPlugin.addDisableLogic(() -> pending.forEach(BlockRestorer::cancel));
     }
 
     public static @NotNull Builder newBuilder(Material material) {
@@ -84,12 +88,12 @@ public final class LaunchableBlock extends Behavior implements Listener {
                     }
                 }
                 block.setType(material, false);
-                block.setMetadata(tagUnbreakable, Common.METADATA_VALUE_TRUE);
+                block.setMetadata(tagUnbreakable, Common.getMetadataValueTrue());
                 block.getState().update();
                 effectedBlocks.add(block);
                 BlockRestorer blockRestorer = new BlockRestorer(oldState, player, this);
                 selectedBlock.put(player, blockRestorer);
-                Bukkit.getScheduler().runTaskLater(plugin, blockRestorer, 100L);
+                Common.runTaskLater(blockRestorer, 100L);
             } else {
                 player.sendActionBar("§cblock is already taken");
             }
@@ -103,17 +107,22 @@ public final class LaunchableBlock extends Behavior implements Listener {
         castSounds.play(player);
         BlockRestorer blockRestorer = selectedBlock.get(player);
         blockRestorer.earlyRun();
-        Location location = blockRestorer.originLoc;
-        FallingBlock fallingBlock = location.getWorld().spawnFallingBlock(location, Bukkit.createBlockData(material));
+        Location blockLoc = blockRestorer.originLoc;
+        FallingBlock fallingBlock = blockLoc.getWorld().spawnFallingBlock(blockLoc, Bukkit.createBlockData(material));
         fallingBlock.setVelocity(new Vector(0, 1, 0));
-        fallingBlock.setMetadata(tagFallingBlock, new FixedMetadataValue(plugin, player.getInventory().getItemInMainHand().getItemMeta().getDisplayName()));
+        fallingBlock.setMetadata(tagFallingBlock, Common.metadataValue(player.getInventory().getItemInMainHand().getItemMeta().getDisplayName()));
         fallingBlock.setDropItem(false);
         blockRelativeSounds.play(fallingBlock);
-        caster.put(fallingBlock, player);
-        trail(fallingBlock);
+        caster.put(fallingBlock, new SpellInfo(player, blockLoc, null) {
+            @Override
+            public Location spellLocation() {
+                return fallingBlock.getLocation();
+            }
+        });
+        trail(player, fallingBlock);
         Block block = player.getTargetBlock(30);
         if (block != null) {
-            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            Common.runTaskLater(() -> {
                 if (fallingBlock.isValid()) {
                     fallingBlock.setVelocity(block
                             .getLocation()
@@ -131,12 +140,21 @@ public final class LaunchableBlock extends Behavior implements Listener {
     }
 
     private void blockLand(FallingBlock fallingBlock) {
-        Player player = caster.get(fallingBlock);
-        if (player != null) {
+        SpellInfo spellInfo = caster.get(fallingBlock);
+        if (spellInfo != null) {
+            Player player = spellInfo.caster();
             caster.remove(fallingBlock);
             Location loc = fallingBlock.getLocation();
-            hitEffects.accept(loc, loc.getWorld());
-            applyEntityEffects(player, loc, fallingBlock.getMetadata(tagFallingBlock).get(0).asString());
+            hitEffects.accept(loc, spellInfo);
+            String weaponName = fallingBlock.getMetadata(tagFallingBlock).get(0).asString();
+            for (LivingEntity entity : SpellEffectUtil.getNearbyLivingEntities(player, loc, spellEffectRadius)) {
+                knockBack.apply(entity, loc);
+                SpellEffectUtil.damageEffect(player, entity, entityDamage, weaponName);
+                entityEffects.accept(entity, spellInfo);
+                for (PotionEffect potionEffect : potionEffects) {
+                    entity.addPotionEffect(potionEffect, true);
+                }
+            }
         }
     }
 
@@ -153,18 +171,25 @@ public final class LaunchableBlock extends Behavior implements Listener {
         if (event.getBlock().hasMetadata(tagUnbreakable)) event.setCancelled(true);
     }
 
-    private void trail(FallingBlock entity) {
-        new BukkitRunnable() {
+    private void trail(Player player, FallingBlock entity) {
+        SpellInfo spellInfo = new SpellInfo(player, player.getLocation(), null) {
+            @Override
+            public Location spellLocation() {
+                return entity.getLocation();
+            }
+        };
+        BukkitRunnable bukkitRunnable = new BukkitRunnable() {
             @Override
             public void run() {
                 if (entity.isValid()) {
-                    spellRelativeEffects.accept(entity.getLocation(), entity.getWorld());
+                    spellRelativeEffects.accept(entity.getLocation(), spellInfo);
                 } else {
                     cancel();
                     blockLand(entity);
                 }
             }
-        }.runTaskTimer(plugin, 0, 1);
+        };
+        Common.runTaskTimer(bukkitRunnable, 0, 1);
     }
 
     private static class BlockRestorer implements Runnable {
@@ -179,7 +204,7 @@ public final class LaunchableBlock extends Behavior implements Listener {
             this.originLoc = state.getLocation().toCenterLocation();
             this.parent = parent;
             this.player = player;
-            new BukkitRunnable() {
+            BukkitRunnable bukkitRunnable = new BukkitRunnable() {
                 final World world = originLoc.getWorld();
                 final BlockData blockData = parent.material.createBlockData();
 
@@ -189,7 +214,8 @@ public final class LaunchableBlock extends Behavior implements Listener {
                         world.spawnParticle(Particle.BLOCK_CRACK, originLoc, 10, 0.5, 0.5, 0.5, 0.15, blockData, true);
                     } else cancel();
                 }
-            }.runTaskTimer(plugin, 1, 1);
+            };
+            Common.runTaskTimer(bukkitRunnable, 1, 1);
             pending.add(this);
         }
 
@@ -207,7 +233,7 @@ public final class LaunchableBlock extends Behavior implements Listener {
             if (canRun) {
                 canRun = false;
                 effectedBlocks.remove(state.getBlock());
-                state.removeMetadata(parent.tagUnbreakable, plugin);
+                Common.removeMetaData(state, parent.tagUnbreakable);
                 state.update(true);
                 parent.selectedBlock.remove(player);
                 pending.remove(this);
@@ -218,7 +244,7 @@ public final class LaunchableBlock extends Behavior implements Listener {
     public static final class Builder extends AbstractBuilder<Builder> {
 
         private final Material material;
-        private BiConsumer<Location, World> hitEffects = Common.emptyBiConsumer();
+        private BiConsumer<Location, SpellInfo> hitEffects = Common.emptyBiConsumer();
         private SoundEffect blockRelativeSounds = SoundEffect.NONE;
 
         private Builder(Material material) {
@@ -235,7 +261,7 @@ public final class LaunchableBlock extends Behavior implements Listener {
             return new LaunchableBlock(this);
         }
 
-        public Builder setHitEffects(BiConsumer<Location, World> hitEffects) {
+        public Builder setHitEffects(BiConsumer<Location, SpellInfo> hitEffects) {
             this.hitEffects = hitEffects;
             return this;
         }

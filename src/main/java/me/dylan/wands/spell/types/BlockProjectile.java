@@ -1,7 +1,9 @@
 package me.dylan.wands.spell.types;
 
 import me.dylan.wands.ListenerRegistry;
+import me.dylan.wands.WandsPlugin;
 import me.dylan.wands.miscellaneous.utils.Common;
+import me.dylan.wands.spell.tools.SpellInfo;
 import me.dylan.wands.spell.util.SpellEffectUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -10,6 +12,7 @@ import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
@@ -52,7 +55,7 @@ public final class BlockProjectile extends Behavior implements Listener {
         addPropertyInfo("Amount", amount);
         addPropertyInfo("Delay between projectiles", delay);
 
-        plugin.addDisableLogic(() -> projectiles.forEach(Entity::remove));
+        WandsPlugin.addDisableLogic(() -> projectiles.forEach(Entity::remove));
 
     }
 
@@ -62,7 +65,7 @@ public final class BlockProjectile extends Behavior implements Listener {
 
     @Override
     public boolean cast(@NotNull Player player, @NotNull String weaponName) {
-        new BukkitRunnable() {
+        BukkitRunnable bukkitRunnable = new BukkitRunnable() {
             int count;
 
             @Override
@@ -73,7 +76,13 @@ public final class BlockProjectile extends Behavior implements Listener {
                 } else {
                     castSounds.play(player);
                     FallingBlock fallingBlock = shootBlockProjectile(player);
-                    handleSpellEffects(fallingBlock, player, weaponName);
+                    SpellInfo spellInfo = new SpellInfo(player, player.getLocation(), null) {
+                        @Override
+                        public Location spellLocation() {
+                            return fallingBlock.getLocation();
+                        }
+                    };
+                    handleSpellEffects(fallingBlock, spellInfo, weaponName);
                 }
             }
 
@@ -82,33 +91,38 @@ public final class BlockProjectile extends Behavior implements Listener {
                 Location location = player.getEyeLocation();
                 FallingBlock fallingBlock = location.getWorld().spawnFallingBlock(location, Bukkit.createBlockData(material));
                 fallingBlock.setVelocity(velocity);
-                fallingBlock.setMetadata(tagBlockProjectile, Common.METADATA_VALUE_TRUE);
+                fallingBlock.setMetadata(tagBlockProjectile, Common.getMetadataValueTrue());
                 fallingBlock.setDropItem(false);
                 projectiles.add(fallingBlock);
                 return fallingBlock;
             }
 
-            void handleSpellEffects(Entity fallingBlock, Player player, String wandDisplayName) {
-                new BukkitRunnable() {
+            void handleSpellEffects(Entity fallingBlock, SpellInfo spellInfo, String wandDisplayName) {
+                BukkitRunnable bukkitRunnable = new BukkitRunnable() {
                     @Override
                     public void run() {
                         if (fallingBlock.isValid()) {
                             Location location = fallingBlock.getLocation();
-                            spellRelativeEffects.accept(location, location.getWorld());
+                            spellRelativeEffects.accept(location, spellInfo);
                             SpellEffectUtil.getNearbyLivingEntities(player, location, entity -> !entity.hasMetadata(tagBlockProjectile), spellEffectRadius)
                                     .forEach(entity -> {
-                                        entity.setMetadata(tagBlockProjectile, Common.METADATA_VALUE_TRUE);
-                                        Bukkit.getScheduler().runTaskLater(plugin, () -> entity.removeMetadata(tagBlockProjectile, plugin), metaTime);
-                                        entityEffects.accept(entity);
+                                        entity.setMetadata(tagBlockProjectile, Common.getMetadataValueTrue());
+                                        Common.runTaskLater(() -> Common.removeMetaData(entity, tagBlockProjectile), metaTime);
+                                        entityEffects.accept(entity, spellInfo);
+                                        for (PotionEffect potionEffect : potionEffects) {
+                                            entity.addPotionEffect(potionEffect, true);
+                                        }
                                         knockBack.apply(entity, location.toCenterLocation());
                                         SpellEffectUtil.damageEffect(player, entity, entityDamage, wandDisplayName);
                                     });
                         } else cancel();
                     }
-                }.runTaskTimer(plugin, 1, 1);
+                };
+                Common.runTaskTimer(bukkitRunnable, 1, 1);
             }
 
-        }.runTaskTimer(plugin, 0, delay);
+        };
+        Common.runTaskTimer(bukkitRunnable, 0, delay);
         return true;
     }
 

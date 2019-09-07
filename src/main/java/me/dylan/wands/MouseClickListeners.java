@@ -15,18 +15,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MouseClickListeners implements Listener {
-    private final List<@NotNull LeftClickListener> leftClickListeners = new ArrayList<>();
-    private final List<@NotNull RightClickListener> rightClickListeners = new ArrayList<>();
+    private final List<LeftClickListener> leftClickListeners = new ArrayList<>();
+    private final List<RightClickListener> rightClickListeners = new ArrayList<>();
 
-    public void addLeftClickListener(LeftClickListener listener) {
+    public void addLeftClickListener(@NotNull LeftClickListener listener) {
         leftClickListeners.add(listener);
     }
 
-    public void addRightClickListener(RightClickListener listener) {
+    public void addRightClickListener(@NotNull RightClickListener listener) {
         rightClickListeners.add(listener);
     }
 
-    public <T extends LeftClickListener & RightClickListener> void addBoth(T t) {
+    public <T extends LeftClickListener & RightClickListener> void addLeftAndRightClickListener(@NotNull T t) {
         leftClickListeners.add(t);
         rightClickListeners.add(t);
     }

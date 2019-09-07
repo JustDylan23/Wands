@@ -1,19 +1,19 @@
 package me.dylan.wands.spell.spells;
 
-import me.dylan.wands.spell.SpellData;
+import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.tools.KnockBack;
 import me.dylan.wands.spell.tools.sound.CompoundSound;
 import me.dylan.wands.spell.types.Behavior;
 import me.dylan.wands.spell.types.MagicProjectile;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.entity.SmallFireball;
 
-public class FireComet implements SpellData {
-    private final Behavior behavior;
-
-    public FireComet() {
-        this.behavior = MagicProjectile.newBuilder(SmallFireball.class, 4)
+public class FireComet implements Castable {
+    @Override
+    public Behavior createBehaviour() {
+        return MagicProjectile.newBuilder(SmallFireball.class, 4)
                 .setCastSound(CompoundSound.chain()
                         .add(Sound.ENTITY_FIREWORK_ROCKET_BLAST)
                         .addAll(Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, 1, 10, 5)
@@ -21,28 +21,25 @@ public class FireComet implements SpellData {
                 )
                 .setSpellEffectRadius(3.0F)
                 .setEntityDamage(8)
-                .setEntityEffects(entity -> entity.setFireTicks(80))
+                .setEntityEffects((entity, spellInfo) -> entity.setFireTicks(80))
                 .setKnockBack(KnockBack.EXPLOSION)
                 .setLifeTime(20)
                 .setProjectileProps(projectile -> {
                     projectile.setIsIncendiary(false);
                     projectile.setYield(0);
                 })
-                .setSpellRelativeEffects((loc, world) -> {
+                .setSpellRelativeEffects((loc, spellInfo) -> {
+                    World world = spellInfo.world();
                     world.spawnParticle(Particle.FLAME, loc, 6, 0.8, 0.8, 0.8, 0.1, null, true);
                     world.spawnParticle(Particle.SMOKE_NORMAL, loc, 10, 1, 1, 1, 0.05, null, true);
                     world.spawnParticle(Particle.SMOKE_LARGE, loc, 10, 0.6, 0.6, 0.6, 0.15, null, true);
                     world.spawnParticle(Particle.LAVA, loc, 5, 1, 1, 1, 0, null, true);
                 })
-                .setHitEffects((loc, world) -> {
-                    loc.createExplosion(0.0f);
+                .setHitEffects((loc, spellInfo) -> {
+                    World world = spellInfo.world();
                     world.spawnParticle(Particle.EXPLOSION_HUGE, loc, 0, 0.0, 0.0, 0.0, 0.0, null, true);
+                    world.createExplosion(loc, 0.0f);
                 })
                 .build();
-    }
-
-    @Override
-    public Behavior getBehavior() {
-        return behavior;
     }
 }

@@ -1,9 +1,9 @@
 package me.dylan.wands.customitems;
 
-import me.dylan.wands.Main;
 import me.dylan.wands.MouseClickListeners.ClickEvent;
 import me.dylan.wands.MouseClickListeners.RightClickListener;
-import me.dylan.wands.miscellaneous.utils.ItemUtil;
+import me.dylan.wands.miscellaneous.utils.Common;
+import me.dylan.wands.spell.ItemTag;
 import me.dylan.wands.spell.util.SpellEffectUtil;
 import me.dylan.wands.spell.util.SpellInteractionUtil;
 import org.bukkit.*;
@@ -20,8 +20,6 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -32,23 +30,16 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 public class CursedBow implements Listener, RightClickListener {
-
-    public static final String ID_TAG = "artifact-bow";
     private final String cursedArrow = UUID.randomUUID().toString();
-    private final Main plugin = Main.getPlugin();
     private final Set<Player> drawing = new HashSet<>();
     private final Set<Player> hasDrawn = new HashSet<>();
     private final PotionEffect slow = new PotionEffect(PotionEffectType.SLOW, 60, 3, false);
 
-    public CursedBow() {
-        plugin.getMouseClickListeners().addRightClickListener(this);
-    }
-
     private int hasBow(Player player) {
         PlayerInventory inventory = player.getInventory();
-        if (ItemUtil.hasPersistentData(inventory.getItemInMainHand(), ID_TAG, PersistentDataType.BYTE)) {
+        if (ItemTag.IS_CURSED_BOW.isTagged(inventory.getItemInMainHand())) {
             return 1;
-        } else if (ItemUtil.hasPersistentData(inventory.getItemInOffHand(), ID_TAG, PersistentDataType.BYTE)) {
+        } else if (ItemTag.IS_CURSED_BOW.isTagged(inventory.getItemInOffHand())) {
             return 2;
         } else {
             return 0;
@@ -66,7 +57,7 @@ public class CursedBow implements Listener, RightClickListener {
         if (hasBow(player) == 1 && SpellInteractionUtil.canUse(player) && (player.getGameMode() == GameMode.CREATIVE || player.getInventory().contains(Material.ARROW))) {
             drawing.add(player);
             player.sendActionBar("§6Charging [§a|§6|||]");
-            new BukkitRunnable() {
+            BukkitRunnable bukkitRunnable = new BukkitRunnable() {
                 int count;
 
                 @Override
@@ -84,7 +75,8 @@ public class CursedBow implements Listener, RightClickListener {
                         }
                     } else cancel();
                 }
-            }.runTaskTimer(Main.getPlugin(), 1, 1);
+            };
+            Common.runTaskTimer(bukkitRunnable, 1, 1);
         }
     }
 
@@ -103,8 +95,7 @@ public class CursedBow implements Listener, RightClickListener {
             } else if (hasDrawn.contains(player)) {
                 hasDrawn.remove(player);
                 Entity projectile = event.getProjectile();
-                projectile.setMetadata(cursedArrow, new FixedMetadataValue(plugin,
-                        player.getInventory().getItemInMainHand().getItemMeta().getDisplayName()));
+                projectile.setMetadata(cursedArrow, Common.metadataValue(player.getInventory().getItemInMainHand().getItemMeta().getDisplayName()));
                 Location location = player.getLocation();
                 location.getWorld().playSound(location, Sound.ENTITY_ENDER_DRAGON_FLAP, SoundCategory.MASTER, 4.0F, 1.0F);
                 location.getWorld().playSound(player.getLocation(), Sound.ENTITY_EVOKER_CAST_SPELL, SoundCategory.MASTER, 4.0F, 0.1F);
@@ -135,14 +126,15 @@ public class CursedBow implements Listener, RightClickListener {
     }
 
     private void trail(Entity entity, Consumer<Location> consumer) {
-        new BukkitRunnable() {
+        BukkitRunnable bukkitRunnable = new BukkitRunnable() {
             @Override
             public void run() {
                 if (entity.isValid()) {
                     consumer.accept(entity.getLocation());
                 } else cancel();
             }
-        }.runTaskTimer(Main.getPlugin(), 1, 1);
+        };
+        Common.runTaskTimer(bukkitRunnable, 1, 1);
     }
 
     @EventHandler

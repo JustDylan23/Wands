@@ -1,10 +1,12 @@
 package me.dylan.wands.spell.types;
 
 import me.dylan.wands.miscellaneous.utils.Common;
+import me.dylan.wands.spell.tools.SpellInfo;
 import me.dylan.wands.spell.util.SpellEffectUtil;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
@@ -55,30 +57,35 @@ public final class Phase extends Behavior {
 
     @Override
     public boolean cast(@NotNull Player player, @NotNull String weaponName) {
-        Location loc = SpellEffectUtil.getSpellLocation(effectDistance, player);
-        if (loc == null) {
+        Location targetLoc = SpellEffectUtil.getSpellLocation(effectDistance, player);
+        if (targetLoc == null) {
             return false;
         }
+        SpellInfo spellInfo = new SpellInfo(player, player.getLocation(), targetLoc);
         castSounds.play(player);
-        spellRelativeEffects.accept(loc, loc.getWorld());
-        Location pushFrom = (knockBackFrom == KnockBackFrom.SPELL) ? loc : player.getLocation();
-        for (LivingEntity entity : SpellEffectUtil.getNearbyLivingEntities(player, loc, entity -> !entity.hasMetadata(tagPhaseSpell), spellEffectRadius)) {
-            entity.setMetadata(tagPhaseSpell, Common.METADATA_VALUE_TRUE);
+        spellRelativeEffects.accept(targetLoc, spellInfo);
+        Location pushFrom = (knockBackFrom == KnockBackFrom.SPELL) ? targetLoc : player.getLocation();
+        for (LivingEntity entity : SpellEffectUtil.getNearbyLivingEntities(player, targetLoc, entity -> !entity.hasMetadata(tagPhaseSpell), spellEffectRadius)) {
+            entity.setMetadata(tagPhaseSpell, Common.getMetadataValueTrue());
             knockBack.apply(entity, pushFrom);
-            entityEffects.accept(entity);
+            entityEffects.accept(entity, spellInfo);
+            for (PotionEffect potionEffect : potionEffects) {
+                entity.addPotionEffect(potionEffect, true);
+            }
             SpellEffectUtil.damageEffect(player, entity, entityDamage, weaponName);
-            new BukkitRunnable() {
+            BukkitRunnable bukkitRunnable = new BukkitRunnable() {
                 @Override
                 public void run() {
                     if (!entity.isValid() || condition.test(entity)) {
                         afterPhaseEffect.accept(entity, player);
-                        entity.removeMetadata(tagPhaseSpell, plugin);
+                        Common.removeMetaData(entity, tagPhaseSpell);
                         cancel();
                     } else {
                         duringPhaseEffect.accept(entity);
                     }
                 }
-            }.runTaskTimer(plugin, 2, 1);
+            };
+            Common.runTaskTimer(bukkitRunnable, 2, 1);
             if (target == Target.SINGLE) break;
 
         }

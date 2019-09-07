@@ -1,9 +1,9 @@
 name: Wands
 version: ${project.version}
-main: me.dylan.wands.Main
+main: me.dylan.wands.WandsPlugin
 prefix: Wands
 authors: [_JustDylan_]
-description: Adds a set of awesome magic wands to your server
+description: ${project.description}
 api-version: "1.14"
 commands:
   wands:

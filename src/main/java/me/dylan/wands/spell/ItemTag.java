@@ -6,6 +6,8 @@ import org.bukkit.persistence.PersistentDataType;
 
 public enum ItemTag {
     IS_WAND("IsWand"),
+    IS_DAGGER("artifact-dagger"),
+    IS_CURSED_BOW("artifact-bow"),
     CANNOT_REGISTER("BlockRegistration");
 
     private final String tag;

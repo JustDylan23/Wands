@@ -1,6 +1,5 @@
 package me.dylan.wands.spell;
 
-import me.dylan.wands.Main;
 import me.dylan.wands.MouseClickListeners.ClickEvent;
 import me.dylan.wands.MouseClickListeners.LeftClickListener;
 import me.dylan.wands.MouseClickListeners.RightClickListener;
@@ -35,10 +34,6 @@ import java.util.Set;
 
 public class PlayerListener implements Listener, LeftClickListener, RightClickListener {
     private final Map<Player, MagicDamageEvent> playerMagicDamageEventMap = new HashMap<>();
-
-    public PlayerListener() {
-        Main.getPlugin().getMouseClickListeners().addBoth(this);
-    }
 
     @Override
     public void onLeftClick(@NotNull ClickEvent event) {
@@ -95,12 +90,11 @@ public class PlayerListener implements Listener, LeftClickListener, RightClickLi
     @EventHandler
     private void onChangeSlot(PlayerItemHeldEvent event) {
         Player player = event.getPlayer();
-        Bukkit.getScheduler().runTaskLater(Main.getPlugin(), () -> {
-            ItemStack itemStack = player.getInventory().getItemInMainHand();
-            if (ItemTag.IS_WAND.isTagged(itemStack)) {
-                SpellInteractionUtil.showSelectedSpell(player, itemStack);
-            }
-        }, 1L);
+        event.getNewSlot();
+        ItemStack itemStack = player.getInventory().getItem(event.getNewSlot());
+        if (ItemTag.IS_WAND.isTagged(itemStack)) {
+            SpellInteractionUtil.showSelectedSpell(player, itemStack);
+        }
     }
 
     @EventHandler

@@ -1,8 +1,9 @@
 package me.dylan.wands.spell.spells;
 
-import me.dylan.wands.Main;
+import me.dylan.wands.WandsPlugin;
 import me.dylan.wands.miscellaneous.utils.Common;
-import me.dylan.wands.spell.SpellData;
+import me.dylan.wands.spell.Castable;
+import me.dylan.wands.spell.tools.SpellInfo;
 import me.dylan.wands.spell.types.Behavior;
 import me.dylan.wands.spell.types.Spark;
 import me.dylan.wands.spell.util.SpellEffectUtil;
@@ -18,45 +19,40 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.HashSet;
 import java.util.Set;
 
-public class CorruptedWolves implements SpellData {
-
-    private final Behavior behavior;
-    private final Main plugin = Main.getPlugin();
+public class CorruptedWolves implements Castable {
     private final Set<Wolf> wolves = new HashSet<>();
     private final PotionEffect speed = new PotionEffect(PotionEffectType.SPEED, 160, 4, true);
 
     public CorruptedWolves() {
-        plugin.addDisableLogic(() -> wolves.forEach(Entity::remove));
+        WandsPlugin.addDisableLogic(() -> wolves.forEach(Entity::remove));
+    }
 
-        this.behavior = Spark.newBuilder(Behavior.Target.SINGLE)
+    @Override
+    public Behavior createBehaviour() {
+        return Spark.newBuilder(Behavior.Target.SINGLE)
                 .setSpellEffectRadius(2.5F)
                 .setCastSound(Sound.ENTITY_EVOKER_PREPARE_SUMMON)
                 .setEffectDistance(30)
                 .setEntityEffects(this::accept)
-                .setSpellRelativeEffects((loc, world) -> {
-                    world.spawnParticle(Particle.SMOKE_LARGE, loc, 20, 0.4, 0.4, 0.4, 0.1, null, true);
-                    world.spawnParticle(Particle.SMOKE_NORMAL, loc, 20, 0.4, 0.4, 0.4, 0.1, null, true);
+                .setSpellRelativeEffects((loc, spellInfo) -> {
+                    spellInfo.world().spawnParticle(Particle.SMOKE_LARGE, loc, 20, 0.4, 0.4, 0.4, 0.1, null, true);
+                    spellInfo.world().spawnParticle(Particle.SMOKE_NORMAL, loc, 20, 0.4, 0.4, 0.4, 0.1, null, true);
                 })
                 .build();
     }
 
-    @Override
-    public Behavior getBehavior() {
-        return behavior;
-    }
-
-    private void accept(LivingEntity target) {
+    private void accept(LivingEntity target, SpellInfo ignored) {
         Location loc = target.getLocation();
         World world = loc.getWorld();
         for (int i = 0; i < 10; i++) {
             Wolf wolf = (Wolf) world.spawnEntity(SpellEffectUtil.getFirstPassableBlockAbove(SpellEffectUtil.randomizeLoc(loc, 2, 0, 2)), EntityType.WOLF);
             wolves.add(wolf);
-            wolf.setMetadata(SpellEffectUtil.CAN_DAMAGE_WITH_WANDS, Common.METADATA_VALUE_TRUE);
+            wolf.setMetadata(SpellEffectUtil.CAN_DAMAGE_WITH_WANDS, Common.getMetadataValueTrue());
             Location location = wolf.getLocation();
             world.playSound(location, Sound.BLOCK_CHORUS_FLOWER_GROW, SoundCategory.MASTER, 4, 1);
             world.spawnParticle(Particle.SMOKE_LARGE, location, 2, 0.1, 0.1, 0.05, 0.1, null, true);
             wolf.addPotionEffect(speed, true);
-            new BukkitRunnable() {
+            BukkitRunnable bukkitRunnable = new BukkitRunnable() {
                 @Override
                 public void run() {
                     if (wolf.isValid()) {
@@ -67,9 +63,10 @@ public class CorruptedWolves implements SpellData {
                         world.spawnParticle(Particle.SMOKE_LARGE, wolf.getLocation(), 3, 0, 0, 0, 0.1, null, true);
                     }
                 }
-            }.runTaskTimer(plugin, 1, 1);
-            Bukkit.getScheduler().runTaskLater(plugin, () -> wolf.damage(1, target), 10);
-            Bukkit.getScheduler().runTaskLater(plugin, wolf::remove, 160);
+            };
+            Common.runTaskTimer(bukkitRunnable, 1, 1);
+            Common.runTaskLater(() -> wolf.damage(1, target), 10);
+            Common.runTaskLater(wolf::remove, 160);
         }
     }
 }

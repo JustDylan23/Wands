@@ -1,17 +1,15 @@
 package me.dylan.wands.spell.types;
 
-import me.dylan.wands.Main;
 import me.dylan.wands.miscellaneous.utils.Common;
 import me.dylan.wands.spell.tools.KnockBack;
 import me.dylan.wands.spell.tools.SpellInfo;
 import me.dylan.wands.spell.tools.sound.SingularSound;
 import me.dylan.wands.spell.tools.sound.SoundEffect;
-import me.dylan.wands.spell.util.SpellEffectUtil;
 import org.bukkit.Location;
 import org.bukkit.Sound;
-import org.bukkit.World;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -19,7 +17,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.StringJoiner;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 /**
  * All spell types inherit the basic properties of the {@link Behavior}.
@@ -36,16 +33,13 @@ import java.util.function.Consumer;
  * {@link BaseProps} can be acquired by implementing {@link AbstractBuilder}.
  */
 public abstract class Behavior {
-    protected static final Main plugin = Main.getPlugin();
-
     final int entityDamage;
     final float spellEffectRadius;
     final SoundEffect castSounds;
-    final BiConsumer<Location, World> spellRelativeEffects;
-    final Consumer<LivingEntity> entityEffects;
+    final BiConsumer<Location, SpellInfo> spellRelativeEffects;
+    final BiConsumer<LivingEntity, SpellInfo> entityEffects;
     final KnockBack knockBack;
-    final BiConsumer<LivingEntity, SpellInfo> extendedEntityEffects;
-    final BiConsumer<Location, SpellInfo> extendedSpellRelativeEffects;
+    final PotionEffect[] potionEffects;
 
     private final List<String> props = new ArrayList<>();
 
@@ -56,8 +50,7 @@ public abstract class Behavior {
         this.spellRelativeEffects = baseProps.spellRelativeEffects;
         this.entityEffects = baseProps.entityEffects;
         this.knockBack = baseProps.knockBack;
-        this.extendedEntityEffects = baseProps.extendedEntityEffects;
-        this.extendedSpellRelativeEffects = baseProps.extendedSpellRelativeEffects;
+        this.potionEffects = baseProps.potionEffects;
 
         if (!baseProps.isEmpty()) {
             addPropertyInfo("Entity damage", entityDamage);
@@ -84,14 +77,6 @@ public abstract class Behavior {
 
     public abstract boolean cast(@NotNull Player player, @NotNull String weaponName);
 
-    void applyEntityEffects(Player caster, Location from, String weaponName) {
-        for (LivingEntity entity : SpellEffectUtil.getNearbyLivingEntities(caster, from, spellEffectRadius)) {
-            knockBack.apply(entity, from);
-            SpellEffectUtil.damageEffect(caster, entity, entityDamage, weaponName);
-            entityEffects.accept(entity);
-        }
-    }
-
     @Override
     public final String toString() {
         StringJoiner stringJoiner = new StringJoiner("\n");
@@ -112,7 +97,6 @@ public abstract class Behavior {
         PLAYER
     }
 
-    @SuppressWarnings("unused")
     public abstract static class AbstractBuilder<T extends AbstractBuilder<T>> {
 
         final Behavior.BaseProps baseProps = new Behavior.BaseProps();
@@ -144,13 +128,13 @@ public abstract class Behavior {
             return self();
         }
 
-        public T setEntityEffects(Consumer<LivingEntity> effects) {
+        public T setEntityEffects(BiConsumer<LivingEntity, SpellInfo> effects) {
             baseProps.entityEffects = effects;
             return self();
         }
 
-        public T extendedSetEntityEffects(BiConsumer<LivingEntity, SpellInfo> effects) {
-            baseProps.extendedEntityEffects = effects;
+        public T setPotionEffects(PotionEffect... potionEffects) {
+            baseProps.potionEffects = potionEffects;
             return self();
         }
 
@@ -159,13 +143,8 @@ public abstract class Behavior {
             return self();
         }
 
-        public T setSpellRelativeEffects(BiConsumer<Location, World> effects) {
+        public T setSpellRelativeEffects(BiConsumer<Location, SpellInfo> effects) {
             baseProps.spellRelativeEffects = effects;
-            return self();
-        }
-
-        public T extendedSetSpellRelativeEffects(BiConsumer<Location, SpellInfo> effects) {
-            baseProps.extendedSpellRelativeEffects = effects;
             return self();
         }
 
@@ -193,15 +172,13 @@ public abstract class Behavior {
                 return true;
             }
         };
-
         int entityDamage;
         float spellEffectRadius;
         SoundEffect castSounds = SoundEffect.NONE;
-        BiConsumer<Location, World> spellRelativeEffects = Common.emptyBiConsumer();
-        BiConsumer<Location, SpellInfo> extendedSpellRelativeEffects = Common.emptyBiConsumer();
-        Consumer<LivingEntity> entityEffects = Common.emptyConsumer();
-        BiConsumer<LivingEntity, SpellInfo> extendedEntityEffects = Common.emptyBiConsumer();
+        BiConsumer<Location, SpellInfo> spellRelativeEffects = Common.emptyBiConsumer();
+        BiConsumer<LivingEntity, SpellInfo> entityEffects = Common.emptyBiConsumer();
         KnockBack knockBack = KnockBack.NONE;
+        PotionEffect[] potionEffects = new PotionEffect[0];
 
         boolean isEmpty() {
             return false;

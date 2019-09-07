@@ -1,6 +1,6 @@
 package me.dylan.wands.commandhandler;
 
-import me.dylan.wands.Main;
+import me.dylan.wands.WandsPlugin;
 import me.dylan.wands.spell.ItemTag;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -9,11 +9,14 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class BaseCommand implements CommandExecutor {
+    protected BaseCommand() {
+    }
+
     protected boolean isPlayer(CommandSender sender) {
         if (sender instanceof Player) {
             return true;
         } else {
-            sender.sendMessage(Main.PREFIX + "Only players can perform this command!");
+            sender.sendMessage(WandsPlugin.PREFIX + "Only players can perform this command!");
             return false;
         }
     }
@@ -22,7 +25,7 @@ public abstract class BaseCommand implements CommandExecutor {
         if (ItemTag.IS_WAND.isTagged(itemStack)) {
             return true;
         } else {
-            sender.sendMessage(Main.PREFIX + "Held item is not a wand!");
+            sender.sendMessage(WandsPlugin.PREFIX + "Held item is not a wand!");
             return false;
         }
     }

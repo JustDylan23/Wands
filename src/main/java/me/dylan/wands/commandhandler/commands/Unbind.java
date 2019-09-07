@@ -1,6 +1,6 @@
 package me.dylan.wands.commandhandler.commands;
 
-import me.dylan.wands.Main;
+import me.dylan.wands.WandsPlugin;
 import me.dylan.wands.commandhandler.BaseCommand;
 import me.dylan.wands.spell.SpellType;
 import me.dylan.wands.spell.tools.SpellCompound;
@@ -25,17 +25,16 @@ public class Unbind extends BaseCommand {
                         SpellCompound compound = new SpellCompound(itemStack);
                         if (compound.remove(spellType)) {
                             compound.apply(itemStack);
-                            sender.sendMessage(Main.PREFIX + "Successfully removed §7§l" + argument.toLowerCase() + "§r from " + itemName);
+                            sender.sendMessage(WandsPlugin.PREFIX + "Successfully removed §7§l" + argument.toLowerCase() + "§r from " + itemName);
                         } else {
-                            sender.sendMessage(Main.PREFIX + itemName + "§r doesn't contain spell §7§l" + argument.toLowerCase());
+                            sender.sendMessage(WandsPlugin.PREFIX + itemName + "§r doesn't contain spell §7§l" + argument.toLowerCase());
                         }
                     } else {
-                        sender.sendMessage(Main.PREFIX + "§7§l" + argument + " §ris not a spell!");
+                        sender.sendMessage(WandsPlugin.PREFIX + "§7§l" + argument + " §ris not a spell!");
                     }
                 }
             } else return false;
         }
         return true;
     }
-
 }

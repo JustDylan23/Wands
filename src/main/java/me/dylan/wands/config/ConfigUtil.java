@@ -1,11 +1,14 @@
 package me.dylan.wands.config;
 
-import me.dylan.wands.Main;
+import me.dylan.wands.WandsPlugin;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 
 @SuppressWarnings("SameParameterValue")
 final class ConfigUtil {
-    private static FileConfiguration config = Main.getPlugin().getConfig();
+    private static final Plugin plugin = JavaPlugin.getPlugin(WandsPlugin.class);
+    private static FileConfiguration config = plugin.getConfig();
 
 
     private ConfigUtil() {
@@ -13,8 +16,8 @@ final class ConfigUtil {
     }
 
     public static void reloadConfig() {
-        Main.getPlugin().reloadConfig();
-        config = Main.getPlugin().getConfig();
+        plugin.reloadConfig();
+        config = plugin.getConfig();
     }
 
     static int getInt(String key) {

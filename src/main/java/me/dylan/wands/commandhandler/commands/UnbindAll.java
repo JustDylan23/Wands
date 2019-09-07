@@ -1,6 +1,6 @@
 package me.dylan.wands.commandhandler.commands;
 
-import me.dylan.wands.Main;
+import me.dylan.wands.WandsPlugin;
 import me.dylan.wands.commandhandler.BaseCommand;
 import me.dylan.wands.spell.tools.SpellCompound;
 import org.bukkit.command.Command;
@@ -20,9 +20,9 @@ public class UnbindAll extends BaseCommand {
                 SpellCompound compound = new SpellCompound(itemStack);
                 if (compound.clear()) {
                     compound.apply(itemStack);
-                    sender.sendMessage(Main.PREFIX + "Successfully removed all spells from " + itemName);
+                    sender.sendMessage(WandsPlugin.PREFIX + "Successfully removed all spells from " + itemName);
                 } else {
-                    sender.sendMessage(Main.PREFIX + itemName + " §ris already empty!");
+                    sender.sendMessage(WandsPlugin.PREFIX + itemName + " §ris already empty!");
                 }
             }
         }

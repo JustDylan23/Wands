@@ -1,6 +1,5 @@
 package me.dylan.wands.miscellaneous.utils;
 
-import me.dylan.wands.Main;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -14,8 +13,6 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 public final class ItemUtil {
-    private static final Main plugin = Main.getPlugin();
-
     private ItemUtil() {
         throw new UnsupportedOperationException("Instantiating util class");
     }
@@ -41,7 +38,7 @@ public final class ItemUtil {
             return;
         }
         PersistentDataContainer container = meta.getPersistentDataContainer();
-        NamespacedKey namespacedKey = new NamespacedKey(plugin, key);
+        NamespacedKey namespacedKey = Common.newNamespacedKey(key);
 
         container.set(namespacedKey, type, t);
         itemStack.setItemMeta(meta);
@@ -53,7 +50,7 @@ public final class ItemUtil {
             return Optional.empty();
         }
         PersistentDataContainer container = meta.getPersistentDataContainer();
-        NamespacedKey namespacedKey = new NamespacedKey(plugin, key);
+        NamespacedKey namespacedKey = Common.newNamespacedKey(key);
 
         return container.has(namespacedKey, type) ? Optional.ofNullable(container.get(namespacedKey, type)) : Optional.empty();
     }
@@ -64,7 +61,7 @@ public final class ItemUtil {
             return false;
         }
         PersistentDataContainer container = meta.getPersistentDataContainer();
-        NamespacedKey namespacedKey = new NamespacedKey(plugin, key);
+        NamespacedKey namespacedKey = Common.newNamespacedKey(key);
 
         return container.has(namespacedKey, type);
     }
@@ -75,7 +72,7 @@ public final class ItemUtil {
             return;
         }
         PersistentDataContainer container = meta.getPersistentDataContainer();
-        NamespacedKey namespacedKey = new NamespacedKey(plugin, key);
+        NamespacedKey namespacedKey = Common.newNamespacedKey(key);
 
         container.remove(namespacedKey);
         itemStack.setItemMeta(meta);

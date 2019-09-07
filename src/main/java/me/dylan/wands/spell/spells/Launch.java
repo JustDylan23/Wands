@@ -1,7 +1,6 @@
 package me.dylan.wands.spell.spells;
 
-import me.dylan.wands.Main;
-import me.dylan.wands.spell.SpellData;
+import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.types.Behavior;
 import me.dylan.wands.spell.types.Behavior.Target;
 import me.dylan.wands.spell.types.Phase;
@@ -9,20 +8,19 @@ import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
 
-public class Launch implements SpellData {
-    private final Behavior behavior;
-
-    public Launch() {
-        this.behavior = Phase.newBuilder(Target.MULTI)
+public class Launch implements Castable {
+    @Override
+    public Behavior createBehaviour() {
+        return Phase.newBuilder(Target.MULTI)
                 .setSpellEffectRadius(2.8f)
                 .setEntityDamage(7)
-                .setEntityEffects(entity -> entity.setVelocity(new Vector(0, 1.2, 0)))
-                .setSpellRelativeEffects((loc, world) -> {
+                .setEntityEffects((entity, spellInfo) -> entity.setVelocity(new Vector(0, 1.2, 0)))
+                .setSpellRelativeEffects((loc, spellInfo) -> {
+                    World world = spellInfo.world();
                     world.spawnParticle(Particle.SPELL_WITCH, loc, 30, 0.6, 0.7, 0.6, 0.4, null, true);
                     world.spawnParticle(Particle.SMOKE_LARGE, loc, 20, 0.2, 0.2, 0.2, 0.2, null, true);
                     world.playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_BLAST, SoundCategory.MASTER, 4.0F, 1.0F);
-                    Bukkit.getScheduler().runTaskLater(Main.getPlugin(), () ->
-                            world.playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, SoundCategory.MASTER, 4.0F, 1.0F), 10L);
+                    MagicSpark.SPARK_SOUND.play(loc);
                 })
                 .setStagePassCondition(Entity::isOnGround)
                 .setEffectsDuringPhase(entity -> {
@@ -33,10 +31,5 @@ public class Launch implements SpellData {
                 })
                 .setEffectDistance(30)
                 .build();
-    }
-
-    @Override
-    public Behavior getBehavior() {
-        return behavior;
     }
 }

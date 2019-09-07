@@ -1,9 +1,12 @@
 package me.dylan.wands.spell.types;
 
+import me.dylan.wands.miscellaneous.utils.Common;
 import me.dylan.wands.spell.tools.SpellInfo;
 import me.dylan.wands.spell.util.SpellEffectUtil;
 import org.bukkit.Location;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -49,13 +52,13 @@ public final class Circle extends Behavior {
             return false;
         }
 
-        SpellInfo spellInfo = new SpellInfo(player, circleCenter, circleCenter);
+        SpellInfo spellInfo = new SpellInfo(player, player.getLocation(), circleCenter);
 
         castSounds.play(player);
 
         Location[] circlePoints = SpellEffectUtil.getHorizontalCircleFrom(circleCenter.clone().add(0, height, 0), circleRadius, player.getLocation().getYaw(), 1);
 
-        new BukkitRunnable() {
+        BukkitRunnable bukkitRunnable = new BukkitRunnable() {
             int circlePoint;
 
             @Override
@@ -63,17 +66,24 @@ public final class Circle extends Behavior {
                 for (int i = 0; i < speed; i++) {
                     if (circlePoint >= circlePoints.length) {
                         cancel();
-                        applyEntityEffects(player, circleCenter, weaponName);
+                        for (LivingEntity entity : SpellEffectUtil.getNearbyLivingEntities(player, circleCenter, spellEffectRadius)) {
+                            knockBack.apply(entity, circleCenter);
+                            SpellEffectUtil.damageEffect(player, entity, entityDamage, weaponName);
+                            entityEffects.accept(entity, spellInfo);
+                            for (PotionEffect potionEffect : potionEffects) {
+                                entity.addPotionEffect(potionEffect, true);
+                            }
+                        }
                         break;
                     } else {
                         Location loc = circlePoints[circlePoint];
-                        spellRelativeEffects.accept(loc, loc.getWorld());
-                        extendedSpellRelativeEffects.accept(loc, spellInfo);
+                        spellRelativeEffects.accept(loc, spellInfo);
                     }
                     circlePoint++;
                 }
             }
-        }.runTaskTimer(plugin, 0, 1);
+        };
+        Common.runTaskTimer(bukkitRunnable, 0, 1);
         return true;
     }
 

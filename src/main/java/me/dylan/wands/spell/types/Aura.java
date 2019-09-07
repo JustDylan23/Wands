@@ -1,12 +1,12 @@
 package me.dylan.wands.spell.types;
 
-import me.dylan.wands.Main;
 import me.dylan.wands.miscellaneous.utils.Common;
+import me.dylan.wands.spell.tools.SpellInfo;
 import me.dylan.wands.spell.util.SpellEffectUtil;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,7 +25,7 @@ import java.util.function.Consumer;
 public final class Aura extends Behavior {
     private final EffectFrequency effectFrequency;
     private final int effectDuration;
-    private final String AuraUUID;
+    private final String auraUUID;
     private final Consumer<LivingEntity> playerEffects, reverseAuraEffects;
     private final AuraParticleType auraParticleType;
 
@@ -33,7 +33,7 @@ public final class Aura extends Behavior {
         super(builder.baseProps);
         this.effectFrequency = builder.effectFrequency;
         this.effectDuration = builder.effectDuration;
-        this.AuraUUID = UUID.randomUUID().toString();
+        this.auraUUID = UUID.randomUUID().toString();
         this.playerEffects = builder.playerEffects;
         this.reverseAuraEffects = builder.reverseAuraEffects;
         this.auraParticleType = builder.auraParticleType;
@@ -49,17 +49,21 @@ public final class Aura extends Behavior {
 
     @Override
     public boolean cast(@NotNull Player player, @NotNull String weaponName) {
-        if (player.hasMetadata(AuraUUID)) {
+        if (player.hasMetadata(auraUUID)) {
             return false;
         }
-
-        player.setMetadata(AuraUUID, Common.METADATA_VALUE_TRUE);
-        World world = player.getWorld();
-
+        player.setMetadata(auraUUID, Common.getMetadataValueTrue());
         castSounds.play(player);
         playerEffects.accept(player);
 
-        new BukkitRunnable() {
+        SpellInfo spellInfo = new SpellInfo(player, player.getLocation(), null) {
+            @Override
+            public Location spellLocation() {
+                return player.getLocation();
+            }
+        };
+
+        BukkitRunnable bukkitRunnable = new BukkitRunnable() {
             int count;
             boolean repeat = true;
             boolean hasAffected;
@@ -69,17 +73,17 @@ public final class Aura extends Behavior {
                 ++count;
                 if (count > effectDuration) {
                     cancel();
-                    player.removeMetadata(AuraUUID, plugin);
+                    Common.removeMetaData(player, auraUUID);
                     if (!hasAffected) {
                         reverseAuraEffects.accept(player);
                     }
                 } else {
                     Location loc = player.getLocation();
                     if (auraParticleType == AuraParticleType.CENTER) {
-                        spellRelativeEffects.accept(loc, world);
+                        spellRelativeEffects.accept(loc, spellInfo);
                     } else {
                         for (Location location : SpellEffectUtil.getHorizontalCircleFrom(loc, spellEffectRadius, 0, 1)) {
-                            spellRelativeEffects.accept(location, world);
+                            spellRelativeEffects.accept(location, spellInfo);
                         }
                     }
                     if (repeat) {
@@ -90,12 +94,16 @@ public final class Aura extends Behavior {
                             knockBack.apply(livingEntity, loc);
                             SpellEffectUtil.damageEffect(player, livingEntity, entityDamage, weaponName);
                             hasAffected = true;
-                            entityEffects.accept(livingEntity);
+                            entityEffects.accept(livingEntity, spellInfo);
+                            for (PotionEffect potionEffect : potionEffects) {
+                                livingEntity.addPotionEffect(potionEffect, true);
+                            }
                         }
                     }
                 }
             }
-        }.runTaskTimer(Main.getPlugin(), 1, 1);
+        };
+        Common.runTaskTimer(bukkitRunnable, 1, 1);
         return true;
     }
 

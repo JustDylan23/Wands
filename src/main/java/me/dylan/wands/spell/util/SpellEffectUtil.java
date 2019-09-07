@@ -1,13 +1,15 @@
 package me.dylan.wands.spell.util;
 
 import com.destroystokyo.paper.block.TargetBlockInfo;
-import me.dylan.wands.Main;
+import me.dylan.wands.WandsPlugin;
 import me.dylan.wands.config.ConfigurableData;
 import me.dylan.wands.events.MagicDamageEvent;
+import me.dylan.wands.miscellaneous.utils.Common;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.*;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 import org.jetbrains.annotations.NotNull;
@@ -22,8 +24,8 @@ import java.util.stream.Collectors;
 
 public final class SpellEffectUtil {
     public static final String CAN_DAMAGE_WITH_WANDS = UUID.randomUUID().toString();
-    private static final ConfigurableData CONFIGURABLE_DATA = Main.getPlugin().getConfigurableData();
-    private static final Main plugin = Main.getPlugin();
+    private static final WandsPlugin plugin = JavaPlugin.getPlugin(WandsPlugin.class);
+    private static final ConfigurableData CONFIGURABLE_DATA = plugin.getConfigurableData();
 
     private SpellEffectUtil() {
         throw new UnsupportedOperationException("Instantiating util class");
@@ -110,7 +112,7 @@ public final class SpellEffectUtil {
     }
 
     public static List<LivingEntity> getNearbyLivingEntities(Player player, Location loc, double radius) {
-        return getNearbyLivingEntities(player, loc, x -> true, radius, radius, radius);
+        return getNearbyLivingEntities(player, loc, Common.emptyPredicate(), radius, radius, radius);
     }
 
     public static List<LivingEntity> getNearbyLivingEntities(Player player, @NotNull Location loc, Predicate<LivingEntity> predicate, double radius) {
@@ -129,14 +131,6 @@ public final class SpellEffectUtil {
                 .map(LivingEntity.class::cast)
                 .filter(predicate)
                 .collect(Collectors.toCollection(ArrayList::new));
-    }
-
-    public static void runTaskLater(Runnable runnable, @NotNull int... delays) {
-        int delay = 0;
-        for (int i : delays) {
-            delay += i;
-            Bukkit.getScheduler().runTaskLater(plugin, runnable, delay);
-        }
     }
 
     public static void spawnColoredParticle(@NotNull Particle particle, Location location, int count, double offsetX, double offsetY, double offsetZ, int red, int green, int blue, boolean rainbow) {

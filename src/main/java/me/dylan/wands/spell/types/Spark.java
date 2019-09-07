@@ -6,6 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -40,18 +41,20 @@ public final class Spark extends Behavior {
 
     @Override
     public boolean cast(@NotNull Player player, @NotNull String weaponName) {
-        Location loc = SpellEffectUtil.getSpellLocation(effectDistance, player);
-        if (loc == null) {
+        Location targetLoc = SpellEffectUtil.getSpellLocation(effectDistance, player);
+        if (targetLoc == null) {
             return false;
         }
-        SpellInfo spellInfo = new SpellInfo(player, player.getLocation(), loc);
+        SpellInfo spellInfo = new SpellInfo(player, player.getLocation(), targetLoc);
         castSounds.play(player);
-        spellRelativeEffects.accept(loc, loc.getWorld());
-        extendedSpellRelativeEffects.accept(loc, spellInfo);
-        for (LivingEntity entity : SpellEffectUtil.getNearbyLivingEntities(player, loc, spellEffectRadius)) {
-            knockBack.apply(entity, loc);
+        spellRelativeEffects.accept(targetLoc, spellInfo);
+        for (LivingEntity entity : SpellEffectUtil.getNearbyLivingEntities(player, targetLoc, spellEffectRadius)) {
+            knockBack.apply(entity, targetLoc);
             SpellEffectUtil.damageEffect(player, entity, entityDamage, weaponName);
-            entityEffects.accept(entity);
+            entityEffects.accept(entity, spellInfo);
+            for (PotionEffect potionEffect : potionEffects) {
+                entity.addPotionEffect(potionEffect, true);
+            }
             if (target == Target.SINGLE) {
                 break;
             }
