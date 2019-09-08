@@ -4,6 +4,7 @@ import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.RayTraceResult;
@@ -30,7 +31,7 @@ public final class PlayerUtil {
         Location farthest = location.clone().add(facing.clone().multiply(distance));
         BoundingBox area = new BoundingBox(location.getX(), location.getY(), location.getZ(), farthest.getX(), farthest.getY(), farthest.getZ());
 
-        Collection<Entity> entities = location.getWorld().getNearbyEntities(area, e -> e != player && predicate.test(e));
+        Collection<Entity> entities = location.getWorld().getNearbyEntities(area, e -> e instanceof LivingEntity && e != player && predicate.test(e));
 
         Vector start = location.toVector();
 
