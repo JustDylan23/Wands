@@ -44,7 +44,7 @@ public final class Common {
         Bukkit.getScheduler().runTaskLater(plugin, runnable, delay);
     }
 
-    public static void runTaskLater(Runnable runnable, @NotNull int... delays) {
+    public static void runRepeatableTaskLater(Runnable runnable, @NotNull int... delays) {
         int delay = 0;
         for (int i : delays) {
             delay += i;

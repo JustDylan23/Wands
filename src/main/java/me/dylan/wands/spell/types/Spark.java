@@ -42,9 +42,6 @@ public final class Spark extends Behavior {
     @Override
     public boolean cast(@NotNull Player player, @NotNull String weaponName) {
         Location targetLoc = SpellEffectUtil.getSpellLocation(effectDistance, player);
-        if (targetLoc == null) {
-            return false;
-        }
         SpellInfo spellInfo = new SpellInfo(player, player.getLocation(), targetLoc);
         castSounds.play(player);
         spellRelativeEffects.accept(targetLoc, spellInfo);

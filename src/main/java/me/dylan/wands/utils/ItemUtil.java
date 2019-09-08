@@ -21,8 +21,7 @@ public final class ItemUtil {
     }
 
     public static @NotNull String getName(@NotNull ItemStack itemStack) {
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        return itemMeta != null ? itemMeta.getDisplayName() : "";
+        return itemStack.hasItemMeta() ? itemStack.getItemMeta().getDisplayName() : "";
     }
 
     public static void setItemMeta(@NotNull ItemStack itemStack, @NotNull Consumer<ItemMeta> consumer) {

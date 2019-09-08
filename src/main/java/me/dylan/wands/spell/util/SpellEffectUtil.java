@@ -3,11 +3,13 @@ package me.dylan.wands.spell.util;
 import me.dylan.wands.WandsPlugin;
 import me.dylan.wands.config.ConfigurableData;
 import me.dylan.wands.events.MagicDamageEvent;
-import me.dylan.wands.spell.TargetBlockInfo;
 import me.dylan.wands.utils.Common;
 import me.dylan.wands.utils.LocationUtil;
 import me.dylan.wands.utils.PlayerUtil;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Particle;
+import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.*;
@@ -15,7 +17,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,22 +34,18 @@ public final class SpellEffectUtil {
         throw new UnsupportedOperationException("Instantiating util class");
     }
 
-    @Nullable
-    public static Location getSpellLocation(int effectDistance, Player player) {
+    public static @NotNull Location getSpellLocation(int effectDistance, Player player) {
         if (effectDistance == 0) return player.getLocation();
         Entity entity = PlayerUtil.getTargetEntity(player, effectDistance, e -> true);
         if (entity instanceof LivingEntity && !(entity instanceof ArmorStand)) {
             return LocationUtil.toCenterLocation(entity.getLocation());
         }
-        TargetBlockInfo info = PlayerUtil.getTargetBlockInfo(player, effectDistance);
-        if (info == null) {
-            Location loc = player.getLocation();
-            return LocationUtil.toCenterLocation(loc.add(loc.getDirection().multiply(effectDistance)));
+        Location exactLoc = PlayerUtil.getTargetBlockExact(player, effectDistance);
+        if (exactLoc == null) {
+            Location playerLocation = player.getLocation();
+            return LocationUtil.toCenterLocation(playerLocation.add(playerLocation.getDirection().multiply(effectDistance)));
         }
-        if (info.getBlock().getType() == Material.AIR) {
-            return LocationUtil.toCenterBlock(info.getBlock());
-        }
-        return LocationUtil.toCenterBlock(info.getRelativeBlock());
+        return exactLoc;
     }
 
     public static @NotNull Location[] getHorizontalCircleFrom(@NotNull Location location, float radius, float angleOffset, float pointsMultiplier) {

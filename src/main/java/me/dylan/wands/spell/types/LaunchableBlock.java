@@ -128,10 +128,10 @@ public final class LaunchableBlock extends Behavior implements Listener {
                 if (fallingBlock.isValid()) {
                     fallingBlock.setVelocity(
                             LocationUtil.toCenterBlock(block)
-                            .subtract(fallingBlock.getLocation())
-                            .toVector()
-                            .normalize()
-                            .multiply(1.2)
+                                    .subtract(fallingBlock.getLocation())
+                                    .toVector()
+                                    .normalize()
+                                    .multiply(1.2)
                     );
                 }
             }, 20L);
