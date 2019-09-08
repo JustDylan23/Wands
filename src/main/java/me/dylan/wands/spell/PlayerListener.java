@@ -4,9 +4,10 @@ import me.dylan.wands.MouseClickListeners.ClickEvent;
 import me.dylan.wands.MouseClickListeners.LeftClickListener;
 import me.dylan.wands.MouseClickListeners.RightClickListener;
 import me.dylan.wands.events.MagicDamageEvent;
-import me.dylan.wands.miscellaneous.utils.ItemUtil;
+import me.dylan.wands.spell.accessories.ItemTag;
 import me.dylan.wands.spell.util.SpellEffectUtil;
 import me.dylan.wands.spell.util.SpellInteractionUtil;
+import me.dylan.wands.utils.ItemUtil;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -73,7 +74,7 @@ public class PlayerListener implements Listener, LeftClickListener, RightClickLi
                     .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText(str)))
                     .append("§7]");
             BaseComponent[] baseComponents = componentBuilder.create();
-            Bukkit.getOnlinePlayers().forEach(player -> player.sendMessage(baseComponents));
+            Bukkit.getOnlinePlayers().forEach(player -> player.spigot().sendMessage(baseComponents));
             event.setDeathMessage(null);
             Player attacker = magicDamageEvent.getAttacker();
             if (!attacker.equals(victim)) {
@@ -90,9 +91,8 @@ public class PlayerListener implements Listener, LeftClickListener, RightClickLi
     @EventHandler
     private void onChangeSlot(PlayerItemHeldEvent event) {
         Player player = event.getPlayer();
-        event.getNewSlot();
         ItemStack itemStack = player.getInventory().getItem(event.getNewSlot());
-        if (ItemTag.IS_WAND.isTagged(itemStack)) {
+        if (itemStack != null && ItemTag.IS_WAND.isTagged(itemStack)) {
             SpellInteractionUtil.showSelectedSpell(player, itemStack);
         }
     }

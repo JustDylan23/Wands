@@ -1,9 +1,9 @@
 package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.spell.Castable;
-import me.dylan.wands.spell.tools.KnockBack;
-import me.dylan.wands.spell.tools.sound.RepeatableSound;
-import me.dylan.wands.spell.tools.sound.SoundEffect;
+import me.dylan.wands.spell.accessories.KnockBack;
+import me.dylan.wands.spell.accessories.sound.RepeatableSound;
+import me.dylan.wands.spell.accessories.sound.SoundEffect;
 import me.dylan.wands.spell.types.Behavior;
 import me.dylan.wands.spell.types.MagicProjectile;
 import org.bukkit.Particle;

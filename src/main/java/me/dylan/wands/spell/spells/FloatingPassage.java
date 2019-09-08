@@ -1,8 +1,8 @@
 package me.dylan.wands.spell.spells;
 
-import me.dylan.wands.miscellaneous.utils.Common;
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.types.Behavior;
+import me.dylan.wands.utils.Common;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;

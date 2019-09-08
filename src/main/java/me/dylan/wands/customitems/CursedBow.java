@@ -2,10 +2,11 @@ package me.dylan.wands.customitems;
 
 import me.dylan.wands.MouseClickListeners.ClickEvent;
 import me.dylan.wands.MouseClickListeners.RightClickListener;
-import me.dylan.wands.miscellaneous.utils.Common;
-import me.dylan.wands.spell.ItemTag;
+import me.dylan.wands.spell.accessories.ItemTag;
 import me.dylan.wands.spell.util.SpellEffectUtil;
 import me.dylan.wands.spell.util.SpellInteractionUtil;
+import me.dylan.wands.utils.Common;
+import me.dylan.wands.utils.PlayerUtil;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -56,7 +57,7 @@ public class CursedBow implements Listener, RightClickListener {
         Player player = event.getPlayer();
         if (hasBow(player) == 1 && SpellInteractionUtil.canUse(player) && (player.getGameMode() == GameMode.CREATIVE || player.getInventory().contains(Material.ARROW))) {
             drawing.add(player);
-            player.sendActionBar("§6Charging [§a|§6|||]");
+            PlayerUtil.sendActionBar(player, "§6Charging [§a|§6|||]");
             BukkitRunnable bukkitRunnable = new BukkitRunnable() {
                 int count;
 
@@ -64,11 +65,11 @@ public class CursedBow implements Listener, RightClickListener {
                 public void run() {
                     count++;
                     if (drawing.contains(player)) {
-                        if (count == 10) player.sendActionBar("§6Charging [§a||§6||]");
-                        if (count == 20) player.sendActionBar("§6Charging [§a|||§6|]");
+                        if (count == 10) PlayerUtil.sendActionBar(player, "§6Charging [§a||§6||]");
+                        if (count == 20) PlayerUtil.sendActionBar(player, "§6Charging [§a|||§6|]");
                         if (count == 30) {
                             player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.MASTER, 1.0F, 1.0F);
-                            player.sendActionBar("§aCharged §6[§a||||§6]");
+                            PlayerUtil.sendActionBar(player, "§aCharged §6[§a||||§6]");
                             hasDrawn.add(player);
                             drawing.remove(player);
                             cancel();
@@ -86,24 +87,26 @@ public class CursedBow implements Listener, RightClickListener {
             Player player = (Player) event.getEntity();
             if (hasBow(player) == 2) {
                 event.setCancelled(true);
-                player.sendActionBar("§ccan't fire from offhand");
+                PlayerUtil.sendActionBar(player, "§ccan't fire from offhand");
             }
             if (drawing.contains(player)) {
                 drawing.remove(player);
-                player.sendActionBar("§ccancelled shot");
+                PlayerUtil.sendActionBar(player, "§ccancelled shot");
                 event.setCancelled(true);
             } else if (hasDrawn.contains(player)) {
                 hasDrawn.remove(player);
                 Entity projectile = event.getProjectile();
                 projectile.setMetadata(cursedArrow, Common.metadataValue(player.getInventory().getItemInMainHand().getItemMeta().getDisplayName()));
                 Location location = player.getLocation();
-                location.getWorld().playSound(location, Sound.ENTITY_ENDER_DRAGON_FLAP, SoundCategory.MASTER, 4.0F, 1.0F);
-                location.getWorld().playSound(player.getLocation(), Sound.ENTITY_EVOKER_CAST_SPELL, SoundCategory.MASTER, 4.0F, 0.1F);
-                location.getWorld().spawnParticle(Particle.SPELL_WITCH, location.add(0, 1, 0), 30, 1, 1, 1, 0.0F, null, true);
-                location.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, location.add(0, 1, 0), 100, 1, 1, 1, 0.0F, null, true);
+                World world = location.getWorld();
+                world.playSound(location, Sound.ENTITY_ENDER_DRAGON_FLAP, SoundCategory.MASTER, 4.0F, 1.0F);
+                world.playSound(player.getLocation(), Sound.ENTITY_EVOKER_CAST_SPELL, SoundCategory.MASTER, 4.0F, 0.1F);
+                world.spawnParticle(Particle.SPELL_WITCH, location.add(0, 1, 0), 30, 1, 1, 1, 0.0F, null, true);
+                world.spawnParticle(Particle.ENCHANTMENT_TABLE, location.add(0, 1, 0), 100, 1, 1, 1, 0.0F, null, true);
                 trail(projectile, loc -> {
-                    loc.getWorld().spawnParticle(Particle.SPELL_WITCH, loc, 10, 0.5, 0.5, 0.5, 0.05, null, true);
-                    loc.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, loc, 10, 0.5, 0.5, 0.5, 0.15, null, true);
+                    World world1 = loc.getWorld();
+                    world1.spawnParticle(Particle.SPELL_WITCH, loc, 10, 0.5, 0.5, 0.5, 0.05, null, true);
+                    world1.spawnParticle(Particle.ENCHANTMENT_TABLE, loc, 10, 0.5, 0.5, 0.5, 0.15, null, true);
                 });
             }
         }
@@ -113,7 +116,7 @@ public class CursedBow implements Listener, RightClickListener {
     private void onChangeSlot(PlayerItemHeldEvent event) {
         Player player = event.getPlayer();
         if (drawing.contains(player)) {
-            player.sendActionBar("§cCancelled shot");
+            PlayerUtil.sendActionBar(player, "§cCancelled shot");
         }
         drawing.remove(player);
     }

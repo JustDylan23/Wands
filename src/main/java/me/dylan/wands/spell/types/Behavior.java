@@ -1,10 +1,10 @@
 package me.dylan.wands.spell.types;
 
-import me.dylan.wands.miscellaneous.utils.Common;
-import me.dylan.wands.spell.tools.KnockBack;
-import me.dylan.wands.spell.tools.SpellInfo;
-import me.dylan.wands.spell.tools.sound.SingularSound;
-import me.dylan.wands.spell.tools.sound.SoundEffect;
+import me.dylan.wands.spell.accessories.KnockBack;
+import me.dylan.wands.spell.accessories.SpellInfo;
+import me.dylan.wands.spell.accessories.sound.SingularSound;
+import me.dylan.wands.spell.accessories.sound.SoundEffect;
+import me.dylan.wands.utils.Common;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.LivingEntity;

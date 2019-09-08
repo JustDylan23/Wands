@@ -3,8 +3,7 @@ package me.dylan.wands.spell;
 import me.dylan.wands.spell.spells.*;
 import me.dylan.wands.spell.types.Behavior;
 import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public enum SpellType {
     BLOOD_BLOCK(new BloodBlock()),

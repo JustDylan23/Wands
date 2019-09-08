@@ -1,4 +1,4 @@
-package me.dylan.wands.spell.tools;
+package me.dylan.wands.spell.accessories;
 
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;

@@ -1,8 +1,8 @@
 package me.dylan.wands.spell.types;
 
-import me.dylan.wands.miscellaneous.utils.Common;
-import me.dylan.wands.spell.tools.SpellInfo;
+import me.dylan.wands.spell.accessories.SpellInfo;
 import me.dylan.wands.spell.util.SpellEffectUtil;
+import me.dylan.wands.utils.Common;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;

@@ -1,7 +1,6 @@
-package me.dylan.wands.spell.tools;
+package me.dylan.wands.spell;
 
-import me.dylan.wands.miscellaneous.utils.ItemUtil;
-import me.dylan.wands.spell.SpellType;
+import me.dylan.wands.utils.ItemUtil;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;

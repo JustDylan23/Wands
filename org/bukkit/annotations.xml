@@ -1,0 +1,12 @@
+<root>
+    <item name='org.bukkit.Bukkit org.bukkit.scoreboard.ScoreboardManager getScoreboardManager()'>
+        <annotation name='org.jetbrains.annotations.Contract'>
+            <val val="&quot;-&gt; !null&quot;"/>
+        </annotation>
+    </item>
+    <item name='org.bukkit.Location org.bukkit.World getWorld()'>
+        <annotation name='org.jetbrains.annotations.Contract'>
+            <val val="&quot;-&gt; !null&quot;"/>
+        </annotation>
+    </item>
+</root>

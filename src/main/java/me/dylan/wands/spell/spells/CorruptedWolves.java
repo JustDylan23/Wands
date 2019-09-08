@@ -1,12 +1,12 @@
 package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.WandsPlugin;
-import me.dylan.wands.miscellaneous.utils.Common;
 import me.dylan.wands.spell.Castable;
-import me.dylan.wands.spell.tools.SpellInfo;
+import me.dylan.wands.spell.accessories.SpellInfo;
 import me.dylan.wands.spell.types.Behavior;
 import me.dylan.wands.spell.types.Spark;
 import me.dylan.wands.spell.util.SpellEffectUtil;
+import me.dylan.wands.utils.Common;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;

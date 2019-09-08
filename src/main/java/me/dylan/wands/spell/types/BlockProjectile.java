@@ -2,9 +2,10 @@ package me.dylan.wands.spell.types;
 
 import me.dylan.wands.ListenerRegistry;
 import me.dylan.wands.WandsPlugin;
-import me.dylan.wands.miscellaneous.utils.Common;
-import me.dylan.wands.spell.tools.SpellInfo;
+import me.dylan.wands.spell.accessories.SpellInfo;
 import me.dylan.wands.spell.util.SpellEffectUtil;
+import me.dylan.wands.utils.Common;
+import me.dylan.wands.utils.LocationUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -112,7 +113,7 @@ public final class BlockProjectile extends Behavior implements Listener {
                                         for (PotionEffect potionEffect : potionEffects) {
                                             entity.addPotionEffect(potionEffect, true);
                                         }
-                                        knockBack.apply(entity, location.toCenterLocation());
+                                        knockBack.apply(entity, LocationUtil.toCenterLocation(location));
                                         SpellEffectUtil.damageEffect(player, entity, entityDamage, wandDisplayName);
                                     });
                         } else cancel();
@@ -135,7 +136,6 @@ public final class BlockProjectile extends Behavior implements Listener {
     }
 
     public static final class Builder extends AbstractBuilder<Builder> {
-
         private final float speed;
         private final Material material;
         private int delay, amount = 1;

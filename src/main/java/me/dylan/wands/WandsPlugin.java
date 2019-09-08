@@ -13,7 +13,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashSet;
@@ -39,15 +38,6 @@ public final class WandsPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        try {
-            Player.class.getMethod("sendActionBar", String.class);
-        } catch (NoSuchMethodException e) {
-            this.getPluginLoader().disablePlugin(this);
-            log("§cThis plugin only works on Paper, an improved version of spigot.");
-            log("§cDisabling plugin...");
-            return;
-        }
-
         ListenerRegistry listenerRegistry = new ListenerRegistry();
 
         this.configurableData = new ConfigurableData(listenerRegistry);
@@ -72,6 +62,7 @@ public final class WandsPlugin extends JavaPlugin {
 
         addCommand("wands", new Wands(configurableData, getDescription().getVersion()), new WandsComplete());
         addCommand("createwand", new CreateWand(), null);
+        addCommand("clearwand", new ClearWand(), null);
         addCommand("bind", new Bind(), new BindComplete());
         addCommand("unbind", new Unbind(), new UnbindComplete());
         addCommand("bindall", new BindAll(), null);
@@ -88,7 +79,7 @@ public final class WandsPlugin extends JavaPlugin {
 
     private void addCommand(String command, CommandExecutor executor, TabCompleter tabCompleter) {
         PluginCommand cmd = getCommand(command);
-        if (cmd == null) throw new NoSuchElementException("Command " + command + "was not found in plugin.yml");
+        if (cmd == null) throw new NoSuchElementException("Command " + command + " was not found in plugin.yml");
         cmd.setExecutor(executor);
         cmd.setTabCompleter(tabCompleter);
     }

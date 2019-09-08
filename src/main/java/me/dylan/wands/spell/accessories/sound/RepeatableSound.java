@@ -1,6 +1,6 @@
-package me.dylan.wands.spell.tools.sound;
+package me.dylan.wands.spell.accessories.sound;
 
-import me.dylan.wands.miscellaneous.utils.Common;
+import me.dylan.wands.utils.Common;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;

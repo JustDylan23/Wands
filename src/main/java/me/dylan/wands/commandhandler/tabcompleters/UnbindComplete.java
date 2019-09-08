@@ -1,7 +1,7 @@
 package me.dylan.wands.commandhandler.tabcompleters;
 
 import me.dylan.wands.commandhandler.BaseCompleter;
-import me.dylan.wands.spell.tools.SpellCompound;
+import me.dylan.wands.spell.SpellCompound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

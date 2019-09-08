@@ -1,8 +1,8 @@
 package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.spell.Castable;
-import me.dylan.wands.spell.tools.KnockBack;
-import me.dylan.wands.spell.tools.sound.CompoundSound;
+import me.dylan.wands.spell.accessories.KnockBack;
+import me.dylan.wands.spell.accessories.sound.CompoundSound;
 import me.dylan.wands.spell.types.Behavior;
 import me.dylan.wands.spell.types.LaunchableBlock;
 import org.bukkit.Material;

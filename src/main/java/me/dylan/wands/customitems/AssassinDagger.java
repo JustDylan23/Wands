@@ -2,13 +2,11 @@ package me.dylan.wands.customitems;
 
 import me.dylan.wands.MouseClickListeners.ClickEvent;
 import me.dylan.wands.MouseClickListeners.RightClickListener;
-import me.dylan.wands.miscellaneous.utils.Common;
-import me.dylan.wands.spell.ItemTag;
+import me.dylan.wands.spell.accessories.ItemTag;
 import me.dylan.wands.spell.util.SpellInteractionUtil;
-import org.bukkit.Location;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
-import org.bukkit.SoundCategory;
+import me.dylan.wands.utils.Common;
+import me.dylan.wands.utils.PlayerUtil;
+import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -25,6 +23,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -38,7 +37,7 @@ public class AssassinDagger implements Listener, RightClickListener {
         return SpellInteractionUtil.canUse(player) && isDagger(player.getInventory().getItemInMainHand());
     }
 
-    private boolean isDagger(ItemStack itemStack) {
+    private boolean isDagger(@NotNull ItemStack itemStack) {
         return ItemTag.IS_DAGGER.isTagged(itemStack);
     }
 
@@ -62,8 +61,9 @@ public class AssassinDagger implements Listener, RightClickListener {
                 public void run() {
                     if (player.isSprinting()) {
                         Location loc = player.getLocation();
-                        loc.getWorld().spawnParticle(Particle.SMOKE_LARGE, loc, 1, 0.1, 0.1, 0.1, 0.1, null, true);
-                        loc.getWorld().spawnParticle(Particle.SMOKE_NORMAL, loc, 1, 0.1, 0.1, 0.1, 0.1, null, true);
+                        World world = loc.getWorld();
+                        world.spawnParticle(Particle.SMOKE_LARGE, loc, 1, 0.1, 0.1, 0.1, 0.1, null, true);
+                        world.spawnParticle(Particle.SMOKE_NORMAL, loc, 1, 0.1, 0.1, 0.1, 0.1, null, true);
                         player.addPotionEffect(speed, true);
                     } else {
                         cancel();
@@ -155,12 +155,13 @@ public class AssassinDagger implements Listener, RightClickListener {
         if (!player.hasMetadata(tagSneak)) {
             player.setMetadata(tagSneak, Common.getMetadataValueTrue());
             Location location = player.getLocation();
-            location.getWorld().playSound(location, Sound.ENTITY_ZOMBIE_VILLAGER_CURE, 1.0f, 2.00f);
-            location.getWorld().spawnParticle(Particle.SMOKE_LARGE, location, 15, 0.5, 0.2, 0.5, 0.1, null, true);
-            location.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, location, 20, 0.5, 0.5, 0.5, 0.1, null, true);
+            World world = location.getWorld();
+            world.playSound(location, Sound.ENTITY_ZOMBIE_VILLAGER_CURE, 1.0f, 2.00f);
+            world.spawnParticle(Particle.SMOKE_LARGE, location, 15, 0.5, 0.2, 0.5, 0.1, null, true);
+            world.spawnParticle(Particle.ENCHANTMENT_TABLE, location, 20, 0.5, 0.5, 0.5, 0.1, null, true);
             player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 6000, 0, true), true);
             player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 6000, 0, true), false);
-            player.sendActionBar("§6You are §aInvisible");
+            PlayerUtil.sendActionBar(player, "§6You are §aInvisible");
         }
     }
 
@@ -170,13 +171,14 @@ public class AssassinDagger implements Listener, RightClickListener {
         player.removePotionEffect(PotionEffectType.REGENERATION);
         Location location = player.getLocation();
         location.getWorld().playSound(location, Sound.ITEM_ARMOR_EQUIP_ELYTRA, 1.0f, 0.8f);
-        player.sendActionBar(message);
+        PlayerUtil.sendActionBar(player, message);
     }
 
     @EventHandler
     private void onChangeSlot(PlayerItemHeldEvent event) {
         Player player = event.getPlayer();
-        if (isDagger(player.getInventory().getItem(event.getNewSlot()))) {
+        ItemStack itemStack = player.getInventory().getItem(event.getNewSlot());
+        if (itemStack != null && isDagger(itemStack)) {
             if (player.isSneaking()) {
                 cover(player);
             } else if (player.isSprinting()) {

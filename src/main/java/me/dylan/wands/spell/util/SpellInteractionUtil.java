@@ -2,13 +2,14 @@ package me.dylan.wands.spell.util;
 
 import me.dylan.wands.WandsPlugin;
 import me.dylan.wands.config.ConfigurableData;
-import me.dylan.wands.miscellaneous.utils.ItemUtil;
 import me.dylan.wands.spell.BrowseParticle;
 import me.dylan.wands.spell.CooldownManager;
-import me.dylan.wands.spell.ItemTag;
+import me.dylan.wands.spell.SpellCompound;
 import me.dylan.wands.spell.SpellType;
-import me.dylan.wands.spell.tools.SpellCompound;
+import me.dylan.wands.spell.accessories.ItemTag;
 import me.dylan.wands.spell.types.Behavior;
+import me.dylan.wands.utils.ItemUtil;
+import me.dylan.wands.utils.PlayerUtil;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
@@ -16,8 +17,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,15 +42,13 @@ public final class SpellInteractionUtil {
     public static boolean canUse(Player player) {
         if (config.doesCastingRequirePermission()) {
             if (!player.hasPermission("wands.use")) {
-                player.sendActionBar("§cinsufficient permissions");
+                PlayerUtil.sendActionBar(player, "§cinsufficient permissions");
                 return false;
             }
         }
         return true;
     }
 
-    // todo implement
-    @SuppressWarnings("unused")
     public static void undoWand(ItemStack itemStack) {
         ItemTag.IS_WAND.untag(itemStack);
         ItemUtil.removePersistentData(itemStack, TAG_SPELL_INDEX);
@@ -94,7 +93,7 @@ public final class SpellInteractionUtil {
         List<SpellType> spells = new SpellCompound(itemStack).getSpells();
         int length = spells.size();
         if (length == 0) {
-            player.sendActionBar(WandsPlugin.PREFIX + "No spells are bound!");
+            PlayerUtil.sendActionBar(player, WandsPlugin.PREFIX + "No spells are bound!");
             return;
         }
 
@@ -110,14 +109,14 @@ public final class SpellInteractionUtil {
         setIndex(itemStack, index);
 
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.5F, 0.5F);
-        player.sendActionBar("§6Current spell: §7§l" + spells.get(index).name);
+        PlayerUtil.sendActionBar(player, "§6Current spell: §7§l" + spells.get(index).name);
         getSpellBrowseParticle(itemStack).ifPresent(particle -> particle.displayAt(player.getLocation()));
     }
 
     public static void showSelectedSpell(Player player, ItemStack itemStack) {
         SpellType spell = getSelectedSpell(itemStack);
         if (spell != null) {
-            player.sendActionBar("§6Current spell: §7§l" + spell.name);
+            PlayerUtil.sendActionBar(player, "§6Current spell: §7§l" + spell.name);
         }
     }
 
@@ -129,7 +128,7 @@ public final class SpellInteractionUtil {
                     cooldownManager.updateLastUsed(caster);
                 }
             } else {
-                caster.sendActionBar("No behaviour found for spell!");
+                PlayerUtil.sendActionBar(caster, "No behaviour found for spell!");
             }
         }
     }

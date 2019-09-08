@@ -2,8 +2,8 @@ package me.dylan.wands;
 
 import me.dylan.wands.spell.BrowseParticle;
 import me.dylan.wands.spell.ItemBuilder;
-import me.dylan.wands.spell.ItemTag;
 import me.dylan.wands.spell.SpellType;
+import me.dylan.wands.spell.accessories.ItemTag;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;

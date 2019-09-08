@@ -2,13 +2,15 @@ package me.dylan.wands.commandhandler.commands;
 
 import me.dylan.wands.WandsPlugin;
 import me.dylan.wands.commandhandler.BaseCommand;
+import me.dylan.wands.spell.SpellCompound;
 import me.dylan.wands.spell.SpellType;
-import me.dylan.wands.spell.tools.SpellCompound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 public class Bind extends BaseCommand {
     @Override
@@ -21,7 +23,7 @@ public class Bind extends BaseCommand {
                 if (isWand(player, itemStack)) {
                     SpellType spellType = SpellType.getSpellType(argument);
                     if (spellType != null) {
-                        String itemName = itemStack.getItemMeta().getDisplayName();
+                        String itemName = Objects.requireNonNull(itemStack.getItemMeta()).getDisplayName();
                         SpellCompound compound = new SpellCompound(itemStack);
                         if (compound.add(spellType)) {
                             compound.apply(itemStack);
