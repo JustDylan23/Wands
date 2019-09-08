@@ -134,7 +134,7 @@ public abstract class Behavior {
         }
 
         public T setPotionEffects(PotionEffect... potionEffects) {
-            baseProps.potionEffects = potionEffects;
+            baseProps.potionEffects = potionEffects.clone();
             return self();
         }
 
@@ -178,6 +178,7 @@ public abstract class Behavior {
         BiConsumer<Location, SpellInfo> spellRelativeEffects = Common.emptyBiConsumer();
         BiConsumer<LivingEntity, SpellInfo> entityEffects = Common.emptyBiConsumer();
         KnockBack knockBack = KnockBack.NONE;
+        @SuppressWarnings("ZeroLengthArrayAllocation")
         PotionEffect[] potionEffects = new PotionEffect[0];
 
         boolean isEmpty() {

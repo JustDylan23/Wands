@@ -1,6 +1,5 @@
 package me.dylan.wands.utils;
 
-import me.dylan.wands.spell.TargetBlockInfo;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Location;
@@ -15,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.function.Predicate;
 
-public class PlayerUtil {
+public final class PlayerUtil {
     private PlayerUtil() {
         throw new UnsupportedOperationException("Instantiating util class");
     }
@@ -24,9 +23,8 @@ public class PlayerUtil {
         player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(message));
     }
 
-    @Nullable
-    public static Entity getTargetEntity(@NotNull Player player, int distance, Predicate<Entity> predicate) {
-        Location location = player.getLocation();
+    public static @Nullable Entity getTargetEntity(@NotNull Player player, int distance, Predicate<Entity> predicate) {
+        Location location = player.getEyeLocation();
         Vector facing = location.getDirection();
 
         Location farthest = location.clone().add(facing.clone().multiply(distance));
@@ -44,6 +42,7 @@ public class PlayerUtil {
 
             if (rayTrace == null)
                 continue;
+
             double distanceSq = rayTrace.getHitPosition().distanceSquared(start);
             if (distanceSq < minDistance) {
                 minDistance = distanceSq;
@@ -53,11 +52,10 @@ public class PlayerUtil {
         return bestMatch;
     }
 
-    @Nullable
-    public static TargetBlockInfo getTargetBlockInfo(@NotNull Player player, int maxDistance) {
+    public static @Nullable Location getTargetBlockExact(@NotNull Player player, int maxDistance) {
         RayTraceResult result = player.rayTraceBlocks(maxDistance);
-        if (result == null || result.getHitBlock() == null || result.getHitBlockFace() == null)
+        if (result == null)
             return null;
-        return new TargetBlockInfo(result.getHitBlock(), result.getHitBlockFace());
+        return result.getHitPosition().toLocation(player.getWorld());
     }
 }

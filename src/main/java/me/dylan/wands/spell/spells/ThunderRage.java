@@ -37,7 +37,7 @@ public class ThunderRage implements Castable {
                     world.spawnParticle(Particle.FLAME, loc, 10, 0.2, 0.2, 0.2, 0.1, null, true);
                     world.spawnParticle(Particle.CLOUD, loc, 10, 0.2, 0.2, 0.2, 0.1, null, true);
                     world.strikeLightningEffect(loc);
-                    Common.runTaskLater(() -> world.strikeLightningEffect(loc), 3, 3, 3);
+                    Common.runRepeatableTaskLater(() -> world.strikeLightningEffect(loc), 3, 3, 3);
                 })
                 .setReverseAuraEffects(player -> {
                     player.addPotionEffect(strength, true);

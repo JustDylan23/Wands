@@ -9,7 +9,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Draws circle around player or target depending on how its configured.
@@ -46,11 +45,9 @@ public final class Circle extends Behavior {
 
     @Override
     public boolean cast(@NotNull Player player, @NotNull String weaponName) {
-        Location circleCenter = getCircleCenter(player);
-
-        if (circleCenter == null) {
-            return false;
-        }
+        Location circleCenter = (circlePlacement == CirclePlacement.TARGET)
+                ? SpellEffectUtil.getSpellLocation(effectDistance, player)
+                : player.getLocation();
 
         SpellInfo spellInfo = new SpellInfo(player, player.getLocation(), circleCenter);
 
@@ -85,12 +82,6 @@ public final class Circle extends Behavior {
         };
         Common.runTaskTimer(bukkitRunnable, 0, 1);
         return true;
-    }
-
-    private @Nullable Location getCircleCenter(Player player) {
-        return (circlePlacement == CirclePlacement.TARGET)
-                ? SpellEffectUtil.getSpellLocation(effectDistance, player)
-                : player.getLocation();
     }
 
     public enum CirclePlacement {

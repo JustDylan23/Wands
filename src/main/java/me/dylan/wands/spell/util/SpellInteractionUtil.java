@@ -76,8 +76,7 @@ public final class SpellInteractionUtil {
         return Optional.empty();
     }
 
-    @Nullable
-    public static SpellType getSelectedSpell(ItemStack itemStack) {
+    public static @Nullable SpellType getSelectedSpell(ItemStack itemStack) {
         SpellCompound compound = new SpellCompound(itemStack);
         if (compound.isEmpty()) return null;
         int index = getIndex(itemStack);

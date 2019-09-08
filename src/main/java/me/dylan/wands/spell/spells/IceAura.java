@@ -12,7 +12,7 @@ import org.bukkit.potion.PotionEffectType;
 public class IceAura implements Castable {
     @Override
     public Behavior createBehaviour() {
-        final PotionEffect speed = new PotionEffect(PotionEffectType.SPEED, 40, 0, false);
+        PotionEffect speed = new PotionEffect(PotionEffectType.SPEED, 40, 0, false);
         return Aura.newBuilder(EffectFrequency.CONSTANT)
                 .setSpellEffectRadius(3.5F)
                 .setEffectDuration(100)

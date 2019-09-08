@@ -33,7 +33,7 @@ public class ThunderStrike implements Castable {
                     world.spawnParticle(Particle.SMOKE_NORMAL, loc, 20, 2, 2, 2, 0.2, null, true);
                     world.spawnParticle(Particle.SMOKE_LARGE, loc, 5, 2, 2, 2, 0.2, null, true);
                     world.spawnParticle(Particle.EXPLOSION_HUGE, loc, 0, 0.0, 0.0, 0.0, 0.0, null, true);
-                    Common.runTaskLater(() -> {
+                    Common.runRepeatableTaskLater(() -> {
                         Location loc2 = SpellEffectUtil.randomizeLoc(loc, 3, 1, 3);
                         world.playSound(loc2, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, 4, 1);
                         world.strikeLightningEffect(loc2);

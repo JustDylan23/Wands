@@ -64,8 +64,7 @@ public enum SpellType {
         this.name = castable.getDisplayName();
     }
 
-    @Nullable
-    public static SpellType getSpellType(@NotNull String name) {
+    public static @Nullable SpellType getSpellType(@NotNull String name) {
         try {
             return valueOf(name.toUpperCase());
         } catch (IllegalArgumentException e) {
