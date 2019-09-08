@@ -1,6 +1,7 @@
 package me.dylan.wands.utils;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -16,16 +17,8 @@ public final class ItemUtil {
         throw new UnsupportedOperationException("Instantiating util class");
     }
 
-    public static void setName(@NotNull ItemStack itemStack, String name) {
-        setItemMeta(itemStack, meta -> meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', name)));
-    }
-
-    public static @NotNull String getName(@NotNull ItemStack itemStack) {
-        return itemStack.hasItemMeta() ? itemStack.getItemMeta().getDisplayName() : "";
-    }
-
     public static void setItemMeta(@NotNull ItemStack itemStack, @NotNull Consumer<ItemMeta> consumer) {
-        if (!itemStack.hasItemMeta()) {
+        if (itemStack.getType() == Material.AIR) {
             return;
         }
         ItemMeta itemMeta = itemStack.getItemMeta();
@@ -33,12 +26,20 @@ public final class ItemUtil {
         itemStack.setItemMeta(itemMeta);
     }
 
+    public static void setName(@NotNull ItemStack itemStack, String name) {
+        setItemMeta(itemStack, meta -> meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', name)));
+    }
+
+    public static @NotNull String getName(@NotNull ItemStack itemStack) {
+        return (itemStack.getType() == Material.AIR) ? itemStack.getItemMeta().getDisplayName() : "";
+    }
+
     public static <T> void setPersistentData(@NotNull ItemStack itemStack, @NotNull String key, @NotNull PersistentDataType<T, T> type, T t) {
         setItemMeta(itemStack, meta -> meta.getPersistentDataContainer().set(Common.newNamespacedKey(key), type, t));
     }
 
     public static <T> Optional<T> getPersistentData(@NotNull ItemStack itemStack, @NotNull String key, @NotNull PersistentDataType<T, T> type) {
-        if (!itemStack.hasItemMeta()) {
+        if (itemStack.getType() == Material.AIR) {
             return Optional.empty();
         }
         PersistentDataContainer container = itemStack.getItemMeta().getPersistentDataContainer();
@@ -48,7 +49,7 @@ public final class ItemUtil {
     }
 
     public static <T> boolean hasPersistentData(@NotNull ItemStack itemStack, @NotNull String key, @NotNull PersistentDataType<T, T> type) {
-        if (!itemStack.hasItemMeta()) {
+        if (itemStack.getType() == Material.AIR) {
             return false;
         }
         ItemMeta meta = itemStack.getItemMeta();
