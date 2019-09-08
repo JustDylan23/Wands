@@ -15,7 +15,7 @@ public class MephiAway implements Castable {
                 .setCircleRadius(5)
                 .setEntityDamage(8)
                 .setSpellEffectRadius(5.0F)
-                .setEntityEffects((entity, spellInfo) -> entity.getLocation().createExplosion(0.0f))
+                .setEntityEffects((entity, spellInfo) -> entity.getWorld().createExplosion(entity.getLocation(), 0.0f))
                 .setMetersPerTick(3)
                 .setCastSound(Sound.ENTITY_ENDER_DRAGON_FLAP)
                 .setSpellRelativeEffects((loc, spellInfo) -> {

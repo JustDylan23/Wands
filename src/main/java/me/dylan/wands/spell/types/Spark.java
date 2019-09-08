@@ -1,6 +1,6 @@
 package me.dylan.wands.spell.types;
 
-import me.dylan.wands.spell.tools.SpellInfo;
+import me.dylan.wands.spell.accessories.SpellInfo;
 import me.dylan.wands.spell.util.SpellEffectUtil;
 import org.bukkit.Location;
 import org.bukkit.Sound;

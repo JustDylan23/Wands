@@ -2,8 +2,8 @@ package me.dylan.wands.commandhandler.commands;
 
 import me.dylan.wands.WandsPlugin;
 import me.dylan.wands.commandhandler.BaseCommand;
-import me.dylan.wands.miscellaneous.utils.ItemUtil;
-import me.dylan.wands.spell.ItemTag;
+import me.dylan.wands.spell.accessories.ItemTag;
+import me.dylan.wands.utils.ItemUtil;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;

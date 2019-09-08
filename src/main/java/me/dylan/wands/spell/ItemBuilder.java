@@ -1,8 +1,8 @@
 package me.dylan.wands.spell;
 
-import me.dylan.wands.miscellaneous.utils.ItemUtil;
-import me.dylan.wands.spell.tools.SpellCompound;
+import me.dylan.wands.spell.accessories.ItemTag;
 import me.dylan.wands.spell.util.SpellInteractionUtil;
+import me.dylan.wands.utils.ItemUtil;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;

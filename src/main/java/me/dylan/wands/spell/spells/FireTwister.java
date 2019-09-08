@@ -1,7 +1,7 @@
 package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.spell.Castable;
-import me.dylan.wands.spell.tools.KnockBack;
+import me.dylan.wands.spell.accessories.KnockBack;
 import me.dylan.wands.spell.types.Behavior;
 import me.dylan.wands.spell.types.Circle;
 import me.dylan.wands.spell.types.Circle.CirclePlacement;
@@ -18,7 +18,7 @@ public class FireTwister implements Castable {
                 .setSpellEffectRadius(3.0F)
                 .setEffectDistance(30)
                 .setEntityEffects((entity, spellInfo) -> {
-                    entity.getLocation().createExplosion(0.0f);
+                    entity.getWorld().createExplosion(entity.getLocation(), 0.0f);
                     entity.setFireTicks(60);
                 })
                 .setMetersPerTick(2)

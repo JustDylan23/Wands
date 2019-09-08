@@ -2,10 +2,12 @@ package me.dylan.wands.spell.types;
 
 import me.dylan.wands.ListenerRegistry;
 import me.dylan.wands.WandsPlugin;
-import me.dylan.wands.miscellaneous.utils.Common;
-import me.dylan.wands.spell.tools.SpellInfo;
-import me.dylan.wands.spell.tools.sound.SoundEffect;
+import me.dylan.wands.spell.accessories.SpellInfo;
+import me.dylan.wands.spell.accessories.sound.SoundEffect;
 import me.dylan.wands.spell.util.SpellEffectUtil;
+import me.dylan.wands.utils.Common;
+import me.dylan.wands.utils.LocationUtil;
+import me.dylan.wands.utils.PlayerUtil;
 import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.block.data.BlockData;
@@ -71,7 +73,7 @@ public final class LaunchableBlock extends Behavior implements Listener {
 
     @SuppressWarnings("SameReturnValue")
     private boolean prepareBlock(@NotNull Player player) {
-        Block block = player.getTargetBlock(10);
+        Block block = player.getTargetBlockExact(10);
         if (block != null && block.getType() != Material.AIR) {
             if (!effectedBlocks.contains(block)) {
                 BlockState oldState = block.getState();
@@ -80,7 +82,7 @@ public final class LaunchableBlock extends Behavior implements Listener {
                         ((Chest) oldState).getBlockInventory().clear();
                         Inventory inventory = ((InventoryHolder) oldState).getInventory();
                         if (inventory.getHolder() instanceof DoubleChest) {
-                            player.sendActionBar("§ccan't be used on double chests");
+                            PlayerUtil.sendActionBar(player, "§ccan't be used on double chests");
                             return false;
                         } else inventory.clear();
                     } else {
@@ -95,10 +97,10 @@ public final class LaunchableBlock extends Behavior implements Listener {
                 selectedBlock.put(player, blockRestorer);
                 Common.runTaskLater(blockRestorer, 100L);
             } else {
-                player.sendActionBar("§cblock is already taken");
+                PlayerUtil.sendActionBar(player, "§cblock is already taken");
             }
         } else {
-            player.sendActionBar("§cselect a closer block");
+            PlayerUtil.sendActionBar(player, "§cselect a closer block");
         }
         return false;
     }
@@ -120,13 +122,12 @@ public final class LaunchableBlock extends Behavior implements Listener {
             }
         });
         trail(player, fallingBlock);
-        Block block = player.getTargetBlock(30);
+        Block block = player.getTargetBlockExact(30);
         if (block != null) {
             Common.runTaskLater(() -> {
                 if (fallingBlock.isValid()) {
-                    fallingBlock.setVelocity(block
-                            .getLocation()
-                            .toCenterLocation()
+                    fallingBlock.setVelocity(
+                            LocationUtil.toCenterBlock(block)
                             .subtract(fallingBlock.getLocation())
                             .toVector()
                             .normalize()
@@ -144,6 +145,7 @@ public final class LaunchableBlock extends Behavior implements Listener {
         if (spellInfo != null) {
             Player player = spellInfo.caster();
             caster.remove(fallingBlock);
+
             Location loc = fallingBlock.getLocation();
             hitEffects.accept(loc, spellInfo);
             String weaponName = fallingBlock.getMetadata(tagFallingBlock).get(0).asString();
@@ -201,7 +203,7 @@ public final class LaunchableBlock extends Behavior implements Listener {
 
         BlockRestorer(@NotNull BlockState state, Player player, @NotNull LaunchableBlock parent) {
             this.state = state;
-            this.originLoc = state.getLocation().toCenterLocation();
+            this.originLoc = LocationUtil.toCenterLocation(state.getLocation());
             this.parent = parent;
             this.player = player;
             BukkitRunnable bukkitRunnable = new BukkitRunnable() {

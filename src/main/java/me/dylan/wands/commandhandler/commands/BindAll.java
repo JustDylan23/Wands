@@ -2,7 +2,7 @@ package me.dylan.wands.commandhandler.commands;
 
 import me.dylan.wands.WandsPlugin;
 import me.dylan.wands.commandhandler.BaseCommand;
-import me.dylan.wands.spell.tools.SpellCompound;
+import me.dylan.wands.spell.SpellCompound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

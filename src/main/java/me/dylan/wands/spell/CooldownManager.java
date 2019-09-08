@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.objects.Object2LongMap;
 import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
 import me.dylan.wands.ListenerRegistry;
 import me.dylan.wands.config.ConfigurableData;
+import me.dylan.wands.utils.PlayerUtil;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -55,7 +56,7 @@ public class CooldownManager implements Listener {
     }
 
     private void sendRemainingTime(@NotNull Player player, int remaining) {
-        player.sendActionBar("§6Wait§7 " + remaining + " §6second" + ((remaining != 1) ? "s" : ""));
+        PlayerUtil.sendActionBar(player, "§6Wait§7 " + remaining + " §6second" + ((remaining != 1) ? "s" : ""));
         player.playSound(player.getLocation(), Sound.ENTITY_BLAZE_AMBIENT, 0.3F, 1);
     }
 

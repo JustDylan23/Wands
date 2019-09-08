@@ -1,7 +1,7 @@
 package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.spell.Castable;
-import me.dylan.wands.spell.tools.sound.CompoundSound;
+import me.dylan.wands.spell.accessories.sound.CompoundSound;
 import me.dylan.wands.spell.types.Aura;
 import me.dylan.wands.spell.types.Aura.EffectFrequency;
 import me.dylan.wands.spell.types.Behavior;

@@ -2,12 +2,12 @@ package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.ListenerRegistry;
 import me.dylan.wands.WandsPlugin;
-import me.dylan.wands.miscellaneous.utils.Common;
 import me.dylan.wands.spell.Castable;
-import me.dylan.wands.spell.tools.sound.RepeatableSound;
-import me.dylan.wands.spell.tools.sound.SoundEffect;
+import me.dylan.wands.spell.accessories.sound.RepeatableSound;
+import me.dylan.wands.spell.accessories.sound.SoundEffect;
 import me.dylan.wands.spell.types.Behavior;
 import me.dylan.wands.spell.util.SpellEffectUtil;
+import me.dylan.wands.utils.Common;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;

@@ -1,8 +1,8 @@
 package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.spell.Castable;
-import me.dylan.wands.spell.tools.KnockBack;
-import me.dylan.wands.spell.tools.SpellInfo;
+import me.dylan.wands.spell.accessories.KnockBack;
+import me.dylan.wands.spell.accessories.SpellInfo;
 import me.dylan.wands.spell.types.Behavior;
 import me.dylan.wands.spell.types.Spark;
 import org.bukkit.Location;

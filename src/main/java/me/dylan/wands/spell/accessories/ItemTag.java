@@ -1,8 +1,9 @@
-package me.dylan.wands.spell;
+package me.dylan.wands.spell.accessories;
 
-import me.dylan.wands.miscellaneous.utils.ItemUtil;
+import me.dylan.wands.utils.ItemUtil;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.NotNull;
 
 public enum ItemTag {
     IS_WAND("IsWand"),
@@ -16,15 +17,15 @@ public enum ItemTag {
         this.tag = tag;
     }
 
-    public boolean isTagged(ItemStack itemStack) {
+    public boolean isTagged(@NotNull ItemStack itemStack) {
         return ItemUtil.hasPersistentData(itemStack, tag, PersistentDataType.BYTE);
     }
 
-    public void tag(ItemStack itemStack) {
+    public void tag(@NotNull ItemStack itemStack) {
         ItemUtil.setPersistentData(itemStack, tag, PersistentDataType.BYTE, (byte) 1);
     }
 
-    public void untag(ItemStack itemStack) {
+    public void untag(@NotNull ItemStack itemStack) {
         ItemUtil.removePersistentData(itemStack, tag);
     }
 }

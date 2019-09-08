@@ -1,7 +1,6 @@
-package me.dylan.wands.miscellaneous.utils;
+package me.dylan.wands.utils;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -23,58 +22,41 @@ public final class ItemUtil {
 
     public static @NotNull String getName(@NotNull ItemStack itemStack) {
         ItemMeta itemMeta = itemStack.getItemMeta();
-        return (itemMeta == null) ? "" : itemMeta.getDisplayName();
+        return itemMeta != null ? itemMeta.getDisplayName() : "";
     }
 
     public static void setItemMeta(@NotNull ItemStack itemStack, @NotNull Consumer<ItemMeta> consumer) {
+        if (!itemStack.hasItemMeta()) {
+            return;
+        }
         ItemMeta itemMeta = itemStack.getItemMeta();
         consumer.accept(itemMeta);
         itemStack.setItemMeta(itemMeta);
     }
 
     public static <T> void setPersistentData(@NotNull ItemStack itemStack, @NotNull String key, @NotNull PersistentDataType<T, T> type, T t) {
-        ItemMeta meta = itemStack.getItemMeta();
-        if (itemStack.getType() == Material.AIR) {
-            return;
-        }
-        PersistentDataContainer container = meta.getPersistentDataContainer();
-        NamespacedKey namespacedKey = Common.newNamespacedKey(key);
-
-        container.set(namespacedKey, type, t);
-        itemStack.setItemMeta(meta);
+        setItemMeta(itemStack, meta -> meta.getPersistentDataContainer().set(Common.newNamespacedKey(key), type, t));
     }
 
     public static <T> Optional<T> getPersistentData(@NotNull ItemStack itemStack, @NotNull String key, @NotNull PersistentDataType<T, T> type) {
-        ItemMeta meta = itemStack.getItemMeta();
-        if (itemStack.getType() == Material.AIR) {
+        if (!itemStack.hasItemMeta()) {
             return Optional.empty();
         }
-        PersistentDataContainer container = meta.getPersistentDataContainer();
+        PersistentDataContainer container = itemStack.getItemMeta().getPersistentDataContainer();
         NamespacedKey namespacedKey = Common.newNamespacedKey(key);
 
         return container.has(namespacedKey, type) ? Optional.ofNullable(container.get(namespacedKey, type)) : Optional.empty();
     }
 
     public static <T> boolean hasPersistentData(@NotNull ItemStack itemStack, @NotNull String key, @NotNull PersistentDataType<T, T> type) {
-        ItemMeta meta = itemStack.getItemMeta();
-        if (itemStack.getType() == Material.AIR) {
+        if (!itemStack.hasItemMeta()) {
             return false;
         }
-        PersistentDataContainer container = meta.getPersistentDataContainer();
-        NamespacedKey namespacedKey = Common.newNamespacedKey(key);
-
-        return container.has(namespacedKey, type);
+        ItemMeta meta = itemStack.getItemMeta();
+        return meta.getPersistentDataContainer().has(Common.newNamespacedKey(key), type);
     }
 
     public static void removePersistentData(@NotNull ItemStack itemStack, @NotNull String key) {
-        ItemMeta meta = itemStack.getItemMeta();
-        if (itemStack.getType() == Material.AIR) {
-            return;
-        }
-        PersistentDataContainer container = meta.getPersistentDataContainer();
-        NamespacedKey namespacedKey = Common.newNamespacedKey(key);
-
-        container.remove(namespacedKey);
-        itemStack.setItemMeta(meta);
+        setItemMeta(itemStack, meta -> meta.getPersistentDataContainer().remove(Common.newNamespacedKey(key)));
     }
 }

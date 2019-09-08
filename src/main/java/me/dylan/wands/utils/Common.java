@@ -1,4 +1,4 @@
-package me.dylan.wands.miscellaneous.utils;
+package me.dylan.wands.utils;
 
 import me.dylan.wands.WandsPlugin;
 import org.bukkit.Bukkit;

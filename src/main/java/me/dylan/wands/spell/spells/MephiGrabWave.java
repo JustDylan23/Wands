@@ -1,10 +1,10 @@
 package me.dylan.wands.spell.spells;
 
-import me.dylan.wands.miscellaneous.utils.Common;
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.types.Behavior;
 import me.dylan.wands.spell.types.Behavior.Target;
 import me.dylan.wands.spell.types.Ray;
+import me.dylan.wands.utils.Common;
 import org.bukkit.*;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;

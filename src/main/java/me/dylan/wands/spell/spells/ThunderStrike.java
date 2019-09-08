@@ -1,12 +1,12 @@
 package me.dylan.wands.spell.spells;
 
-import me.dylan.wands.miscellaneous.utils.Common;
 import me.dylan.wands.spell.Castable;
-import me.dylan.wands.spell.tools.KnockBack;
+import me.dylan.wands.spell.accessories.KnockBack;
 import me.dylan.wands.spell.types.Behavior;
 import me.dylan.wands.spell.types.Behavior.Target;
 import me.dylan.wands.spell.types.Ray;
 import me.dylan.wands.spell.util.SpellEffectUtil;
+import me.dylan.wands.utils.Common;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;

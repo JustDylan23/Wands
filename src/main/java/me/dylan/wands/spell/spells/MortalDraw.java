@@ -1,8 +1,8 @@
 package me.dylan.wands.spell.spells;
 
-import me.dylan.wands.miscellaneous.utils.Common;
-import me.dylan.wands.spell.tools.KnockBack;
+import me.dylan.wands.spell.accessories.KnockBack;
 import me.dylan.wands.spell.util.SpellEffectUtil;
+import me.dylan.wands.utils.Common;
 import org.bukkit.*;
 import org.bukkit.Particle.DustOptions;
 import org.bukkit.entity.LivingEntity;
