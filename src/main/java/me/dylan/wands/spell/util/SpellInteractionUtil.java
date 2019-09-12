@@ -120,7 +120,7 @@ public final class SpellInteractionUtil {
     }
 
     public static void castSpell(@NotNull Player caster, String wandDisplayName, @NotNull SpellType spell) {
-        if (cooldownManager.canCast(caster)) {
+        if (cooldownManager.canCast(caster, spell)) {
             Behavior behavior = spell.behavior;
             if (behavior != null) {
                 if (behavior.cast(caster, wandDisplayName)) {

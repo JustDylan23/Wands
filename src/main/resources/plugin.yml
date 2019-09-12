@@ -37,4 +37,9 @@ commands:
     description: Unbinds spells from a wand.
     usage: /unbindall
     permission: wands.unbind
+  tweakspell:
+    aliases: [ts]
+    description: Tweak the propperties of a spell
+    usage: /tweakspell <spell> <option> <intiger>
+    permission: wands.tweakspell
 

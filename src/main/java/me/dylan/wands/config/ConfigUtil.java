@@ -5,17 +5,19 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
-@SuppressWarnings("SameParameterValue")
 final class ConfigUtil {
     private static final Plugin plugin = JavaPlugin.getPlugin(WandsPlugin.class);
     private static FileConfiguration config = plugin.getConfig();
-
 
     private ConfigUtil() {
         throw new UnsupportedOperationException("Instantiating util class");
     }
 
-    public static void reloadConfig() {
+    static FileConfiguration getConfig() {
+        return config;
+    }
+
+    static void reloadConfig() {
         plugin.reloadConfig();
         config = plugin.getConfig();
     }
@@ -30,5 +32,6 @@ final class ConfigUtil {
 
     static void set(String key, Object value) {
         config.set(key, value);
+        plugin.saveConfig();
     }
 }

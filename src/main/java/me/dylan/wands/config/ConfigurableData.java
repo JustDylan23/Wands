@@ -1,6 +1,11 @@
 package me.dylan.wands.config;
 
 import me.dylan.wands.ListenerRegistry;
+import me.dylan.wands.WandsPlugin;
+import me.dylan.wands.spell.SpellType;
+import me.dylan.wands.spell.types.Behavior;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.jetbrains.annotations.NotNull;
 
 public class ConfigurableData {
     private static final String ALLOW_MAGIC_USE_KEY = "allow-magic-use";
@@ -16,10 +21,58 @@ public class ConfigurableData {
 
     public ConfigurableData(ListenerRegistry listenerRegistry) {
         this.listenerRegistry = listenerRegistry;
+        mapConfig();
+    }
+
+    private void mapConfig() {
         this.isMagicUseAllowed = ConfigUtil.getBoolean(ALLOW_MAGIC_USE_KEY);
         this.isSelfHarmAllowed = ConfigUtil.getBoolean(ALLOW_SELF_HARM);
         this.magicCooldownTime = ConfigUtil.getInt(MAGIC_COOLDOWN_TIME_KEY);
         this.doesSpellCastingRequirePermission = ConfigUtil.getBoolean(spellsRequirePermission);
+
+        FileConfiguration config = ConfigUtil.getConfig();
+        for (SpellType spellType : SpellType.values()) {
+            Behavior behavior = spellType.behavior;
+
+            int cooldown = config.getInt(spellType.configKey + ".cooldown");
+            int correctedCooldown = Math.max(0, Math.min(99, cooldown));
+            if (correctedCooldown == cooldown) {
+                behavior.setCooldown(cooldown);
+            } else {
+                WandsPlugin.log("at: " + spellType.configKey + ".cooldown");
+                WandsPlugin.log("found: " + cooldown);
+                WandsPlugin.log("to: " + correctedCooldown);
+                tweakCooldown(spellType, correctedCooldown);
+            }
+
+            int damage = config.getInt(spellType.configKey + ".damage");
+            int correctedDamage = Math.max(-behavior.entityDamage, Math.min(99, damage));
+            if (damage == correctedDamage) {
+                behavior.setDamage(damage);
+            } else {
+                WandsPlugin.log("at: " + spellType.configKey + ".damage");
+                WandsPlugin.log("found: " + damage);
+                WandsPlugin.log("to: " + correctedDamage);
+                tweakDamage(spellType, correctedDamage);
+            }
+
+            behavior.setDamage(config.getInt(spellType.configKey + ".damage"));
+        }
+    }
+
+    public void reload() {
+        ConfigUtil.reloadConfig();
+        mapConfig();
+    }
+
+    public void tweakCooldown(@NotNull SpellType spellType, int time) {
+        ConfigUtil.set(spellType.configKey + ".cooldown", time);
+        spellType.behavior.setCooldown(time);
+    }
+
+    public void tweakDamage(@NotNull SpellType spellType, int damage) {
+        ConfigUtil.set(spellType.configKey + ".damage", damage);
+        spellType.behavior.setDamage(damage);
     }
 
     public void allowMagicUse(boolean value) {

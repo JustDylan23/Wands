@@ -2,6 +2,7 @@ package me.dylan.wands.spell;
 
 import me.dylan.wands.spell.spells.*;
 import me.dylan.wands.spell.types.Behavior;
+import me.dylan.wands.utils.Common;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -58,10 +59,12 @@ public enum SpellType {
 
     public final Behavior behavior;
     public final String name;
+    public final String configKey;
 
     SpellType(@NotNull Castable castable) {
         this.behavior = castable.createBehaviour();
         this.name = castable.getDisplayName();
+        this.configKey = Common.pascalCaseToWords(castable.getClass().getSimpleName());
     }
 
     public static @Nullable SpellType getSpellType(@NotNull String name) {

@@ -33,13 +33,15 @@ import java.util.function.BiConsumer;
  * {@link BaseProps} can be acquired by implementing {@link AbstractBuilder}.
  */
 public abstract class Behavior {
-    final int entityDamage;
+    public final int entityDamage;
     final float spellEffectRadius;
     final SoundEffect castSounds;
     final BiConsumer<Location, SpellInfo> spellRelativeEffects;
     final BiConsumer<LivingEntity, SpellInfo> entityEffects;
     final KnockBack knockBack;
     final PotionEffect[] potionEffects;
+    private int tweakedCooldown;
+    private int tweakedDamage;
 
     private final List<String> props = new ArrayList<>();
 
@@ -76,6 +78,22 @@ public abstract class Behavior {
     }
 
     public abstract boolean cast(@NotNull Player player, @NotNull String weaponName);
+
+    public void setCooldown(int seconds) {
+        this.tweakedCooldown = seconds;
+    }
+
+    public int getTweakedCooldown() {
+        return tweakedCooldown;
+    }
+
+    public void setDamage(int damage) {
+        this.tweakedDamage = damage;
+    }
+
+    public int getTweakedDamage() {
+        return tweakedDamage;
+    }
 
     @Override
     public final String toString() {
