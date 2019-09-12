@@ -2,6 +2,7 @@ package me.dylan.wands;
 
 import me.dylan.wands.commandhandler.commands.*;
 import me.dylan.wands.commandhandler.tabcompleters.BindComplete;
+import me.dylan.wands.commandhandler.tabcompleters.TweakSpellComplete;
 import me.dylan.wands.commandhandler.tabcompleters.UnbindComplete;
 import me.dylan.wands.commandhandler.tabcompleters.WandsComplete;
 import me.dylan.wands.config.ConfigurableData;
@@ -27,7 +28,6 @@ public final class WandsPlugin extends JavaPlugin {
     private ConfigurableData configurableData;
     private CooldownManager cooldownManager;
 
-    @SuppressWarnings("WeakerAccess")
     public static void log(String text) {
         Bukkit.getLogger().info(PREFIX + text);
     }
@@ -67,6 +67,7 @@ public final class WandsPlugin extends JavaPlugin {
         addCommand("unbind", new Unbind(), new UnbindComplete());
         addCommand("bindall", new BindAll(), null);
         addCommand("unbindall", new UnbindAll(), null);
+        addCommand("tweakspell", new TweakSpell(configurableData), new TweakSpellComplete());
 
         log("Up and running!");
     }

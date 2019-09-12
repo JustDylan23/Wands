@@ -2,3 +2,6 @@ magic-cooldown-time: 0
 allow-magic-use: true
 allow-self-harm: false
 casting-requires-permission: true
+comet-spell:
+  cooldown: -2
+  damage: 4

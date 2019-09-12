@@ -33,11 +33,15 @@ public class Wands extends BaseCommand {
         switch (args.length) {
             case 1:
                 switch (args[0]) {
+                    case "reload":
+                        configurableData.reload();
+                        sender.sendMessage(WandsPlugin.PREFIX + "§asuccessfully §rreloaded the config file");
+                        return true;
                     case "inspect":
                         if (isPlayer(sender)) {
                             Player player = (Player) sender;
                             ItemStack itemStack = player.getInventory().getItemInMainHand();
-                            player.sendMessage("Spells: [" + (ItemUtil.getPersistentData(itemStack, "Spells", PersistentDataType.STRING).orElse("empty")) + "]");
+                            player.sendMessage(WandsPlugin.PREFIX + "\nSpells: [" + (ItemUtil.getPersistentData(itemStack, "Spells", PersistentDataType.STRING).orElse("empty")) + "]");
                         }
                         return true;
                     case "disable":

@@ -12,9 +12,13 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+@SuppressWarnings("WeakerAccess")
 public final class Common {
     private static final WandsPlugin plugin = JavaPlugin.getPlugin(WandsPlugin.class);
+    private static final Pattern PASCAL_CASE_TO_WORDS = Pattern.compile("/([A-Z] )/g", Pattern.LITERAL);
     private static final FixedMetadataValue METADATA_VALUE_TRUE = new FixedMetadataValue(plugin, true);
     private static final Consumer<?> EMPTY_CONSUMER = t -> {
     };
@@ -23,6 +27,10 @@ public final class Common {
     private static final Predicate<?> EMPTY_PREDICATE = t -> true;
 
     private Common() {
+    }
+
+    public static String pascalCaseToWords(String pascalCaseString) {
+        return PASCAL_CASE_TO_WORDS.matcher(pascalCaseString).replaceAll(Matcher.quoteReplacement(" $1"));
     }
 
     @SuppressWarnings("unchecked")

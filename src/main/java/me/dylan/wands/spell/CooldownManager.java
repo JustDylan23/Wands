@@ -18,7 +18,7 @@ public class CooldownManager implements Listener {
 
     public CooldownManager(ConfigurableData configurableData) {
         this.configurableData = configurableData;
-        map.defaultReturnValue(0);
+        map.defaultReturnValue(-100);
         ListenerRegistry.addListener(this);
     }
 
@@ -27,10 +27,13 @@ public class CooldownManager implements Listener {
      * has to wait for after casting a implementations before a new
      * implementations may be cast.
      *
-     * @param player Player.
+     * @param player    Player.
+     * @param spellType SpellType.
      */
-    public boolean canCast(Player player) {
+    public boolean canCast(Player player, SpellType spellType) {
         int remainingTime = getRemainingTime(player);
+        if (remainingTime == 0) return true;
+        remainingTime += spellType.behavior.getTweakedCooldown() * 1000;
         if (remainingTime <= 0) {
             return true;
         } else {
