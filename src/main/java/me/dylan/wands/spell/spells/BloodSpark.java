@@ -10,7 +10,7 @@ import org.bukkit.World;
 import org.bukkit.block.data.BlockData;
 
 public class BloodSpark implements Castable {
-    static final BlockData BLOCK_CRACK_REDSTONE = Material.REDSTONE_BLOCK.createBlockData();
+    public static final BlockData BLOCK_CRACK_REDSTONE = Material.REDSTONE_BLOCK.createBlockData();
 
     @Override
     public Behavior createBehaviour() {
@@ -24,7 +24,6 @@ public class BloodSpark implements Castable {
                     MagicSpark.SPARK_SOUND.play(loc);
                 })
                 .setCastSound(Sound.ENTITY_FIREWORK_ROCKET_BLAST)
-
                 .setEffectDistance(30)
                 .build();
     }

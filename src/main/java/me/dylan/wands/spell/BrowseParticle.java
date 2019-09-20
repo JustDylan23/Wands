@@ -1,7 +1,7 @@
 package me.dylan.wands.spell;
 
+import me.dylan.wands.spell.spells.BloodSpark;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
@@ -10,11 +10,14 @@ import java.util.function.BiConsumer;
 
 public enum BrowseParticle {
     DEFAULT((loc, world) -> {
+        world.spawnParticle(Particle.ENCHANTMENT_TABLE, loc, 15, 0.5, 0.5, 0.5, 1, null, true);
+    }),
+    WITCH((loc, world) -> {
         world.spawnParticle(Particle.SPELL_WITCH, loc, 10, 0.5, 0.5, 0.5, 1, null, true);
         world.spawnParticle(Particle.ENCHANTMENT_TABLE, loc, 15, 0.5, 0.5, 0.5, 1, null, true);
     }),
     PARTICLE_BLOOD((loc, world) -> {
-        world.spawnParticle(Particle.BLOCK_CRACK, loc, 10, 0.5, 0.5, 0.5, 1, Material.REDSTONE_BLOCK.createBlockData(), true);
+        world.spawnParticle(Particle.BLOCK_CRACK, loc, 10, 0.5, 0.5, 0.5, 1, BloodSpark.BLOCK_CRACK_REDSTONE, true);
         world.spawnParticle(Particle.ENCHANTMENT_TABLE, loc, 15, 0.5, 0.5, 0.5, 1, null, true);
     }),
     PARTICLE_ICE((loc, world) -> {
@@ -39,7 +42,7 @@ public enum BrowseParticle {
         world.spawnParticle(Particle.VILLAGER_HAPPY, loc, 4, 0.5, 0.5, 0.5, 1, null, true);
     }),
     MORTAL_BLADE((loc, world) -> {
-        world.spawnParticle(Particle.BLOCK_CRACK, loc, 10, 0.5, 0.5, 0.5, 1, Material.REDSTONE_BLOCK.createBlockData(), true);
+        world.spawnParticle(Particle.BLOCK_CRACK, loc, 10, 0.5, 0.5, 0.5, 1, BloodSpark.BLOCK_CRACK_REDSTONE, true);
         world.spawnParticle(Particle.SMOKE_NORMAL, loc, 10, 0.5, 0.5, 0.5, 0.03, null, true);
     });
 

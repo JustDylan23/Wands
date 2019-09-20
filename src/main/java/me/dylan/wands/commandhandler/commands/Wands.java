@@ -144,17 +144,10 @@ public class Wands extends BaseCommand {
                     if ("cooldown".equalsIgnoreCase(args[1])) {
                         if (checkPerm(sender, "setcooldown")) {
                             try {
-                                int i = Integer.parseInt(args[2]);
-                                int x = i * 1000;
-                                if (args[2].length() <= 2) {
-                                    if (i >= 0) {
-                                        configurableData.setMagicCooldownTime(x);
-                                        sender.sendMessage(WandsPlugin.PREFIX + "Cooldown has been set to " + i + " second" + ((i != 1) ? "s" : ""));
-                                    } else {
-                                        sender.sendMessage(WandsPlugin.PREFIX + "Number can't be negative!");
-                                    }
-                                } else {
-                                    sender.sendMessage(WandsPlugin.PREFIX + "Max value is 99");
+                                int in = Integer.parseInt(args[2]);
+                                if (args[2].length() <= 2 && isInRange(sender, 0, 99, in)) {
+                                    configurableData.setMagicCooldownTime(in);
+                                    sender.sendMessage(WandsPlugin.PREFIX + "Cooldown has been set to " + in + " second" + ((in != 1) ? "s" : ""));
                                 }
                             } catch (NumberFormatException e) {
                                 sender.sendMessage(WandsPlugin.PREFIX + "Cooldown can only be set to a full number!");

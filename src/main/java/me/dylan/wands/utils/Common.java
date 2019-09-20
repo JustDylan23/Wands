@@ -12,13 +12,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @SuppressWarnings("WeakerAccess")
-public final class Common {
+public final class
+Common {
     private static final WandsPlugin plugin = JavaPlugin.getPlugin(WandsPlugin.class);
-    private static final Pattern PASCAL_CASE_TO_WORDS = Pattern.compile("/([A-Z] )/g", Pattern.LITERAL);
     private static final FixedMetadataValue METADATA_VALUE_TRUE = new FixedMetadataValue(plugin, true);
     private static final Consumer<?> EMPTY_CONSUMER = t -> {
     };
@@ -27,10 +25,11 @@ public final class Common {
     private static final Predicate<?> EMPTY_PREDICATE = t -> true;
 
     private Common() {
+        throw new UnsupportedOperationException("Instantiating Util Class");
     }
 
-    public static String pascalCaseToWords(String pascalCaseString) {
-        return PASCAL_CASE_TO_WORDS.matcher(pascalCaseString).replaceAll(Matcher.quoteReplacement(" $1"));
+    public static String pascalCaseToWords(String input) {
+        return input.replaceAll("[A-Z]", " $0").trim();
     }
 
     @SuppressWarnings("unchecked")
@@ -46,6 +45,10 @@ public final class Common {
     @SuppressWarnings("unchecked")
     public static <T> Predicate<T> emptyPredicate() {
         return (Predicate<T>) EMPTY_PREDICATE;
+    }
+
+    public static int getIntInRange(int min, int max, int in) {
+        return Math.max(min, Math.min(max, in));
     }
 
     public static void runTaskLater(Runnable runnable, long delay) {

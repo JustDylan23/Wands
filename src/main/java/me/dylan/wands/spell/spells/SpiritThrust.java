@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 public class SpiritThrust extends Behavior implements Castable {
     private static final DustOptions BLACK = new DustOptions(Color.BLACK, 1);
     private static final DustOptions RED = new DustOptions(Color.RED, 1);
-    private static final KnockBack knockBack = KnockBack.from(0.4f, 0.2f);
+    private static final KnockBack knockBack = KnockBack.from(0.7f, 0.2f);
 
     @Override
     public Behavior createBehaviour() {
@@ -54,7 +54,7 @@ public class SpiritThrust extends Behavior implements Castable {
                         world.spawnParticle(Particle.REDSTONE, location, 1, 0.1, 0.1, 0.1, 0, RED, false);
 
                         for (LivingEntity livingEntity : SpellEffectUtil.getNearbyLivingEntities(player, location.add(increment), 0.7)) {
-                            SpellEffectUtil.damageEffect(player, livingEntity, 5, weaponName);
+                            SpellEffectUtil.damageEffect(player, livingEntity, 6, weaponName);
                             knockBack.apply(livingEntity, origin);
                             cancel();
                             break;

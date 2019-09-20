@@ -22,7 +22,7 @@ public class Bind extends BaseCommand {
                 ItemStack itemStack = player.getInventory().getItemInMainHand();
                 if (isWand(player, itemStack)) {
                     SpellType spellType = SpellType.getSpellType(argument);
-                    if (spellType != null) {
+                    if (isSpell(sender, spellType, argument)) {
                         String itemName = Objects.requireNonNull(itemStack.getItemMeta()).getDisplayName();
                         SpellCompound compound = new SpellCompound(itemStack);
                         if (compound.add(spellType)) {
@@ -31,8 +31,6 @@ public class Bind extends BaseCommand {
                         } else {
                             sender.sendMessage(WandsPlugin.PREFIX + itemName + "§r already contains §7§l" + argument);
                         }
-                    } else {
-                        sender.sendMessage(WandsPlugin.PREFIX + "§7§l" + argument + " §ris not a spell!");
                     }
                 }
             } else return false;

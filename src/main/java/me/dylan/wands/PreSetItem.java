@@ -42,7 +42,12 @@ public enum PreSetItem {
                     .hideFlags()
                     .withSpells(
                             SpellType.ONE_MIND,
-                            SpellType.SPIRIT_THRUST
+                            SpellType.DUAL_DRAW,
+                            SpellType.SPIRIT_THRUST,
+                            SpellType.SPIRIT_FURY,
+                            SpellType.WHIRLWIND_SLASH,
+                            SpellType.FLOATING_PASSAGE,
+                            SpellType.SPIRAL_CLOUD_PASSAGE
                     )
                     .withSpellBrowseParticles(BrowseParticle.MORTAL_BLADE)
                     .build()
@@ -59,7 +64,7 @@ public enum PreSetItem {
                             SpellType.ESCAPE,
                             SpellType.POISON_WAVE
                     )
-                    .withSpellBrowseParticles(BrowseParticle.DEFAULT)
+                    .withSpellBrowseParticles(BrowseParticle.WITCH)
                     .build()
     ),
     BLOOD_WAND(

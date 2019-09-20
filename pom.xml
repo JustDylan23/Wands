@@ -6,12 +6,14 @@
 
     <groupId>me.dylan</groupId>
     <artifactId>wands</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.4</version>
     <packaging>jar</packaging>
 
     <name>Wands</name>
 
-    <description>Adds a set of awesome magic wands to your server</description>
+    <description>Adds a set of awesome magic wands to your server which provide a unique combat experience for the
+        players
+    </description>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -70,28 +72,22 @@
     </repositories>
 
     <dependencies>
-<!--        <dependency>-->
-<!--            <groupId>com.destroystokyo.paper</groupId>-->
-<!--            <artifactId>paper-api</artifactId>-->
-<!--            <version>1.14.4-R0.1-SNAPSHOT</version>-->
-<!--            <scope>provided</scope>-->
-<!--        </dependency>-->
-                <dependency>
-                    <groupId>org.spigotmc</groupId>
-                    <artifactId>spigot-api</artifactId>
-                    <version>1.14.4-R0.1-SNAPSHOT</version>
-                    <scope>provided</scope>
-                </dependency>
+        <!--        <dependency>-->
+        <!--            <groupId>com.destroystokyo.paper</groupId>-->
+        <!--            <artifactId>paper-api</artifactId>-->
+        <!--            <version>1.14.4-R0.1-SNAPSHOT</version>-->
+        <!--            <scope>provided</scope>-->
+        <!--        </dependency>-->
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>1.14.4-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
             <version>16.0.2</version>
-        </dependency>
-        <dependency>
-            <groupId>it.unimi.dsi</groupId>
-            <artifactId>fastutil</artifactId>
-            <version>8.2.2</version>
-            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

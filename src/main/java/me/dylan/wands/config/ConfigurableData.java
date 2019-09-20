@@ -1,17 +1,14 @@
 package me.dylan.wands.config;
 
 import me.dylan.wands.ListenerRegistry;
-import me.dylan.wands.WandsPlugin;
 import me.dylan.wands.spell.SpellType;
-import me.dylan.wands.spell.types.Behavior;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.jetbrains.annotations.NotNull;
 
 public class ConfigurableData {
-    private static final String ALLOW_MAGIC_USE_KEY = "allow-magic-use";
-    private static final String ALLOW_SELF_HARM = "allow-self-harm";
-    private static final String MAGIC_COOLDOWN_TIME_KEY = "magic-cooldown-time";
-    private static final String spellsRequirePermission = "casting-requires-permission";
+    private static final String ALLOW_MAGIC_USE_KEY = "Allow Magic Use";
+    private static final String ALLOW_SELF_HARM = "Allow Self Harm";
+    private static final String MAGIC_COOLDOWN_TIME_KEY = "Magic Cooldown Time";
+    private static final String spellsRequirePermission = "Casting Requires Permission";
 
     private final ListenerRegistry listenerRegistry;
     private boolean isMagicUseAllowed;
@@ -21,58 +18,32 @@ public class ConfigurableData {
 
     public ConfigurableData(ListenerRegistry listenerRegistry) {
         this.listenerRegistry = listenerRegistry;
-        mapConfig();
+        mapConfig(true);
     }
 
-    private void mapConfig() {
-        this.isMagicUseAllowed = ConfigUtil.getBoolean(ALLOW_MAGIC_USE_KEY);
-        this.isSelfHarmAllowed = ConfigUtil.getBoolean(ALLOW_SELF_HARM);
-        this.magicCooldownTime = ConfigUtil.getInt(MAGIC_COOLDOWN_TIME_KEY);
-        this.doesSpellCastingRequirePermission = ConfigUtil.getBoolean(spellsRequirePermission);
+    private void mapConfig(boolean write) {
+        this.isMagicUseAllowed = ConfigUtil.getAndRenderBoolean(ALLOW_MAGIC_USE_KEY, write);
+        this.isSelfHarmAllowed = ConfigUtil.getAndRenderBoolean(ALLOW_SELF_HARM, write);
+        this.magicCooldownTime = ConfigUtil.getIntWithCorrectedRange(99, 0, MAGIC_COOLDOWN_TIME_KEY) * 1000;
+        this.doesSpellCastingRequirePermission = ConfigUtil.getAndRenderBoolean(spellsRequirePermission, write);
 
-        FileConfiguration config = ConfigUtil.getConfig();
         for (SpellType spellType : SpellType.values()) {
-            Behavior behavior = spellType.behavior;
-
-            int cooldown = config.getInt(spellType.configKey + ".cooldown");
-            int correctedCooldown = Math.max(0, Math.min(99, cooldown));
-            if (correctedCooldown == cooldown) {
-                behavior.setCooldown(cooldown);
-            } else {
-                WandsPlugin.log("at: " + spellType.configKey + ".cooldown");
-                WandsPlugin.log("found: " + cooldown);
-                WandsPlugin.log("to: " + correctedCooldown);
-                tweakCooldown(spellType, correctedCooldown);
+            int cooldown = ConfigUtil.getIntWithCorrectedRange(99, 0, spellType.configKey + ".cooldown");
+            if (write) {
+                ConfigUtil.set(spellType.configKey + ".cooldown", cooldown);
             }
-
-            int damage = config.getInt(spellType.configKey + ".damage");
-            int correctedDamage = Math.max(-behavior.entityDamage, Math.min(99, damage));
-            if (damage == correctedDamage) {
-                behavior.setDamage(damage);
-            } else {
-                WandsPlugin.log("at: " + spellType.configKey + ".damage");
-                WandsPlugin.log("found: " + damage);
-                WandsPlugin.log("to: " + correctedDamage);
-                tweakDamage(spellType, correctedDamage);
-            }
-
-            behavior.setDamage(config.getInt(spellType.configKey + ".damage"));
+            spellType.behavior.setCooldown(cooldown);
         }
     }
 
     public void reload() {
         ConfigUtil.reloadConfig();
-        mapConfig();
+        mapConfig(false);
     }
 
     public void tweakCooldown(@NotNull SpellType spellType, int time) {
         ConfigUtil.set(spellType.configKey + ".cooldown", time);
         spellType.behavior.setCooldown(time);
-    }
-
-    public void tweakDamage(@NotNull SpellType spellType, int damage) {
-        ConfigUtil.set(spellType.configKey + ".damage", damage);
-        spellType.behavior.setDamage(damage);
     }
 
     public void allowMagicUse(boolean value) {
@@ -96,7 +67,7 @@ public class ConfigurableData {
     }
 
     public void setMagicCooldownTime(int magicCooldownTime) {
-        this.magicCooldownTime = magicCooldownTime;
+        this.magicCooldownTime = magicCooldownTime * 1000;
         ConfigUtil.set(MAGIC_COOLDOWN_TIME_KEY, magicCooldownTime);
     }
 
