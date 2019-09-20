@@ -20,7 +20,7 @@ public class Unbind extends BaseCommand {
                 ItemStack itemStack = player.getInventory().getItemInMainHand();
                 if (isWand(player, itemStack)) {
                     SpellType spellType = SpellType.getSpellType(argument);
-                    if (spellType != null) {
+                    if (isSpell(sender, spellType, argument)) {
                         String itemName = itemStack.getItemMeta().getDisplayName();
                         SpellCompound compound = new SpellCompound(itemStack);
                         if (compound.remove(spellType)) {
@@ -29,8 +29,6 @@ public class Unbind extends BaseCommand {
                         } else {
                             sender.sendMessage(WandsPlugin.PREFIX + itemName + "§r doesn't contain spell §7§l" + argument.toLowerCase());
                         }
-                    } else {
-                        sender.sendMessage(WandsPlugin.PREFIX + "§7§l" + argument + " §ris not a spell!");
                     }
                 }
             } else return false;

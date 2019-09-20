@@ -38,6 +38,7 @@ public final class WandsPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        saveDefaultConfig();
         ListenerRegistry listenerRegistry = new ListenerRegistry();
 
         this.configurableData = new ConfigurableData(listenerRegistry);
@@ -67,7 +68,7 @@ public final class WandsPlugin extends JavaPlugin {
         addCommand("unbind", new Unbind(), new UnbindComplete());
         addCommand("bindall", new BindAll(), null);
         addCommand("unbindall", new UnbindAll(), null);
-        addCommand("tweakspell", new TweakSpell(configurableData), new TweakSpellComplete());
+        addCommand("tweakcooldown", new TweakCooldown(configurableData), new TweakSpellComplete());
 
         log("Up and running!");
     }

@@ -1,7 +1,5 @@
 package me.dylan.wands.spell;
 
-import it.unimi.dsi.fastutil.objects.Object2LongMap;
-import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
 import me.dylan.wands.ListenerRegistry;
 import me.dylan.wands.config.ConfigurableData;
 import me.dylan.wands.utils.PlayerUtil;
@@ -12,13 +10,15 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class CooldownManager implements Listener {
-    private final Object2LongMap<Player> map = new Object2LongOpenHashMap<>();
+    private final Map<Player, Long> playerCooldownHashMap = new HashMap<>();
     private final ConfigurableData configurableData;
 
     public CooldownManager(ConfigurableData configurableData) {
         this.configurableData = configurableData;
-        map.defaultReturnValue(-100);
         ListenerRegistry.addListener(this);
     }
 
@@ -43,7 +43,7 @@ public class CooldownManager implements Listener {
     }
 
     public void updateLastUsed(Player player) {
-        map.put(player, System.currentTimeMillis());
+        playerCooldownHashMap.put(player, System.currentTimeMillis());
     }
 
     /**
@@ -52,10 +52,13 @@ public class CooldownManager implements Listener {
      */
     private int getRemainingTime(Player player) {
         int cooldown = configurableData.getMagicCooldownTime();
-        long lastUsed = map.getLong(player);
-        if (cooldown == 0 || lastUsed == 0) return 0;
-        int elapsed = (int) (System.currentTimeMillis() - lastUsed);
-        return cooldown - elapsed;
+        Long lastUsed = playerCooldownHashMap.get(player);
+        if (lastUsed != null) {
+            if (cooldown == 0) return 0;
+            int elapsed = (int) (System.currentTimeMillis() - lastUsed);
+
+            return cooldown - elapsed;
+        } else return 0;
     }
 
     private void sendRemainingTime(@NotNull Player player, int remaining) {
@@ -70,6 +73,6 @@ public class CooldownManager implements Listener {
      */
     @EventHandler
     private void onQuit(PlayerQuitEvent event) {
-        map.removeLong(event.getPlayer());
+        playerCooldownHashMap.remove(event.getPlayer());
     }
 }

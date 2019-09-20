@@ -25,7 +25,7 @@ public enum ItemTag {
         ItemUtil.setPersistentData(itemStack, tag, PersistentDataType.BYTE, (byte) 1);
     }
 
-    public void untag(@NotNull ItemStack itemStack) {
+    public void unTag(@NotNull ItemStack itemStack) {
         ItemUtil.removePersistentData(itemStack, tag);
     }
 }

@@ -56,7 +56,7 @@ public class SpiritFury extends Behavior implements Castable {
                         world.spawnParticle(Particle.REDSTONE, location, 1, 0, 0, 0, 0, RED, false);
 
                         for (LivingEntity livingEntity : SpellEffectUtil.getNearbyLivingEntities(player, location, 0.7)) {
-                            SpellEffectUtil.damageEffect(player, livingEntity, 5, weaponName);
+                            SpellEffectUtil.damageEffect(player, livingEntity, 6, weaponName);
                             knockBack.apply(livingEntity, origin);
                             cancel(world, location);
                             break;
