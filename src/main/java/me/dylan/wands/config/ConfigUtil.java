@@ -5,6 +5,7 @@ import me.dylan.wands.utils.Common;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.Nullable;
 
 final class ConfigUtil {
     private static final Plugin plugin = JavaPlugin.getPlugin(WandsPlugin.class);
@@ -19,21 +20,21 @@ final class ConfigUtil {
         config = plugin.getConfig();
     }
 
-    static int getIntWithCorrectedRange(int max, int min, String key) {
-        int a = config.getInt(key);
+    static int getIntWithCorrectedRange(int max, int min, String path) {
+        int a = config.getInt(path);
         int b = Common.getIntInRange(min, max, a);
         if (a != b) {
-            WandsPlugin.log("at: " + key);
+            WandsPlugin.log("at: " + path);
             WandsPlugin.log("found: " + a);
             WandsPlugin.log("to: " + b);
-            set(key, b);
+            set(path, b);
         }
         return b;
     }
 
-    static boolean getAndRenderBoolean(String key, boolean render) {
-        boolean bool = config.getBoolean(key);
-        if (render) config.set(key, bool);
+    static boolean getAndRenderBoolean(String path, boolean render) {
+        boolean bool = config.getBoolean(path);
+        if (render) config.set(path, bool);
         return bool;
     }
 

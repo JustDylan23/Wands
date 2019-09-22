@@ -46,7 +46,7 @@ public final class Circle extends Behavior {
     @Override
     public boolean cast(@NotNull Player player, @NotNull String weaponName) {
         Location circleCenter = (circlePlacement == CirclePlacement.TARGET)
-                ? SpellEffectUtil.getSpellLocation(effectDistance, player)
+                ? SpellEffectUtil.getSpellLocation(player, effectDistance)
                 : player.getLocation();
 
         SpellInfo spellInfo = new SpellInfo(player, player.getLocation(), circleCenter);
