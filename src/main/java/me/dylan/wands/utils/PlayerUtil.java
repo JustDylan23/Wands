@@ -53,7 +53,7 @@ public final class PlayerUtil {
         return bestMatch;
     }
 
-    public static @Nullable Location getTargetBlockExact(@NotNull Player player, int maxDistance) {
+    public static @Nullable Location getTargetLocation(@NotNull Player player, int maxDistance) {
         RayTraceResult result = player.rayTraceBlocks(maxDistance);
         if (result == null)
             return null;

@@ -88,7 +88,7 @@ public final class MagicProjectile<T extends Projectile> extends Behavior implem
         return true;
     }
 
-    private void hit(Player player, @NotNull Projectile projectile) {
+    private void projectileHitEffect(Player player, @NotNull Projectile projectile) {
         projectiles.remove(projectile);
         projectile.remove();
         SpellInfo spellInfo = caster.remove(projectile);
@@ -110,7 +110,7 @@ public final class MagicProjectile<T extends Projectile> extends Behavior implem
     private void activateLifeTimer(Projectile projectile) {
         Common.runTaskLater(() -> {
             if (projectile.isValid()) {
-                hit((Player) projectile.getShooter(), projectile);
+                projectileHitEffect((Player) projectile.getShooter(), projectile);
             }
         }, lifeTime);
     }
@@ -131,7 +131,7 @@ public final class MagicProjectile<T extends Projectile> extends Behavior implem
     private void onProjectileHit(ProjectileHitEvent event) {
         Projectile eventProjectile = event.getEntity();
         if (eventProjectile.hasMetadata(tagProjectileSpell)) {
-            hit((Player) eventProjectile.getShooter(), eventProjectile);
+            projectileHitEffect((Player) eventProjectile.getShooter(), eventProjectile);
         }
     }
 

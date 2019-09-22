@@ -122,22 +122,15 @@ public final class LaunchableBlock extends Behavior implements Listener {
             }
         });
         trail(player, fallingBlock);
-        Block block = player.getTargetBlockExact(30);
-        if (block != null) {
-            Common.runTaskLater(() -> {
-                if (fallingBlock.isValid()) {
-                    fallingBlock.setVelocity(
-                            LocationUtil.toCenterBlock(block)
-                                    .subtract(fallingBlock.getLocation())
-                                    .toVector()
-                                    .normalize()
-                                    .multiply(1.2)
-                    );
-                }
-            }, 20L);
-            return true;
-        }
-        return false;
+        Location loc = SpellEffectUtil.getSpellLocation(player, 30);
+        Common.runTaskLater(() -> {
+            if (fallingBlock.isValid()) {
+                fallingBlock.setVelocity(
+                        loc.subtract(fallingBlock.getLocation()).toVector().normalize().multiply(1.2)
+                );
+            }
+        }, 20L);
+        return true;
     }
 
     private void blockLand(FallingBlock fallingBlock) {

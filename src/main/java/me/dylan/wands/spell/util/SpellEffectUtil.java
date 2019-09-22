@@ -34,13 +34,13 @@ public final class SpellEffectUtil {
         throw new UnsupportedOperationException("Instantiating util class");
     }
 
-    public static @NotNull Location getSpellLocation(int effectDistance, Player player) {
+    public static @NotNull Location getSpellLocation(Player player, int effectDistance) {
         if (effectDistance == 0) return player.getLocation();
         Entity entity = PlayerUtil.getTargetEntity(player, effectDistance, e -> true);
         if (entity instanceof LivingEntity && !(entity instanceof ArmorStand)) {
             return LocationUtil.toCenterLocation(entity.getLocation());
         }
-        Location exactLoc = PlayerUtil.getTargetBlockExact(player, effectDistance);
+        Location exactLoc = PlayerUtil.getTargetLocation(player, effectDistance);
         if (exactLoc == null) {
             Location playerLocation = player.getLocation();
             return LocationUtil.toCenterLocation(playerLocation.add(playerLocation.getDirection().multiply(effectDistance)));
