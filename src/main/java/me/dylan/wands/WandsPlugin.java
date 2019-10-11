@@ -44,6 +44,8 @@ public final class WandsPlugin extends JavaPlugin {
         this.configurableData = new ConfigurableData(listenerRegistry);
         this.cooldownManager = new CooldownManager(configurableData);
 
+        configurableData.loadDefaults(true);
+
         PlayerListener playerListener = new PlayerListener();
         AssassinDagger assassinDagger = new AssassinDagger();
         CursedBow cursedBow = new CursedBow();

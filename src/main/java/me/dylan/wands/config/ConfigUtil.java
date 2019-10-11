@@ -5,7 +5,6 @@ import me.dylan.wands.utils.Common;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.Nullable;
 
 final class ConfigUtil {
     private static final Plugin plugin = JavaPlugin.getPlugin(WandsPlugin.class);

@@ -18,10 +18,9 @@ public class ConfigurableData {
 
     public ConfigurableData(ListenerRegistry listenerRegistry) {
         this.listenerRegistry = listenerRegistry;
-        mapConfig(true);
     }
 
-    private void mapConfig(boolean write) {
+    public void loadDefaults(boolean write) {
         this.isMagicUseAllowed = ConfigUtil.getAndRenderBoolean(ALLOW_MAGIC_USE_KEY, write);
         this.isSelfHarmAllowed = ConfigUtil.getAndRenderBoolean(ALLOW_SELF_HARM, write);
         this.magicCooldownTime = ConfigUtil.getIntWithCorrectedRange(99, 0, MAGIC_COOLDOWN_TIME_KEY) * 1000;
@@ -38,7 +37,7 @@ public class ConfigurableData {
 
     public void reload() {
         ConfigUtil.reloadConfig();
-        mapConfig(false);
+        loadDefaults(false);
     }
 
     public void tweakCooldown(@NotNull SpellType spellType, int time) {
