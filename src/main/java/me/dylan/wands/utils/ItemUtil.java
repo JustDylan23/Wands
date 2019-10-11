@@ -31,7 +31,7 @@ public final class ItemUtil {
     }
 
     public static @NotNull String getName(@NotNull ItemStack itemStack) {
-        return (itemStack.getType() == Material.AIR) ? itemStack.getItemMeta().getDisplayName() : "";
+        return (itemStack.getType() == Material.AIR) ? "" : itemStack.getItemMeta().getDisplayName();
     }
 
     public static <T> void setPersistentData(@NotNull ItemStack itemStack, @NotNull String key, @NotNull PersistentDataType<T, T> type, T t) {

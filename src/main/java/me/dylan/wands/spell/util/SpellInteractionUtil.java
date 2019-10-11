@@ -39,7 +39,7 @@ public final class SpellInteractionUtil {
         throw new UnsupportedOperationException("Instantiating util class");
     }
 
-    public static boolean canUse(Player player) {
+    public static boolean canUseMagic(Player player) {
         if (config.doesCastingRequirePermission()) {
             if (!player.hasPermission("wands.use")) {
                 PlayerUtil.sendActionBar(player, "§cinsufficient permissions");
