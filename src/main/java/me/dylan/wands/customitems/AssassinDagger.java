@@ -34,7 +34,7 @@ public class AssassinDagger implements Listener, RightClickListener {
     private final PotionEffect speed = new PotionEffect(PotionEffectType.SPEED, 10, 4, true);
 
     private boolean hasDagger(Player player) {
-        return SpellInteractionUtil.canUse(player) && isDagger(player.getInventory().getItemInMainHand());
+        return isDagger(player.getInventory().getItemInMainHand()) && SpellInteractionUtil.canUseMagic(player);
     }
 
     private boolean isDagger(@NotNull ItemStack itemStack) {

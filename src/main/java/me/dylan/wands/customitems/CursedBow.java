@@ -55,7 +55,7 @@ public class CursedBow implements Listener, RightClickListener {
     @Override
     public void onRightClick(ClickEvent event) {
         Player player = event.getPlayer();
-        if (hasBow(player) == 1 && SpellInteractionUtil.canUse(player) && (player.getGameMode() == GameMode.CREATIVE || player.getInventory().contains(Material.ARROW))) {
+        if (hasBow(player) == 1 && SpellInteractionUtil.canUseMagic(player) && (player.getGameMode() == GameMode.CREATIVE || player.getInventory().contains(Material.ARROW))) {
             drawing.add(player);
             PlayerUtil.sendActionBar(player, "§6Charging [§a|§6|||]");
             BukkitRunnable bukkitRunnable = new BukkitRunnable() {
