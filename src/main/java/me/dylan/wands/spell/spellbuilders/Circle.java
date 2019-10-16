@@ -1,4 +1,4 @@
-package me.dylan.wands.spell.types;
+package me.dylan.wands.spell.spellbuilders;
 
 import me.dylan.wands.spell.accessories.SpellInfo;
 import me.dylan.wands.spell.util.SpellEffectUtil;
@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
  * - Effect distance, only has effect when circle placement is set to target.
  * - Circle drawing speed
  */
-public final class Circle extends Behavior {
+public final class Circle extends BuildableBehaviour {
     private final int speed, height, effectDistance, circleRadius;
     private final CirclePlacement circlePlacement;
 

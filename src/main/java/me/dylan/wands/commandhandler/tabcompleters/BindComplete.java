@@ -19,7 +19,7 @@ public class BindComplete extends BaseCompleter {
             String value = args[0];
             ItemStack itemStack = ((Player) sender).getInventory().getItemInMainHand();
             if (ItemTag.IS_WAND.isTagged(itemStack)) {
-                List<SpellType> bound = new SpellCompound(itemStack).getSpells();
+                List<SpellType> bound = new ArrayList<>(Arrays.asList(new SpellCompound(itemStack).getSpells()));
                 List<SpellType> unbound = new ArrayList<>(Arrays.asList(SpellType.values()));
                 unbound.removeAll(bound);
 

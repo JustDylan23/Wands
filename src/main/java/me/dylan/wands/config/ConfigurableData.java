@@ -27,9 +27,9 @@ public class ConfigurableData {
         this.doesSpellCastingRequirePermission = ConfigUtil.getAndRenderBoolean(spellsRequirePermission, write);
 
         for (SpellType spellType : SpellType.values()) {
-            int cooldown = ConfigUtil.getIntWithCorrectedRange(99, 0, spellType.configKey + ".cooldown");
+            int cooldown = ConfigUtil.getIntWithCorrectedRange(99, 0, spellType.name + ".cooldown");
             if (write) {
-                ConfigUtil.set(spellType.configKey + ".cooldown", cooldown);
+                ConfigUtil.set(spellType.name + ".cooldown", cooldown);
             }
             spellType.behavior.setCooldown(cooldown);
         }
@@ -41,7 +41,7 @@ public class ConfigurableData {
     }
 
     public void tweakCooldown(@NotNull SpellType spellType, int time) {
-        ConfigUtil.set(spellType.configKey + ".cooldown", time);
+        ConfigUtil.set(spellType.name + ".cooldown", time);
         spellType.behavior.setCooldown(time);
     }
 

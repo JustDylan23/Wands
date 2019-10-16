@@ -1,4 +1,4 @@
-package me.dylan.wands.spell.types;
+package me.dylan.wands.spell.spellbuilders;
 
 import me.dylan.wands.spell.accessories.SpellInfo;
 import me.dylan.wands.spell.util.SpellEffectUtil;
@@ -23,7 +23,7 @@ import java.util.function.BiConsumer;
  * - The speed at which the ray moves forward.
  * - The maximum distance the ray can travel.
  */
-public final class Ray extends Behavior {
+public final class Ray extends BuildableBehaviour {
     private final int effectDistance, speed;
     private final float rayWidth;
     private final Target target;

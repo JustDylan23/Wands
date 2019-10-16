@@ -1,4 +1,4 @@
-package me.dylan.wands.spell.types;
+package me.dylan.wands.spell.spellbuilders;
 
 import me.dylan.wands.spell.accessories.SpellInfo;
 import me.dylan.wands.spell.util.SpellEffectUtil;
@@ -22,7 +22,7 @@ import java.util.function.Consumer;
  * - Effects which player receives on activation
  * - Effects which player receives if aura effected nothing excluding the player
  */
-public final class Aura extends Behavior {
+public final class Aura extends BuildableBehaviour {
     private final EffectFrequency effectFrequency;
     private final int effectDuration;
     private final String auraUUID;

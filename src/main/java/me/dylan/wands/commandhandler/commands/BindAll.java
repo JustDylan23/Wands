@@ -17,7 +17,7 @@ public class BindAll extends BaseCommand {
             ItemStack itemStack = player.getInventory().getItemInMainHand();
             if (isWand(sender, itemStack)) {
                 SpellCompound compound = new SpellCompound(itemStack);
-                compound.addAll();
+                compound.addAllSpells();
                 compound.apply(itemStack);
                 sender.sendMessage(WandsPlugin.PREFIX + "Successfully added all spells to " + itemStack.getItemMeta().getDisplayName());
             }

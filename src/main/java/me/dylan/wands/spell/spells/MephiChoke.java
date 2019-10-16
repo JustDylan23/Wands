@@ -2,9 +2,9 @@ package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.accessories.SpellInfo;
-import me.dylan.wands.spell.types.Behavior;
-import me.dylan.wands.spell.types.Behavior.Target;
-import me.dylan.wands.spell.types.Phase;
+import me.dylan.wands.spell.spellbuilders.Behavior;
+import me.dylan.wands.spell.spellbuilders.BuildableBehaviour;
+import me.dylan.wands.spell.spellbuilders.Phase;
 import me.dylan.wands.utils.Common;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
@@ -16,7 +16,7 @@ import org.bukkit.util.Vector;
 
 public class MephiChoke implements Castable {
     public Behavior createBehaviour() {
-        return Phase.newBuilder(Target.SINGLE)
+        return Phase.newBuilder(BuildableBehaviour.Target.SINGLE)
                 .setCastSound(Sound.ENTITY_PHANTOM_BITE)
                 .setEffectDistance(30)
                 .setSpellEffectRadius(2.8F)

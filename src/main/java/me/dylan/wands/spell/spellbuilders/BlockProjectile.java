@@ -1,4 +1,4 @@
-package me.dylan.wands.spell.types;
+package me.dylan.wands.spell.spellbuilders;
 
 import me.dylan.wands.ListenerRegistry;
 import me.dylan.wands.WandsPlugin;
@@ -31,7 +31,7 @@ import java.util.UUID;
  * - Material of blocks
  * - Speed of blocks
  */
-public final class BlockProjectile extends Behavior implements Listener {
+public final class BlockProjectile extends BuildableBehaviour implements Listener {
     private static final Set<Entity> projectiles = new HashSet<>();
     private final Material material;
     private final float speed;

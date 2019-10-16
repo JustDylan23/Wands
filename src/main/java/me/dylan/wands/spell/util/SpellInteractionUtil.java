@@ -7,7 +7,7 @@ import me.dylan.wands.spell.CooldownManager;
 import me.dylan.wands.spell.SpellCompound;
 import me.dylan.wands.spell.SpellType;
 import me.dylan.wands.spell.accessories.ItemTag;
-import me.dylan.wands.spell.types.Behavior;
+import me.dylan.wands.spell.spellbuilders.Behavior;
 import me.dylan.wands.utils.ItemUtil;
 import me.dylan.wands.utils.PlayerUtil;
 import org.bukkit.Sound;
@@ -19,7 +19,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
 import java.util.Optional;
 
 public final class SpellInteractionUtil {
@@ -27,7 +26,6 @@ public final class SpellInteractionUtil {
     private static final ConfigurableData config;
     private static final CooldownManager cooldownManager;
     private static final String TAG_SPELL_INDEX = "SpellIndex";
-    private static final String TAG_SPELLS_LIST = "Spells";
 
     static {
         WandsPlugin wandsPlugin = JavaPlugin.getPlugin(WandsPlugin.class);
@@ -52,7 +50,7 @@ public final class SpellInteractionUtil {
     public static void undoWand(ItemStack itemStack) {
         ItemTag.IS_WAND.unTag(itemStack);
         ItemUtil.removePersistentData(itemStack, TAG_SPELL_INDEX);
-        ItemUtil.removePersistentData(itemStack, TAG_SPELLS_LIST);
+        ItemUtil.removePersistentData(itemStack, SpellCompound.TAG_SPELLS_LIST);
         ItemUtil.removePersistentData(itemStack, TAG_SPELL_BROWSE_PARTICLES);
     }
 
@@ -77,20 +75,19 @@ public final class SpellInteractionUtil {
     }
 
     public static @Nullable SpellType getSelectedSpell(ItemStack itemStack) {
-        SpellCompound compound = new SpellCompound(itemStack);
-        if (compound.isEmpty()) return null;
+        int[] indices = SpellCompound.getIndices(itemStack);
+        if (indices.length == 0) return null;
         int index = getIndex(itemStack);
-        if (index <= compound.size()) {
-            return compound.get(index);
-        } else {
+        if (index >= indices.length || index < 0) {
             setIndex(itemStack, 0);
-            return compound.get(0);
+            index = 0;
         }
+        return SpellType.getSpellById(indices[index]);
     }
 
     public static void nextSpell(Player player, ItemStack itemStack) {
-        List<SpellType> spells = new SpellCompound(itemStack).getSpells();
-        int length = spells.size();
+        int[] indices = SpellCompound.getIndices(itemStack);
+        int length = indices.length;
         if (length == 0) {
             PlayerUtil.sendActionBar(player, WandsPlugin.PREFIX + "No spells are bound!");
             return;
@@ -107,9 +104,13 @@ public final class SpellInteractionUtil {
 
         setIndex(itemStack, index);
 
-        player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.5F, 0.5F);
-        PlayerUtil.sendActionBar(player, "§6Current spell: §7§l" + spells.get(index).name);
-        getSpellBrowseParticle(itemStack).orElse(BrowseParticle.DEFAULT).displayAt(player.getLocation());
+        SpellType spell = SpellType.getSpellById(indices[index]);
+
+        if (spell != null) {
+            player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.5F, 0.5F);
+            PlayerUtil.sendActionBar(player, "§6Current spell: §7§l" + spell.name);
+            getSpellBrowseParticle(itemStack).orElse(BrowseParticle.DEFAULT).displayAt(player.getLocation());
+        }
     }
 
     public static void showSelectedSpell(Player player, ItemStack itemStack) {

@@ -1,9 +1,9 @@
 package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.spell.Castable;
-import me.dylan.wands.spell.types.Behavior;
-import me.dylan.wands.spell.types.Behavior.Target;
-import me.dylan.wands.spell.types.Phase;
+import me.dylan.wands.spell.spellbuilders.Behavior;
+import me.dylan.wands.spell.spellbuilders.BuildableBehaviour;
+import me.dylan.wands.spell.spellbuilders.Phase;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
@@ -11,7 +11,7 @@ import org.bukkit.util.Vector;
 public class Launch implements Castable {
     @Override
     public Behavior createBehaviour() {
-        return Phase.newBuilder(Target.MULTI)
+        return Phase.newBuilder(BuildableBehaviour.Target.MULTI)
                 .setSpellEffectRadius(2.8f)
                 .setEntityDamage(7)
                 .setEntityEffects((entity, spellInfo) -> entity.setVelocity(new Vector(0, 1.2, 0)))

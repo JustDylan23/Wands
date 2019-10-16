@@ -1,6 +1,6 @@
 package me.dylan.wands.spell;
 
-import me.dylan.wands.spell.types.Behavior;
+import me.dylan.wands.spell.spellbuilders.Behavior;
 import me.dylan.wands.utils.Common;
 
 @FunctionalInterface

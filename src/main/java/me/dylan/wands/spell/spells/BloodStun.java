@@ -1,9 +1,9 @@
 package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.spell.Castable;
-import me.dylan.wands.spell.types.Behavior;
-import me.dylan.wands.spell.types.Behavior.Target;
-import me.dylan.wands.spell.types.Ray;
+import me.dylan.wands.spell.spellbuilders.Behavior;
+import me.dylan.wands.spell.spellbuilders.BuildableBehaviour;
+import me.dylan.wands.spell.spellbuilders.Ray;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;
@@ -13,7 +13,7 @@ import org.bukkit.potion.PotionEffectType;
 public class BloodStun implements Castable {
     @Override
     public Behavior createBehaviour() {
-        return Ray.newBuilder(Target.SINGLE)
+        return Ray.newBuilder(BuildableBehaviour.Target.SINGLE)
                 .setCastSound(Sound.ENTITY_FIREWORK_ROCKET_BLAST)
                 .setEntityDamage(8)
                 .setPotionEffects(new PotionEffect(PotionEffectType.SLOW, 180, 3, false))

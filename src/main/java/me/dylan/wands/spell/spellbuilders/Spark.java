@@ -1,4 +1,4 @@
-package me.dylan.wands.spell.types;
+package me.dylan.wands.spell.spellbuilders;
 
 import me.dylan.wands.spell.accessories.SpellInfo;
 import me.dylan.wands.spell.util.SpellEffectUtil;
@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
  * - Can effect single or multiple entities
  */
 
-public final class Spark extends Behavior {
+public final class Spark extends BuildableBehaviour {
     private final int effectDistance;
     private final Target target;
 
@@ -28,10 +28,8 @@ public final class Spark extends Behavior {
         this.effectDistance = builder.effectDistance;
         this.target = builder.target;
 
-
         addPropertyInfo("Effect distance", effectDistance, "meters");
         addPropertyInfo("Target", target);
-
     }
 
     public static @NotNull Builder newBuilder(Target target) {

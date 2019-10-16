@@ -46,7 +46,7 @@ public final class ItemBuilder {
     public ItemBuilder withSpells(SpellType... spells) {
         ItemTag.IS_WAND.tag(itemStack);
         SpellCompound compound = new SpellCompound(itemStack);
-        compound.add(spells);
+        compound.addAll(spells);
         compound.apply(itemStack);
         return this;
     }

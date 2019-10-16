@@ -2,9 +2,9 @@ package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.accessories.KnockBack;
-import me.dylan.wands.spell.types.Behavior;
-import me.dylan.wands.spell.types.Circle;
-import me.dylan.wands.spell.types.Circle.CirclePlacement;
+import me.dylan.wands.spell.spellbuilders.Behavior;
+import me.dylan.wands.spell.spellbuilders.Circle;
+import me.dylan.wands.spell.spellbuilders.Circle.CirclePlacement;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;
