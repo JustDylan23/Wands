@@ -1,4 +1,4 @@
-package me.dylan.wands.spell.types;
+package me.dylan.wands.spell.spellbuilders;
 
 import me.dylan.wands.spell.accessories.SpellInfo;
 import me.dylan.wands.spell.util.SpellEffectUtil;
@@ -19,7 +19,7 @@ import java.util.UUID;
  * - Radius to which the wave will extend.
  * - The delay before the wave grows half a meter
  */
-public final class ShockWave extends Behavior {
+public final class ShockWave extends BuildableBehaviour {
     private final int waveRadius, delay;
     private final String tagShockWave;
 

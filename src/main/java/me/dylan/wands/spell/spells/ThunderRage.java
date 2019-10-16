@@ -1,9 +1,9 @@
 package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.spell.Castable;
-import me.dylan.wands.spell.types.Aura;
-import me.dylan.wands.spell.types.Aura.EffectFrequency;
-import me.dylan.wands.spell.types.Behavior;
+import me.dylan.wands.spell.spellbuilders.Aura;
+import me.dylan.wands.spell.spellbuilders.Aura.EffectFrequency;
+import me.dylan.wands.spell.spellbuilders.Behavior;
 import me.dylan.wands.utils.Common;
 import org.bukkit.*;
 import org.bukkit.potion.PotionEffect;

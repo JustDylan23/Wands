@@ -1,8 +1,9 @@
 package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.spell.Castable;
-import me.dylan.wands.spell.types.Behavior;
-import me.dylan.wands.spell.types.Spark;
+import me.dylan.wands.spell.spellbuilders.Behavior;
+import me.dylan.wands.spell.spellbuilders.BuildableBehaviour;
+import me.dylan.wands.spell.spellbuilders.Spark;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -14,7 +15,7 @@ public class BloodSpark implements Castable {
 
     @Override
     public Behavior createBehaviour() {
-        return Spark.newBuilder(Behavior.Target.MULTI)
+        return Spark.newBuilder(BuildableBehaviour.Target.MULTI)
                 .setSpellEffectRadius(2.8F)
                 .setEntityDamage(12)
                 .setSpellRelativeEffects((loc, spellInfo) -> {

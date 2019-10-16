@@ -4,8 +4,9 @@ import me.dylan.wands.PreSetItem;
 import me.dylan.wands.WandsPlugin;
 import me.dylan.wands.commandhandler.BaseCommand;
 import me.dylan.wands.config.ConfigurableData;
+import me.dylan.wands.spell.SpellCompound;
 import me.dylan.wands.spell.SpellType;
-import me.dylan.wands.spell.types.Behavior;
+import me.dylan.wands.spell.spellbuilders.Behavior;
 import me.dylan.wands.utils.ItemUtil;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -17,6 +18,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.StringJoiner;
 
 public class Wands extends BaseCommand {
@@ -41,7 +43,8 @@ public class Wands extends BaseCommand {
                         if (isPlayer(sender)) {
                             Player player = (Player) sender;
                             ItemStack itemStack = player.getInventory().getItemInMainHand();
-                            player.sendMessage(WandsPlugin.PREFIX + "\nSpells: [" + (ItemUtil.getPersistentData(itemStack, "Spells", PersistentDataType.STRING).orElse("empty")) + "]");
+                            player.sendMessage(WandsPlugin.PREFIX + "\nLegacy Spells: [" + (ItemUtil.getPersistentData(itemStack, SpellCompound.TAG_SPELLS_LIST, PersistentDataType.STRING).orElse("empty")) + "]");
+                            player.sendMessage("\nSpells: " + (Arrays.toString(ItemUtil.getPersistentData(itemStack, SpellCompound.TAG_SPELLS_LIST, PersistentDataType.INTEGER_ARRAY).orElse(new int[0]))));
                         }
                         return true;
                     case "disable":

@@ -3,8 +3,9 @@ package me.dylan.wands.spell.spells;
 import me.dylan.wands.WandsPlugin;
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.accessories.SpellInfo;
-import me.dylan.wands.spell.types.Behavior;
-import me.dylan.wands.spell.types.Spark;
+import me.dylan.wands.spell.spellbuilders.Behavior;
+import me.dylan.wands.spell.spellbuilders.BuildableBehaviour;
+import me.dylan.wands.spell.spellbuilders.Spark;
 import me.dylan.wands.spell.util.SpellEffectUtil;
 import me.dylan.wands.utils.Common;
 import org.bukkit.*;
@@ -29,7 +30,7 @@ public class CorruptedWolves implements Castable {
 
     @Override
     public Behavior createBehaviour() {
-        return Spark.newBuilder(Behavior.Target.SINGLE)
+        return Spark.newBuilder(BuildableBehaviour.Target.SINGLE)
                 .setSpellEffectRadius(2.5F)
                 .setCastSound(Sound.ENTITY_EVOKER_PREPARE_SUMMON)
                 .setEffectDistance(30)

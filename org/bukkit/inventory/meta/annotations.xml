@@ -1,0 +1,7 @@
+<root>
+    <item name='org.bukkit.inventory.meta.ItemMeta java.lang.String getDisplayName()'>
+        <annotation name='org.jetbrains.annotations.Contract'>
+            <val val="&quot;-&gt;!null&quot;"/>
+        </annotation>
+    </item>
+</root>

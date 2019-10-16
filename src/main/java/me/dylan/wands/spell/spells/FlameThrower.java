@@ -1,8 +1,8 @@
 package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.spell.Castable;
-import me.dylan.wands.spell.types.Behavior;
-import me.dylan.wands.spell.types.BlockProjectile;
+import me.dylan.wands.spell.spellbuilders.Behavior;
+import me.dylan.wands.spell.spellbuilders.BlockProjectile;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;

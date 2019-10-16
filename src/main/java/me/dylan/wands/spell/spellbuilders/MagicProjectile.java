@@ -1,4 +1,4 @@
-package me.dylan.wands.spell.types;
+package me.dylan.wands.spell.spellbuilders;
 
 import me.dylan.wands.ListenerRegistry;
 import me.dylan.wands.WandsPlugin;
@@ -37,7 +37,7 @@ import java.util.function.Consumer;
  *
  * @param <T> Type of projectile which gets fired
  */
-public final class MagicProjectile<T extends Projectile> extends Behavior implements Listener {
+public final class MagicProjectile<T extends Projectile> extends BuildableBehaviour implements Listener {
     private static final Set<Projectile> projectiles = new HashSet<>();
     private final Map<Projectile, SpellInfo> caster = new HashMap<>();
     private final Class<T> projectile;

@@ -1,10 +1,10 @@
 package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.spell.Castable;
-import me.dylan.wands.spell.types.Aura;
-import me.dylan.wands.spell.types.Aura.AuraParticleType;
-import me.dylan.wands.spell.types.Aura.EffectFrequency;
-import me.dylan.wands.spell.types.Behavior;
+import me.dylan.wands.spell.spellbuilders.Aura;
+import me.dylan.wands.spell.spellbuilders.Aura.AuraParticleType;
+import me.dylan.wands.spell.spellbuilders.Aura.EffectFrequency;
+import me.dylan.wands.spell.spellbuilders.Behavior;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;

@@ -1,4 +1,4 @@
-package me.dylan.wands.spell.types;
+package me.dylan.wands.spell.spellbuilders;
 
 import me.dylan.wands.ListenerRegistry;
 import me.dylan.wands.WandsPlugin;
@@ -38,7 +38,7 @@ import java.util.function.BiConsumer;
  * - Effects displayed when the block lands.
  * - Block relative sounds, unlike {@link Behavior#castSounds} this sound is played at the location of the block when launched.
  */
-public final class LaunchableBlock extends Behavior implements Listener {
+public final class LaunchableBlock extends BuildableBehaviour implements Listener {
     private static final Set<Block> effectedBlocks = new HashSet<>();
     private static final Set<BlockRestorer> pending = new HashSet<>();
     private final String tagUnbreakable, tagFallingBlock;

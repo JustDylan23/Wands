@@ -2,9 +2,9 @@ package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.accessories.SpellInfo;
-import me.dylan.wands.spell.types.Behavior;
-import me.dylan.wands.spell.types.Behavior.Target;
-import me.dylan.wands.spell.types.Ray;
+import me.dylan.wands.spell.spellbuilders.Behavior;
+import me.dylan.wands.spell.spellbuilders.BuildableBehaviour;
+import me.dylan.wands.spell.spellbuilders.Ray;
 import me.dylan.wands.utils.Common;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -18,7 +18,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class Freeze implements Castable {
     @Override
     public Behavior createBehaviour() {
-        return Ray.newBuilder(Target.SINGLE)
+        return Ray.newBuilder(BuildableBehaviour.Target.SINGLE)
                 .setRayWidth(1)
                 .setEntityDamage(6)
                 .setMetersPerTick(2)

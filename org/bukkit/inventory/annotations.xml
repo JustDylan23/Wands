@@ -1,7 +1,2 @@
 <root>
-    <item name='org.bukkit.inventory.ItemStack org.bukkit.inventory.meta.ItemMeta getItemMeta()'>
-        <annotation name='org.jetbrains.annotations.Contract'>
-            <val val="&quot;-&gt;!null&quot;"/>
-        </annotation>
-    </item>
 </root>

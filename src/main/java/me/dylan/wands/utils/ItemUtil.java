@@ -31,7 +31,7 @@ public final class ItemUtil {
     }
 
     public static @NotNull String getName(@NotNull ItemStack itemStack) {
-        return (itemStack.getType() == Material.AIR) ? "" : itemStack.getItemMeta().getDisplayName();
+        return (itemStack.hasItemMeta()) ? itemStack.getItemMeta().getDisplayName() : "";
     }
 
     public static <T> void setPersistentData(@NotNull ItemStack itemStack, @NotNull String key, @NotNull PersistentDataType<T, T> type, T t) {
@@ -39,21 +39,21 @@ public final class ItemUtil {
     }
 
     public static <T> Optional<T> getPersistentData(@NotNull ItemStack itemStack, @NotNull String key, @NotNull PersistentDataType<T, T> type) {
-        if (itemStack.getType() == Material.AIR) {
+        if (itemStack.hasItemMeta()) {
+            PersistentDataContainer container = itemStack.getItemMeta().getPersistentDataContainer();
+            NamespacedKey namespacedKey = Common.newNamespacedKey(key);
+            return container.has(namespacedKey, type) ? Optional.ofNullable(container.get(namespacedKey, type)) : Optional.empty();
+        } else {
             return Optional.empty();
         }
-        PersistentDataContainer container = itemStack.getItemMeta().getPersistentDataContainer();
-        NamespacedKey namespacedKey = Common.newNamespacedKey(key);
-
-        return container.has(namespacedKey, type) ? Optional.ofNullable(container.get(namespacedKey, type)) : Optional.empty();
     }
 
     public static <T> boolean hasPersistentData(@NotNull ItemStack itemStack, @NotNull String key, @NotNull PersistentDataType<T, T> type) {
-        if (itemStack.getType() == Material.AIR) {
-            return false;
+        if (itemStack.hasItemMeta()) {
+            ItemMeta meta = itemStack.getItemMeta();
+            return meta.getPersistentDataContainer().has(Common.newNamespacedKey(key), type);
         }
-        ItemMeta meta = itemStack.getItemMeta();
-        return meta.getPersistentDataContainer().has(Common.newNamespacedKey(key), type);
+        return false;
     }
 
     public static void removePersistentData(@NotNull ItemStack itemStack, @NotNull String key) {

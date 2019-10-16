@@ -4,11 +4,11 @@ import me.dylan.wands.ListenerRegistry;
 import me.dylan.wands.WandsPlugin;
 import me.dylan.wands.config.ConfigurableData;
 import me.dylan.wands.spell.Castable;
-import me.dylan.wands.spell.SpellType;
 import me.dylan.wands.spell.accessories.SpellInfo;
 import me.dylan.wands.spell.accessories.sound.CompoundSound;
-import me.dylan.wands.spell.types.Behavior;
-import me.dylan.wands.spell.types.Spark;
+import me.dylan.wands.spell.spellbuilders.Behavior;
+import me.dylan.wands.spell.spellbuilders.BuildableBehaviour;
+import me.dylan.wands.spell.spellbuilders.Spark;
 import me.dylan.wands.spell.util.SpellEffectUtil;
 import me.dylan.wands.utils.Common;
 import org.bukkit.*;
@@ -43,7 +43,7 @@ public class CorruptedRain implements Castable, Listener {
 
     @Override
     public Behavior createBehaviour() {
-        return Spark.newBuilder(Behavior.Target.MULTI)
+        return Spark.newBuilder(BuildableBehaviour.Target.MULTI)
                 .setCastSound(CompoundSound.chain()
                         .add(Sound.ENTITY_ARROW_SHOOT)
                         .add(Sound.BLOCK_STONE_PLACE)

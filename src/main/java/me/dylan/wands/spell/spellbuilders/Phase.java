@@ -1,4 +1,4 @@
-package me.dylan.wands.spell.types;
+package me.dylan.wands.spell.spellbuilders;
 
 import me.dylan.wands.spell.accessories.SpellInfo;
 import me.dylan.wands.spell.util.SpellEffectUtil;
@@ -28,13 +28,13 @@ import java.util.function.Predicate;
  * - Effects constantly applied during phase.
  * - Effects applied after stage.
  */
-public final class Phase extends Behavior {
+public final class Phase extends BuildableBehaviour {
     private final Target target;
     private final String tagPhaseSpell;
     private final Predicate<LivingEntity> condition;
     private final Consumer<LivingEntity> duringPhaseEffect;
     private final BiConsumer<LivingEntity, Player> afterPhaseEffect;
-    private final KnockBackFrom knockBackFrom;
+    private final KnockBackDirection knockBackFrom;
     private final int effectDistance;
 
     private Phase(@NotNull Builder builder) {
@@ -61,7 +61,7 @@ public final class Phase extends Behavior {
         SpellInfo spellInfo = new SpellInfo(player, player.getLocation(), targetLoc);
         castSounds.play(player);
         spellRelativeEffects.accept(targetLoc, spellInfo);
-        Location pushFrom = (knockBackFrom == KnockBackFrom.SPELL) ? targetLoc : player.getLocation();
+        Location pushFrom = (knockBackFrom == KnockBackDirection.SPELL) ? targetLoc : player.getLocation();
         for (LivingEntity entity : SpellEffectUtil.getNearbyLivingEntities(player, targetLoc, entity -> !entity.hasMetadata(tagPhaseSpell), spellEffectRadius)) {
             entity.setMetadata(tagPhaseSpell, Common.getMetadataValueTrue());
             knockBack.apply(entity, pushFrom);
@@ -95,7 +95,7 @@ public final class Phase extends Behavior {
         private Predicate<LivingEntity> condition = Common.emptyPredicate();
         private Consumer<LivingEntity> duringPhaseEffect = Common.emptyConsumer();
         private BiConsumer<LivingEntity, Player> afterPhaseEffect = Common.emptyBiConsumer();
-        private KnockBackFrom knockBackFrom = KnockBackFrom.SPELL;
+        private KnockBackDirection knockBackFrom = KnockBackDirection.SPELL;
 
         private Builder(Target target) {
             this.target = target;
@@ -131,7 +131,7 @@ public final class Phase extends Behavior {
             return this;
         }
 
-        public Builder knockBackFrom(KnockBackFrom direction) {
+        public Builder knockBackFrom(KnockBackDirection direction) {
             this.knockBackFrom = direction;
             return this;
         }

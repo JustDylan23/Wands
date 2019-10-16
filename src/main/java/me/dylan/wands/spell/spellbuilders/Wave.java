@@ -1,4 +1,4 @@
-package me.dylan.wands.spell.types;
+package me.dylan.wands.spell.spellbuilders;
 
 import me.dylan.wands.spell.accessories.SpellInfo;
 import me.dylan.wands.spell.util.SpellEffectUtil;
@@ -20,7 +20,7 @@ import java.util.UUID;
  * - Speed in which the wave moves forward
  * - The maximum distance the wave can travel.
  */
-public final class Wave extends Behavior {
+public final class Wave extends BuildableBehaviour {
     private final int effectDistance;
     private final String tagWaveSpell;
 

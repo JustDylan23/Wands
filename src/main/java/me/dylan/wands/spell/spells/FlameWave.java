@@ -2,8 +2,8 @@ package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.accessories.sound.CompoundSound;
-import me.dylan.wands.spell.types.Behavior;
-import me.dylan.wands.spell.types.Wave;
+import me.dylan.wands.spell.spellbuilders.Behavior;
+import me.dylan.wands.spell.spellbuilders.Wave;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;

@@ -1,70 +1,89 @@
 package me.dylan.wands.spell;
 
+import me.dylan.wands.spell.spellbuilders.Behavior;
 import me.dylan.wands.spell.spells.*;
-import me.dylan.wands.spell.types.Behavior;
-import me.dylan.wands.utils.Common;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public enum SpellType {
-    BLOOD_BLOCK(new BloodBlock()),
-    BLOOD_EXPLODE(new BloodExplode()),
-    BLOOD_SPARK(new BloodSpark()),
-    BLOOD_STUN(new BloodStun()),
-    BLOOD_WAVE(new BloodWave()),
-    COMET(new Comet()),
-    CONFUSE(new Confuse()),
-    CORRUPTED_LAUNCH(new CorruptedLaunch()),
-    CORRUPTED_RAIN(new CorruptedRain()),
-    CORRUPTED_SHOCK_WAVE(new CorruptedShockWave()),
-    CORRUPTED_SPARK(new CorruptedSpark()),
-    CORRUPTED_WAVE(new CorruptedWave()),
-    CORRUPTED_WOLFS(new CorruptedWolves()),
-    DARK_AURA(new DarkAura()),
-    DARK_BLOCK(new DarkBlock()),
-    DARK_CIRCLE(new DarkCircle()),
-    DARK_PULSE(new DarkPulse()),
-    DARK_PUSH(new DarkPush()),
-    DARK_SPARK(new DarkSpark()),
-    ESCAPE(new Escape()),
-    FIRE_COMET(new FireComet()),
-    FIRE_SPARK(new FireSpark()),
-    FIRE_TWISTER(new FireTwister()),
-    FLAME_SHOCK_WAVE(new FlameShockWave()),
-    FLAME_THROWER(new FlameThrower()),
-    FLAME_WAVE(new FlameWave()),
-    ICE_AURA(new IceAura()),
-    ICE_FREEZE(new Freeze()),
-    LAUNCH(new Launch()),
-    MEPHI_AURA(new MephiAura()),
-    MEPHI_AWAY(new MephiAway()),
-    MEPHI_CHOKE(new MephiChoke()),
-    MEPHI_GRAB_WAVE(new MephiGrabWave()),
-    MEPHI_SPARK(new MephiSpark()),
-    POISON_WAVE(new PoisonWave()),
-    SPARK(new MagicSpark()),
-    THUNDER_ARROW(new LightningArrow()),
-    THUNDER_RAGE(new ThunderRage()),
-    THUNDER_STORM(new ThunderStorm()),
-    THUNDER_STRIKE(new ThunderStrike()),
+    BLOOD_BLOCK(1, new BloodBlock()),
+    BLOOD_EXPLODE(2, new BloodExplode()),
+    BLOOD_SPARK(3, new BloodSpark()),
+    BLOOD_STUN(4, new BloodStun()),
+    BLOOD_WAVE(5, new BloodWave()),
+    COMET(6, new Comet()),
+    CONFUSE(7, new Confuse()),
+    CORRUPTED_LAUNCH(8, new CorruptedLaunch()),
+    CORRUPTED_RAIN(9, new CorruptedRain()),
+    CORRUPTED_SHOCK_WAVE(10, new CorruptedShockWave()),
+    CORRUPTED_SPARK(11, new CorruptedSpark()),
+    CORRUPTED_WAVE(12, new CorruptedWave()),
+    CORRUPTED_WOLFS(13, new CorruptedWolves()),
+    DARK_AURA(14, new DarkAura()),
+    DARK_BLOCK(15, new DarkBlock()),
+    DARK_CIRCLE(16, new DarkCircle()),
+    DARK_PULSE(17, new DarkPulse()),
+    DARK_PUSH(18, new DarkPush()),
+    DARK_SPARK(19, new DarkSpark()),
+    ESCAPE(20, new Escape()),
+    FIRE_COMET(21, new FireComet()),
+    FIRE_SPARK(22, new FireSpark()),
+    FIRE_TWISTER(23, new FireTwister()),
+    FLAME_SHOCK_WAVE(24, new FlameShockWave()),
+    FLAME_THROWER(25, new FlameThrower()),
+    FLAME_WAVE(26, new FlameWave()),
+    ICE_AURA(27, new IceAura()),
+    ICE_FREEZE(28, new Freeze()),
+    LAUNCH(29, new Launch()),
+    MEPHI_AURA(30, new MephiAura()),
+    MEPHI_AWAY(31, new MephiAway()),
+    MEPHI_CHOKE(32, new MephiChoke()),
+    MEPHI_GRAB_WAVE(33, new MephiGrabWave()),
+    MEPHI_SPARK(34, new MephiSpark()),
+    POISON_WAVE(35, new PoisonWave()),
+    SPARK(36, new MagicSpark()),
+    THUNDER_ARROW(37, new LightningArrow()),
+    THUNDER_RAGE(38, new ThunderRage()),
+    THUNDER_STORM(39, new ThunderStorm()),
+    THUNDER_STRIKE(40, new ThunderStrike()),
 
-    SPIRIT_THRUST(new SpiritThrust()),
-    SPIRIT_FURY(new SpiritFury()),
+    SPIRIT_THRUST(41, new SpiritThrust()),
+    SPIRIT_FURY(42, new SpiritFury()),
 
-    ONE_MIND(new OneMind()),
-    DUAL_DRAW(new DualDraw()),
-    WHIRLWIND_SLASH(new WhirlwindSlash()),
-    FLOATING_PASSAGE(new FloatingPassage()),
-    SPIRAL_CLOUD_PASSAGE(new SpiralCloudPassage());
+    ONE_MIND(43, new OneMind()),
+    DUAL_DRAW(44, new DualDraw()),
+    WHIRLWIND_SLASH(45, new WhirlwindSlash()),
+    FLOATING_PASSAGE(46, new FloatingPassage()),
+    SPIRAL_CLOUD_PASSAGE(47, new SpiralCloudPassage());
+
+    private static final Map<Integer, SpellType> SPELL_TYPE_MAP = new HashMap<>();
+
+    static {
+        for (SpellType value : values()) {
+            SPELL_TYPE_MAP.put(value.id, value);
+        }
+    }
 
     public final Behavior behavior;
     public final String name;
-    public final String configKey;
+    public final int id;
 
-    SpellType(@NotNull Castable castable) {
+    SpellType(int id, @NotNull Castable castable) {
+        this.id = id;
         this.behavior = castable.createBehaviour();
         this.name = castable.getDisplayName();
-        this.configKey = Common.pascalCaseToWords(castable.getClass().getSimpleName());
+    }
+
+    @Nullable
+    public static SpellType getSpellById(int id) {
+        return SPELL_TYPE_MAP.get(id);
+    }
+
+    public static boolean hasSpellWithId(int id) {
+        return SPELL_TYPE_MAP.containsKey(id);
     }
 
     public static @Nullable SpellType getSpellType(@NotNull String name) {

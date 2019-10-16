@@ -1,10 +1,10 @@
 package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.spell.Castable;
-import me.dylan.wands.spell.types.Behavior;
-import me.dylan.wands.spell.types.Behavior.KnockBackFrom;
-import me.dylan.wands.spell.types.Behavior.Target;
-import me.dylan.wands.spell.types.Phase;
+import me.dylan.wands.spell.spellbuilders.Behavior;
+import me.dylan.wands.spell.spellbuilders.BuildableBehaviour;
+import me.dylan.wands.spell.spellbuilders.BuildableBehaviour.KnockBackDirection;
+import me.dylan.wands.spell.spellbuilders.Phase;
 import me.dylan.wands.spell.util.SpellEffectUtil;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -18,13 +18,13 @@ import org.bukkit.potion.PotionEffectType;
 public class DarkPush implements Castable {
     @Override
     public Behavior createBehaviour() {
-        return Phase.newBuilder(Target.SINGLE)
+        return Phase.newBuilder(BuildableBehaviour.Target.SINGLE)
                 .setEntityDamage(6)
                 .setCastSound(Sound.ENTITY_WITHER_SHOOT)
                 .setKnockBack(1.2F, 0.6F)
                 .setEffectDistance(30)
                 .setSpellEffectRadius(2.5F)
-                .knockBackFrom(KnockBackFrom.PLAYER)
+                .knockBackFrom(KnockBackDirection.PLAYER)
                 .setSpellRelativeEffects((loc, spellInfo) -> {
                     World world = spellInfo.world();
                     world.spawnParticle(Particle.SMOKE_LARGE, loc, 20, 0.4, 0.4, 0.4, 0.1, null, true);
