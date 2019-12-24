@@ -22,19 +22,19 @@ commands:
     usage: /clearwand
     permission: wands.clear
   bind:
-    description: Binds spells to a wand.
+    description: Binds spells to the held wand.
     usage: /bind <spell>
     permission: wands.bind
   bindall:
-    description: Binds all spells to a wand.
+    description: Binds all spells to the held wand.
     usage: /bindall <spell>
     permission: wands.bind
   unbind:
-    description: Unbinds spells from a wand.
+    description: Unbinds spells from the held wand.
     usage: /unbind <spell>
     permission: wands.unbind
   unbindall:
-    description: Unbinds spells from a wand.
+    description: Unbinds spells from the held wand.
     usage: /unbindall
     permission: wands.unbind
   tweakcooldown:
