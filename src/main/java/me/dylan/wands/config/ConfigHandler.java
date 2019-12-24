@@ -33,9 +33,7 @@ public class ConfigHandler {
         });
     }
 
-    public void save(String filePath) {
-        File file = new File(filePath);
-
+    public void save(File file) {
         try (DataOutputStream stream = new DataOutputStream(new GZIPOutputStream(new FileOutputStream(file)))) {
             stream.writeUTF(new Gson().toJson(config));
         } catch (IOException e) {

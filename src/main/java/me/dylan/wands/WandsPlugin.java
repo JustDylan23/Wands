@@ -18,7 +18,10 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -28,9 +31,9 @@ public final class WandsPlugin extends JavaPlugin {
 
     public static final boolean DEBUG = true;
     public static final String PREFIX = "§8§l[§6§lWands§8§l]§r ";
-    private static final String configPath = "config.dat";
     private static final Set<Runnable> disableLogic = new HashSet<>();
 
+    private File configFile;
     private ConfigHandler configHandler;
     private CooldownManager cooldownManager;
 
@@ -50,6 +53,7 @@ public final class WandsPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        configFile = new File(getDataFolder(), "config.dat");
         ListenerRegistry listenerRegistry = new ListenerRegistry();
         loadConfig(listenerRegistry);
         loadListeners(listenerRegistry);
@@ -59,16 +63,14 @@ public final class WandsPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        configHandler.save(configPath);
+        configHandler.save(configFile);
         disableLogic.forEach(Runnable::run);
     }
 
     private void loadConfig(ListenerRegistry listenerRegistry) {
-        File file = new File(configPath);
-
         Config config;
-        if (file.exists()) {
-            try (DataInputStream stream = new DataInputStream(new GZIPInputStream(new FileInputStream(file)))) {
+        if (configFile.exists()) {
+            try (DataInputStream stream = new DataInputStream(new GZIPInputStream(new FileInputStream(configFile)))) {
                 config = new Gson().fromJson(stream.readUTF(), Config.class);
                 log("Loaded config");
             } catch (IOException e) {
