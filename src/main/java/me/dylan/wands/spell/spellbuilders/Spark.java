@@ -38,14 +38,14 @@ public final class Spark extends BuildableBehaviour {
     }
 
     @Override
-    public boolean cast(@NotNull Player player, @NotNull String weaponName) {
+    public boolean cast(@NotNull Player player, @NotNull String weapon) {
         Location targetLoc = SpellEffectUtil.getSpellLocation(player, effectDistance);
         SpellInfo spellInfo = new SpellInfo(player, player.getLocation(), targetLoc);
         castSounds.play(player);
         spellRelativeEffects.accept(targetLoc, spellInfo);
         for (LivingEntity entity : SpellEffectUtil.getNearbyLivingEntities(player, targetLoc, spellEffectRadius)) {
             knockBack.apply(entity, targetLoc);
-            SpellEffectUtil.damageEffect(player, entity, entityDamage, weaponName);
+            SpellEffectUtil.damageEffect(player, entity, entityDamage, weapon);
             entityEffects.accept(entity, spellInfo);
             for (PotionEffect potionEffect : potionEffects) {
                 entity.addPotionEffect(potionEffect, true);

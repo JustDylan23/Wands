@@ -10,10 +10,7 @@ import java.util.StringJoiner;
 
 public abstract class Behavior {
     private final List<String> props = new ArrayList<>();
-    private int tweakedCooldown;
-
-    protected Behavior() {
-    }
+    private int cooldown;
 
     void addPropertyInfo(String key, Object value) {
         addPropertyInfo(key, value, "");
@@ -23,14 +20,14 @@ public abstract class Behavior {
         props.add("§6" + key.substring(0, 1).toUpperCase() + key.substring(1).toLowerCase() + ":§r " + value.toString().toLowerCase() + " " + unit);
     }
 
-    public abstract boolean cast(@NotNull Player player, @NotNull String weaponName);
+    public abstract boolean cast(@NotNull Player player, @NotNull String weapon);
 
     public void setCooldown(int seconds) {
-        this.tweakedCooldown = seconds;
+        this.cooldown = seconds;
     }
 
-    public int getTweakedCooldown() {
-        return tweakedCooldown;
+    public int getCooldown() {
+        return cooldown;
     }
 
     @Override

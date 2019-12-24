@@ -65,7 +65,7 @@ public final class BlockProjectile extends BuildableBehaviour implements Listene
     }
 
     @Override
-    public boolean cast(@NotNull Player player, @NotNull String weaponName) {
+    public boolean cast(@NotNull Player player, @NotNull String weapon) {
         BukkitRunnable bukkitRunnable = new BukkitRunnable() {
             int count;
 
@@ -83,7 +83,7 @@ public final class BlockProjectile extends BuildableBehaviour implements Listene
                             return fallingBlock.getLocation();
                         }
                     };
-                    handleSpellEffects(fallingBlock, spellInfo, weaponName);
+                    handleSpellEffects(fallingBlock, spellInfo, weapon);
                 }
             }
 

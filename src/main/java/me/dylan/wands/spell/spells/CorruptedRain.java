@@ -2,7 +2,7 @@ package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.ListenerRegistry;
 import me.dylan.wands.WandsPlugin;
-import me.dylan.wands.config.ConfigurableData;
+import me.dylan.wands.config.ConfigHandler;
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.accessories.SpellInfo;
 import me.dylan.wands.spell.accessories.sound.CompoundSound;
@@ -33,12 +33,12 @@ public class CorruptedRain implements Castable, Listener {
     private final PotionEffect blind = new PotionEffect(PotionEffectType.BLINDNESS, 120, 0, false);
     private final BlockData obsidian = Material.OBSIDIAN.createBlockData();
     private final String tagCorruptedRain = UUID.randomUUID().toString();
-    private final ConfigurableData config;
+    private final ConfigHandler config;
 
     public CorruptedRain() {
         ListenerRegistry.addListener(this);
         WandsPlugin plugin = JavaPlugin.getPlugin(WandsPlugin.class);
-        config = plugin.getConfigurableData();
+        config = plugin.getConfigHandler();
     }
 
     @Override
@@ -93,7 +93,7 @@ public class CorruptedRain implements Castable, Listener {
             Projectile projectile = (Projectile) event.getDamager();
             if (projectile.hasMetadata(tagCorruptedRain)) {
                 Player source = (Player) projectile.getShooter();
-                if (source != null && source.equals(event.getEntity()) && !config.isSelfHarmAllowed()) {
+                if (event.getEntity().equals(source)) {
                     event.setCancelled(true);
                 }
             }

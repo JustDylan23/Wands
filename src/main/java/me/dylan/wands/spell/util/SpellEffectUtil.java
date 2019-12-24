@@ -1,7 +1,7 @@
 package me.dylan.wands.spell.util;
 
 import me.dylan.wands.WandsPlugin;
-import me.dylan.wands.config.ConfigurableData;
+import me.dylan.wands.config.ConfigHandler;
 import me.dylan.wands.events.MagicDamageEvent;
 import me.dylan.wands.utils.Common;
 import me.dylan.wands.utils.LocationUtil;
@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 public final class SpellEffectUtil {
     public static final String CAN_DAMAGE_WITH_WANDS = UUID.randomUUID().toString();
     private static final WandsPlugin plugin = JavaPlugin.getPlugin(WandsPlugin.class);
-    private static final ConfigurableData CONFIGURABLE_DATA = plugin.getConfigurableData();
+    private static final ConfigHandler CONFIGURABLE_DATA = plugin.getConfigHandler();
 
     private SpellEffectUtil() {
         throw new UnsupportedOperationException("Instantiating util class");
@@ -124,10 +124,8 @@ public final class SpellEffectUtil {
                 .getNearbyEntities(loc, rx, ry, rz).stream()
                 .filter(entity -> entity instanceof LivingEntity)
                 .filter(entity -> !(entity instanceof ArmorStand))
-                .filter(entity -> entity.equals(player)
-                        ? CONFIGURABLE_DATA.isSelfHarmAllowed()
-                        : checkFriendlyFireOption(player, entity)
-                )
+                .filter(entity -> !entity.equals(player))
+                .filter(entity -> checkFriendlyFireOption(player, entity))
                 .map(LivingEntity.class::cast)
                 .filter(predicate)
                 .collect(Collectors.toCollection(ArrayList::new));

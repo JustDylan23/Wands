@@ -44,7 +44,7 @@ public final class Circle extends BuildableBehaviour {
     }
 
     @Override
-    public boolean cast(@NotNull Player player, @NotNull String weaponName) {
+    public boolean cast(@NotNull Player player, @NotNull String weapon) {
         Location circleCenter = (circlePlacement == CirclePlacement.TARGET)
                 ? SpellEffectUtil.getSpellLocation(player, effectDistance)
                 : player.getLocation();
@@ -65,7 +65,7 @@ public final class Circle extends BuildableBehaviour {
                         cancel();
                         for (LivingEntity entity : SpellEffectUtil.getNearbyLivingEntities(player, circleCenter, spellEffectRadius)) {
                             knockBack.apply(entity, circleCenter);
-                            SpellEffectUtil.damageEffect(player, entity, entityDamage, weaponName);
+                            SpellEffectUtil.damageEffect(player, entity, entityDamage, weapon);
                             entityEffects.accept(entity, spellInfo);
                             for (PotionEffect potionEffect : potionEffects) {
                                 entity.addPotionEffect(potionEffect, true);

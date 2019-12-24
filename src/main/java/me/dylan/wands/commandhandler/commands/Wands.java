@@ -3,7 +3,7 @@ package me.dylan.wands.commandhandler.commands;
 import me.dylan.wands.PreSetItem;
 import me.dylan.wands.WandsPlugin;
 import me.dylan.wands.commandhandler.BaseCommand;
-import me.dylan.wands.config.ConfigurableData;
+import me.dylan.wands.config.ConfigHandler;
 import me.dylan.wands.spell.SpellCompound;
 import me.dylan.wands.spell.SpellType;
 import me.dylan.wands.spell.spellbuilders.Behavior;
@@ -22,11 +22,11 @@ import java.util.Arrays;
 import java.util.StringJoiner;
 
 public class Wands extends BaseCommand {
-    private final ConfigurableData configurableData;
+    private final ConfigHandler configHandler;
     private final String version;
 
-    public Wands(ConfigurableData configurableData, String version) {
-        this.configurableData = configurableData;
+    public Wands(ConfigHandler configHandler, String version) {
+        this.configHandler = configHandler;
         this.version = version;
     }
 
@@ -35,10 +35,6 @@ public class Wands extends BaseCommand {
         switch (args.length) {
             case 1:
                 switch (args[0]) {
-                    case "reload":
-                        configurableData.reload();
-                        sender.sendMessage(WandsPlugin.PREFIX + "§asuccessfully §rreloaded the config file");
-                        return true;
                     case "inspect":
                         if (isPlayer(sender)) {
                             Player player = (Player) sender;
@@ -49,13 +45,13 @@ public class Wands extends BaseCommand {
                         return true;
                     case "disable":
                         if (checkPerm(sender, "toggle")) {
-                            configurableData.allowMagicUse(false);
+                            configHandler.allowMagicUse(false);
                             sender.sendMessage(WandsPlugin.PREFIX + "All wands are now disabled.");
                         }
                         return true;
                     case "enable":
                         if (checkPerm(sender, "toggle")) {
-                            configurableData.allowMagicUse(true);
+                            configHandler.allowMagicUse(true);
                             sender.sendMessage(WandsPlugin.PREFIX + "All wands are now enabled.");
                         }
                         return true;
@@ -84,10 +80,9 @@ public class Wands extends BaseCommand {
                         return true;
                     case "getconfig":
                         if (checkPerm(sender, "viewconfig")) {
-                            ConfigurableData cd = configurableData;
-                            sender.sendMessage("§6magic cooldown time:§r " + (cd.getMagicCooldownTime() / 1000) + " seconds");
-                            sender.sendMessage("§6allow magic use:§r " + (cd.isMagicUseAllowed() ? "§a" : "§c") + cd.isMagicUseAllowed());
-                            sender.sendMessage("§6allow self harm use:§r " + (cd.isSelfHarmAllowed() ? "§a" : "§c") + cd.isSelfHarmAllowed());
+                            ConfigHandler cd = configHandler;
+                            sender.sendMessage("§6magic cooldown time:§r " + (cd.getSpellCooldown() / 1000) + " seconds");
+                            sender.sendMessage("§6allow magic use:§r " + (cd.isMagicEnabled() ? "§a" : "§c") + cd.isMagicEnabled());
                             sender.sendMessage("§6wands usage requires permissoin:§r " + (cd.doesCastingRequirePermission() ? "§a" : "§c") + cd.doesCastingRequirePermission());
                         }
                         return true;
@@ -149,23 +144,12 @@ public class Wands extends BaseCommand {
                             try {
                                 int in = Integer.parseInt(args[2]);
                                 if (args[2].length() <= 2 && isInRange(sender, 0, 99, in)) {
-                                    configurableData.setMagicCooldownTime(in);
+                                    configHandler.setSpellCooldown(in);
                                     sender.sendMessage(WandsPlugin.PREFIX + "Cooldown has been set to " + in + " second" + ((in != 1) ? "s" : ""));
                                 }
                             } catch (NumberFormatException e) {
                                 sender.sendMessage(WandsPlugin.PREFIX + "Cooldown can only be set to a full number!");
                             }
-                        }
-                        return true;
-                    } else if ("selfharm".equalsIgnoreCase(args[1])) {
-                        if (checkPerm(sender, "setselfharm")) {
-                            boolean result = Boolean.parseBoolean(args[2]);
-                            if (result) {
-                                sender.sendMessage(WandsPlugin.PREFIX + "Player can now harm himself with wands");
-                            } else {
-                                sender.sendMessage(WandsPlugin.PREFIX + "Player can no longer harm himself with wands");
-                            }
-                            configurableData.allowSelfHarm(result);
                         }
                         return true;
                     } else if ("restriction".equalsIgnoreCase(args[1])) {
@@ -176,7 +160,7 @@ public class Wands extends BaseCommand {
                             } else {
                                 sender.sendMessage(WandsPlugin.PREFIX + "All players can use wands now");
                             }
-                            configurableData.requirePermissionForCasting(result);
+                            configHandler.requirePermissionForCasting(result);
                         }
                         return true;
                     }

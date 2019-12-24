@@ -48,7 +48,7 @@ public final class Aura extends BuildableBehaviour {
     }
 
     @Override
-    public boolean cast(@NotNull Player player, @NotNull String weaponName) {
+    public boolean cast(@NotNull Player player, @NotNull String weapon) {
         if (player.hasMetadata(auraUUID)) {
             return false;
         }
@@ -92,7 +92,7 @@ public final class Aura extends BuildableBehaviour {
                                 repeat = false;
                             }
                             knockBack.apply(livingEntity, loc);
-                            SpellEffectUtil.damageEffect(player, livingEntity, entityDamage, weaponName);
+                            SpellEffectUtil.damageEffect(player, livingEntity, entityDamage, weapon);
                             hasAffected = true;
                             entityEffects.accept(livingEntity, spellInfo);
                             for (PotionEffect potionEffect : potionEffects) {

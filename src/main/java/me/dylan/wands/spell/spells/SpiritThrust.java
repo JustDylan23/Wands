@@ -24,7 +24,7 @@ public class SpiritThrust extends Behavior implements Castable {
     }
 
     @Override
-    public boolean cast(@NotNull Player player, @NotNull String weaponName) {
+    public boolean cast(@NotNull Player player, @NotNull String weapon) {
         Location location = player.getEyeLocation();
         Location origin = location.clone();
         World world = location.getWorld();
@@ -54,7 +54,7 @@ public class SpiritThrust extends Behavior implements Castable {
                         world.spawnParticle(Particle.REDSTONE, location, 1, 0.1, 0.1, 0.1, 0, RED, false);
 
                         for (LivingEntity livingEntity : SpellEffectUtil.getNearbyLivingEntities(player, location.add(increment), 0.7)) {
-                            SpellEffectUtil.damageEffect(player, livingEntity, 6, weaponName);
+                            SpellEffectUtil.damageEffect(player, livingEntity, 6, weapon);
                             knockBack.apply(livingEntity, origin);
                             cancel();
                             break;

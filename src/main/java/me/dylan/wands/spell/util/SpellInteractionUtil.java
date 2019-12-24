@@ -1,7 +1,7 @@
 package me.dylan.wands.spell.util;
 
 import me.dylan.wands.WandsPlugin;
-import me.dylan.wands.config.ConfigurableData;
+import me.dylan.wands.config.ConfigHandler;
 import me.dylan.wands.spell.BrowseParticle;
 import me.dylan.wands.spell.CooldownManager;
 import me.dylan.wands.spell.SpellCompound;
@@ -23,13 +23,13 @@ import java.util.Optional;
 
 public final class SpellInteractionUtil {
     public static final String TAG_SPELL_BROWSE_PARTICLES = "SpellBrowseParticles";
-    private static final ConfigurableData config;
+    private static final ConfigHandler config;
     private static final CooldownManager cooldownManager;
     private static final String TAG_SPELL_INDEX = "SpellIndex";
 
     static {
         WandsPlugin wandsPlugin = JavaPlugin.getPlugin(WandsPlugin.class);
-        config = wandsPlugin.getConfigurableData();
+        config = wandsPlugin.getConfigHandler();
         cooldownManager = wandsPlugin.getCooldownManager();
     }
 
