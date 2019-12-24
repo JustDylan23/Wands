@@ -56,7 +56,7 @@ public final class Phase extends BuildableBehaviour {
     }
 
     @Override
-    public boolean cast(@NotNull Player player, @NotNull String weaponName) {
+    public boolean cast(@NotNull Player player, @NotNull String weapon) {
         Location targetLoc = SpellEffectUtil.getSpellLocation(player, effectDistance);
         SpellInfo spellInfo = new SpellInfo(player, player.getLocation(), targetLoc);
         castSounds.play(player);
@@ -69,7 +69,7 @@ public final class Phase extends BuildableBehaviour {
             for (PotionEffect potionEffect : potionEffects) {
                 entity.addPotionEffect(potionEffect, true);
             }
-            SpellEffectUtil.damageEffect(player, entity, entityDamage, weaponName);
+            SpellEffectUtil.damageEffect(player, entity, entityDamage, weapon);
             BukkitRunnable bukkitRunnable = new BukkitRunnable() {
                 @Override
                 public void run() {

@@ -67,7 +67,7 @@ public final class LaunchableBlock extends BuildableBehaviour implements Listene
     }
 
     @Override
-    public boolean cast(@NotNull Player player, @NotNull String weaponName) {
+    public boolean cast(@NotNull Player player, @NotNull String weapon) {
         return selectedBlock.containsKey(player) ? launchBlock(player) : prepareBlock(player);
     }
 

@@ -1,7 +1,7 @@
 package me.dylan.wands.spell;
 
 import me.dylan.wands.ListenerRegistry;
-import me.dylan.wands.config.ConfigurableData;
+import me.dylan.wands.config.ConfigHandler;
 import me.dylan.wands.utils.PlayerUtil;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -15,10 +15,10 @@ import java.util.Map;
 
 public class CooldownManager implements Listener {
     private final Map<Player, Long> playerCooldownHashMap = new HashMap<>();
-    private final ConfigurableData configurableData;
+    private final ConfigHandler configHandler;
 
-    public CooldownManager(ConfigurableData configurableData) {
-        this.configurableData = configurableData;
+    public CooldownManager(ConfigHandler configHandler) {
+        this.configHandler = configHandler;
         ListenerRegistry.addListener(this);
     }
 
@@ -33,7 +33,7 @@ public class CooldownManager implements Listener {
     public boolean canCast(Player player, SpellType spellType) {
         int remainingTime = getRemainingTime(player);
         if (remainingTime == 0) return true;
-        remainingTime += spellType.behavior.getTweakedCooldown() * 1000;
+        remainingTime += spellType.behavior.getCooldown() * 1000;
         if (remainingTime <= 0) {
             return true;
         } else {
@@ -51,7 +51,7 @@ public class CooldownManager implements Listener {
      * @return Amount of time since last updated cooldown {@link #updateLastUsed(Player)}.
      */
     private int getRemainingTime(Player player) {
-        int cooldown = configurableData.getMagicCooldownTime();
+        int cooldown = configHandler.getSpellCooldown() * 1000;
         Long lastUsed = playerCooldownHashMap.get(player);
         if (lastUsed != null) {
             if (cooldown == 0) return 0;

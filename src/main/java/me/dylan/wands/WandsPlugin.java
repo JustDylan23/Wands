@@ -1,11 +1,13 @@
 package me.dylan.wands;
 
+import com.google.gson.Gson;
 import me.dylan.wands.commandhandler.commands.*;
 import me.dylan.wands.commandhandler.tabcompleters.BindComplete;
 import me.dylan.wands.commandhandler.tabcompleters.TweakSpellComplete;
 import me.dylan.wands.commandhandler.tabcompleters.UnbindComplete;
 import me.dylan.wands.commandhandler.tabcompleters.WandsComplete;
-import me.dylan.wands.config.ConfigurableData;
+import me.dylan.wands.config.Config;
+import me.dylan.wands.config.ConfigHandler;
 import me.dylan.wands.customitems.AssassinDagger;
 import me.dylan.wands.customitems.CursedBow;
 import me.dylan.wands.spell.CooldownManager;
@@ -16,20 +18,30 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.*;
 import java.util.HashSet;
 import java.util.NoSuchElementException;
 import java.util.Set;
+import java.util.zip.GZIPInputStream;
 
 public final class WandsPlugin extends JavaPlugin {
 
+    public static final boolean DEBUG = true;
     public static final String PREFIX = "§8§l[§6§lWands§8§l]§r ";
+    private static final String configPath = "config.dat";
     private static final Set<Runnable> disableLogic = new HashSet<>();
-    // instances of classes accessible via main class
-    private ConfigurableData configurableData;
+
+    private ConfigHandler configHandler;
     private CooldownManager cooldownManager;
 
-    public static void log(String text) {
-        Bukkit.getLogger().info(PREFIX + text);
+    public static void log(String message) {
+        Bukkit.getLogger().info(PREFIX + message);
+    }
+
+    public static void debug(String message) {
+        if (DEBUG) {
+            log(message);
+        }
     }
 
     public static void addDisableLogic(Runnable runnable) {
@@ -38,14 +50,40 @@ public final class WandsPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        saveDefaultConfig();
         ListenerRegistry listenerRegistry = new ListenerRegistry();
+        loadConfig(listenerRegistry);
+        loadListeners(listenerRegistry);
+        loadCommands();
+        log("Enabled successfully");
+    }
 
-        this.configurableData = new ConfigurableData(listenerRegistry);
-        this.cooldownManager = new CooldownManager(configurableData);
+    @Override
+    public void onDisable() {
+        configHandler.save(configPath);
+        disableLogic.forEach(Runnable::run);
+    }
 
-        configurableData.loadDefaults(true);
+    private void loadConfig(ListenerRegistry listenerRegistry) {
+        File file = new File(configPath);
 
+        Config config;
+        if (file.exists()) {
+            try (DataInputStream stream = new DataInputStream(new GZIPInputStream(new FileInputStream(file)))) {
+                config = new Gson().fromJson(stream.readUTF(), Config.class);
+                log("Loaded config");
+            } catch (IOException e) {
+                throw new IllegalStateException("Config is corrupted");
+            }
+        } else {
+            config = new Config();
+            log("Created config");
+        }
+
+        this.configHandler = new ConfigHandler(config, listenerRegistry);
+        this.cooldownManager = new CooldownManager(configHandler);
+    }
+
+    private void loadListeners(ListenerRegistry listenerRegistry) {
         PlayerListener playerListener = new PlayerListener();
         AssassinDagger assassinDagger = new AssassinDagger();
         CursedBow cursedBow = new CursedBow();
@@ -63,22 +101,20 @@ public final class WandsPlugin extends JavaPlugin {
                 mouseClickListeners
         );
 
-        addCommand("wands", new Wands(configurableData, getDescription().getVersion()), new WandsComplete());
+        if (this.configHandler.isMagicEnabled()) {
+            listenerRegistry.enableListeners();
+        }
+    }
+
+    private void loadCommands() {
+        addCommand("wands", new Wands(configHandler, getDescription().getVersion()), new WandsComplete());
         addCommand("createwand", new CreateWand(), null);
         addCommand("clearwand", new ClearWand(), null);
         addCommand("bind", new Bind(), new BindComplete());
         addCommand("unbind", new Unbind(), new UnbindComplete());
         addCommand("bindall", new BindAll(), null);
         addCommand("unbindall", new UnbindAll(), null);
-        addCommand("tweakcooldown", new TweakCooldown(configurableData), new TweakSpellComplete());
-
-        log("Up and running!");
-    }
-
-    @Override
-    public void onDisable() {
-        saveConfig();
-        disableLogic.forEach(Runnable::run);
+        addCommand("tweakcooldown", new TweakCooldown(configHandler), new TweakSpellComplete());
     }
 
     private void addCommand(String command, CommandExecutor executor, TabCompleter tabCompleter) {
@@ -88,8 +124,8 @@ public final class WandsPlugin extends JavaPlugin {
         cmd.setTabCompleter(tabCompleter);
     }
 
-    public ConfigurableData getConfigurableData() {
-        return configurableData;
+    public ConfigHandler getConfigHandler() {
+        return configHandler;
     }
 
     public CooldownManager getCooldownManager() {

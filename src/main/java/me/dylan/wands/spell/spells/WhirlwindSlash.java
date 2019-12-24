@@ -17,7 +17,7 @@ public class WhirlwindSlash extends Behavior implements Castable {
     }
 
     @Override
-    public boolean cast(@NotNull Player player, @NotNull String weaponName) {
+    public boolean cast(@NotNull Player player, @NotNull String weapon) {
         BukkitRunnable bukkitRunnable = new BukkitRunnable() {
             int count;
 

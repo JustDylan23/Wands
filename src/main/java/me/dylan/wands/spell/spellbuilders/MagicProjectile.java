@@ -69,7 +69,7 @@ public final class MagicProjectile<T extends Projectile> extends BuildableBehavi
     }
 
     @Override
-    public boolean cast(@NotNull Player player, @NotNull String weaponName) {
+    public boolean cast(@NotNull Player player, @NotNull String weapon) {
         castSounds.play(player);
         Location origin = player.getLocation();
         Vector velocity = origin.getDirection().multiply(speed);
@@ -83,7 +83,7 @@ public final class MagicProjectile<T extends Projectile> extends BuildableBehavi
         caster.put(firedProjectile, spellInfo);
         trail(firedProjectile, spellInfo);
         projectileProps.accept(firedProjectile);
-        firedProjectile.setMetadata(tagProjectileSpell, Common.metadataValue(weaponName));
+        firedProjectile.setMetadata(tagProjectileSpell, Common.metadataValue(weapon));
         activateLifeTimer(firedProjectile);
         return true;
     }

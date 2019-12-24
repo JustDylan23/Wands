@@ -37,7 +37,7 @@ public final class ShockWave extends BuildableBehaviour {
     }
 
     @Override
-    public boolean cast(@NotNull Player player, @NotNull String weaponName) {
+    public boolean cast(@NotNull Player player, @NotNull String weapon) {
         castSounds.play(player);
         Location waveCenter = player.getLocation();
         SpellInfo spellInfo = new SpellInfo(player, waveCenter, waveCenter);
@@ -57,7 +57,7 @@ public final class ShockWave extends BuildableBehaviour {
 
                     for (LivingEntity entity : SpellEffectUtil.getNearbyLivingEntities(player, waveCenter, entity -> !entity.hasMetadata(tagShockWave), currentRadius, 2.0, currentRadius)) {
                         entity.setMetadata(tagShockWave, Common.getMetadataValueTrue());
-                        SpellEffectUtil.damageEffect(player, entity, entityDamage, weaponName);
+                        SpellEffectUtil.damageEffect(player, entity, entityDamage, weapon);
                         entityEffects.accept(entity, spellInfo);
                         for (PotionEffect potionEffect : potionEffects) {
                             entity.addPotionEffect(potionEffect, true);

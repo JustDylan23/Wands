@@ -48,7 +48,7 @@ public final class Ray extends BuildableBehaviour {
     }
 
     @Override
-    public boolean cast(@NotNull Player player, @NotNull String weaponName) {
+    public boolean cast(@NotNull Player player, @NotNull String weapon) {
         Vector direction = player.getLocation().getDirection().normalize();
         castSounds.play(player);
         Location origin = player.getEyeLocation();
@@ -66,7 +66,7 @@ public final class Ray extends BuildableBehaviour {
                         continue;
                     }
                     cancel();
-                    effectEntities(spellInfo, weaponName);
+                    effectEntities(spellInfo, weapon);
                     break;
                 }
             }

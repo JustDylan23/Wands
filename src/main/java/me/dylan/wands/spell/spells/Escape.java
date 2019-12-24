@@ -38,7 +38,7 @@ public class Escape extends Behavior implements Castable, Listener {
     }
 
     @Override
-    public boolean cast(@NotNull Player player, @NotNull String weaponName) {
+    public boolean cast(@NotNull Player player, @NotNull String weapon) {
         if (player.hasMetadata(tagEscaping)) {
             return false;
         } else {

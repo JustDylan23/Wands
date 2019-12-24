@@ -37,7 +37,7 @@ public final class Wave extends BuildableBehaviour {
     }
 
     @Override
-    public boolean cast(@NotNull Player player, @NotNull String weaponName) {
+    public boolean cast(@NotNull Player player, @NotNull String weapon) {
         Vector direction = player.getLocation().getDirection().normalize();
         castSounds.play(player.getLocation().add(direction.clone().multiply(5)));
         Location origin = player.getEyeLocation();
@@ -58,7 +58,7 @@ public final class Wave extends BuildableBehaviour {
                 spellRelativeEffects.accept(spellLoc, spellInfo);
                 for (LivingEntity livingEntity : SpellEffectUtil.getNearbyLivingEntities(player, spellLoc, entity -> !entity.hasMetadata(tagWaveSpell), spellEffectRadius)) {
                     livingEntity.setMetadata(tagWaveSpell, Common.getMetadataValueTrue());
-                    SpellEffectUtil.damageEffect(player, livingEntity, entityDamage, weaponName);
+                    SpellEffectUtil.damageEffect(player, livingEntity, entityDamage, weapon);
                     entityEffects.accept(livingEntity, spellInfo);
                     for (PotionEffect potionEffect : potionEffects) {
                         livingEntity.addPotionEffect(potionEffect, true);

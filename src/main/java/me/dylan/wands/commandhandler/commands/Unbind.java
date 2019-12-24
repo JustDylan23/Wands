@@ -19,7 +19,7 @@ public class Unbind extends BaseCommand {
                 String argument = args[0].toUpperCase();
                 ItemStack itemStack = player.getInventory().getItemInMainHand();
                 if (isWand(player, itemStack)) {
-                    SpellType spellType = SpellType.getSpellType(argument);
+                    SpellType spellType = SpellType.fromString(argument);
                     if (isSpell(sender, spellType, argument)) {
                         String itemName = itemStack.getItemMeta().getDisplayName();
                         SpellCompound compound = new SpellCompound(itemStack);
