@@ -10,17 +10,15 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 public class UnbindComplete extends BaseCompleter {
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         if (args.length == 1 && sender instanceof Player) {
-            SpellType[] spells = new SpellCompound(((Player) sender).getInventory().getItemInMainHand()).getSpells();
-            String[] completions = new String[spells.length];
-            for (int i = 0; i < spells.length; i++) {
-                completions[i] = spells[i].toString();
-            }
-            return validCompletions(args[0], completions);
+            Set<SpellType> compound = SpellCompound.getCompound(((Player) sender).getInventory().getItemInMainHand());
+            return validCompletions(args[0], compound.stream().map(Objects::toString).toArray(String[]::new));
         }
         return Collections.emptyList();
     }

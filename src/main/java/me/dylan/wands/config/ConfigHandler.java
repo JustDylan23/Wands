@@ -53,7 +53,7 @@ public class ConfigHandler {
         return config.isMagicEnabled();
     }
 
-    public void allowMagicUse(boolean value) {
+    public void enableMagic(boolean value) {
         if (config.isMagicEnabled() != value) {
             config.setMagicEnabled(value);
             if (value) {

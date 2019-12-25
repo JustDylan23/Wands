@@ -10,6 +10,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Set;
+
 public class Unbind extends BaseCommand {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
@@ -22,9 +24,9 @@ public class Unbind extends BaseCommand {
                     SpellType spellType = SpellType.fromString(argument);
                     if (isSpell(sender, spellType, argument)) {
                         String itemName = itemStack.getItemMeta().getDisplayName();
-                        SpellCompound compound = new SpellCompound(itemStack);
+                        Set<SpellType> compound = SpellCompound.getCompound(itemStack);
                         if (compound.remove(spellType)) {
-                            compound.apply(itemStack);
+                            SpellCompound.apply(compound, itemStack);
                             sender.sendMessage(WandsPlugin.PREFIX + "Successfully removed §7§l" + argument.toLowerCase() + "§r from " + itemName);
                         } else {
                             sender.sendMessage(WandsPlugin.PREFIX + itemName + "§r doesn't contain spell §7§l" + argument.toLowerCase());

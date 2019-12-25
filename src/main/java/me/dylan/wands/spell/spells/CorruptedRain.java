@@ -1,8 +1,6 @@
 package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.ListenerRegistry;
-import me.dylan.wands.WandsPlugin;
-import me.dylan.wands.config.ConfigHandler;
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.accessories.SpellInfo;
 import me.dylan.wands.spell.accessories.sound.CompoundSound;
@@ -18,7 +16,6 @@ import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -33,12 +30,9 @@ public class CorruptedRain implements Castable, Listener {
     private final PotionEffect blind = new PotionEffect(PotionEffectType.BLINDNESS, 120, 0, false);
     private final BlockData obsidian = Material.OBSIDIAN.createBlockData();
     private final String tagCorruptedRain = UUID.randomUUID().toString();
-    private final ConfigHandler config;
 
     public CorruptedRain() {
         ListenerRegistry.addListener(this);
-        WandsPlugin plugin = JavaPlugin.getPlugin(WandsPlugin.class);
-        config = plugin.getConfigHandler();
     }
 
     @Override

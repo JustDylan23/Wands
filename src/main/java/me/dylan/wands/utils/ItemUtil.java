@@ -39,18 +39,18 @@ public final class ItemUtil {
     }
 
     public static <T> Optional<T> getPersistentData(@NotNull ItemStack itemStack, @NotNull String key, @NotNull PersistentDataType<T, T> type) {
-        if (itemStack.hasItemMeta()) {
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        if (itemMeta != null) {
             PersistentDataContainer container = itemStack.getItemMeta().getPersistentDataContainer();
             NamespacedKey namespacedKey = Common.newNamespacedKey(key);
             return container.has(namespacedKey, type) ? Optional.ofNullable(container.get(namespacedKey, type)) : Optional.empty();
-        } else {
-            return Optional.empty();
         }
+        return Optional.empty();
     }
 
     public static <T> boolean hasPersistentData(@NotNull ItemStack itemStack, @NotNull String key, @NotNull PersistentDataType<T, T> type) {
-        if (itemStack.hasItemMeta()) {
-            ItemMeta meta = itemStack.getItemMeta();
+        ItemMeta meta = itemStack.getItemMeta();
+        if (meta != null) {
             return meta.getPersistentDataContainer().has(Common.newNamespacedKey(key), type);
         }
         return false;

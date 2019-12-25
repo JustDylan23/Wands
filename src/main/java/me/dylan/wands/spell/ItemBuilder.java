@@ -11,6 +11,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
+import java.util.Set;
 
 public final class ItemBuilder {
     private final ItemStack itemStack;
@@ -38,16 +39,16 @@ public final class ItemBuilder {
         return this;
     }
 
-    public ItemBuilder flavorText(String... text) {
+    public ItemBuilder withLore(String... text) {
         ItemUtil.setItemMeta(itemStack, meta -> meta.setLore(Arrays.asList(text)));
         return this;
     }
 
     public ItemBuilder withSpells(SpellType... spells) {
         ItemTag.IS_WAND.tag(itemStack);
-        SpellCompound compound = new SpellCompound(itemStack);
-        compound.addAll(spells);
-        compound.apply(itemStack);
+        Set<SpellType> compound = SpellCompound.getCompound(itemStack);
+        compound.addAll(Arrays.asList(spells));
+        SpellCompound.apply(compound, itemStack);
         return this;
     }
 

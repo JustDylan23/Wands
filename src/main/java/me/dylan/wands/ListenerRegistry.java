@@ -1,6 +1,5 @@
 package me.dylan.wands;
 
-import me.dylan.wands.commandhandler.commands.Wands;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
@@ -37,6 +36,6 @@ public class ListenerRegistry {
     public void enableListeners() {
         disableListeners();
         toggleableListeners.forEach(listener -> Bukkit.getServer().getPluginManager().registerEvents(listener, plugin));
-        WandsPlugin.debug("enabled " + toggleableListeners.size() +  " listener(s)");
+        WandsPlugin.debug("enabled " + toggleableListeners.size() + " listener(s)");
     }
 }
