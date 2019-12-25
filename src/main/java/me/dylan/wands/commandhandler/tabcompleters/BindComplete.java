@@ -10,7 +10,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 public class BindComplete extends BaseCompleter {
     @Override
@@ -19,13 +22,9 @@ public class BindComplete extends BaseCompleter {
             String value = args[0];
             ItemStack itemStack = ((Player) sender).getInventory().getItemInMainHand();
             if (ItemTag.IS_WAND.isTagged(itemStack)) {
-                List<SpellType> bound = new ArrayList<>(Arrays.asList(new SpellCompound(itemStack).getSpells()));
-                List<SpellType> unbound = new ArrayList<>(Arrays.asList(SpellType.values()));
-                unbound.removeAll(bound);
-
-                String[] completions = unbound.stream().map(Objects::toString).toArray(String[]::new);
-
-                return validCompletions(value, completions);
+                List<SpellType> compound = Arrays.asList(SpellType.values());
+                compound.removeAll(SpellCompound.getCompound(itemStack));
+                return validCompletions(value, compound.stream().map(Objects::toString).toArray(String[]::new));
             }
         }
         return Collections.emptyList();

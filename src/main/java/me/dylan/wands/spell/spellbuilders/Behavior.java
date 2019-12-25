@@ -22,12 +22,12 @@ public abstract class Behavior {
 
     public abstract boolean cast(@NotNull Player player, @NotNull String weapon);
 
-    public void setCooldown(int seconds) {
-        this.cooldown = seconds;
-    }
-
     public int getCooldown() {
         return cooldown;
+    }
+
+    public void setCooldown(int seconds) {
+        this.cooldown = seconds;
     }
 
     @Override

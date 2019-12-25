@@ -45,13 +45,13 @@ public class Wands extends BaseCommand {
                         return true;
                     case "disable":
                         if (checkPerm(sender, "toggle")) {
-                            configHandler.allowMagicUse(false);
+                            configHandler.enableMagic(false);
                             sender.sendMessage(WandsPlugin.PREFIX + "All wands are now disabled.");
                         }
                         return true;
                     case "enable":
                         if (checkPerm(sender, "toggle")) {
-                            configHandler.allowMagicUse(true);
+                            configHandler.enableMagic(true);
                             sender.sendMessage(WandsPlugin.PREFIX + "All wands are now enabled.");
                         }
                         return true;

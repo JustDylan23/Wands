@@ -36,7 +36,7 @@ import java.util.function.BiConsumer;
  * Configurable:
  * - Material of block which gets launched.
  * - Effects displayed when the block lands.
- * - Block relative sounds, unlike {@link Behavior#castSounds} this sound is played at the location of the block when launched.
+ * - Block relative sounds, unlike {@link #castSounds} this sound is played at the location of the block when launched.
  */
 public final class LaunchableBlock extends BuildableBehaviour implements Listener {
     private static final Set<Block> effectedBlocks = new HashSet<>();

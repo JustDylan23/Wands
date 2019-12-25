@@ -23,12 +23,11 @@ public class CooldownManager implements Listener {
     }
 
     /**
-     * This method handles the cooldown which the player
-     * has to wait for after casting a implementations before a new
-     * implementations may be cast.
+     * This method handles the cooldown which the player has to wait for after casting a spell before a new spell may be cast.
      *
      * @param player    Player.
      * @param spellType SpellType.
+     * @return Returns boolean based on whether the cooldown is active or not
      */
     public boolean canCast(Player player, SpellType spellType) {
         int remainingTime = getRemainingTime(player);
