@@ -99,9 +99,9 @@ public final class Ray extends BuildableBehaviour {
 
     public static final class Builder extends AbstractBuilder<Builder> {
         private final Target target;
-        private int effectDistance;
+        private int effectDistance = 30;
         private int speed = 1;
-        private float rayWidth;
+        private float rayWidth = 1;
         private BiConsumer<Location, SpellInfo> hitEffects = Common.emptyBiConsumer();
 
         private Builder(Target target) {
