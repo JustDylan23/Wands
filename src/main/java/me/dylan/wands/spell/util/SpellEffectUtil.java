@@ -102,12 +102,12 @@ public final class SpellEffectUtil {
         return locations;
     }
 
-    private static boolean checkFriendlyFireOption(@NotNull Player player, Entity entity) {
+    public static boolean checkFriendlyFireOption(@NotNull Entity attacker, Entity victim) {
         Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
-        Team team = scoreboard.getEntryTeam(player.getName());
-        String entry = (entity instanceof Player)
-                ? entity.getName()
-                : entity.getUniqueId().toString();
+        Team team = scoreboard.getEntryTeam(attacker.getName());
+        String entry = (victim instanceof Player)
+                ? victim.getName()
+                : victim.getUniqueId().toString();
         return team == null || team.allowFriendlyFire() || !team.equals(scoreboard.getEntryTeam(entry));
     }
 
