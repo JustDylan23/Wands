@@ -1,7 +1,5 @@
 package me.dylan.wands.spell.util;
 
-import me.dylan.wands.WandsPlugin;
-import me.dylan.wands.config.ConfigHandler;
 import me.dylan.wands.events.MagicDamageEvent;
 import me.dylan.wands.utils.Common;
 import me.dylan.wands.utils.LocationUtil;
@@ -13,7 +11,6 @@ import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.*;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 import org.jetbrains.annotations.NotNull;
@@ -27,8 +24,6 @@ import java.util.stream.Collectors;
 
 public final class SpellEffectUtil {
     public static final String CAN_DAMAGE_WITH_WANDS = UUID.randomUUID().toString();
-    private static final WandsPlugin plugin = JavaPlugin.getPlugin(WandsPlugin.class);
-    private static final ConfigHandler CONFIGURABLE_DATA = plugin.getConfigHandler();
 
     private SpellEffectUtil() {
         throw new UnsupportedOperationException("Instantiating util class");
@@ -102,12 +97,12 @@ public final class SpellEffectUtil {
         return locations;
     }
 
-    private static boolean checkFriendlyFireOption(@NotNull Player player, Entity entity) {
+    public static boolean checkFriendlyFireOption(@NotNull Entity attacker, Entity victim) {
         Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
-        Team team = scoreboard.getEntryTeam(player.getName());
-        String entry = (entity instanceof Player)
-                ? entity.getName()
-                : entity.getUniqueId().toString();
+        Team team = scoreboard.getEntryTeam(attacker.getName());
+        String entry = (victim instanceof Player)
+                ? victim.getName()
+                : victim.getUniqueId().toString();
         return team == null || team.allowFriendlyFire() || !team.equals(scoreboard.getEntryTeam(entry));
     }
 

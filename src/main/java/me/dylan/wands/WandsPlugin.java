@@ -31,6 +31,7 @@ public final class WandsPlugin extends JavaPlugin {
 
     public static final boolean DEBUG = true;
     public static final String PREFIX = "§8§l[§6§lWands§8§l]§r ";
+    private static final String PREFIX_WARNING = "§e[§e§lWARNING§r] §c";
     private static final Set<Runnable> disableLogic = new HashSet<>();
 
     private File configFile;
@@ -39,6 +40,10 @@ public final class WandsPlugin extends JavaPlugin {
 
     public static void log(String message) {
         Bukkit.getLogger().info(PREFIX + message);
+    }
+
+    public static void warn(String message) {
+        Bukkit.getLogger().info(PREFIX + PREFIX_WARNING + message);
     }
 
     public static void debug(String message) {

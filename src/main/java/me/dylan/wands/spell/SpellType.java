@@ -1,5 +1,6 @@
 package me.dylan.wands.spell;
 
+import me.dylan.wands.WandsPlugin;
 import me.dylan.wands.spell.spellbuilders.Behavior;
 import me.dylan.wands.spell.spells.*;
 import org.jetbrains.annotations.NotNull;
@@ -49,6 +50,7 @@ public enum SpellType {
     THUNDER_RAGE(38, new ThunderRage()),
     THUNDER_STORM(39, new ThunderStorm()),
     THUNDER_STRIKE(40, new ThunderStrike()),
+    ZAP(48, new Zap()),
 
     SPIRIT_THRUST(41, new SpiritThrust()),
     SPIRIT_FURY(42, new SpiritFury()),
@@ -63,6 +65,10 @@ public enum SpellType {
 
     static {
         for (SpellType value : values()) {
+            SpellType overridden = SPELL_TYPE_MAP.get(value.id);
+            if (overridden != null) {
+                WandsPlugin.warn(overridden + " has been overridden by " + value);
+            }
             SPELL_TYPE_MAP.put(value.id, value);
         }
     }
