@@ -29,13 +29,13 @@ import java.util.zip.GZIPInputStream;
 
 public final class WandsPlugin extends JavaPlugin {
 
-    public static final boolean DEBUG = true;
     public static final String PREFIX = "§8§l[§6§lWands§8§l]§r ";
+    private static final boolean DEBUG = true;
     private static final Set<Runnable> disableLogic = new HashSet<>();
 
-    private File configFile;
-    private ConfigHandler configHandler;
-    private CooldownManager cooldownManager;
+    private File configFile = null;
+    private ConfigHandler configHandler = null;
+    private CooldownManager cooldownManager = null;
 
     public static void log(String message) {
         Bukkit.getLogger().info(PREFIX + message);

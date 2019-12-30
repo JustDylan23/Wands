@@ -4,6 +4,7 @@ import me.dylan.wands.WandsPlugin;
 import me.dylan.wands.commandhandler.BaseCommand;
 import me.dylan.wands.spell.SpellCompound;
 import me.dylan.wands.spell.SpellType;
+import me.dylan.wands.utils.ItemUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -23,7 +24,7 @@ public class BindAll extends BaseCommand {
                 Set<SpellType> compound = SpellCompound.getCompound(itemStack);
                 compound.addAll(Arrays.asList(SpellType.values()));
                 SpellCompound.apply(compound, itemStack);
-                sender.sendMessage(WandsPlugin.PREFIX + "Successfully added all spells to " + itemStack.getItemMeta().getDisplayName());
+                sender.sendMessage(WandsPlugin.PREFIX + "Successfully added all spells to " + ItemUtil.getName(itemStack));
             }
         }
         return true;

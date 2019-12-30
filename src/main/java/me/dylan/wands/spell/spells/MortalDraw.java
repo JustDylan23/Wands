@@ -3,6 +3,7 @@ package me.dylan.wands.spell.spells;
 import me.dylan.wands.spell.accessories.KnockBack;
 import me.dylan.wands.spell.util.SpellEffectUtil;
 import me.dylan.wands.utils.Common;
+import me.dylan.wands.utils.ItemUtil;
 import org.bukkit.*;
 import org.bukkit.Particle.DustOptions;
 import org.bukkit.entity.LivingEntity;
@@ -25,7 +26,7 @@ final class MortalDraw {
     }
 
     static void draw(@NotNull Player player, double degrees, double radius, int damage, int rotation, boolean fullCircle) {
-        String weaponName = player.getInventory().getItemInMainHand().getItemMeta().getDisplayName();
+        String weaponName = ItemUtil.getName(player.getInventory().getItemInMainHand());
         Location location = player.getEyeLocation();
         World world = location.getWorld();
 

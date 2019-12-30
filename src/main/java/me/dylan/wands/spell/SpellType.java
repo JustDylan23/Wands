@@ -82,11 +82,16 @@ public enum SpellType {
         return SPELL_TYPE_MAP.get(id);
     }
 
-    public static @Nullable SpellType fromString(@NotNull String name) {
+    @Nullable
+    public static SpellType fromString(@NotNull String name) {
         try {
             return valueOf(name.toUpperCase());
         } catch (IllegalArgumentException e) {
             return null;
         }
+    }
+
+    public String getDisplayName() {
+        return name;
     }
 }

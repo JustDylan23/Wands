@@ -31,7 +31,6 @@ public final class SpellEffectUtil {
     private static final ConfigHandler CONFIGURABLE_DATA = plugin.getConfigHandler();
 
     private SpellEffectUtil() {
-        throw new UnsupportedOperationException("Instantiating util class");
     }
 
     public static @NotNull Location getSpellLocation(Player player, int effectDistance) {

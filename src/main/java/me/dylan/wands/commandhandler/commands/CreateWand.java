@@ -21,7 +21,7 @@ public class CreateWand extends BaseCommand {
                 Player player = (Player) sender;
                 ItemStack itemStack = player.getInventory().getItemInMainHand();
                 if (itemStack.getType() != Material.AIR) {
-                    String displayName = itemStack.getItemMeta().getDisplayName();
+                    String displayName = ItemUtil.getName(itemStack);
                     if (ItemTag.IS_WAND.isTagged(itemStack)) {
                         sender.sendMessage(WandsPlugin.PREFIX + displayName + "§r is already a wand!");
                     } else {
@@ -32,7 +32,7 @@ public class CreateWand extends BaseCommand {
                                 stringJoiner.add(arg);
                             }
                             ItemUtil.setName(itemStack, stringJoiner.toString());
-                            sender.sendMessage(WandsPlugin.PREFIX + itemStack.getItemMeta().getDisplayName() + "§r is registered as wand");
+                            sender.sendMessage(WandsPlugin.PREFIX + displayName + "§r is registered as wand");
                             sender.sendMessage(WandsPlugin.PREFIX + "use §8/bind <spell>§r to bind spells");
                         } else {
                             sender.sendMessage(WandsPlugin.PREFIX + displayName + "§r can't be registered!");

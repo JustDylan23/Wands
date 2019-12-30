@@ -4,6 +4,7 @@ import me.dylan.wands.WandsPlugin;
 import me.dylan.wands.commandhandler.BaseCommand;
 import me.dylan.wands.spell.SpellCompound;
 import me.dylan.wands.spell.SpellType;
+import me.dylan.wands.utils.ItemUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -23,7 +24,7 @@ public class Unbind extends BaseCommand {
                 if (isWand(player, itemStack)) {
                     SpellType spellType = SpellType.fromString(argument);
                     if (isSpell(sender, spellType, argument)) {
-                        String itemName = itemStack.getItemMeta().getDisplayName();
+                        String itemName = ItemUtil.getName(itemStack);
                         Set<SpellType> compound = SpellCompound.getCompound(itemStack);
                         if (compound.remove(spellType)) {
                             SpellCompound.apply(compound, itemStack);
