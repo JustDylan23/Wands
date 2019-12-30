@@ -33,8 +33,8 @@ public class SpiritThrust extends Behavior implements Castable {
         Vector increment = player.getLocation().getDirection().normalize().multiply(0.2);
         Vector incrementDistance = new Vector(0, 0, 0);
         BukkitRunnable bukkitRunnable = new BukkitRunnable() {
-            int count;
-            int length;
+            int count = 0;
+            int length = 0;
 
             @Override
             public void run() {

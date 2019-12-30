@@ -23,7 +23,7 @@ public class TweakCooldown extends BaseCommand {
                 if (args.length > 1) {
                     try {
                         int input = Integer.parseInt(args[1]);
-                        String message = WandsPlugin.PREFIX + spellType.name + "'s cooldown is now default value + " + input;
+                        String message = WandsPlugin.PREFIX + spellType.getDisplayName() + "'s cooldown is now default value + " + input;
                         if (isInRange(sender, 0, 99, input)) {
                             configHandler.setCooldown(spellType, input);
                             sender.sendMessage(message);
@@ -33,7 +33,7 @@ public class TweakCooldown extends BaseCommand {
                     }
                 } else {
                     int cooldown = spellType.behavior.getCooldown();
-                    sender.sendMessage(WandsPlugin.PREFIX + "Cooldown of " + spellType.name + " is +" + cooldown + " second" + ((cooldown == 1) ? "" : "s"));
+                    sender.sendMessage(WandsPlugin.PREFIX + "Cooldown of " + spellType.getDisplayName() + " is +" + cooldown + " second" + ((cooldown == 1) ? "" : "s"));
                 }
         } else return false;
         return true;

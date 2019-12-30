@@ -4,6 +4,7 @@ import me.dylan.wands.WandsPlugin;
 import me.dylan.wands.commandhandler.BaseCommand;
 import me.dylan.wands.spell.SpellCompound;
 import me.dylan.wands.spell.SpellType;
+import me.dylan.wands.utils.ItemUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -19,7 +20,7 @@ public class UnbindAll extends BaseCommand {
             Player player = (Player) sender;
             ItemStack itemStack = player.getInventory().getItemInMainHand();
             if (isWand(sender, itemStack)) {
-                String itemName = itemStack.getItemMeta().getDisplayName();
+                String itemName = ItemUtil.getName(itemStack);
                 Set<SpellType> compound = SpellCompound.getCompound(itemStack);
                 if (!compound.isEmpty()) {
                     compound.clear();

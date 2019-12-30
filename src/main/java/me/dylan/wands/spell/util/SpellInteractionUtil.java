@@ -34,7 +34,6 @@ public final class SpellInteractionUtil {
     }
 
     private SpellInteractionUtil() {
-        throw new UnsupportedOperationException("Instantiating util class");
     }
 
     public static boolean canUseMagic(Player player) {
@@ -108,7 +107,7 @@ public final class SpellInteractionUtil {
 
         if (spell != null) {
             player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.5F, 0.5F);
-            PlayerUtil.sendActionBar(player, "§6Current spell: §7§l" + spell.name);
+            PlayerUtil.sendActionBar(player, "§6Current spell: §7§l" + spell.getDisplayName());
             getSpellBrowseParticle(itemStack).orElse(BrowseParticle.DEFAULT).displayAt(player.getLocation());
         }
     }
@@ -116,7 +115,7 @@ public final class SpellInteractionUtil {
     public static void showSelectedSpell(Player player, ItemStack itemStack) {
         SpellType spell = getSelectedSpell(itemStack);
         if (spell != null) {
-            PlayerUtil.sendActionBar(player, "§6Current spell: §7§l" + spell.name);
+            PlayerUtil.sendActionBar(player, "§6Current spell: §7§l" + spell.getDisplayName());
         }
     }
 

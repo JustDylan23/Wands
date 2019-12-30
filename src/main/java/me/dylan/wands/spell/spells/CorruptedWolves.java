@@ -65,9 +65,9 @@ public class CorruptedWolves implements Castable {
                     }
                 }
             };
-            Common.runTaskTimer(bukkitRunnable, 1, 1);
-            Common.runTaskLater(() -> wolf.damage(1, target), 10);
-            Common.runTaskLater(wolf::remove, 160);
+            Common.runTaskTimer(bukkitRunnable, 1L, 1L);
+            Common.runTaskLater(() -> wolf.damage(1, target), 10L);
+            Common.runTaskLater(wolf::remove, 160L);
         }
     }
 }
