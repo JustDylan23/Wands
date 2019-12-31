@@ -34,9 +34,9 @@ public final class WandsPlugin extends JavaPlugin {
     private static final String PREFIX_WARNING = "§e[§e§lWARNING§r] §c";
     private static final Set<Runnable> disableLogic = new HashSet<>();
 
-    private File configFile;
-    private ConfigHandler configHandler;
-    private CooldownManager cooldownManager;
+    private File configFile = null;
+    private ConfigHandler configHandler = null;
+    private CooldownManager cooldownManager = null;
 
     public static void log(String message) {
         Bukkit.getLogger().info(PREFIX + message);

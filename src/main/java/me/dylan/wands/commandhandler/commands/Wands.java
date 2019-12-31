@@ -60,7 +60,7 @@ public class Wands extends BaseCommand {
                             SpellType[] spellTypes = SpellType.values();
                             StringJoiner stringJoiner = new StringJoiner(", ");
                             for (SpellType spellType : spellTypes) {
-                                stringJoiner.add(spellType.name);
+                                stringJoiner.add(spellType.getDisplayName());
                             }
                             sender.sendMessage("§6Spells (" + spellTypes.length + "):§r " + stringJoiner);
                         }

@@ -10,8 +10,11 @@ import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 
-public class SpellCompound {
+public final class SpellCompound {
     public static final String TAG_SPELLS_LIST = "Spells";
+
+    private SpellCompound() {
+    }
 
     public static int[] getIndices(ItemStack itemStack) {
         return ItemUtil.getPersistentData(itemStack, TAG_SPELLS_LIST, PersistentDataType.INTEGER_ARRAY).orElse(new int[0]);

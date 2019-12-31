@@ -6,6 +6,7 @@ import me.dylan.wands.spell.accessories.ItemTag;
 import me.dylan.wands.spell.util.SpellEffectUtil;
 import me.dylan.wands.spell.util.SpellInteractionUtil;
 import me.dylan.wands.utils.Common;
+import me.dylan.wands.utils.ItemUtil;
 import me.dylan.wands.utils.PlayerUtil;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
@@ -59,7 +60,7 @@ public class CursedBow implements Listener, RightClickListener {
             drawing.add(player);
             PlayerUtil.sendActionBar(player, "§6Charging [§a|§6|||]");
             BukkitRunnable bukkitRunnable = new BukkitRunnable() {
-                int count;
+                int count = 0;
 
                 @Override
                 public void run() {
@@ -96,7 +97,7 @@ public class CursedBow implements Listener, RightClickListener {
             } else if (hasDrawn.contains(player)) {
                 hasDrawn.remove(player);
                 Entity projectile = event.getProjectile();
-                projectile.setMetadata(cursedArrow, Common.metadataValue(player.getInventory().getItemInMainHand().getItemMeta().getDisplayName()));
+                projectile.setMetadata(cursedArrow, Common.metadataValue(ItemUtil.getName(player.getInventory().getItemInMainHand())));
                 Location location = player.getLocation();
                 World world = location.getWorld();
                 world.playSound(location, Sound.ENTITY_ENDER_DRAGON_FLAP, SoundCategory.MASTER, 4.0F, 1.0F);
