@@ -6,6 +6,7 @@ import me.dylan.wands.spell.accessories.SpellInfo;
 import me.dylan.wands.spell.accessories.sound.SoundEffect;
 import me.dylan.wands.spell.util.SpellEffectUtil;
 import me.dylan.wands.utils.Common;
+import me.dylan.wands.utils.ItemUtil;
 import me.dylan.wands.utils.LocationUtil;
 import me.dylan.wands.utils.PlayerUtil;
 import org.bukkit.*;
@@ -112,7 +113,7 @@ public final class LaunchableBlock extends BuildableBehaviour implements Listene
         Location blockLoc = blockRestorer.originLoc;
         FallingBlock fallingBlock = blockLoc.getWorld().spawnFallingBlock(blockLoc, Bukkit.createBlockData(material));
         fallingBlock.setVelocity(new Vector(0, 1, 0));
-        fallingBlock.setMetadata(tagFallingBlock, Common.metadataValue(player.getInventory().getItemInMainHand().getItemMeta().getDisplayName()));
+        fallingBlock.setMetadata(tagFallingBlock, Common.metadataValue(ItemUtil.getName(player.getInventory().getItemInMainHand())));
         fallingBlock.setDropItem(false);
         blockRelativeSounds.play(fallingBlock);
         caster.put(fallingBlock, new SpellInfo(player, blockLoc, null) {

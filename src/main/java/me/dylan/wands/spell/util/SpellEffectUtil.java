@@ -26,7 +26,6 @@ public final class SpellEffectUtil {
     public static final String CAN_DAMAGE_WITH_WANDS = UUID.randomUUID().toString();
 
     private SpellEffectUtil() {
-        throw new UnsupportedOperationException("Instantiating util class");
     }
 
     public static @NotNull Location getSpellLocation(Player player, int effectDistance) {

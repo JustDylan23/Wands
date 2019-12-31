@@ -7,7 +7,6 @@ import org.jetbrains.annotations.NotNull;
 
 public final class LocationUtil {
     private LocationUtil() {
-        throw new UnsupportedOperationException("Instantiating util class");
     }
 
     @Contract("_ -> new")

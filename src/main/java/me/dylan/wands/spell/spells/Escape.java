@@ -58,7 +58,7 @@ public class Escape extends Behavior implements Castable, Listener {
                     count++;
                     if (!player.isValid() || player.isOnGround()) {
                         cancel();
-                        Common.runTaskLater(() -> Common.removeMetaData(player, tagEscaping), 10);
+                        Common.runTaskLater(() -> Common.removeMetaData(player, tagEscaping), 10L);
                         leaping.remove(player);
                         Location loc = player.getLocation();
                         world.createExplosion(loc, 0.0f);

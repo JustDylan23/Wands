@@ -17,7 +17,6 @@ import java.util.function.Predicate;
 
 public final class PlayerUtil {
     private PlayerUtil() {
-        throw new UnsupportedOperationException("Instantiating util class");
     }
 
     public static void sendActionBar(@NotNull Player player, String message) {
