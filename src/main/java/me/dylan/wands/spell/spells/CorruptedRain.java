@@ -5,8 +5,8 @@ import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.accessories.SpellInfo;
 import me.dylan.wands.spell.accessories.sound.CompoundSound;
 import me.dylan.wands.spell.spellbuilders.Behavior;
-import me.dylan.wands.spell.spellbuilders.BuildableBehaviour;
 import me.dylan.wands.spell.spellbuilders.Spark;
+import me.dylan.wands.spell.spellbuilders.Spark.Target;
 import me.dylan.wands.spell.util.SpellEffectUtil;
 import me.dylan.wands.utils.Common;
 import org.bukkit.*;
@@ -37,7 +37,7 @@ public class CorruptedRain implements Castable, Listener {
 
     @Override
     public Behavior createBehaviour() {
-        return Spark.newBuilder(BuildableBehaviour.Target.MULTI)
+        return Spark.newBuilder(Target.MULTI)
                 .setCastSound(CompoundSound.chain()
                         .add(Sound.ENTITY_ARROW_SHOOT)
                         .add(Sound.BLOCK_STONE_PLACE)
@@ -57,7 +57,7 @@ public class CorruptedRain implements Castable, Listener {
         world.spawnParticle(Particle.SMOKE_NORMAL, particleLoc, 70, 1, 1, 1, 0, null, true);
         List<Arrow> arrows = new ArrayList<>();
         BukkitRunnable bukkitRunnable = new BukkitRunnable() {
-            int count;
+            int count = 0;
 
             @Override
             public void run() {

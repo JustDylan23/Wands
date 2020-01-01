@@ -2,7 +2,7 @@ package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.spellbuilders.Behavior;
-import me.dylan.wands.spell.spellbuilders.BuildableBehaviour;
+import me.dylan.wands.spell.spellbuilders.BuildableBehaviour.Target;
 import me.dylan.wands.spell.spellbuilders.Phase;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
@@ -11,7 +11,7 @@ import org.bukkit.util.Vector;
 public class CorruptedLaunch implements Castable {
     @Override
     public Behavior createBehaviour() {
-        return Phase.newBuilder(BuildableBehaviour.Target.MULTI)
+        return Phase.newBuilder(Target.MULTI)
                 .setSpellEffectRadius(2.8f)
                 .setEntityDamage(7)
                 .setEntityEffects((entity, spellInfo) -> entity.setVelocity(new Vector(0, 1.2, 0)))

@@ -52,10 +52,13 @@ public final class PlayerUtil {
         return bestMatch;
     }
 
-    public static @Nullable Location getTargetLocation(@NotNull Player player, int maxDistance) {
+    @NotNull
+    public static Location getTargetLocation(@NotNull Player player, int maxDistance) {
         RayTraceResult result = player.rayTraceBlocks(maxDistance);
-        if (result == null)
-            return null;
+        if (result == null) {
+            Location playerLocation = player.getEyeLocation();
+            return playerLocation.add(playerLocation.getDirection().multiply(maxDistance));
+        }
         return result.getHitPosition().toLocation(player.getWorld());
     }
 }

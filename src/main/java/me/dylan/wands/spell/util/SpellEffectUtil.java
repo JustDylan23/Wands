@@ -2,7 +2,6 @@ package me.dylan.wands.spell.util;
 
 import me.dylan.wands.events.MagicDamageEvent;
 import me.dylan.wands.utils.Common;
-import me.dylan.wands.utils.LocationUtil;
 import me.dylan.wands.utils.PlayerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -17,14 +16,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public final class SpellEffectUtil {
-    public static final String CAN_DAMAGE_WITH_WANDS = UUID.randomUUID().toString();
-
     private SpellEffectUtil() {
     }
 
@@ -32,14 +29,9 @@ public final class SpellEffectUtil {
         if (effectDistance == 0) return player.getLocation();
         Entity entity = PlayerUtil.getTargetEntity(player, effectDistance, e -> true);
         if (entity instanceof LivingEntity && !(entity instanceof ArmorStand)) {
-            return LocationUtil.toCenterLocation(entity.getLocation());
+            return entity.getLocation();
         }
-        Location exactLoc = PlayerUtil.getTargetLocation(player, effectDistance);
-        if (exactLoc == null) {
-            Location playerLocation = player.getLocation();
-            return LocationUtil.toCenterLocation(playerLocation.add(playerLocation.getDirection().multiply(effectDistance)));
-        }
-        return exactLoc;
+        return PlayerUtil.getTargetLocation(player, effectDistance);
     }
 
     public static @NotNull Location[] getHorizontalCircleFrom(@NotNull Location location, float radius, float angleOffset, float pointsMultiplier) {
@@ -97,7 +89,7 @@ public final class SpellEffectUtil {
     }
 
     public static boolean checkFriendlyFireOption(@NotNull Entity attacker, Entity victim) {
-        Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
+        Scoreboard scoreboard = Objects.requireNonNull(Bukkit.getScoreboardManager()).getMainScoreboard();
         Team team = scoreboard.getEntryTeam(attacker.getName());
         String entry = (victim instanceof Player)
                 ? victim.getName()
@@ -125,26 +117,33 @@ public final class SpellEffectUtil {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public static void spawnColoredParticle(@NotNull Particle particle, Location location, int count, double offsetX, double offsetY, double offsetZ, int red, int green, int blue, boolean rainbow) {
-        switch (particle) {
-            case REDSTONE:
-            case SPELL_MOB:
-            case SPELL_MOB_AMBIENT:
-                if (rainbow) {
-                    location.getWorld().spawnParticle(particle, location, (count > 0) ? count : 1, offsetX, offsetY, offsetZ, 1, null, true);
-                } else {
-                    float redR = Math.max(Float.MIN_NORMAL, red / 255.0F);
-                    float greenG = Math.max(0, green / 255.0F);
-                    float blueB = Math.max(0, blue / 255.0F);
-                    for (int i = 0; count > i; i++) {
-                        location.getWorld().spawnParticle(particle, randomizeLoc(location, offsetX, offsetY, offsetZ), 0, redR, greenG, blueB, 1, null, true);
-                    }
-                }
+    public static void spawnColoredRedstone(Location location, int count, double offsetX, double offsetY, double offsetZ, int red, int green, int blue, boolean rainbow) {
+        spawnColoredParticle(Particle.REDSTONE, location, count, offsetX, offsetY, offsetZ, red, green, blue, rainbow);
+    }
+
+    public static void spawnColoredSpellMob(Location location, int count, double offsetX, double offsetY, double offsetZ, int red, int green, int blue, boolean rainbow) {
+        spawnColoredParticle(Particle.SPELL_MOB, location, count, offsetX, offsetY, offsetZ, red, green, blue, rainbow);
+    }
+
+    public static void spawnColoredSpellMobAmbient(Location location, int count, double offsetX, double offsetY, double offsetZ, int red, int green, int blue, boolean rainbow) {
+        spawnColoredParticle(Particle.SPELL_MOB_AMBIENT, location, count, offsetX, offsetY, offsetZ, red, green, blue, rainbow);
+    }
+
+    private static void spawnColoredParticle(Particle particle, Location location, int count, double offsetX, double offsetY, double offsetZ, int red, int green, int blue, boolean rainbow) {
+        if (rainbow) {
+            location.getWorld().spawnParticle(particle, location, (count > 0) ? count : 1, offsetX, offsetY, offsetZ, 1, null, true);
+        } else {
+            float redR = Math.max(Float.MIN_NORMAL, red / 255.0F);
+            float greenG = Math.max(0, green / 255.0F);
+            float blueB = Math.max(0, blue / 255.0F);
+            for (int i = 0; count > i; i++) {
+                location.getWorld().spawnParticle(particle, randomizeLoc(location, offsetX, offsetY, offsetZ), 0, redR, greenG, blueB, 1, null, true);
+            }
         }
     }
 
-    public static @NotNull Location randomizeLoc(@NotNull Location location, double x, double y, double z) {
-        return location.clone().add(randomize(x), randomize(y), randomize(z));
+    public static @NotNull Location randomizeLoc(@NotNull Location location, double rx, double ry, double rz) {
+        return location.clone().add(randomize(rx), randomize(ry), randomize(rz));
     }
 
     public static double randomize(double d) {
@@ -166,7 +165,6 @@ public final class SpellEffectUtil {
             } else victim.damage(amount);
         }
     }
-
 
     public static @NotNull Location getFirstPassableBlockAbove(@NotNull Location location) {
         if (location.getBlock().isPassable()) return location;

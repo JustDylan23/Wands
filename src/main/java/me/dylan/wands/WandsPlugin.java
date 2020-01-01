@@ -24,15 +24,18 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.Set;
 import java.util.zip.GZIPInputStream;
 
 public final class WandsPlugin extends JavaPlugin {
 
     public static final boolean DEBUG = true;
+
     public static final String PREFIX = "§8§l[§6§lWands§8§l]§r ";
     private static final String PREFIX_WARNING = "§e[§e§lWARNING§r] §c";
     private static final Set<Runnable> disableLogic = new HashSet<>();
+    private static WandsPlugin instance = null;
 
     private File configFile = null;
     private ConfigHandler configHandler = null;
@@ -56,8 +59,13 @@ public final class WandsPlugin extends JavaPlugin {
         disableLogic.add(runnable);
     }
 
+    public static WandsPlugin getInstance() {
+        return Objects.requireNonNull(instance);
+    }
+
     @Override
     public void onEnable() {
+        instance = this;
         configFile = new File(getDataFolder(), "config.dat");
         ListenerRegistry listenerRegistry = new ListenerRegistry();
         loadConfig(listenerRegistry);

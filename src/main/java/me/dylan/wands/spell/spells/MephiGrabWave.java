@@ -2,7 +2,7 @@ package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.spellbuilders.Behavior;
-import me.dylan.wands.spell.spellbuilders.BuildableBehaviour;
+import me.dylan.wands.spell.spellbuilders.BuildableBehaviour.Target;
 import me.dylan.wands.spell.spellbuilders.Ray;
 import me.dylan.wands.utils.Common;
 import org.bukkit.*;
@@ -13,7 +13,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class MephiGrabWave implements Castable {
     @Override
     public Behavior createBehaviour() {
-        return Ray.newBuilder(BuildableBehaviour.Target.MULTI)
+        return Ray.newBuilder(Target.MULTI)
                 .setCastSound(Sound.ENTITY_EVOKER_CAST_SPELL)
                 .setRayWidth(2)
                 .setEntityDamage(5)
@@ -37,7 +37,7 @@ public class MephiGrabWave implements Castable {
                 )
                 .setEntityEffects((livingEntity, spellInfo) -> {
                     BukkitRunnable bukkitRunnable = new BukkitRunnable() {
-                        int i;
+                        int i = 0;
 
                         @Override
                         public void run() {

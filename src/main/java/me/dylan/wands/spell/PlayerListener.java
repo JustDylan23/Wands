@@ -5,7 +5,6 @@ import me.dylan.wands.MouseClickListeners.LeftClickListener;
 import me.dylan.wands.MouseClickListeners.RightClickListener;
 import me.dylan.wands.events.MagicDamageEvent;
 import me.dylan.wands.spell.accessories.ItemTag;
-import me.dylan.wands.spell.util.SpellEffectUtil;
 import me.dylan.wands.spell.util.SpellInteractionUtil;
 import me.dylan.wands.utils.ItemUtil;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -13,13 +12,13 @@ import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Statistic;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
@@ -31,6 +30,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 public class PlayerListener implements Listener, LeftClickListener, RightClickListener {
@@ -53,8 +53,10 @@ public class PlayerListener implements Listener, LeftClickListener, RightClickLi
         Player player = event.getPlayer();
         ItemStack itemStack = player.getInventory().getItemInMainHand();
         if (ItemTag.IS_WAND.isTagged(itemStack) && SpellInteractionUtil.canUseMagic(player)) {
-            event.cancel();
             SpellInteractionUtil.nextSpell(player, itemStack);
+            if (player.getGameMode() != GameMode.ADVENTURE) {
+                event.cancel();
+            }
         }
     }
 
@@ -79,7 +81,7 @@ public class PlayerListener implements Listener, LeftClickListener, RightClickLi
             Player attacker = magicDamageEvent.getAttacker();
             if (!attacker.equals(victim)) {
                 attacker.incrementStatistic(Statistic.PLAYER_KILLS);
-                Set<Objective> objectives = Bukkit.getScoreboardManager().getMainScoreboard().getObjectivesByCriteria("playerKillCount");
+                Set<Objective> objectives = Objects.requireNonNull(Objects.requireNonNull(Bukkit.getScoreboardManager())).getMainScoreboard().getObjectivesByCriteria("playerKillCount");
                 for (Objective objective : objectives) {
                     Score score = objective.getScore(attacker.getName());
                     score.setScore(score.getScore() + 1);
@@ -94,17 +96,6 @@ public class PlayerListener implements Listener, LeftClickListener, RightClickLi
         ItemStack itemStack = player.getInventory().getItem(event.getNewSlot());
         if (itemStack != null && ItemTag.IS_WAND.isTagged(itemStack)) {
             SpellInteractionUtil.showSelectedSpell(player, itemStack);
-        }
-    }
-
-    @EventHandler
-    private void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-        Entity attacker = event.getDamager();
-        if (attacker instanceof Player
-                && !event.getEntity().hasMetadata(SpellEffectUtil.CAN_DAMAGE_WITH_WANDS)
-                && ItemTag.IS_WAND.isTagged(((Player) attacker).getInventory().getItemInMainHand())
-        ) {
-            event.setCancelled(true);
         }
     }
 

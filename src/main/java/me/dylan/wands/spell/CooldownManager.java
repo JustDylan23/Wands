@@ -50,7 +50,7 @@ public class CooldownManager implements Listener {
      * @return Amount of time since last updated cooldown {@link #updateLastUsed(Player)}.
      */
     private int getRemainingTime(Player player) {
-        int cooldown = configHandler.getSpellCooldown() * 1000;
+        int cooldown = configHandler.getGlobalSpellCooldown() * 1000;
         Long lastUsed = playerCooldownHashMap.get(player);
         if (lastUsed != null) {
             if (cooldown == 0) return 0;

@@ -4,8 +4,8 @@ import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.accessories.KnockBack;
 import me.dylan.wands.spell.accessories.SpellInfo;
 import me.dylan.wands.spell.spellbuilders.Behavior;
-import me.dylan.wands.spell.spellbuilders.BuildableBehaviour;
 import me.dylan.wands.spell.spellbuilders.Spark;
+import me.dylan.wands.spell.spellbuilders.Spark.Target;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -24,7 +24,7 @@ public class BloodExplode implements Castable {
 
     @Override
     public Behavior createBehaviour() {
-        return Spark.newBuilder(BuildableBehaviour.Target.MULTI)
+        return Spark.newBuilder(Target.MULTI)
                 .setEntityDamage(10)
                 .setKnockBack(KnockBack.EXPLOSION)
                 .setSpellEffectRadius(3.0F)

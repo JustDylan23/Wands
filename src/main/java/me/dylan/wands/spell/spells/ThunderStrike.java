@@ -3,7 +3,7 @@ package me.dylan.wands.spell.spells;
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.accessories.KnockBack;
 import me.dylan.wands.spell.spellbuilders.Behavior;
-import me.dylan.wands.spell.spellbuilders.BuildableBehaviour;
+import me.dylan.wands.spell.spellbuilders.BuildableBehaviour.Target;
 import me.dylan.wands.spell.spellbuilders.Ray;
 import me.dylan.wands.spell.util.SpellEffectUtil;
 import me.dylan.wands.utils.Common;
@@ -15,7 +15,7 @@ import org.bukkit.World;
 public class ThunderStrike implements Castable {
     @Override
     public Behavior createBehaviour() {
-        return Ray.newBuilder(BuildableBehaviour.Target.MULTI)
+        return Ray.newBuilder(Target.MULTI)
                 .setEffectDistance(40)
                 .setEntityDamage(8)
                 .setKnockBack(KnockBack.EXPLOSION)

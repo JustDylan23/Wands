@@ -6,7 +6,6 @@ import me.dylan.wands.utils.Common;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
@@ -64,9 +63,9 @@ public final class Aura extends BuildableBehaviour {
         };
 
         BukkitRunnable bukkitRunnable = new BukkitRunnable() {
-            int count;
+            int count = 0;
             boolean repeat = true;
-            boolean hasAffected;
+            boolean hasAffected = false;
 
             @Override
             public void run() {
@@ -79,7 +78,7 @@ public final class Aura extends BuildableBehaviour {
                     }
                 } else {
                     Location loc = player.getLocation();
-                    if (auraParticleType == AuraParticleType.CENTER) {
+                    if (auraParticleType == AuraParticleType.EMIT_AROUND_CENTER) {
                         spellRelativeEffects.accept(loc, spellInfo);
                     } else {
                         for (Location location : SpellEffectUtil.getHorizontalCircleFrom(loc, spellEffectRadius, 0, 1)) {
@@ -95,9 +94,7 @@ public final class Aura extends BuildableBehaviour {
                             SpellEffectUtil.damageEffect(player, livingEntity, entityDamage, weapon);
                             hasAffected = true;
                             entityEffects.accept(livingEntity, spellInfo);
-                            for (PotionEffect potionEffect : potionEffects) {
-                                livingEntity.addPotionEffect(potionEffect, true);
-                            }
+                            applyPotionEffects(livingEntity);
                         }
                     }
                 }
@@ -113,16 +110,17 @@ public final class Aura extends BuildableBehaviour {
     }
 
     public enum AuraParticleType {
-        CENTER,
-        CIRCLE
+        EMIT_AROUND_CENTER,
+        EMIT_AS_CIRCLE
     }
 
     public static final class Builder extends AbstractBuilder<Builder> {
         private final EffectFrequency effectFrequency;
+
         private Consumer<LivingEntity> reverseAuraEffects = Common.emptyConsumer();
         private Consumer<LivingEntity> playerEffects = Common.emptyConsumer();
-        private int effectDuration;
-        private AuraParticleType auraParticleType = AuraParticleType.CENTER;
+        private int effectDuration = 20;
+        private AuraParticleType auraParticleType = AuraParticleType.EMIT_AROUND_CENTER;
 
         private Builder(EffectFrequency effectFrequency) {
             this.effectFrequency = effectFrequency;

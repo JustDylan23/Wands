@@ -20,7 +20,7 @@ public class PoisonWave implements Castable {
                 .setCastSound(Sound.ENTITY_EVOKER_CAST_SPELL)
                 .setPotionEffects(new PotionEffect(PotionEffectType.POISON, 120, 3, false))
                 .setSpellRelativeEffects((loc, spellInfo) -> {
-                    SpellEffectUtil.spawnColoredParticle(Particle.SPELL_MOB, loc, 18, 1.2, 1.2, 1.2, 75, 140, 50, false);
+                    SpellEffectUtil.spawnColoredSpellMob(loc, 18, 1.2, 1.2, 1.2, 75, 140, 50, false);
                     World world = spellInfo.world();
                     world.spawnParticle(Particle.SMOKE_NORMAL, loc, 5, 1, 1, 1, 0.05, null, true);
                     world.spawnParticle(Particle.SMOKE_NORMAL, loc, 5, 1, 1, 1, 0.05, null, true);

@@ -89,7 +89,8 @@ public enum PreSetItem {
                             SpellType.THUNDER_STORM,
                             SpellType.THUNDER_RAGE,
                             SpellType.ICE_FREEZE,
-                            SpellType.ICE_AURA
+                            SpellType.ICE_AURA,
+                            SpellType.ZAP
                     )
                     .withSpellBrowseParticles(BrowseParticle.PARTICLE_ICE)
                     .build()

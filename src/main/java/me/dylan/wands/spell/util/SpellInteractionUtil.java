@@ -15,7 +15,6 @@ import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,7 +27,7 @@ public final class SpellInteractionUtil {
     private static final String TAG_SPELL_INDEX = "SpellIndex";
 
     static {
-        WandsPlugin wandsPlugin = JavaPlugin.getPlugin(WandsPlugin.class);
+        WandsPlugin wandsPlugin = WandsPlugin.getInstance();
         config = wandsPlugin.getConfigHandler();
         cooldownManager = wandsPlugin.getCooldownManager();
     }

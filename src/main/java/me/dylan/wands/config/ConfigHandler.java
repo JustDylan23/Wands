@@ -2,6 +2,7 @@ package me.dylan.wands.config;
 
 import com.google.gson.Gson;
 import me.dylan.wands.ListenerRegistry;
+import me.dylan.wands.WandsPlugin;
 import me.dylan.wands.config.Config.SpellConfig;
 import me.dylan.wands.spell.SpellType;
 import org.jetbrains.annotations.NotNull;
@@ -37,11 +38,11 @@ public class ConfigHandler {
         try (DataOutputStream stream = new DataOutputStream(new GZIPOutputStream(new FileOutputStream(file)))) {
             stream.writeUTF(new Gson().toJson(config));
         } catch (IOException e) {
-            e.printStackTrace();
+            WandsPlugin.warn("Could not save config");
         }
     }
 
-    public void setCooldown(@NotNull SpellType spellType, int time) {
+    public void setSpellCooldown(@NotNull SpellType spellType, int time) {
         Map<Integer, SpellConfig> spellConfigMap = config.getSpellConfigMap();
         SpellConfig spellConfig = spellConfigMap.getOrDefault(spellType.id, new SpellConfig());
         spellConfig.setCooldown(time);
@@ -64,12 +65,12 @@ public class ConfigHandler {
         }
     }
 
-    public int getSpellCooldown() {
-        return config.getSpellCooldown();
+    public int getGlobalSpellCooldown() {
+        return config.getGlobalSpellCooldown();
     }
 
-    public void setSpellCooldown(int seconds) {
-        config.setSpellCooldown(seconds);
+    public void setGlobalSpellCooldown(int seconds) {
+        config.setGlobalSpellCooldown(seconds);
     }
 
     public boolean doesCastingRequirePermission() {

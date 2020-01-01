@@ -4,8 +4,8 @@ import me.dylan.wands.WandsPlugin;
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.accessories.SpellInfo;
 import me.dylan.wands.spell.spellbuilders.Behavior;
-import me.dylan.wands.spell.spellbuilders.BuildableBehaviour;
 import me.dylan.wands.spell.spellbuilders.Spark;
+import me.dylan.wands.spell.spellbuilders.Spark.Target;
 import me.dylan.wands.spell.util.SpellEffectUtil;
 import me.dylan.wands.utils.Common;
 import org.bukkit.*;
@@ -16,21 +16,22 @@ import org.bukkit.entity.Wolf;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class CorruptedWolves implements Castable {
-    private final Set<Wolf> wolves = new HashSet<>();
-    private final PotionEffect speed = new PotionEffect(PotionEffectType.SPEED, 160, 4, true);
+    private static final Set<Entity> WOLVES = new HashSet<>();
+    private static final PotionEffect SPEED = new PotionEffect(PotionEffectType.SPEED, 160, 4, true);
 
     public CorruptedWolves() {
-        WandsPlugin.addDisableLogic(() -> wolves.forEach(Entity::remove));
+        WandsPlugin.addDisableLogic(() -> WOLVES.forEach(Entity::remove));
     }
 
     @Override
     public Behavior createBehaviour() {
-        return Spark.newBuilder(BuildableBehaviour.Target.SINGLE)
+        return Spark.newBuilder(Target.SINGLE_REQUIRED)
                 .setSpellEffectRadius(2.5F)
                 .setCastSound(Sound.ENTITY_EVOKER_PREPARE_SUMMON)
                 .setEffectDistance(30)
@@ -42,17 +43,16 @@ public class CorruptedWolves implements Castable {
                 .build();
     }
 
-    private void accept(LivingEntity target, SpellInfo ignored) {
+    private void accept(@NotNull LivingEntity target, SpellInfo ignored) {
         Location loc = target.getLocation();
         World world = loc.getWorld();
         for (int i = 0; i < 10; i++) {
             Wolf wolf = (Wolf) world.spawnEntity(SpellEffectUtil.getFirstPassableBlockAbove(SpellEffectUtil.randomizeLoc(loc, 2, 0, 2)), EntityType.WOLF);
-            wolves.add(wolf);
-            wolf.setMetadata(SpellEffectUtil.CAN_DAMAGE_WITH_WANDS, Common.getMetadataValueTrue());
+            WOLVES.add(wolf);
             Location location = wolf.getLocation();
             world.playSound(location, Sound.BLOCK_CHORUS_FLOWER_GROW, SoundCategory.MASTER, 4, 1);
             world.spawnParticle(Particle.SMOKE_LARGE, location, 2, 0.1, 0.1, 0.05, 0.1, null, true);
-            wolf.addPotionEffect(speed, true);
+            wolf.addPotionEffect(SPEED, true);
             BukkitRunnable bukkitRunnable = new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -60,7 +60,7 @@ public class CorruptedWolves implements Castable {
                         world.spawnParticle(Particle.SMOKE_NORMAL, wolf.getLocation(), 1, 0.1, 0.1, 0.1, 0.05, null, true);
                     } else {
                         cancel();
-                        wolves.remove(wolf);
+                        WOLVES.remove(wolf);
                         world.spawnParticle(Particle.SMOKE_LARGE, wolf.getLocation(), 3, 0, 0, 0, 0.1, null, true);
                     }
                 }

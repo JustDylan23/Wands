@@ -10,7 +10,6 @@ public abstract class BaseCompleter implements TabCompleter {
     protected List<String> validCompletions(String toComplete, String... values) {
         return Arrays.stream(values)
                 .filter(s -> s.toLowerCase().contains(toComplete))
-                .map(String::toLowerCase)
                 .collect(Collectors.toList());
     }
 }

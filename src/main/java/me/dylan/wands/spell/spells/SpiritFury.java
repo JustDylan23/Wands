@@ -34,7 +34,7 @@ public class SpiritFury extends Behavior implements Castable {
         Vector increment = incrementFull.clone().multiply(0.2);
 
         BukkitRunnable bukkitRunnable = new BukkitRunnable() {
-            int count;
+            int count = 0;
 
             @Override
             public void run() {

@@ -3,7 +3,7 @@ package me.dylan.wands.spell.spells;
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.accessories.SpellInfo;
 import me.dylan.wands.spell.spellbuilders.Behavior;
-import me.dylan.wands.spell.spellbuilders.BuildableBehaviour;
+import me.dylan.wands.spell.spellbuilders.BuildableBehaviour.Target;
 import me.dylan.wands.spell.spellbuilders.Ray;
 import me.dylan.wands.utils.Common;
 import org.bukkit.Location;
@@ -18,7 +18,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class Freeze implements Castable {
     @Override
     public Behavior createBehaviour() {
-        return Ray.newBuilder(BuildableBehaviour.Target.SINGLE)
+        return Ray.newBuilder(Target.SINGLE)
                 .setRayWidth(1)
                 .setEntityDamage(6)
                 .setMetersPerTick(2)
@@ -40,7 +40,7 @@ public class Freeze implements Castable {
         world.playSound(loc, Sound.ENTITY_EVOKER_FANGS_ATTACK, 4, 2);
         if (entity.hasPotionEffect(PotionEffectType.SLOW)) return;
         BukkitRunnable bukkitRunnable = new BukkitRunnable() {
-            int count;
+            int count = 0;
 
             @Override
             public void run() {

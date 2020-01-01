@@ -4,7 +4,6 @@ import me.dylan.wands.WandsPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.Metadatable;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,7 +13,7 @@ import java.util.function.Predicate;
 
 @SuppressWarnings("WeakerAccess")
 public final class Common {
-    private static final WandsPlugin plugin = JavaPlugin.getPlugin(WandsPlugin.class);
+    private static final WandsPlugin plugin = WandsPlugin.getInstance();
     private static final FixedMetadataValue METADATA_VALUE_TRUE = new FixedMetadataValue(plugin, true);
     private static final Consumer<?> EMPTY_CONSUMER = t -> {
     };

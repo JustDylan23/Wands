@@ -10,7 +10,7 @@ import java.util.StringJoiner;
 
 public abstract class Behavior {
     private final List<String> props = new ArrayList<>();
-    private int cooldown;
+    private int cooldown = 0;
 
     void addPropertyInfo(String key, Object value) {
         addPropertyInfo(key, value, "");

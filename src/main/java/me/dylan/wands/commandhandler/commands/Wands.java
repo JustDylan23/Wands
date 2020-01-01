@@ -81,7 +81,7 @@ public class Wands extends BaseCommand {
                     case "getconfig":
                         if (checkPerm(sender, "viewconfig")) {
                             ConfigHandler cd = configHandler;
-                            sender.sendMessage("§6magic cooldown time:§r " + (cd.getSpellCooldown() / 1000) + " seconds");
+                            sender.sendMessage("§6magic cooldown time:§r " + (cd.getGlobalSpellCooldown() / 1000) + " seconds");
                             sender.sendMessage("§6allow magic use:§r " + (cd.isMagicEnabled() ? "§a" : "§c") + cd.isMagicEnabled());
                             sender.sendMessage("§6wands usage requires permissoin:§r " + (cd.doesCastingRequirePermission() ? "§a" : "§c") + cd.doesCastingRequirePermission());
                         }
@@ -144,7 +144,7 @@ public class Wands extends BaseCommand {
                             try {
                                 int in = Integer.parseInt(args[2]);
                                 if (args[2].length() <= 2 && isInRange(sender, 0, 99, in)) {
-                                    configHandler.setSpellCooldown(in);
+                                    configHandler.setGlobalSpellCooldown(in);
                                     sender.sendMessage(WandsPlugin.PREFIX + "Cooldown has been set to " + in + " second" + ((in != 1) ? "s" : ""));
                                 }
                             } catch (NumberFormatException e) {

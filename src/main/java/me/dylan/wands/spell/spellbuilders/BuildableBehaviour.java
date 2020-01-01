@@ -9,7 +9,6 @@ import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.potion.PotionEffect;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.BiConsumer;
@@ -34,8 +33,14 @@ public abstract class BuildableBehaviour extends Behavior {
 
         addPropertyInfo("Entity damage", entityDamage);
         addPropertyInfo("Effect radius", spellEffectRadius, "meters");
-        addPropertyInfo("Knock Back xy", knockBack.getXz());
-        addPropertyInfo("Knock Back y", knockBack.getY());
+        addPropertyInfo("Knockback xz", knockBack.getXz());
+        addPropertyInfo("Knockback y", knockBack.getY());
+    }
+
+    public void applyPotionEffects(LivingEntity livingEntity) {
+        for (PotionEffect potionEffect : potionEffects) {
+            livingEntity.addPotionEffect(potionEffect, true);
+        }
     }
 
     public enum Target {
@@ -57,11 +62,6 @@ public abstract class BuildableBehaviour extends Behavior {
 
         abstract T self();
 
-        /**
-         * @return new instance
-         */
-
-        @Contract("-> new")
         public abstract @NotNull Behavior build();
 
         public T setCastSound(SoundEffect soundPlayer) {
@@ -90,7 +90,7 @@ public abstract class BuildableBehaviour extends Behavior {
         }
 
         public T setPotionEffects(PotionEffect... potionEffects) {
-            baseProps.potionEffects = potionEffects.clone();
+            baseProps.potionEffects = potionEffects;
             return self();
         }
 
@@ -122,12 +122,13 @@ public abstract class BuildableBehaviour extends Behavior {
     }
 
     private static class BaseProps {
-        int entityDamage;
-        float spellEffectRadius;
+        private static final PotionEffect[] POTION_EFFECTS = new PotionEffect[0];
+        int entityDamage = 0;
+        float spellEffectRadius = 0.0F;
         SoundEffect castSounds = SoundEffect.NONE;
         BiConsumer<Location, SpellInfo> spellRelativeEffects = Common.emptyBiConsumer();
         BiConsumer<LivingEntity, SpellInfo> entityEffects = Common.emptyBiConsumer();
         KnockBack knockBack = KnockBack.NONE;
-        PotionEffect[] potionEffects = new PotionEffect[0];
+        PotionEffect[] potionEffects = POTION_EFFECTS;
     }
 }

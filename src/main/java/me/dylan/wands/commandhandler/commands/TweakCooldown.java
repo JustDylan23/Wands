@@ -25,7 +25,7 @@ public class TweakCooldown extends BaseCommand {
                         int input = Integer.parseInt(args[1]);
                         String message = WandsPlugin.PREFIX + spellType.getDisplayName() + "'s cooldown is now default value + " + input;
                         if (isInRange(sender, 0, 99, input)) {
-                            configHandler.setCooldown(spellType, input);
+                            configHandler.setSpellCooldown(spellType, input);
                             sender.sendMessage(message);
                         }
                     } catch (NumberFormatException e) {
