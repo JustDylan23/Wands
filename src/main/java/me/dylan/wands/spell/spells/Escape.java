@@ -51,7 +51,7 @@ public class Escape extends Behavior implements Castable, Listener {
             player.setVelocity(vector);
             sound.play(player);
             BukkitRunnable bukkitRunnable = new BukkitRunnable() {
-                int count;
+                int count = 0;
 
                 @Override
                 public void run() {

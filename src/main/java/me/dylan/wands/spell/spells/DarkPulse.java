@@ -3,7 +3,7 @@ package me.dylan.wands.spell.spells;
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.accessories.KnockBack;
 import me.dylan.wands.spell.spellbuilders.Behavior;
-import me.dylan.wands.spell.spellbuilders.BuildableBehaviour;
+import me.dylan.wands.spell.spellbuilders.BuildableBehaviour.Target;
 import me.dylan.wands.spell.spellbuilders.Ray;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -15,7 +15,7 @@ import org.bukkit.potion.PotionEffectType;
 public class DarkPulse implements Castable {
     @Override
     public Behavior createBehaviour() {
-        return Ray.newBuilder(BuildableBehaviour.Target.MULTI)
+        return Ray.newBuilder(Target.MULTI)
                 .setRayWidth(1)
                 .setSpellEffectRadius(3.0F)
                 .setMetersPerTick(2)

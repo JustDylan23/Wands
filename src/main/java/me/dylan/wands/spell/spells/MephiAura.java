@@ -15,7 +15,7 @@ public class MephiAura implements Castable {
         return Aura.newBuilder(EffectFrequency.CONSTANT)
                 .setSpellEffectRadius(3.5f)
                 .setEffectDuration(160)
-                .setAuraParticleType(AuraParticleType.CIRCLE)
+                .setAuraParticleType(AuraParticleType.EMIT_AS_CIRCLE)
                 .setCastSound(Sound.ENTITY_ENDER_DRAGON_FLAP)
                 .setSpellRelativeEffects((loc, spellInfo) -> {
                     World world = spellInfo.world();

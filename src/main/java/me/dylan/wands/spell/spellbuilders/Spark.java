@@ -2,11 +2,12 @@ package me.dylan.wands.spell.spellbuilders;
 
 import me.dylan.wands.spell.accessories.SpellInfo;
 import me.dylan.wands.spell.util.SpellEffectUtil;
+import me.dylan.wands.utils.PlayerUtil;
 import org.bukkit.Location;
-import org.bukkit.Sound;
+import org.bukkit.Particle;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -22,7 +23,6 @@ public final class Spark extends BuildableBehaviour {
     private final int effectDistance;
     private final Target target;
 
-
     private Spark(@NotNull Builder builder) {
         super(builder.baseProps);
         this.effectDistance = builder.effectDistance;
@@ -33,33 +33,53 @@ public final class Spark extends BuildableBehaviour {
     }
 
     public static @NotNull Builder newBuilder(Target target) {
-        new Builder(Target.MULTI).setCastSound(Sound.ENTITY_ARROW_HIT_PLAYER).setEffectDistance(3);
         return new Builder(target);
     }
 
     @Override
     public boolean cast(@NotNull Player player, @NotNull String weapon) {
-        Location targetLoc = SpellEffectUtil.getSpellLocation(player, effectDistance);
-        SpellInfo spellInfo = new SpellInfo(player, player.getLocation(), targetLoc);
-        castSounds.play(player);
-        spellRelativeEffects.accept(targetLoc, spellInfo);
-        for (LivingEntity entity : SpellEffectUtil.getNearbyLivingEntities(player, targetLoc, spellEffectRadius)) {
-            knockBack.apply(entity, targetLoc);
-            SpellEffectUtil.damageEffect(player, entity, entityDamage, weapon);
-            entityEffects.accept(entity, spellInfo);
-            for (PotionEffect potionEffect : potionEffects) {
-                entity.addPotionEffect(potionEffect, true);
+        if (target == Target.MULTI) {
+            Location targetLoc = SpellEffectUtil.getSpellLocation(player, effectDistance);
+            SpellInfo spellInfo = new SpellInfo(player, player.getLocation(), targetLoc);
+            spellRelativeEffects.accept(targetLoc, spellInfo);
+            for (LivingEntity entity : SpellEffectUtil.getNearbyLivingEntities(player, targetLoc, spellEffectRadius)) {
+                applyEffects(entity, spellInfo, targetLoc, weapon);
             }
-            if (target == Target.SINGLE) {
-                break;
+        } else {
+            Entity entity = PlayerUtil.getTargetEntity(player, effectDistance, e -> true);
+            if (!(entity instanceof LivingEntity)) {
+                PlayerUtil.sendActionBar(player, "§cselect an entity");
+                Location loc = PlayerUtil.getTargetLocation(player, 10);
+                loc.getWorld().spawnParticle(Particle.FIREWORKS_SPARK, loc, 5, 0, 0, 0, 0.1);
+                return false;
             }
+            LivingEntity livingEntity = (LivingEntity) entity;
+            Location entityLoc = livingEntity.getLocation();
+            SpellInfo spellInfo = new SpellInfo(player, player.getLocation(), entityLoc);
+            spellRelativeEffects.accept(entityLoc, spellInfo);
+            applyEffects(livingEntity, spellInfo, spellInfo.origin(), weapon);
+
         }
+        castSounds.play(player);
         return true;
+    }
+
+    private void applyEffects(LivingEntity livingEntity, @NotNull SpellInfo spellInfo, Location knockbackFrom, String weapon) {
+        knockBack.apply(livingEntity, knockbackFrom);
+        SpellEffectUtil.damageEffect(spellInfo.caster(), livingEntity, entityDamage, weapon);
+        entityEffects.accept(livingEntity, spellInfo);
+        applyPotionEffects(livingEntity);
+    }
+
+    public enum Target {
+        MULTI,
+        SINGLE_REQUIRED
     }
 
     public static final class Builder extends AbstractBuilder<Builder> {
         private final Target target;
-        private int effectDistance;
+
+        private int effectDistance = 10;
 
         private Builder(Target target) {
             this.target = target;

@@ -22,7 +22,6 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
@@ -147,9 +146,7 @@ public final class LaunchableBlock extends BuildableBehaviour implements Listene
                 knockBack.apply(entity, loc);
                 SpellEffectUtil.damageEffect(player, entity, entityDamage, weaponName);
                 entityEffects.accept(entity, spellInfo);
-                for (PotionEffect potionEffect : potionEffects) {
-                    entity.addPotionEffect(potionEffect, true);
-                }
+                applyPotionEffects(entity);
             }
         }
     }
@@ -240,6 +237,7 @@ public final class LaunchableBlock extends BuildableBehaviour implements Listene
     public static final class Builder extends AbstractBuilder<Builder> {
 
         private final Material material;
+
         private BiConsumer<Location, SpellInfo> hitEffects = Common.emptyBiConsumer();
         private SoundEffect blockRelativeSounds = SoundEffect.NONE;
 

@@ -2,8 +2,8 @@ package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.spellbuilders.Behavior;
-import me.dylan.wands.spell.spellbuilders.BuildableBehaviour;
 import me.dylan.wands.spell.spellbuilders.Spark;
+import me.dylan.wands.spell.spellbuilders.Spark.Target;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;
@@ -11,7 +11,7 @@ import org.bukkit.World;
 public class MephiSpark implements Castable {
     @Override
     public Behavior createBehaviour() {
-        return Spark.newBuilder(BuildableBehaviour.Target.MULTI)
+        return Spark.newBuilder(Target.MULTI)
                 .setSpellEffectRadius(2.8F)
                 .setEntityDamage(12)
                 .setSpellRelativeEffects((loc, spellInfo) -> {

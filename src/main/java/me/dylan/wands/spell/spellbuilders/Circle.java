@@ -6,7 +6,6 @@ import me.dylan.wands.utils.Common;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
@@ -56,7 +55,7 @@ public final class Circle extends BuildableBehaviour {
         Location[] circlePoints = SpellEffectUtil.getHorizontalCircleFrom(circleCenter.clone().add(0, height, 0), circleRadius, player.getLocation().getYaw(), 1);
 
         BukkitRunnable bukkitRunnable = new BukkitRunnable() {
-            int circlePoint;
+            int circlePoint = 0;
 
             @Override
             public void run() {
@@ -67,9 +66,7 @@ public final class Circle extends BuildableBehaviour {
                             knockBack.apply(entity, circleCenter);
                             SpellEffectUtil.damageEffect(player, entity, entityDamage, weapon);
                             entityEffects.accept(entity, spellInfo);
-                            for (PotionEffect potionEffect : potionEffects) {
-                                entity.addPotionEffect(potionEffect, true);
-                            }
+                            applyPotionEffects(entity);
                         }
                         break;
                     } else {
@@ -91,8 +88,9 @@ public final class Circle extends BuildableBehaviour {
 
     public static final class Builder extends AbstractBuilder<Builder> {
         private final CirclePlacement circlePlacement;
-        private int circleRadius, speed = 1;
-        private int effectDistance, height;
+
+        private int circleRadius = 1, speed = 1;
+        private int effectDistance = 5, height = 1;
 
         private Builder(CirclePlacement circlePlacement) {
             this.circlePlacement = circlePlacement;

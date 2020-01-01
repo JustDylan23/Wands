@@ -1,4 +1,4 @@
-lightning spell that bounces between entities
+lightning spell that bounces between entities - done
 add a magic wall that acts like a barrier
 improve on freeze spell
 homing spells

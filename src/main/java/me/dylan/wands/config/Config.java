@@ -10,7 +10,7 @@ public class Config {
     private boolean isMagicEnabled = true;
 
     @SerializedName("spell_cooldown")
-    private int spellCooldown;
+    private int globalSpellCooldown = 0;
 
     @SerializedName("casting_requires_permission")
     private boolean castingRequiresPermission = true;
@@ -22,24 +22,24 @@ public class Config {
         return isMagicEnabled;
     }
 
-    void setMagicEnabled(boolean magicEnabled) {
-        isMagicEnabled = magicEnabled;
+    void setMagicEnabled(boolean bool) {
+        isMagicEnabled = bool;
     }
 
-    int getSpellCooldown() {
-        return spellCooldown;
+    int getGlobalSpellCooldown() {
+        return globalSpellCooldown;
     }
 
-    void setSpellCooldown(int spellCooldown) {
-        this.spellCooldown = spellCooldown;
+    void setGlobalSpellCooldown(int seconds) {
+        this.globalSpellCooldown = seconds;
     }
 
     boolean doesCastingRequirePermission() {
         return castingRequiresPermission;
     }
 
-    void setCastingRequiresPermission(boolean doesCastingRequirePermission) {
-        this.castingRequiresPermission = doesCastingRequirePermission;
+    void setCastingRequiresPermission(boolean bool) {
+        this.castingRequiresPermission = bool;
     }
 
     public Map<Integer, SpellConfig> getSpellConfigMap() {
@@ -51,14 +51,14 @@ public class Config {
     }
 
     public static class SpellConfig {
-        private int cooldown;
+        private int cooldown = 0;
 
         int getCooldown() {
             return cooldown;
         }
 
-        void setCooldown(int cooldown) {
-            this.cooldown = cooldown;
+        void setCooldown(int seconds) {
+            this.cooldown = seconds;
         }
     }
 }

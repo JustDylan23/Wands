@@ -3,7 +3,7 @@ package me.dylan.wands.spell.spells;
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.accessories.SpellInfo;
 import me.dylan.wands.spell.spellbuilders.Behavior;
-import me.dylan.wands.spell.spellbuilders.BuildableBehaviour;
+import me.dylan.wands.spell.spellbuilders.BuildableBehaviour.Target;
 import me.dylan.wands.spell.spellbuilders.Ray;
 import me.dylan.wands.spell.util.SpellEffectUtil;
 import me.dylan.wands.utils.Common;
@@ -25,11 +25,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Zap implements Castable {
+
     private static final PotionEffect SLOW_EFFECT = new PotionEffect(PotionEffectType.SLOW, 40, 3);
+    private static final int TOTAL_RICOCHET = 5;
+    private static final int RICOCHET_REACH = 5;
+    private static final int DAMAGE = 7;
 
     @Override
     public Behavior createBehaviour() {
-        return Ray.newBuilder(BuildableBehaviour.Target.SINGLE)
+        return Ray.newBuilder(Target.SINGLE)
+                .setMetersPerTick(2)
+                .setRayWidth(1)
                 .setSpellRelativeEffects((loc, spellInfo) -> {
                     World world = spellInfo.world();
                     world.spawnParticle(Particle.EXPLOSION_NORMAL, loc, 8, 0.1, 0.1, 0.1, 0.02, null, true);
@@ -41,32 +47,30 @@ public class Zap implements Castable {
     }
 
     private void zap(LivingEntity zappedEntity, SpellInfo spellInfo) {
+        LivingEntity zapTo = zappedEntity;
         Vector noVelocity = new Vector(0, 0, 0);
         Set<Entity> zappedEntities = new HashSet<>();
 
-        LivingEntity lastConductor = spellInfo.caster();
-        int totalRicochet = 5;
-        for (int i = 0; i < totalRicochet; i++) {
-            zappedEntities.add(zappedEntity);
+        for (int i = 0; i < TOTAL_RICOCHET; i++) {
+            zappedEntities.add(zapTo);
+            LivingEntity victim = zapTo;
+            Common.runTaskLater(() -> {
+                victim.damage(DAMAGE);
+                Location location = victim.getLocation();
+                location.getWorld().playSound(location, Sound.ITEM_TRIDENT_RETURN, 1F, 2F);
+            }, i * 2);
+            zapTo.setVelocity(noVelocity);
+            zapTo.addPotionEffect(SLOW_EFFECT, true);
 
-            if (lastConductor.equals(spellInfo.caster())) {
-                zappedEntity.damage(7);
-            } else {
-                zappedEntity.damage(7 - i, lastConductor);
-            }
-            zappedEntity.setVelocity(noVelocity);
-            zappedEntity.addPotionEffect(SLOW_EFFECT, true);
-
-            if (i >= totalRicochet - 1) {
+            if (i >= TOTAL_RICOCHET - 1) {
                 break;
             }
 
-            LivingEntity next = getClosestZappableEntity(zappedEntity, 4, zappedEntities);
-            drawLine(zappedEntity, next);
-            zappedEntity = next;
+            LivingEntity next = getClosestZappableEntity(zapTo, zappedEntities);
+            drawLine(zapTo, next);
+            zapTo = next;
         }
     }
-
 
     private void drawLine(LivingEntity from, LivingEntity to) {
         Location start = from.getEyeLocation();
@@ -88,10 +92,10 @@ public class Zap implements Castable {
         }
     }
 
-    private LivingEntity getClosestZappableEntity(@NotNull Entity zappedEntity, int radius, Set<Entity> zappedEntities) {
+    private LivingEntity getClosestZappableEntity(@NotNull Entity zappedEntity, Set<Entity> zappedEntities) {
         Location loc = zappedEntity.getLocation();
         List<LivingEntity> nearby = loc.getWorld()
-                .getNearbyEntities(loc, radius, radius, radius).stream()
+                .getNearbyEntities(loc, RICOCHET_REACH, RICOCHET_REACH, RICOCHET_REACH).stream()
                 .filter(entity -> isZappable(zappedEntity, entity, zappedEntities))
                 .map(LivingEntity.class::cast)
                 .collect(Collectors.toList());

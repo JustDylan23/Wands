@@ -7,6 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerAnimationEvent;
+import org.bukkit.event.player.PlayerAnimationType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.jetbrains.annotations.NotNull;
@@ -50,7 +51,7 @@ public class MouseClickListeners implements Listener {
     @EventHandler
     private void onLeftClick(@NotNull PlayerAnimationEvent event) {
         Player player = event.getPlayer();
-        if (player.getGameMode() == GameMode.ADVENTURE) {
+        if (player.getGameMode() == GameMode.ADVENTURE && event.getAnimationType() == PlayerAnimationType.ARM_SWING) {
             ClickEvent clickEvent = new ClickEvent(player, event);
             leftClickListeners.forEach(listener -> listener.onLeftClick(clickEvent));
         }

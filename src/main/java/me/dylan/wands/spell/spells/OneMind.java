@@ -17,7 +17,7 @@ public class OneMind extends Behavior implements Castable {
     @Override
     public boolean cast(@NotNull Player player, @NotNull String weapon) {
         BukkitRunnable bukkitRunnable = new BukkitRunnable() {
-            int count;
+            int count = 0;
 
             @Override
             public void run() {

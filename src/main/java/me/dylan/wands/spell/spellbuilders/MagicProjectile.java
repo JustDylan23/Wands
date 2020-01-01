@@ -16,7 +16,6 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
@@ -59,7 +58,7 @@ public final class MagicProjectile<T extends Projectile> extends BuildableBehavi
 
         addPropertyInfo("Projectile", projectile.getSimpleName());
         addPropertyInfo("Speed", speed);
-        addPropertyInfo("Life time", lifeTime, "ticks");
+        addPropertyInfo("Lifetime", lifeTime, "ticks");
 
         WandsPlugin.addDisableLogic(() -> projectiles.forEach(Entity::remove));
     }
@@ -100,9 +99,7 @@ public final class MagicProjectile<T extends Projectile> extends BuildableBehavi
                 knockBack.apply(entity, loc);
                 SpellEffectUtil.damageEffect(player, entity, entityDamage, weaponName);
                 entityEffects.accept(entity, spellInfo);
-                for (PotionEffect potionEffect : potionEffects) {
-                    entity.addPotionEffect(potionEffect, true);
-                }
+                applyPotionEffects(entity);
             }
         }
     }
