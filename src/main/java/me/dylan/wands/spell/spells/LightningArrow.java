@@ -14,8 +14,9 @@ public class LightningArrow implements Castable {
         return MagicProjectile.newBuilder(Arrow.class, 2.2F)
                 .setHitEffects((loc, spellInfo) -> {
                     World world = spellInfo.world();
-                    world.strikeLightningEffect(loc);
+                    world.spigot().strikeLightningEffect(loc, true);
                     world.playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, 4, 1);
+                    world.playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 5, 1);
                     world.spawnParticle(Particle.CLOUD, loc, 40, 0.2, 0.2, 0.2, 0.3, null, true);
                 })
                 .setSpellEffectRadius(3.5F)

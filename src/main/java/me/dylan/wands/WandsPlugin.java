@@ -66,7 +66,6 @@ public final class WandsPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
-        configFile = new File(getDataFolder(), "config.dat");
         ListenerRegistry listenerRegistry = new ListenerRegistry();
         loadConfig(listenerRegistry);
         loadListeners(listenerRegistry);
@@ -81,6 +80,8 @@ public final class WandsPlugin extends JavaPlugin {
     }
 
     private void loadConfig(ListenerRegistry listenerRegistry) {
+        getDataFolder().mkdir();
+        this.configFile = new File(getDataFolder(), "config.dat");
         Config config;
         if (configFile.exists()) {
             try (DataInputStream stream = new DataInputStream(new GZIPInputStream(new FileInputStream(configFile)))) {

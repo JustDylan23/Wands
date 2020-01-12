@@ -17,7 +17,7 @@ public class BloodStun implements Castable {
                 .setCastSound(Sound.ENTITY_FIREWORK_ROCKET_BLAST)
                 .setEntityDamage(8)
                 .setPotionEffects(new PotionEffect(PotionEffectType.SLOW, 180, 3, false))
-                .setHitEffects((location, spellInfo) -> spellInfo.world().playSound(location, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, 4, 1))
+                .setHitEffects((location, spellInfo) -> spellInfo.world().playSound(location, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, 4.0F, 1.0F))
                 .setRayWidth(1)
                 .setSpellRelativeEffects((loc, spellInfo) -> {
                     World world = spellInfo.world();

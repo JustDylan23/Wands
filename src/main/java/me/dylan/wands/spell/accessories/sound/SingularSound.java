@@ -19,6 +19,6 @@ public final class SingularSound implements SoundEffect {
 
     @Override
     public void play(Location location) {
-        location.getWorld().playSound(location, sound, SoundCategory.MASTER, 4, pitch);
+        location.getWorld().playSound(location, sound, SoundCategory.MASTER, 4.0F, pitch);
     }
 }

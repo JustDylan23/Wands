@@ -50,7 +50,7 @@ public class CorruptedWolves implements Castable {
             Wolf wolf = (Wolf) world.spawnEntity(SpellEffectUtil.getFirstPassableBlockAbove(SpellEffectUtil.randomizeLoc(loc, 2, 0, 2)), EntityType.WOLF);
             WOLVES.add(wolf);
             Location location = wolf.getLocation();
-            world.playSound(location, Sound.BLOCK_CHORUS_FLOWER_GROW, SoundCategory.MASTER, 4, 1);
+            world.playSound(location, Sound.BLOCK_CHORUS_FLOWER_GROW, SoundCategory.MASTER, 4.0F, 1.0F);
             world.spawnParticle(Particle.SMOKE_LARGE, location, 2, 0.1, 0.1, 0.05, 0.1, null, true);
             wolf.addPotionEffect(SPEED, true);
             BukkitRunnable bukkitRunnable = new BukkitRunnable() {

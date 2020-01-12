@@ -36,8 +36,14 @@ public class ThunderRage implements Castable {
                     Location loc = entity.getLocation();
                     world.spawnParticle(Particle.FLAME, loc, 10, 0.2, 0.2, 0.2, 0.1, null, true);
                     world.spawnParticle(Particle.CLOUD, loc, 10, 0.2, 0.2, 0.2, 0.1, null, true);
-                    world.strikeLightningEffect(loc);
-                    Common.runRepeatableTaskLater(() -> world.strikeLightningEffect(loc), 3, 3, 3);
+                    world.spigot().strikeLightningEffect(loc, true);
+                    world.playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, 4, 1);
+                    world.playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 5, 1);
+                    Common.runRepeatableTaskLater(() -> {
+                        world.spigot().strikeLightningEffect(loc, true);
+                        world.playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, 4, 1);
+                        world.playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 5, 1);
+                    }, 3, 3, 3);
                 })
                 .setReverseAuraEffects(player -> {
                     player.addPotionEffect(strength, true);

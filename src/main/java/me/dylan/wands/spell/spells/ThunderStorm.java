@@ -32,8 +32,9 @@ public class ThunderStorm implements Castable {
                     world.spawnParticle(Particle.EXPLOSION_HUGE, loc, 0, 0.0, 0.0, 0.0, 0.0, null, true);
                     Common.runRepeatableTaskLater(() -> {
                         Location lightningLocation = SpellEffectUtil.randomizeLoc(loc, 3, 1, 3);
+                        world.spigot().strikeLightningEffect(lightningLocation, true);
                         world.playSound(lightningLocation, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, 4, 1);
-                        lightningLocation.getWorld().strikeLightningEffect(lightningLocation);
+                        world.playSound(lightningLocation, Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 5, 1);
                     }, 1, 2, 3);
                     entity.setFireTicks(60);
                 })

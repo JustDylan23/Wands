@@ -1,6 +1,7 @@
 package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.spell.Castable;
+import me.dylan.wands.spell.accessories.KnockBack;
 import me.dylan.wands.spell.accessories.SpellInfo;
 import me.dylan.wands.spell.spellbuilders.Behavior;
 import me.dylan.wands.spell.spellbuilders.BuildableBehaviour.Target;
@@ -27,6 +28,7 @@ import java.util.stream.Collectors;
 public class Zap implements Castable {
 
     private static final PotionEffect SLOW_EFFECT = new PotionEffect(PotionEffectType.SLOW, 40, 3);
+    private static final KnockBack knockBack = KnockBack.from(0, 1);
     private static final int TOTAL_RICOCHET = 5;
     private static final int RICOCHET_REACH = 5;
     private static final int DAMAGE = 7;
@@ -43,6 +45,7 @@ public class Zap implements Castable {
                 .setCastSound(Sound.ENTITY_LLAMA_SWAG)
                 .setEffectDistance(30)
                 .setEntityEffects(this::zap)
+                .setHitEffects((location, spellInfo) -> location.getWorld().playSound(location, Sound.ITEM_TRIDENT_RETURN, 1F, 2F))
                 .build();
     }
 
@@ -50,6 +53,7 @@ public class Zap implements Castable {
         LivingEntity zapTo = zappedEntity;
         Vector noVelocity = new Vector(0, 0, 0);
         Set<Entity> zappedEntities = new HashSet<>();
+        zappedEntities.add(spellInfo.caster());
 
         for (int i = 0; i < TOTAL_RICOCHET; i++) {
             zappedEntities.add(zapTo);
@@ -57,7 +61,8 @@ public class Zap implements Castable {
             Common.runTaskLater(() -> {
                 victim.damage(DAMAGE);
                 Location location = victim.getLocation();
-                location.getWorld().playSound(location, Sound.ITEM_TRIDENT_RETURN, 1F, 2F);
+                knockBack.apply(victim, location);
+                location.getWorld().playSound(location, Sound.ITEM_TRIDENT_RETURN, 8.0F, 2.0F);
             }, i * 2);
             zapTo.setVelocity(noVelocity);
             zapTo.addPotionEffect(SLOW_EFFECT, true);
