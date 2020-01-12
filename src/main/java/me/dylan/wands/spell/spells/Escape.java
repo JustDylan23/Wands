@@ -62,7 +62,7 @@ public class Escape extends Behavior implements Castable, Listener {
                         leaping.remove(player);
                         Location loc = player.getLocation();
                         world.createExplosion(loc, 0.0f);
-                        world.playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, SoundCategory.MASTER, 4, 1);
+                        world.playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, SoundCategory.MASTER, 4.0F, 1.0F);
                         world.spawnParticle(Particle.EXPLOSION_HUGE, loc, 0, 0.0, 0.0, 0.0, 0.0, null, true);
                         world.spawnParticle(Particle.SPELL_WITCH, loc, 40, 1, 1, 1, 1, null, true);
                         world.spawnParticle(Particle.SMOKE_LARGE, loc, 50, 2, 2, 2, 0.05, null, true);

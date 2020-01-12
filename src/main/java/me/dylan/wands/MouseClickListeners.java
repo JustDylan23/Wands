@@ -6,6 +6,7 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerAnimationEvent;
 import org.bukkit.event.player.PlayerAnimationType;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -49,7 +50,18 @@ public class MouseClickListeners implements Listener {
     }
 
     @EventHandler
-    private void onLeftClick(@NotNull PlayerAnimationEvent event) {
+    private void onEntityDamageEntityEvent(EntityDamageByEntityEvent event) {
+        if (event.getDamager() instanceof Player) {
+            Player player = (Player) event.getDamager();
+            if (player.rayTraceBlocks(5) != null) {
+                ClickEvent clickEvent = new ClickEvent(player, event);
+                leftClickListeners.forEach(listener -> listener.onLeftClick(clickEvent));
+            }
+        }
+    }
+
+    @EventHandler
+    private void onPlayerAnimation(@NotNull PlayerAnimationEvent event) {
         Player player = event.getPlayer();
         if (player.getGameMode() == GameMode.ADVENTURE && event.getAnimationType() == PlayerAnimationType.ARM_SWING) {
             ClickEvent clickEvent = new ClickEvent(player, event);
