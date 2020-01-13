@@ -15,8 +15,10 @@ public class FlameThrower implements Castable {
                 .setCastSound(Sound.ENTITY_BLAZE_SHOOT)
                 .setProjectileAmount(8)
                 .setProjectileShootDelay(3)
-                .setEntityEffects((entity, spellInfo) -> entity.setFireTicks(120))
-                .setEntityDamage(4)
+                .setEntityEffects((entity, spellInfo) -> {
+                    entity.setFireTicks(120);
+                })
+                .setEntityDamage(6)
                 .setSpellEffectRadius(3.0F)
                 .setSpellRelativeEffects((loc, spellInfo) -> {
                     World world = spellInfo.world();

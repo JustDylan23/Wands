@@ -1,58 +1,76 @@
 package me.dylan.wands.spell.spells;
 
 import me.dylan.wands.spell.Castable;
-import me.dylan.wands.spell.spellbuilders.Aura;
-import me.dylan.wands.spell.spellbuilders.Aura.EffectFrequency;
 import me.dylan.wands.spell.spellbuilders.Behavior;
+import me.dylan.wands.spell.util.SpellEffectUtil;
 import me.dylan.wands.utils.Common;
-import org.bukkit.*;
+import org.bukkit.Location;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
+import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
 
 public class ThunderRage implements Castable {
+    private final PotionEffect wither = new PotionEffect(PotionEffectType.WITHER, 80, 1, false);
+    private final PotionEffect slow = new PotionEffect(PotionEffectType.SLOW, 80, 3, false);
+
     @Override
     public Behavior createBehaviour() {
-        PotionEffect strength = new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 300, 1, false);
-        PotionEffect speed = new PotionEffect(PotionEffectType.SPEED, 60, 1, false);
-        return Aura.newBuilder(EffectFrequency.ONCE)
-                .setCastSound(Sound.ITEM_TOTEM_USE)
-                .setEntityDamage(7)
-                .setSpellEffectRadius(8.0F)
-                .setEffectDuration(40)
-                .setSpellRelativeEffects((loc, spellInfo) -> {
-                    World world = spellInfo.world();
-                    world.spawnParticle(Particle.EXPLOSION_NORMAL, loc, 1, 0.4, 0.3, 0.4, 0.1, null, true);
-                    world.spawnParticle(Particle.SMOKE_LARGE, loc, 1, 0.4, 0.3, 0.4, 0.1, null, true);
-                    world.spawnParticle(Particle.SMOKE_NORMAL, loc, 1, 0.4, 0.3, 0.4, 0.1, null, true);
-                    world.spawnParticle(Particle.FLAME, loc, 1, 0.4, 0.2, 0.4, 0.1, null, true);
-                })
-                .setPotionEffects(
-                        new PotionEffect(PotionEffectType.WITHER, 80, 1, false),
-                        new PotionEffect(PotionEffectType.SLOW, 80, 3, false)
+        return new Behavior() {
+            @Override
+            public boolean cast(@NotNull Player player, @NotNull String weapon) {
+                Location loc = player.getLocation();
+                World world = loc.getWorld();
+                world.playSound(loc, Sound.ITEM_TOTEM_USE, 4.0F, 1.0F);
+                BukkitRunnable bukkitRunnable = new BukkitRunnable() {
+                    int count = 0;
+
+                    @Override
+                    public void run() {
+                        count++;
+                        if (count >= 25) {
+                            cancel();
+                        }
+                        Location currentLoc = player.getLocation();
+                        world.spawnParticle(Particle.EXPLOSION_NORMAL, currentLoc, 1, 0.4, 0.3, 0.4, 0.1, null, true);
+                        world.spawnParticle(Particle.SMOKE_LARGE, currentLoc, 1, 0.4, 0.3, 0.4, 0.1, null, true);
+                        world.spawnParticle(Particle.SMOKE_NORMAL, currentLoc, 1, 0.4, 0.3, 0.4, 0.1, null, true);
+                        world.spawnParticle(Particle.FLAME, currentLoc, 1, 0.4, 0.2, 0.4, 0.1, null, true);
+                        strikeRandomLightning(player, weapon);
+                    }
+                };
+                Common.runTaskTimer(bukkitRunnable, 0, 2);
+                return true;
+            }
+        };
+    }
+
+    private void strikeRandomLightning(Player player, String weapon) {
+        Location loc = SpellEffectUtil.getFirstPassableBlockAbove(
+                SpellEffectUtil.getFirstGroundBlockUnder(
+                        SpellEffectUtil.randomizeLoc(player.getLocation(), 12, 0, 12)
                 )
-                .setEntityEffects((entity, spellInfo) -> {
-                    entity.setFireTicks(60);
-                    World world = entity.getWorld();
-                    Location loc = entity.getLocation();
-                    world.spawnParticle(Particle.FLAME, loc, 10, 0.2, 0.2, 0.2, 0.1, null, true);
-                    world.spawnParticle(Particle.CLOUD, loc, 10, 0.2, 0.2, 0.2, 0.1, null, true);
-                    world.spigot().strikeLightningEffect(loc, true);
-                    world.playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, 4, 1);
-                    world.playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 5, 1);
-                    Common.runRepeatableTaskLater(() -> {
-                        world.spigot().strikeLightningEffect(loc, true);
-                        world.playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, 4, 1);
-                        world.playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 5, 1);
-                    }, 3, 3, 3);
-                })
-                .setReverseAuraEffects(player -> {
-                    player.addPotionEffect(strength, true);
-                    player.addPotionEffect(speed, true);
-                    World world = player.getWorld();
-                    Location location = player.getLocation();
-                    world.spawnParticle(Particle.LAVA, location, 10, 1, 1, 1, 0, null, true);
-                    world.playSound(location, Sound.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.MASTER, 4, 1);
-                })
-                .build();
+        );
+        World world = loc.getWorld();
+        world.spigot().strikeLightningEffect(loc, true);
+        world.playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, 4, 1);
+        world.playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 5, 1);
+        world.spawnParticle(Particle.FLAME, loc, 10, 0.2, 0.2, 0.2, 0.1, null, true);
+        world.spawnParticle(Particle.CLOUD, loc, 10, 0.2, 0.2, 0.2, 0.1, null, true);
+        effectNearbyEntities(loc, player, weapon);
+    }
+
+    private void effectNearbyEntities(Location location, Player player, String weapon) {
+        SpellEffectUtil.getNearbyLivingEntities(player, location, 3.5D)
+                .forEach(livingEntity -> {
+                    livingEntity.addPotionEffect(wither, true);
+                    livingEntity.addPotionEffect(slow, true);
+                    livingEntity.setFireTicks(60);
+                    SpellEffectUtil.damageEffect(player, livingEntity, 5, weapon);
+                });
     }
 }

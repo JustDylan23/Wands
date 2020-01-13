@@ -147,6 +147,7 @@ public final class SpellEffectUtil {
     }
 
     public static double randomize(double d) {
+        if (d == 0) return 0;
         return ThreadLocalRandom.current().nextDouble() * d * 2.0 - d;
     }
 

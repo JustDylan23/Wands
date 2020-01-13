@@ -9,29 +9,28 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public class WhirlwindSlash extends Behavior implements Castable {
-
+public class WhirlwindSlash implements Castable {
     @Override
     public Behavior createBehaviour() {
-        return this;
-    }
-
-    @Override
-    public boolean cast(@NotNull Player player, @NotNull String weapon) {
-        BukkitRunnable bukkitRunnable = new BukkitRunnable() {
-            int count = 0;
-
+        return new Behavior() {
             @Override
-            public void run() {
-                ++count;
-                if (count > 5) {
-                    cancel();
-                } else {
-                    MortalDraw.draw(player, ThreadLocalRandom.current().nextInt(0, 360), 1.8, 4, 0, false);
-                }
+            public boolean cast(@NotNull Player player, @NotNull String weapon) {
+                BukkitRunnable bukkitRunnable = new BukkitRunnable() {
+                    int count = 0;
+
+                    @Override
+                    public void run() {
+                        ++count;
+                        if (count > 5) {
+                            cancel();
+                        } else {
+                            MortalDraw.draw(player, ThreadLocalRandom.current().nextInt(0, 360), 1.8, 4, 0, false);
+                        }
+                    }
+                };
+                Common.runTaskTimer(bukkitRunnable, 0, 3);
+                return true;
             }
         };
-        Common.runTaskTimer(bukkitRunnable, 0, 3);
-        return true;
     }
 }
