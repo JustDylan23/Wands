@@ -9,32 +9,31 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public class SpiralCloudPassage extends Behavior implements Castable {
-
+public class SpiralCloudPassage implements Castable {
     @Override
     public Behavior createBehaviour() {
-        return this;
-    }
-
-    @Override
-    public boolean cast(@NotNull Player player, @NotNull String weapon) {
-        BukkitRunnable bukkitRunnable = new BukkitRunnable() {
-            int count = 0;
-
+        return new Behavior() {
             @Override
-            public void run() {
-                ++count;
-                if (count > 8) {
-                    cancel();
-                } else {
-                    MortalDraw.draw(player,
-                            ThreadLocalRandom.current().nextInt(0, 360),
-                            ThreadLocalRandom.current().nextInt(1, 4), 5,
-                            ThreadLocalRandom.current().nextInt(0, 360), true);
-                }
+            public boolean cast(@NotNull Player player, @NotNull String weapon) {
+                BukkitRunnable bukkitRunnable = new BukkitRunnable() {
+                    int count = 0;
+
+                    @Override
+                    public void run() {
+                        ++count;
+                        if (count > 8) {
+                            cancel();
+                        } else {
+                            MortalDraw.draw(player,
+                                    ThreadLocalRandom.current().nextInt(0, 360),
+                                    ThreadLocalRandom.current().nextInt(1, 4), 5,
+                                    ThreadLocalRandom.current().nextInt(0, 360), true);
+                        }
+                    }
+                };
+                Common.runTaskTimer(bukkitRunnable, 0, 3);
+                return true;
             }
         };
-        Common.runTaskTimer(bukkitRunnable, 0, 3);
-        return true;
     }
 }

@@ -19,6 +19,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.List;
@@ -45,7 +46,7 @@ public class Zap implements Castable {
                 .setCastSound(Sound.ENTITY_LLAMA_SWAG)
                 .setEffectDistance(30)
                 .setEntityEffects(this::zap)
-                .setHitEffects((location, spellInfo) -> location.getWorld().playSound(location, Sound.ITEM_TRIDENT_RETURN, 1F, 2F))
+                .setHitEffects((location, spellInfo) -> location.getWorld().playSound(location, Sound.ITEM_TRIDENT_RETURN, 4F, 2F))
                 .build();
     }
 
@@ -72,6 +73,9 @@ public class Zap implements Castable {
             }
 
             LivingEntity next = getClosestZappableEntity(zapTo, zappedEntities);
+            if (next == null) {
+                return;
+            }
             drawLine(zapTo, next);
             zapTo = next;
         }
@@ -97,6 +101,7 @@ public class Zap implements Castable {
         }
     }
 
+    @Nullable
     private LivingEntity getClosestZappableEntity(@NotNull Entity zappedEntity, Set<Entity> zappedEntities) {
         Location loc = zappedEntity.getLocation();
         List<LivingEntity> nearby = loc.getWorld()
