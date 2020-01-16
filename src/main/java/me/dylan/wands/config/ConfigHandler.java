@@ -7,11 +7,9 @@ import me.dylan.wands.config.Config.SpellConfig;
 import me.dylan.wands.spell.SpellType;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.Map;
+import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 public class ConfigHandler {
@@ -34,12 +32,31 @@ public class ConfigHandler {
         });
     }
 
+    public static ConfigHandler load(File file, ListenerRegistry listenerRegistry) {
+        if (file.exists()) {
+            try (DataInputStream stream = new DataInputStream(new GZIPInputStream(new FileInputStream(file)))) {
+                Config config = new Gson().fromJson(stream.readUTF(), Config.class);
+                WandsPlugin.log("Loaded config");
+                return new ConfigHandler(config, listenerRegistry);
+            } catch (IOException e) {
+                throw new IllegalStateException("Config is corrupted");
+            }
+        } else {
+            WandsPlugin.log("No config found");
+            return new ConfigHandler(new Config(), listenerRegistry);
+        }
+    }
+
     public void save(File file) {
-        WandsPlugin.getInstance().getDataFolder().mkdir();
+        if (!file.exists()) {
+            WandsPlugin.log("No config to save to found, preparing directory");
+            file.getParentFile().mkdirs();
+        }
         try (DataOutputStream stream = new DataOutputStream(new GZIPOutputStream(new FileOutputStream(file)))) {
-            stream.writeUTF(new Gson().toJson(config));
+            stream.writeUTF(new Gson().toJson(this));
+            WandsPlugin.log("Saved config");
         } catch (IOException e) {
-            WandsPlugin.warn("Could not save config");
+            WandsPlugin.warn("Failed to save config");
         }
     }
 

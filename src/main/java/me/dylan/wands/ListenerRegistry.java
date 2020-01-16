@@ -15,7 +15,7 @@ public class ListenerRegistry {
 
     public static void addListener(@NotNull Listener... listeners) {
         for (Listener listener : listeners) {
-            WandsPlugin.debug("Registered listener for " + listener.getClass());
+            WandsPlugin.debug("Registered listener: " + listener.getClass());
             Bukkit.getServer().getPluginManager().registerEvents(listener, plugin);
         }
     }
@@ -24,17 +24,22 @@ public class ListenerRegistry {
         toggleableListeners.addAll(Arrays.asList(listeners));
         if (plugin.getConfigHandler().isMagicEnabled()) {
             addListener(listeners);
+            for (Listener listener : listeners) {
+                WandsPlugin.debug("Registered toggleable listener: " + listener.getClass());
+                Bukkit.getServer().getPluginManager().registerEvents(listener, plugin);
+            }
         }
     }
 
     public void disableListeners() {
         toggleableListeners.forEach(HandlerList::unregisterAll);
-        WandsPlugin.debug("disabled listeners");
+        WandsPlugin.debug("Disabled toggleable listeners");
     }
 
     public void enableListeners() {
+        WandsPlugin.debug("Preventing duplicates listeners");
         disableListeners();
-        toggleableListeners.forEach(listener -> Bukkit.getServer().getPluginManager().registerEvents(listener, plugin));
-        WandsPlugin.debug("enabled " + toggleableListeners.size() + " listener(s)");
+        addListener(toggleableListeners.toArray(new Listener[0]));
+        WandsPlugin.debug("Enabled " + toggleableListeners.size() + " listener(s)");
     }
 }

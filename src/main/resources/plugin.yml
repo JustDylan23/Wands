@@ -1,4 +1,4 @@
-name: Wands
+name: ExtensiveMagicWands
 version: ${project.version}
 main: me.dylan.wands.WandsPlugin
 prefix: Wands
