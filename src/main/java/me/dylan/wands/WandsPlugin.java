@@ -1,12 +1,10 @@
 package me.dylan.wands;
 
-import com.google.gson.Gson;
 import me.dylan.wands.commandhandler.commands.*;
 import me.dylan.wands.commandhandler.tabcompleters.BindComplete;
 import me.dylan.wands.commandhandler.tabcompleters.TweakSpellComplete;
 import me.dylan.wands.commandhandler.tabcompleters.UnbindComplete;
 import me.dylan.wands.commandhandler.tabcompleters.WandsComplete;
-import me.dylan.wands.config.Config;
 import me.dylan.wands.config.ConfigHandler;
 import me.dylan.wands.customitems.AssassinDagger;
 import me.dylan.wands.customitems.CursedBow;
@@ -18,15 +16,11 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Set;
-import java.util.zip.GZIPInputStream;
 
 public final class WandsPlugin extends JavaPlugin {
 
@@ -66,8 +60,11 @@ public final class WandsPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
+        MetricsLite metricsLite = new MetricsLite(this);
         ListenerRegistry listenerRegistry = new ListenerRegistry();
-        loadConfig(listenerRegistry);
+        this.configFile = new File(getDataFolder(), "config.dat");
+        this.configHandler = ConfigHandler.load(configFile, listenerRegistry);
+        this.cooldownManager = new CooldownManager(configHandler);
         loadListeners(listenerRegistry);
         loadCommands();
         log("Enabled successfully");
@@ -77,26 +74,6 @@ public final class WandsPlugin extends JavaPlugin {
     public void onDisable() {
         configHandler.save(configFile);
         disableLogic.forEach(Runnable::run);
-    }
-
-    private void loadConfig(ListenerRegistry listenerRegistry) {
-        getDataFolder().mkdir();
-        this.configFile = new File(getDataFolder(), "config.dat");
-        Config config;
-        if (configFile.exists()) {
-            try (DataInputStream stream = new DataInputStream(new GZIPInputStream(new FileInputStream(configFile)))) {
-                config = new Gson().fromJson(stream.readUTF(), Config.class);
-                log("Loaded config");
-            } catch (IOException e) {
-                throw new IllegalStateException("Config is corrupted");
-            }
-        } else {
-            config = new Config();
-            log("Created config");
-        }
-
-        this.configHandler = new ConfigHandler(config, listenerRegistry);
-        this.cooldownManager = new CooldownManager(configHandler);
     }
 
     private void loadListeners(ListenerRegistry listenerRegistry) {
