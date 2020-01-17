@@ -29,6 +29,9 @@ public class WandsComplete extends BaseCompleter {
         if (args.length == 1)
             return validCompletions(value, "enable", "disable", "get", "set", "info", "spells", "getconfig", "inspect", "update");
         else if (args.length == 2) {
+            if ("update".equalsIgnoreCase(args[0])) {
+                return validCompletions(value, "install");
+            }
             if ("spells".equalsIgnoreCase(args[0])) {
                 String[] completions = Arrays.stream(SpellType.values()).map(Enum::toString).toArray(String[]::new);
                 return validCompletions(value, completions);

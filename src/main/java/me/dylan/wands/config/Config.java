@@ -6,17 +6,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 class Config {
-    @SerializedName("is_magic_enabled")
-    private boolean isMagicEnabled = true;
-
-    @SerializedName("spell_cooldown")
-    private int globalSpellCooldown = 0;
-
-    @SerializedName("casting_requires_permission")
-    private boolean castingRequiresPermission = true;
-
     @SerializedName("spell_data")
     private final Map<Integer, SpellConfig> spellConfigMap = new HashMap<>();
+    @SerializedName("is_magic_enabled")
+    private boolean isMagicEnabled = true;
+    @SerializedName("spell_cooldown")
+    private int globalSpellCooldown = 0;
+    @SerializedName("casting_requires_permission")
+    private boolean castingRequiresPermission = true;
 
     boolean isMagicEnabled() {
         return isMagicEnabled;
