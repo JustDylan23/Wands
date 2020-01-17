@@ -68,7 +68,10 @@ public final class LaunchableBlock extends BuildableBehaviour implements Listene
 
     @Override
     public boolean cast(@NotNull Player player, @NotNull String weapon) {
-        return selectedBlock.containsKey(player) ? launchBlock(player) : prepareBlock(player);
+        if (selectedBlock.containsKey(player)) {
+            launchBlock(player);
+            return true;
+        } else return prepareBlock(player);
     }
 
     @SuppressWarnings("SameReturnValue")
@@ -105,7 +108,7 @@ public final class LaunchableBlock extends BuildableBehaviour implements Listene
         return false;
     }
 
-    private boolean launchBlock(Player player) {
+    private void launchBlock(Player player) {
         castSounds.play(player);
         BlockRestorer blockRestorer = selectedBlock.get(player);
         blockRestorer.earlyRun();
@@ -130,7 +133,6 @@ public final class LaunchableBlock extends BuildableBehaviour implements Listene
                 );
             }
         }, 20L);
-        return true;
     }
 
     private void blockLand(FallingBlock fallingBlock) {

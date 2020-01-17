@@ -11,6 +11,7 @@ import java.util.Set;
 
 public class ListenerRegistry {
     private static final WandsPlugin plugin = WandsPlugin.getInstance();
+    private static final Listener[] LISTENERS = new Listener[0];
     private final Set<Listener> toggleableListeners = new HashSet<>();
 
     public static void addListener(@NotNull Listener... listeners) {
@@ -20,10 +21,9 @@ public class ListenerRegistry {
         }
     }
 
-    void addToggleableListener(Listener... listeners) {
+    void addToggleableListenerAndEnable(Listener... listeners) {
         toggleableListeners.addAll(Arrays.asList(listeners));
         if (plugin.getConfigHandler().isMagicEnabled()) {
-            addListener(listeners);
             for (Listener listener : listeners) {
                 WandsPlugin.debug("Registered toggleable listener: " + listener.getClass());
                 Bukkit.getServer().getPluginManager().registerEvents(listener, plugin);
@@ -33,13 +33,10 @@ public class ListenerRegistry {
 
     public void disableListeners() {
         toggleableListeners.forEach(HandlerList::unregisterAll);
-        WandsPlugin.debug("Disabled toggleable listeners");
+        WandsPlugin.debug("Disabled all toggleable listeners");
     }
 
     public void enableListeners() {
-        WandsPlugin.debug("Preventing duplicates listeners");
-        disableListeners();
-        addListener(toggleableListeners.toArray(new Listener[0]));
-        WandsPlugin.debug("Enabled " + toggleableListeners.size() + " listener(s)");
+        addToggleableListenerAndEnable(toggleableListeners.toArray(LISTENERS));
     }
 }

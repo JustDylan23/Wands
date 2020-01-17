@@ -1,16 +1,11 @@
 package me.dylan.wands.config;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
 import com.google.gson.annotations.SerializedName;
 
-import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Config implements JsonDeserializer<Config> {
+class Config {
     @SerializedName("is_magic_enabled")
     private boolean isMagicEnabled = true;
 
@@ -21,46 +16,37 @@ public class Config implements JsonDeserializer<Config> {
     private boolean castingRequiresPermission = true;
 
     @SerializedName("spell_data")
-    private Map<Integer, SpellConfig> spellConfigMap = new HashMap<>();
+    private final Map<Integer, SpellConfig> spellConfigMap = new HashMap<>();
 
-    public boolean isMagicEnabled() {
+    boolean isMagicEnabled() {
         return isMagicEnabled;
     }
 
-    public void setMagicEnabled(boolean bool) {
+    void setMagicEnabled(boolean bool) {
         isMagicEnabled = bool;
     }
 
-    public int getGlobalSpellCooldown() {
+    int getGlobalSpellCooldown() {
         return globalSpellCooldown;
     }
 
-    public void setGlobalSpellCooldown(int seconds) {
+    void setGlobalSpellCooldown(int seconds) {
         this.globalSpellCooldown = seconds;
     }
 
-    public boolean doesCastingRequirePermission() {
+    boolean doesCastingRequirePermission() {
         return castingRequiresPermission;
     }
 
-    public void setCastingRequiresPermission(boolean bool) {
+    void setCastingRequiresPermission(boolean bool) {
         this.castingRequiresPermission = bool;
     }
 
-    public Map<Integer, SpellConfig> getSpellConfigMap() {
+    Map<Integer, SpellConfig> getSpellConfigMap() {
         return spellConfigMap;
     }
 
-    public void setSpellConfigMap(Map<Integer, SpellConfig> spellConfigMap) {
-        this.spellConfigMap = spellConfigMap;
-    }
-
-    @Override
-    public Config deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        return null;
-    }
-
-    public static class SpellConfig {
+    static class SpellConfig {
         private int cooldown = 0;
 
         int getCooldown() {

@@ -20,7 +20,7 @@ public abstract class BuildableBehaviour extends Behavior {
     final BiConsumer<Location, SpellInfo> spellRelativeEffects;
     final BiConsumer<LivingEntity, SpellInfo> entityEffects;
     final KnockBack knockBack;
-    final PotionEffect[] potionEffects;
+    private final PotionEffect[] potionEffects;
 
     BuildableBehaviour(@NotNull BaseProps baseProps) {
         this.entityDamage = baseProps.entityDamage;

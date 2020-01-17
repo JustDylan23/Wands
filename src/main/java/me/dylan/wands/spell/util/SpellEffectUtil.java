@@ -117,27 +117,15 @@ public final class SpellEffectUtil {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public static void spawnColoredRedstone(Location location, int count, double offsetX, double offsetY, double offsetZ, int red, int green, int blue, boolean rainbow) {
-        spawnColoredParticle(Particle.REDSTONE, location, count, offsetX, offsetY, offsetZ, red, green, blue, rainbow);
-    }
-
     public static void spawnColoredSpellMob(Location location, int count, double offsetX, double offsetY, double offsetZ, int red, int green, int blue, boolean rainbow) {
-        spawnColoredParticle(Particle.SPELL_MOB, location, count, offsetX, offsetY, offsetZ, red, green, blue, rainbow);
-    }
-
-    public static void spawnColoredSpellMobAmbient(Location location, int count, double offsetX, double offsetY, double offsetZ, int red, int green, int blue, boolean rainbow) {
-        spawnColoredParticle(Particle.SPELL_MOB_AMBIENT, location, count, offsetX, offsetY, offsetZ, red, green, blue, rainbow);
-    }
-
-    private static void spawnColoredParticle(Particle particle, Location location, int count, double offsetX, double offsetY, double offsetZ, int red, int green, int blue, boolean rainbow) {
         if (rainbow) {
-            location.getWorld().spawnParticle(particle, location, (count > 0) ? count : 1, offsetX, offsetY, offsetZ, 1, null, true);
+            location.getWorld().spawnParticle(Particle.SPELL_MOB, location, (count > 0) ? count : 1, offsetX, offsetY, offsetZ, 1, null, true);
         } else {
             float redR = Math.max(Float.MIN_NORMAL, red / 255.0F);
             float greenG = Math.max(0, green / 255.0F);
             float blueB = Math.max(0, blue / 255.0F);
             for (int i = 0; count > i; i++) {
-                location.getWorld().spawnParticle(particle, randomizeLoc(location, offsetX, offsetY, offsetZ), 0, redR, greenG, blueB, 1, null, true);
+                location.getWorld().spawnParticle(Particle.SPELL_MOB, randomizeLoc(location, offsetX, offsetY, offsetZ), 0, redR, greenG, blueB, 1, null, true);
             }
         }
     }

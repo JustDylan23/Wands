@@ -14,6 +14,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -27,6 +28,7 @@ public final class WandsPlugin extends JavaPlugin {
     public static final boolean DEBUG = true;
 
     public static final String PREFIX = "§8§l[§6§lWands§8§l]§r ";
+    public static final String PREFIX_TOP = "§e---- " + PREFIX + "§e----§r\n";
     private static final String PREFIX_WARNING = "§e[§e§lWARNING§r] §c";
     private static final Set<Runnable> disableLogic = new HashSet<>();
     private static WandsPlugin instance = null;
@@ -60,7 +62,6 @@ public final class WandsPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
-        MetricsLite metricsLite = new MetricsLite(this);
         ListenerRegistry listenerRegistry = new ListenerRegistry();
         this.configFile = new File(getDataFolder(), "config.dat");
         this.configHandler = ConfigHandler.load(configFile, listenerRegistry);
@@ -68,6 +69,29 @@ public final class WandsPlugin extends JavaPlugin {
         loadListeners(listenerRegistry);
         loadCommands();
         log("Enabled successfully");
+        log("Checking for updates...");
+        Bukkit.getScheduler().runTaskTimer(this, this::lookForUpdates, 0L, 3600L);
+        new MetricsLite(this);
+    }
+
+    private void lookForUpdates() {
+        UpdateChecker.getLatestVersionString().whenComplete((fetchedVersion, throwable) -> {
+            if (throwable != null) {
+                WandsPlugin.warn("Failed to check if updates are available");
+                return;
+            }
+            String currentVersion = getDescription().getVersion();
+            if (!currentVersion.equals(fetchedVersion)) {
+                String message = "A new update is available\n" +
+                        currentVersion + "->" + fetchedVersion +
+                        "\nAvailable here: " + UpdateChecker.RESOURCE;
+                Bukkit.getOnlinePlayers().stream().filter(Player::isOp).forEach(p -> p.sendMessage(
+                        PREFIX_TOP + message
+                ));
+                log(message);
+
+            }
+        });
     }
 
     @Override
@@ -87,16 +111,12 @@ public final class WandsPlugin extends JavaPlugin {
         mouseClickListeners.addRightClickListener(assassinDagger);
         mouseClickListeners.addRightClickListener(cursedBow);
 
-        listenerRegistry.addToggleableListener(
+        listenerRegistry.addToggleableListenerAndEnable(
                 playerListener,
                 assassinDagger,
                 cursedBow,
                 mouseClickListeners
         );
-
-        if (this.configHandler.isMagicEnabled()) {
-            listenerRegistry.enableListeners();
-        }
     }
 
     private void loadCommands() {

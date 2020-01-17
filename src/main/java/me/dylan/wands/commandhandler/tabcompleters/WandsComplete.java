@@ -27,7 +27,7 @@ public class WandsComplete extends BaseCompleter {
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         String value = args[args.length - 1];
         if (args.length == 1)
-            return validCompletions(value, "enable", "disable", "get", "set", "info", "spells", "getconfig", "inspect");
+            return validCompletions(value, "enable", "disable", "get", "set", "info", "spells", "getconfig", "inspect", "update");
         else if (args.length == 2) {
             if ("spells".equalsIgnoreCase(args[0])) {
                 String[] completions = Arrays.stream(SpellType.values()).map(Enum::toString).toArray(String[]::new);
