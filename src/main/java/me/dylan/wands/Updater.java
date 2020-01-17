@@ -60,7 +60,7 @@ public final class Updater {
             } else if (currentVersion.equals(fetchedVersion)) {
                 sender.sendMessage("No updates available");
             } else {
-                sender.sendMessage("Version §c" + fetchedVersion + "§r is available (current version §c" + currentVersion + "§r)");
+                sender.sendMessage("Version §a" + fetchedVersion + "§r is available (current version §c" + currentVersion + "§r)");
                 if (install) {
                     install();
                 } else {
