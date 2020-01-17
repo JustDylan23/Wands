@@ -1,7 +1,7 @@
 package me.dylan.wands.commandhandler.commands;
 
 import me.dylan.wands.PreSetItem;
-import me.dylan.wands.UpdateChecker;
+import me.dylan.wands.Updater;
 import me.dylan.wands.WandsPlugin;
 import me.dylan.wands.commandhandler.BaseCommand;
 import me.dylan.wands.config.ConfigHandler;
@@ -37,19 +37,9 @@ public class Wands extends BaseCommand {
             case 1:
                 switch (args[0]) {
                     case "update":
-                        sender.sendMessage(WandsPlugin.PREFIX_TOP + "Checking for updates...");
-                        UpdateChecker.getLatestVersionString().whenComplete((result, throwable) -> {
-                            if (throwable != null) {
-                                sender.sendMessage("Failed to check if updates are available");
-                                return;
-                            }
-                            String currentVersion = WandsPlugin.getInstance().getDescription().getVersion();
-                            if (currentVersion.equals(result)) {
-                                sender.sendMessage("no update is available");
-                            } else {
-                                sender.sendMessage("update is available " + currentVersion + " -> " + result);
-                            }
-                        });
+                        if (checkPerm(sender, "update")) {
+                            Updater.checkForUpdates(sender, false);
+                        }
                         return true;
                     case "inspect":
                         if (isPlayer(sender)) {
@@ -118,6 +108,12 @@ public class Wands extends BaseCommand {
                 }
                 return false;
             case 2:
+                if ("update".equalsIgnoreCase(args[0]) && "install".equalsIgnoreCase(args[1])) {
+                    if (checkPerm(sender, "update.install")) {
+                        Updater.checkForUpdates(sender, true);
+                    }
+                    return true;
+                }
                 if ("get".equalsIgnoreCase(args[0])) {
                     if (checkPerm(sender, "get")) {
                         try {

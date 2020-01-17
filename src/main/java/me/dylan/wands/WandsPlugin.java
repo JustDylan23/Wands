@@ -14,7 +14,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -33,6 +32,7 @@ public final class WandsPlugin extends JavaPlugin {
     private static final Set<Runnable> disableLogic = new HashSet<>();
     private static WandsPlugin instance = null;
 
+    private final String currentVersion = getDescription().getVersion();
     private File configFile = null;
     private ConfigHandler configHandler = null;
     private CooldownManager cooldownManager = null;
@@ -70,28 +70,8 @@ public final class WandsPlugin extends JavaPlugin {
         loadCommands();
         log("Enabled successfully");
         log("Checking for updates...");
-        Bukkit.getScheduler().runTaskTimer(this, this::lookForUpdates, 0L, 3600L);
+        Bukkit.getScheduler().runTaskTimerAsynchronously(this, Updater::checkForUpdates, 0L, 12000L);
         new MetricsLite(this);
-    }
-
-    private void lookForUpdates() {
-        UpdateChecker.getLatestVersionString().whenComplete((fetchedVersion, throwable) -> {
-            if (throwable != null) {
-                WandsPlugin.warn("Failed to check if updates are available");
-                return;
-            }
-            String currentVersion = getDescription().getVersion();
-            if (!currentVersion.equals(fetchedVersion)) {
-                String message = "A new update is available\n" +
-                        currentVersion + "->" + fetchedVersion +
-                        "\nAvailable here: " + UpdateChecker.RESOURCE;
-                Bukkit.getOnlinePlayers().stream().filter(Player::isOp).forEach(p -> p.sendMessage(
-                        PREFIX_TOP + message
-                ));
-                log(message);
-
-            }
-        });
     }
 
     @Override
