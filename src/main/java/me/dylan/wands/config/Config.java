@@ -14,13 +14,19 @@ class Config {
     private int globalSpellCooldown = 0;
     @SerializedName("casting_requires_permission")
     private boolean castingRequiresPermission = true;
+    @SerializedName("send_updating_notifications")
+    private boolean sendUpdateNotifications = true;
+
+    Map<Integer, SpellConfig> getSpellConfigMap() {
+        return spellConfigMap;
+    }
 
     boolean isMagicEnabled() {
         return isMagicEnabled;
     }
 
-    void setMagicEnabled(boolean bool) {
-        isMagicEnabled = bool;
+    void setMagicEnabled(boolean value) {
+        isMagicEnabled = value;
     }
 
     int getGlobalSpellCooldown() {
@@ -35,12 +41,16 @@ class Config {
         return castingRequiresPermission;
     }
 
-    void setCastingRequiresPermission(boolean bool) {
-        this.castingRequiresPermission = bool;
+    void setCastingRequiresPermission(boolean value) {
+        this.castingRequiresPermission = value;
     }
 
-    Map<Integer, SpellConfig> getSpellConfigMap() {
-        return spellConfigMap;
+    boolean areNotificationsEnabled() {
+        return sendUpdateNotifications;
+    }
+
+    void enableNotifications(boolean value) {
+        this.sendUpdateNotifications = value;
     }
 
     static class SpellConfig {
