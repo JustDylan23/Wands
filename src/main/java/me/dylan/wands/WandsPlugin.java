@@ -32,10 +32,10 @@ public final class WandsPlugin extends JavaPlugin {
     private static final Set<Runnable> disableLogic = new HashSet<>();
     private static WandsPlugin instance = null;
 
-    private final String currentVersion = getDescription().getVersion();
     private File configFile = null;
     private ConfigHandler configHandler = null;
     private CooldownManager cooldownManager = null;
+    private Updater updater;
 
     public static void log(String message) {
         Bukkit.getLogger().info(PREFIX + message);
@@ -45,9 +45,9 @@ public final class WandsPlugin extends JavaPlugin {
         Bukkit.getLogger().info(PREFIX + PREFIX_WARNING + message);
     }
 
-    public static void debug(String message) {
+    public static void debug(Object message) {
         if (DEBUG) {
-            log(message);
+            log(String.valueOf(message));
         }
     }
 
@@ -66,11 +66,13 @@ public final class WandsPlugin extends JavaPlugin {
         this.configFile = new File(getDataFolder(), "config.dat");
         this.configHandler = ConfigHandler.load(configFile, listenerRegistry);
         this.cooldownManager = new CooldownManager(configHandler);
+
         loadListeners(listenerRegistry);
         loadCommands();
         log("Enabled successfully");
         log("Checking for updates...");
-        Bukkit.getScheduler().runTaskTimerAsynchronously(this, Updater::checkForUpdates, 0L, 12000L);
+        this.updater = new Updater(getFile().getName(), this);
+        Bukkit.getScheduler().runTaskTimerAsynchronously(this, updater::checkForUpdates, 0L, 12000L);
         new MetricsLite(this);
     }
 
@@ -123,5 +125,9 @@ public final class WandsPlugin extends JavaPlugin {
 
     public CooldownManager getCooldownManager() {
         return cooldownManager;
+    }
+
+    public Updater getUpdater() {
+        return updater;
     }
 }

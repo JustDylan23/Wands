@@ -3,6 +3,7 @@ package me.dylan.wands.config;
 import com.google.gson.Gson;
 import me.dylan.wands.ListenerRegistry;
 import me.dylan.wands.WandsPlugin;
+import me.dylan.wands.commandhandler.commands.Wands;
 import me.dylan.wands.config.Config.SpellConfig;
 import me.dylan.wands.spell.SpellType;
 import org.jetbrains.annotations.NotNull;
@@ -30,7 +31,9 @@ public final class ConfigHandler {
                 WandsPlugin.log("Loaded config");
                 return new ConfigHandler(config, listenerRegistry);
             } catch (IOException e) {
-                throw new IllegalStateException("Config is corrupted");
+                file.delete();
+                WandsPlugin.log("Config file got corrupted and got wiped.");
+                return new ConfigHandler(new Config(), listenerRegistry);
             }
         } else {
             WandsPlugin.log("No config found");
@@ -95,8 +98,16 @@ public final class ConfigHandler {
         return config.doesCastingRequirePermission();
     }
 
-    public void requirePermissionForCasting(boolean bool) {
-        config.setCastingRequiresPermission(bool);
+    public void requirePermissionForCasting(boolean value) {
+        config.setCastingRequiresPermission(value);
+    }
+
+    public boolean areNotificationsEnabled() {
+        return config.areNotificationsEnabled();
+    }
+
+    public void enableNotifications(boolean value) {
+        config.enableNotifications(value);
     }
 }
 

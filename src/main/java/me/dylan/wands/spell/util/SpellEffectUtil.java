@@ -108,7 +108,8 @@ public final class SpellEffectUtil {
     public static List<LivingEntity> getNearbyLivingEntities(Player player, @NotNull Location loc, Predicate<LivingEntity> predicate, double rx, double ry, double rz) {
         return loc.getWorld()
                 .getNearbyEntities(loc, rx, ry, rz).stream()
-                .filter(entity -> entity instanceof LivingEntity)
+                .filter(Entity::isValid)
+                .filter(LivingEntity.class::isInstance)
                 .filter(entity -> !(entity instanceof ArmorStand))
                 .filter(entity -> !entity.equals(player))
                 .filter(entity -> checkFriendlyFireOption(player, entity))

@@ -38,7 +38,7 @@ public class Wands extends BaseCommand {
                 switch (args[0]) {
                     case "update":
                         if (checkPerm(sender, "update")) {
-                            Updater.checkForUpdates(sender, false);
+                            WandsPlugin.getInstance().getUpdater().checkForUpdates(sender, false);
                         }
                         return true;
                     case "inspect":
@@ -110,7 +110,7 @@ public class Wands extends BaseCommand {
             case 2:
                 if ("update".equalsIgnoreCase(args[0]) && "install".equalsIgnoreCase(args[1])) {
                     if (checkPerm(sender, "update.install")) {
-                        Updater.checkForUpdates(sender, true);
+                        WandsPlugin.getInstance().getUpdater().checkForUpdates(sender, true);
                     }
                     return true;
                 }

@@ -41,9 +41,10 @@ public class Zap implements Castable {
                 .setRayWidth(1)
                 .setSpellRelativeEffects((loc, spellInfo) -> {
                     World world = spellInfo.world();
-                    world.spawnParticle(Particle.EXPLOSION_NORMAL, loc, 8, 0.1, 0.1, 0.1, 0.02, null, true);
+                    world.spawnParticle(Particle.END_ROD, loc, 5, 0.1, 0.1, 0.1, 0.02, null, true);
+                    world.spawnParticle(Particle.CRIT_MAGIC, loc, 5, 0.4, 0.4, 0.4, 1, null, true);
                 })
-                .setCastSound(Sound.ENTITY_LLAMA_SWAG)
+                .setCastSound(Sound.ENTITY_EVOKER_CAST_SPELL, 2)
                 .setEffectDistance(30)
                 .setEntityEffects(this::zap)
                 .setHitEffects((location, spellInfo) -> location.getWorld().playSound(location, Sound.ITEM_TRIDENT_RETURN, 4F, 2F))
@@ -97,7 +98,7 @@ public class Zap implements Castable {
 
         for (int i = 0; i < numSteps; ++i) {
             start.add(direction);
-            world.spawnParticle(Particle.EXPLOSION_NORMAL, start, 1, 0, 0, 0, 0.02, null, true);
+            world.spawnParticle(Particle.END_ROD, start, 1, 0, 0, 0, 0.02, null, true);
         }
     }
 
@@ -125,7 +126,8 @@ public class Zap implements Castable {
     }
 
     private boolean isZappable(Entity zappedEntity, Entity entity, Set<Entity> zappedEntities) {
-        return entity instanceof LivingEntity
+        return entity.isValid()
+                && entity instanceof LivingEntity
                 && !(entity instanceof ArmorStand)
                 && !entity.equals(zappedEntity)
                 && SpellEffectUtil.checkFriendlyFireOption(entity, entity)
