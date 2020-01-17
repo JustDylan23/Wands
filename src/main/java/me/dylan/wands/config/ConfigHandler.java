@@ -12,24 +12,15 @@ import java.util.Map;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-public class ConfigHandler {
+public final class ConfigHandler {
     private final Config config;
     private final ListenerRegistry listenerRegistry;
 
-    public ConfigHandler(@NotNull Config config, ListenerRegistry listenerRegistry) {
+    private ConfigHandler(@NotNull Config config, ListenerRegistry listenerRegistry) {
         this.config = config;
         this.listenerRegistry = listenerRegistry;
 
         mapSpellConfigSection(config);
-    }
-
-    private void mapSpellConfigSection(@NotNull Config config) {
-        config.getSpellConfigMap().forEach((id, spellConfig) -> {
-            SpellType spellType = SpellType.getSpellById(id);
-            if (spellType != null) {
-                spellType.behavior.setCooldown(spellConfig.getCooldown());
-            }
-        });
     }
 
     public static ConfigHandler load(File file, ListenerRegistry listenerRegistry) {
@@ -45,6 +36,15 @@ public class ConfigHandler {
             WandsPlugin.log("No config found");
             return new ConfigHandler(new Config(), listenerRegistry);
         }
+    }
+
+    private void mapSpellConfigSection(@NotNull Config config) {
+        config.getSpellConfigMap().forEach((id, spellConfig) -> {
+            SpellType spellType = SpellType.getSpellById(id);
+            if (spellType != null) {
+                spellType.behavior.setCooldown(spellConfig.getCooldown());
+            }
+        });
     }
 
     public void save(File file) {

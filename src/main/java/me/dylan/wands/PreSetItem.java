@@ -15,7 +15,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
-@SuppressWarnings("unused")
 public enum PreSetItem {
     ASSASSINS_DAGGER(
             ItemBuilder.from(Material.MUSIC_DISC_MALL)

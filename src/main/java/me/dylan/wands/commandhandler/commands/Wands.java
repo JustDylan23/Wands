@@ -1,6 +1,7 @@
 package me.dylan.wands.commandhandler.commands;
 
 import me.dylan.wands.PreSetItem;
+import me.dylan.wands.UpdateChecker;
 import me.dylan.wands.WandsPlugin;
 import me.dylan.wands.commandhandler.BaseCommand;
 import me.dylan.wands.config.ConfigHandler;
@@ -35,12 +36,27 @@ public class Wands extends BaseCommand {
         switch (args.length) {
             case 1:
                 switch (args[0]) {
+                    case "update":
+                        sender.sendMessage(WandsPlugin.PREFIX_TOP + "Checking for updates...");
+                        UpdateChecker.getLatestVersionString().whenComplete((result, throwable) -> {
+                            if (throwable != null) {
+                                sender.sendMessage("Failed to check if updates are available");
+                                return;
+                            }
+                            String currentVersion = WandsPlugin.getInstance().getDescription().getVersion();
+                            if (currentVersion.equals(result)) {
+                                sender.sendMessage("no update is available");
+                            } else {
+                                sender.sendMessage("update is available " + currentVersion + " -> " + result);
+                            }
+                        });
+                        return true;
                     case "inspect":
                         if (isPlayer(sender)) {
                             Player player = (Player) sender;
                             ItemStack itemStack = player.getInventory().getItemInMainHand();
-                            player.sendMessage(WandsPlugin.PREFIX + "\nLegacy Spells: [" + (ItemUtil.getPersistentData(itemStack, SpellCompound.TAG_SPELLS_LIST, PersistentDataType.STRING).orElse("empty")) + "]");
-                            player.sendMessage("\nSpells: " + (Arrays.toString(ItemUtil.getPersistentData(itemStack, SpellCompound.TAG_SPELLS_LIST, PersistentDataType.INTEGER_ARRAY).orElse(new int[0]))));
+                            player.sendMessage(WandsPlugin.PREFIX_TOP + "Legacy Spells: [" + (ItemUtil.getPersistentData(itemStack, SpellCompound.TAG_SPELLS_LIST, PersistentDataType.STRING).orElse("none")) + "]");
+                            player.sendMessage("Spells: " + (Arrays.toString(ItemUtil.getPersistentData(itemStack, SpellCompound.TAG_SPELLS_LIST, PersistentDataType.INTEGER_ARRAY).orElse(new int[0]))));
                         }
                         return true;
                     case "disable":
@@ -66,9 +82,7 @@ public class Wands extends BaseCommand {
                         }
                         return true;
                     case "info":
-                        sender.sendMessage("§e---- §6Wands§e ----");
-                        sender.sendMessage("§6Created by: §e_JustDylan_");
-                        sender.sendMessage("§6Current version:§e " + version);
+                        sender.sendMessage(WandsPlugin.PREFIX_TOP + "§6Created by: §e_JustDylan_\n" + "§6Current version:§e " + version);
                         return true;
                     case "get":
                         if (checkPerm(sender, "get")) {

@@ -25,7 +25,7 @@ public final class Aura extends BuildableBehaviour {
     private final EffectFrequency effectFrequency;
     private final int effectDuration;
     private final String auraUUID;
-    private final Consumer<LivingEntity> playerEffects, reverseAuraEffects;
+    private final Consumer<LivingEntity> playerEffects;
     private final AuraParticleType auraParticleType;
 
     private Aura(@NotNull Builder builder) {
@@ -34,7 +34,6 @@ public final class Aura extends BuildableBehaviour {
         this.effectDuration = builder.effectDuration;
         this.auraUUID = UUID.randomUUID().toString();
         this.playerEffects = builder.playerEffects;
-        this.reverseAuraEffects = builder.reverseAuraEffects;
         this.auraParticleType = builder.auraParticleType;
 
         addPropertyInfo("Aura duration", effectDuration, "ticks");
@@ -65,7 +64,6 @@ public final class Aura extends BuildableBehaviour {
         BukkitRunnable bukkitRunnable = new BukkitRunnable() {
             int count = 0;
             boolean repeat = true;
-            boolean hasAffected = false;
 
             @Override
             public void run() {
@@ -73,9 +71,6 @@ public final class Aura extends BuildableBehaviour {
                 if (count > effectDuration) {
                     cancel();
                     Common.removeMetaData(player, auraUUID);
-                    if (!hasAffected) {
-                        reverseAuraEffects.accept(player);
-                    }
                 } else {
                     Location loc = player.getLocation();
                     if (auraParticleType == AuraParticleType.EMIT_AROUND_CENTER) {
@@ -92,7 +87,6 @@ public final class Aura extends BuildableBehaviour {
                             }
                             knockBack.apply(livingEntity, loc);
                             SpellEffectUtil.damageEffect(player, livingEntity, entityDamage, weapon);
-                            hasAffected = true;
                             entityEffects.accept(livingEntity, spellInfo);
                             applyPotionEffects(livingEntity);
                         }
@@ -117,7 +111,6 @@ public final class Aura extends BuildableBehaviour {
     public static final class Builder extends AbstractBuilder<Builder> {
         private final EffectFrequency effectFrequency;
 
-        private Consumer<LivingEntity> reverseAuraEffects = Common.emptyConsumer();
         private Consumer<LivingEntity> playerEffects = Common.emptyConsumer();
         private int effectDuration = 20;
         private AuraParticleType auraParticleType = AuraParticleType.EMIT_AROUND_CENTER;
@@ -143,11 +136,6 @@ public final class Aura extends BuildableBehaviour {
 
         public Builder setPlayerEffects(Consumer<LivingEntity> playerEffects) {
             this.playerEffects = playerEffects;
-            return this;
-        }
-
-        public Builder setReverseAuraEffects(Consumer<LivingEntity> playerEffects) {
-            this.reverseAuraEffects = playerEffects;
             return this;
         }
 
