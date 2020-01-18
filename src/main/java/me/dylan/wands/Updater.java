@@ -48,36 +48,38 @@ public final class Updater implements Listener {
         getLatestVersionString().whenCompleteAsync((fetchedVersion, throwable) -> {
             if (plugin.getConfigHandler().areNotificationsEnabled() && throwable == null && !currentVersion.equals(fetchedVersion)) {
                 bukkitTask.cancel();
-                String message = WandsPlugin.PREFIX_TOP + getNewVersionMessage(currentVersion, fetchedVersion) + getInstallInstructionMessage(true);
-                Bukkit.getOnlinePlayers().stream().filter(p -> p.hasPermission("wands.update.install")).forEach(p -> p.sendMessage(message));
-                WandsPlugin.log(getNewVersionMessage(currentVersion, fetchedVersion) + getInstallInstructionMessage(false));
+                String message = WandsPlugin.PREFIX_TOP + getNewVersionMessage(currentVersion, fetchedVersion) + getDownloadInstructionMessage(true);
+                Bukkit.getOnlinePlayers().stream().filter(p -> p.hasPermission("wands.update.download")).forEach(p -> p.sendMessage(message));
+                WandsPlugin.log(getNewVersionMessage(currentVersion, fetchedVersion) + " " + getDownloadInstructionMessage(false));
             }
         });
     }
 
     public void checkForUpdates(@NotNull CommandSender sender, boolean install) {
         String currentVersion = WandsPlugin.getInstance().getDescription().getVersion();
-        sender.sendMessage(WandsPlugin.PREFIX_TOP + "Checking for updates...");
         getLatestVersionString().whenComplete((fetchedVersion, throwable) -> {
             if (throwable != null) {
-                sender.sendMessage("Failed to connect");
+                sender.sendMessage(WandsPlugin.PREFIX + "Failed to check for updates");
             } else if (currentVersion.equals(fetchedVersion)) {
-                sender.sendMessage("No updates available");
+                sender.sendMessage(WandsPlugin.PREFIX + "Already up to date!");
             } else {
-                sender.sendMessage(getNewVersionMessage(currentVersion, fetchedVersion));
                 if (install) {
-                    sender.sendMessage("Installing update");
-                    install();
+                    install(sender, currentVersion, fetchedVersion);
                 } else {
-                    sender.sendMessage(getInstallInstructionMessage(false));
+                    sender.sendMessage(WandsPlugin.PREFIX_TOP + getNewVersionMessage(currentVersion, fetchedVersion) + getDownloadInstructionMessage(true));
                 }
             }
         });
     }
 
-    private void install() {
+    private void install(CommandSender sender, String currentVer, String newVer) {
+        //noinspection ResultOfMethodCallIgnored
         Bukkit.getUpdateFolderFile().mkdirs();
         File file = new File(Bukkit.getUpdateFolderFile(), updateFileName);
+        if (file.exists()) {
+            sender.sendMessage(WandsPlugin.PREFIX + "§cPlease complete the pending update first\nby restarting/reloading");
+            return;
+        }
         try (
                 ReadableByteChannel readableByteChannel = Channels.newChannel(new URL(URL_DOWNLOAD).openStream());
                 FileOutputStream fileOutputStream = new FileOutputStream(file)
@@ -86,31 +88,27 @@ public final class Updater implements Listener {
         } catch (IOException e) {
             WandsPlugin.log(e.toString());
         }
-        Bukkit.broadcastMessage(WandsPlugin.PREFIX + "Reloading server to complete installation...");
-        Bukkit.getScheduler().runTask(plugin, () -> {
-            Bukkit.getServer().reload();
-            Bukkit.broadcastMessage(WandsPlugin.PREFIX + "Finished installing update");
-        });
+        sender.sendMessage(WandsPlugin.PREFIX_TOP + "Finished downloading §av" + newVer + "§r (current §cv" + currentVer + "§r)\nTo complete the installation,\nplease restart/reload the server");
     }
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        if (plugin.getConfigHandler().areNotificationsEnabled() && player.hasPermission("wands.update.install")) {
+        if (plugin.getConfigHandler().areNotificationsEnabled() && player.hasPermission("wands.update.download")) {
             String currentVersion = WandsPlugin.getInstance().getDescription().getVersion();
             getLatestVersionString().whenComplete((fetchedVersion, throwable) -> {
                 if (throwable == null && !currentVersion.equals(fetchedVersion)) {
-                    player.sendMessage(WandsPlugin.PREFIX_TOP + getNewVersionMessage(currentVersion, fetchedVersion) + getInstallInstructionMessage(true));
+                    player.sendMessage(WandsPlugin.PREFIX_TOP + getNewVersionMessage(currentVersion, fetchedVersion) + getDownloadInstructionMessage(true));
                 }
             });
         }
     }
 
     private String getNewVersionMessage(String currentVersion, String newVersion) {
-        return "Version §a" + newVersion + "§r is available (current version §c" + currentVersion + "§r)";
+        return "§av" + newVersion + "§r is available (current §cv" + currentVersion + "§r)";
     }
 
-    private String getInstallInstructionMessage(boolean newLine) {
-        return (newLine ? "\n" : "") + "Please run \"/wands update install\" to update";
+    private String getDownloadInstructionMessage(boolean newLine) {
+        return (newLine ? "\n" : "") + "Run \"/wands update download\" to download the update";
     }
 }

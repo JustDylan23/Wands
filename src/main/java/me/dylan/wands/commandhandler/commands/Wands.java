@@ -1,7 +1,6 @@
 package me.dylan.wands.commandhandler.commands;
 
 import me.dylan.wands.PreSetItem;
-import me.dylan.wands.Updater;
 import me.dylan.wands.WandsPlugin;
 import me.dylan.wands.commandhandler.BaseCommand;
 import me.dylan.wands.config.ConfigHandler;
@@ -42,11 +41,17 @@ public class Wands extends BaseCommand {
                         }
                         return true;
                     case "inspect":
-                        if (isPlayer(sender)) {
+                        if (isPlayer(sender) ) {
                             Player player = (Player) sender;
                             ItemStack itemStack = player.getInventory().getItemInMainHand();
-                            player.sendMessage(WandsPlugin.PREFIX_TOP + "Legacy Spells: [" + (ItemUtil.getPersistentData(itemStack, SpellCompound.TAG_SPELLS_LIST, PersistentDataType.STRING).orElse("none")) + "]");
-                            player.sendMessage("Spells: " + (Arrays.toString(ItemUtil.getPersistentData(itemStack, SpellCompound.TAG_SPELLS_LIST, PersistentDataType.INTEGER_ARRAY).orElse(new int[0]))));
+                            if (isWand(sender, itemStack)) {
+                                if (ItemUtil.hasPersistentData(itemStack, SpellCompound.TAG_SPELLS_LIST, PersistentDataType.STRING)) {
+                                    player.sendMessage(WandsPlugin.PREFIX_TOP + "Legacy Spells: [" + (ItemUtil.getPersistentData(itemStack, SpellCompound.TAG_SPELLS_LIST, PersistentDataType.STRING).orElse("none")) + "]");
+                                }
+                                if (ItemUtil.hasPersistentData(itemStack, SpellCompound.TAG_SPELLS_LIST, PersistentDataType.INTEGER_ARRAY)) {
+                                    player.sendMessage("Spells: " + (Arrays.toString(ItemUtil.getPersistentData(itemStack, SpellCompound.TAG_SPELLS_LIST, PersistentDataType.INTEGER_ARRAY).orElse(new int[0]))));
+                                }
+                            }
                         }
                         return true;
                     case "disable":
@@ -72,7 +77,7 @@ public class Wands extends BaseCommand {
                         }
                         return true;
                     case "info":
-                        sender.sendMessage(WandsPlugin.PREFIX_TOP + "§6Created by: §e_JustDylan_\n" + "§6Current version:§e " + version);
+                        sender.sendMessage(WandsPlugin.PREFIX_TOP + "Created by: §e_JustDylan_§r\nContributor(s): §ejetp250§r\nCurrent version:§e v" + version);
                         return true;
                     case "get":
                         if (checkPerm(sender, "get")) {
@@ -84,16 +89,17 @@ public class Wands extends BaseCommand {
                         return true;
                     case "getconfig":
                         if (checkPerm(sender, "viewconfig")) {
-                            ConfigHandler cd = configHandler;
-                            sender.sendMessage("§6magic cooldown time:§r " + (cd.getGlobalSpellCooldown() / 1000) + " seconds");
-                            sender.sendMessage("§6allow magic use:§r " + (cd.isMagicEnabled() ? "§a" : "§c") + cd.isMagicEnabled());
-                            sender.sendMessage("§6wands usage requires permissoin:§r " + (cd.doesCastingRequirePermission() ? "§a" : "§c") + cd.doesCastingRequirePermission());
+                            sender.sendMessage(WandsPlugin.PREFIX_TOP);
+                            sender.sendMessage("magic cooldown time:§r " + (configHandler.getGlobalSpellCooldown()) + " seconds");
+                            sender.sendMessage("allow magic use:§r " + (configHandler.isMagicEnabled() ? "§atrue" : "§cfalse"));
+                            sender.sendMessage("wands usage requires permission:§r " + (configHandler.doesCastingRequirePermission() ? "§atrue" : "§cfalse"));
+                            sender.sendMessage("send update notifications:§r " + (configHandler.areNotificationsEnabled() ? "§atrue" : "§cfalse"));
                         }
                         return true;
                     case "getcdwands":
                         if (checkPerm(sender, "getcdwands") && isPlayer(sender)) {
                             InventoryHolder player = (InventoryHolder) sender;
-                            ItemStack item = PreSetItem.MAGIC_WAND.getItemStack();
+                            ItemStack item = PreSetItem.BEWITCHED_WAND.getItemStack();
                             ItemMeta meta = item.getItemMeta();
                             item = new ItemStack(Material.BLAZE_ROD);
                             item.setItemMeta(meta);
@@ -108,8 +114,8 @@ public class Wands extends BaseCommand {
                 }
                 return false;
             case 2:
-                if ("update".equalsIgnoreCase(args[0]) && "install".equalsIgnoreCase(args[1])) {
-                    if (checkPerm(sender, "update.install")) {
+                if ("update".equalsIgnoreCase(args[0]) && "download".equalsIgnoreCase(args[1])) {
+                    if (checkPerm(sender, "update.download")) {
                         WandsPlugin.getInstance().getUpdater().checkForUpdates(sender, true);
                     }
                     return true;
@@ -171,6 +177,13 @@ public class Wands extends BaseCommand {
                                 sender.sendMessage(WandsPlugin.PREFIX + "All players can use wands now");
                             }
                             configHandler.requirePermissionForCasting(result);
+                        }
+                        return true;
+                    } else if ("notifications".equalsIgnoreCase(args[1])) {
+                        if (checkPerm(sender, "notifications")) {
+                            boolean result = Boolean.parseBoolean(args[2]);
+                            sender.sendMessage(WandsPlugin.PREFIX + (result ? "Enabled" : "Disabled") + " update notifications");
+                            configHandler.enableNotifications(result);
                         }
                         return true;
                     }

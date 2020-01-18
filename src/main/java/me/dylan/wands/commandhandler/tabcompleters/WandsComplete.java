@@ -30,7 +30,7 @@ public class WandsComplete extends BaseCompleter {
             return validCompletions(value, "enable", "disable", "get", "set", "info", "spells", "getconfig", "inspect", "update");
         else if (args.length == 2) {
             if ("update".equalsIgnoreCase(args[0])) {
-                return validCompletions(value, "install");
+                return validCompletions(value, "download");
             }
             if ("spells".equalsIgnoreCase(args[0])) {
                 String[] completions = Arrays.stream(SpellType.values()).map(Enum::toString).toArray(String[]::new);
@@ -39,10 +39,10 @@ public class WandsComplete extends BaseCompleter {
             if ("get".equalsIgnoreCase(args[0]))
                 return validCompletions(value, itemNames);
             if ("set".equalsIgnoreCase(args[0]))
-                return validCompletions(value, "cooldown", "restriction");
+                return validCompletions(value, "cooldown", "restriction", "notifications");
         } else if (args.length == 3) {
             if ("set".equalsIgnoreCase(args[0]))
-                if ("selfharm".equalsIgnoreCase(args[1]) || "restriction".equalsIgnoreCase(args[1]))
+                if ("restriction".equalsIgnoreCase(args[1]) || "notifications".equalsIgnoreCase(args[1]))
                     return validCompletions(value, "true", "false");
         }
         return Collections.emptyList();
