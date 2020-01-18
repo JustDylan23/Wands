@@ -3,9 +3,9 @@ package me.dylan.wands.config;
 import com.google.gson.Gson;
 import me.dylan.wands.ListenerRegistry;
 import me.dylan.wands.WandsPlugin;
-import me.dylan.wands.commandhandler.commands.Wands;
 import me.dylan.wands.config.Config.SpellConfig;
 import me.dylan.wands.spell.SpellType;
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
@@ -20,7 +20,8 @@ public final class ConfigHandler {
     private ConfigHandler(@NotNull Config config, ListenerRegistry listenerRegistry) {
         this.config = config;
         this.listenerRegistry = listenerRegistry;
-
+        Bukkit.broadcastMessage("Cooldown: " + config.getGlobalSpellCooldown());
+        WandsPlugin.log("Cooldown: " + config.getGlobalSpellCooldown());
         mapSpellConfigSection(config);
     }
 
@@ -50,13 +51,13 @@ public final class ConfigHandler {
         });
     }
 
-    public void save(File file) {
+    public void save(@NotNull File file) {
         if (!file.exists()) {
             WandsPlugin.log("No config to save to found, preparing directory");
             file.getParentFile().mkdirs();
         }
         try (DataOutputStream stream = new DataOutputStream(new GZIPOutputStream(new FileOutputStream(file)))) {
-            stream.writeUTF(new Gson().toJson(this));
+            stream.writeUTF(new Gson().toJson(config));
             WandsPlugin.log("Saved config");
         } catch (IOException e) {
             WandsPlugin.warn("Failed to save config");

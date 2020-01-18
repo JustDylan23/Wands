@@ -46,7 +46,7 @@ public enum SpellType {
     MEPHI_SPARK(34, new MephiSpark()),
     POISON_WAVE(35, new PoisonWave()),
     SPARK(36, new MagicSpark()),
-    THUNDER_ARROW(37, new LightningArrow()),
+    LIGHTNING_ARROW(37, new LightningArrow()),
     THUNDER_RAGE(38, new ThunderRage()),
     THUNDER_STORM(39, new ThunderStorm()),
     THUNDER_STRIKE(40, new ThunderStrike()),

@@ -24,7 +24,7 @@ import java.util.Set;
 
 public final class WandsPlugin extends JavaPlugin {
 
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
 
     public static final String PREFIX = "§8§l[§6§lWands§8§l]§r ";
     public static final String PREFIX_TOP = "§e---- " + PREFIX + "§e----§r\n";
@@ -35,7 +35,7 @@ public final class WandsPlugin extends JavaPlugin {
     private File configFile = null;
     private ConfigHandler configHandler = null;
     private CooldownManager cooldownManager = null;
-    private Updater updater;
+    private Updater updater = null;
 
     public static void log(String message) {
         Bukkit.getLogger().info(PREFIX + message);

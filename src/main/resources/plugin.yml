@@ -2,7 +2,7 @@ name: ExtensiveMagicWands
 version: ${project.version}
 main: me.dylan.wands.WandsPlugin
 prefix: Wands
-authors: [_JustDylan_]
+authors: [_JustDylan_, jetp250]
 description: ${project.description}
 api-version: "1.15"
 commands:

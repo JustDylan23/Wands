@@ -51,7 +51,7 @@ public enum PreSetItem {
                     .withSpellBrowseParticles(BrowseParticle.MORTAL_BLADE)
                     .build()
     ),
-    MAGIC_WAND(
+    BEWITCHED_WAND(
             ItemBuilder.from(Material.BLAZE_ROD)
                     .named("&5Bewitched Wand")
                     .glowing()
@@ -83,7 +83,7 @@ public enum PreSetItem {
             ItemBuilder.from(Material.BLAZE_ROD)
                     .named("&rIce Wand")
                     .withSpells(
-                            SpellType.THUNDER_ARROW,
+                            SpellType.LIGHTNING_ARROW,
                             SpellType.THUNDER_STRIKE,
                             SpellType.THUNDER_STORM,
                             SpellType.THUNDER_RAGE,
