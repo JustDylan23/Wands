@@ -11,32 +11,45 @@ import java.util.Set;
 
 public class ListenerRegistry {
     private static final WandsPlugin plugin = WandsPlugin.getInstance();
-    private static final Listener[] LISTENERS = new Listener[0];
     private final Set<Listener> toggleableListeners = new HashSet<>();
+    private boolean isEnabled = false;
 
-    public static void addListener(@NotNull Listener... listeners) {
-        for (Listener listener : listeners) {
-            WandsPlugin.debug("Registered listener: " + listener.getClass());
-            Bukkit.getServer().getPluginManager().registerEvents(listener, plugin);
+    public static void addListener(@NotNull Listener listener) {
+        WandsPlugin.debug("Registered listener: " + listener.getClass());
+        Bukkit.getServer().getPluginManager().registerEvents(listener, plugin);
+    }
+
+    /**
+     * Used to enable/disable toggleable listeners.
+     * listeners will only be disabled/enabled if that  .
+     *
+     * @param value boolean
+     * @return whether enabling or disabling had any effect
+     */
+    public boolean enableListeners(boolean value) {
+        if (isEnabled) {
+            if (!value) {
+                toggleableListeners.forEach(HandlerList::unregisterAll);
+            }
+            return !value;
+        } else {
+            if (value) {
+                for (Listener listener : toggleableListeners) {
+                    Bukkit.getServer().getPluginManager().registerEvents(listener, plugin);
+                }
+                isEnabled = true;
+            }
+            return value;
         }
     }
 
     void addToggleableListenerAndEnable(Listener... listeners) {
         toggleableListeners.addAll(Arrays.asList(listeners));
-        if (plugin.getConfigHandler().isMagicEnabled()) {
+        if (isEnabled) {
             for (Listener listener : listeners) {
                 WandsPlugin.debug("Registered toggleable listener: " + listener.getClass());
                 Bukkit.getServer().getPluginManager().registerEvents(listener, plugin);
             }
         }
-    }
-
-    public void disableListeners() {
-        toggleableListeners.forEach(HandlerList::unregisterAll);
-        WandsPlugin.debug("Disabled all toggleable listeners");
-    }
-
-    public void enableListeners() {
-        addToggleableListenerAndEnable(toggleableListeners.toArray(LISTENERS));
     }
 }

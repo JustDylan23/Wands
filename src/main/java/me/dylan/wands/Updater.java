@@ -1,5 +1,7 @@
 package me.dylan.wands;
 
+import me.dylan.wands.commandhandler.Permissions;
+import me.dylan.wands.config.ConfigHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -21,11 +23,39 @@ public final class Updater implements Listener {
     private static final String URL_VERSION = "https://api.spigotmc.org/legacy/update.php?resource=" + ID;
     private final WandsPlugin plugin;
     private final String updateFileName;
+    private ConfigHandler configHandler;
+    private BukkitTask bukkitTask = null;
 
-    Updater(String updateFileName, WandsPlugin plugin) {
+    Updater(String updateFileName, WandsPlugin plugin, @NotNull ConfigHandler configHandler) {
         ListenerRegistry.addListener(this);
         this.updateFileName = updateFileName;
         this.plugin = plugin;
+        this.configHandler = configHandler;
+        if (configHandler.areNotificationsEnabled()) {
+            enableNotifications(true);
+        }
+    }
+
+    /**
+     * Used to enable/disable notifications.
+     * Notifications will only be disabled/enabled if that isn't their current state.
+     *
+     * @param value boolean
+     * @return whether enabling or disabling had any effect
+     */
+    public boolean enableNotifications(boolean value) {
+        if (bukkitTask == null) {
+            if (value) {
+                bukkitTask = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, this::checkForUpdates, 0L, 12000L);
+            }
+            return value;
+        } else {
+            if (!value) {
+                bukkitTask.cancel();
+                bukkitTask = null;
+            }
+            return !value;
+        }
     }
 
     @NotNull
@@ -43,13 +73,13 @@ public final class Updater implements Listener {
         return completableFuture;
     }
 
-    void checkForUpdates(BukkitTask bukkitTask) {
+    private void checkForUpdates() {
         String currentVersion = WandsPlugin.getInstance().getDescription().getVersion();
-        getLatestVersionString().whenCompleteAsync((fetchedVersion, throwable) -> {
-            if (plugin.getConfigHandler().areNotificationsEnabled() && throwable == null && !currentVersion.equals(fetchedVersion)) {
+        getLatestVersionString().whenComplete((fetchedVersion, throwable) -> {
+            if (throwable == null && !currentVersion.equals(fetchedVersion)) {
                 bukkitTask.cancel();
                 String message = WandsPlugin.PREFIX_TOP + getNewVersionMessage(currentVersion, fetchedVersion) + getDownloadInstructionMessage(true);
-                Bukkit.getOnlinePlayers().stream().filter(p -> p.hasPermission("wands.update.download")).forEach(p -> p.sendMessage(message));
+                Bukkit.getOnlinePlayers().stream().filter(p -> p.hasPermission(Permissions.UPDATE_DOWNLOAD)).forEach(p -> p.sendMessage(message));
                 WandsPlugin.log(getNewVersionMessage(currentVersion, fetchedVersion) + " " + getDownloadInstructionMessage(false));
             }
         });
@@ -94,7 +124,7 @@ public final class Updater implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        if (plugin.getConfigHandler().areNotificationsEnabled() && player.hasPermission("wands.update.download")) {
+        if (configHandler.areNotificationsEnabled() && player.hasPermission(Permissions.UPDATE_DOWNLOAD)) {
             String currentVersion = WandsPlugin.getInstance().getDescription().getVersion();
             getLatestVersionString().whenComplete((fetchedVersion, throwable) -> {
                 if (throwable == null && !currentVersion.equals(fetchedVersion)) {

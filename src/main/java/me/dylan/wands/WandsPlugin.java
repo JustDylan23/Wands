@@ -59,30 +59,9 @@ public final class WandsPlugin extends JavaPlugin {
         return Objects.requireNonNull(instance);
     }
 
-    @Override
-    public void onEnable() {
-        instance = this;
-        ListenerRegistry listenerRegistry = new ListenerRegistry();
-        this.configFile = new File(getDataFolder(), "config.dat");
-        this.configHandler = ConfigHandler.load(configFile, listenerRegistry);
-        this.cooldownManager = new CooldownManager(configHandler);
+    private static void loadListeners(ListenerRegistry listenerRegistry, ConfigHandler configHandler) {
+        listenerRegistry.enableListeners(configHandler.isMagicEnabled());
 
-        loadListeners(listenerRegistry);
-        loadCommands();
-        log("Enabled successfully");
-        log("Checking for updates...");
-        this.updater = new Updater(getFile().getName(), this);
-        Bukkit.getScheduler().runTaskTimerAsynchronously(this, updater::checkForUpdates, 0L, 12000L);
-        new MetricsLite(this);
-    }
-
-    @Override
-    public void onDisable() {
-        configHandler.save(configFile);
-        disableLogic.forEach(Runnable::run);
-    }
-
-    private void loadListeners(ListenerRegistry listenerRegistry) {
         PlayerListener playerListener = new PlayerListener();
         AssassinDagger assassinDagger = new AssassinDagger();
         CursedBow cursedBow = new CursedBow();
@@ -101,15 +80,35 @@ public final class WandsPlugin extends JavaPlugin {
         );
     }
 
-    private void loadCommands() {
-        addCommand("wands", new Wands(configHandler, getDescription().getVersion()), new WandsComplete());
-        addCommand("createwand", new CreateWand(), null);
-        addCommand("clearwand", new ClearWand(), null);
-        addCommand("bind", new Bind(), new BindComplete());
-        addCommand("unbind", new Unbind(), new UnbindComplete());
-        addCommand("bindall", new BindAll(), null);
-        addCommand("unbindall", new UnbindAll(), null);
-        addCommand("tweakcooldown", new TweakCooldown(configHandler), new TweakSpellComplete());
+    private static void loadCommands(ConfigHandler configHandler, WandsPlugin plugin) {
+        plugin.addCommand("wands", new Wands(configHandler, plugin.getDescription().getVersion()), new WandsComplete());
+        plugin.addCommand("createwand", new CreateWand(), null);
+        plugin.addCommand("clearwand", new ClearWand(), null);
+        plugin.addCommand("bind", new Bind(), new BindComplete());
+        plugin.addCommand("unbind", new Unbind(), new UnbindComplete());
+        plugin.addCommand("bindall", new BindAll(), null);
+        plugin.addCommand("unbindall", new UnbindAll(), null);
+        plugin.addCommand("tweakcooldown", new TweakCooldown(configHandler), new TweakSpellComplete());
+    }
+
+    @Override
+    public void onEnable() {
+        instance = this;
+        ListenerRegistry listenerRegistry = new ListenerRegistry();
+        this.configFile = new File(getDataFolder(), "config.dat");
+        this.configHandler = ConfigHandler.load(configFile, listenerRegistry);
+        this.cooldownManager = new CooldownManager(configHandler);
+        loadListeners(listenerRegistry, configHandler);
+        loadCommands(configHandler, this);
+        this.updater = new Updater(getFile().getName(), this, configHandler);
+        new MetricsLite(this);
+        log("Enabled successfully");
+    }
+
+    @Override
+    public void onDisable() {
+        configHandler.save(configFile);
+        disableLogic.forEach(Runnable::run);
     }
 
     private void addCommand(String command, CommandExecutor executor, TabCompleter tabCompleter) {

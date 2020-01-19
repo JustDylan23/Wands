@@ -5,7 +5,6 @@ import me.dylan.wands.ListenerRegistry;
 import me.dylan.wands.WandsPlugin;
 import me.dylan.wands.config.Config.SpellConfig;
 import me.dylan.wands.spell.SpellType;
-import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
@@ -20,8 +19,6 @@ public final class ConfigHandler {
     private ConfigHandler(@NotNull Config config, ListenerRegistry listenerRegistry) {
         this.config = config;
         this.listenerRegistry = listenerRegistry;
-        Bukkit.broadcastMessage("Cooldown: " + config.getGlobalSpellCooldown());
-        WandsPlugin.log("Cooldown: " + config.getGlobalSpellCooldown());
         mapSpellConfigSection(config);
     }
 
@@ -76,15 +73,9 @@ public final class ConfigHandler {
         return config.isMagicEnabled();
     }
 
-    public void enableMagic(boolean value) {
-        if (config.isMagicEnabled() != value) {
-            config.setMagicEnabled(value);
-            if (value) {
-                listenerRegistry.enableListeners();
-            } else {
-                listenerRegistry.disableListeners();
-            }
-        }
+    public boolean enableMagic(boolean value) {
+        config.setMagicEnabled(value);
+        return listenerRegistry.enableListeners(value);
     }
 
     public int getGlobalSpellCooldown() {
@@ -107,8 +98,9 @@ public final class ConfigHandler {
         return config.areNotificationsEnabled();
     }
 
-    public void enableNotifications(boolean value) {
+    public boolean enableNotifications(boolean value) {
         config.enableNotifications(value);
+        return WandsPlugin.getInstance().getUpdater().enableNotifications(value);
     }
 }
 

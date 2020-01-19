@@ -6,10 +6,10 @@ import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
 public enum ItemTag {
-    IS_WAND("IsWand"),
-    IS_DAGGER("artifact-dagger"),
-    IS_CURSED_BOW("artifact-bow"),
-    CANNOT_REGISTER("BlockRegistration");
+    IS_WAND("is_wand"),
+    IS_DAGGER("artifact_dagger"),
+    IS_CURSED_BOW("artifact_bow"),
+    CANNOT_REGISTER("block_registration");
 
     private final String tag;
 
