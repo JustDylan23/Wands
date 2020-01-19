@@ -1,18 +1,19 @@
 package me.dylan.wands.commandhandler.tabcompleters;
 
-import me.dylan.wands.commandhandler.BaseCompleter;
+import me.dylan.wands.commandhandler.CommandUtils;
 import me.dylan.wands.spell.SpellCompound;
 import me.dylan.wands.spell.SpellType;
 import me.dylan.wands.spell.accessories.ItemTag;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-public class BindComplete extends BaseCompleter {
+public class BindComplete implements TabCompleter {
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         if (args.length == 1 && sender instanceof Player) {
@@ -21,7 +22,7 @@ public class BindComplete extends BaseCompleter {
             if (ItemTag.IS_WAND.isTagged(itemStack)) {
                 List<SpellType> compound = new ArrayList<>(Arrays.asList(SpellType.values()));
                 compound.removeAll(SpellCompound.getCompound(itemStack));
-                return validCompletions(value, compound.stream().map(Objects::toString).toArray(String[]::new));
+                return CommandUtils.validCompletions(value, compound.stream().map(Objects::toString).toArray(String[]::new));
             }
         }
         return Collections.emptyList();

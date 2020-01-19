@@ -11,7 +11,7 @@ import java.util.Objects;
 import java.util.Set;
 
 public final class SpellCompound {
-    public static final String TAG_SPELLS_LIST = "Spells";
+    public static final String TAG_SPELLS_LIST = "spells";
 
     private SpellCompound() {
     }

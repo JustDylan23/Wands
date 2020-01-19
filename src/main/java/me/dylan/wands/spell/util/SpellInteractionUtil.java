@@ -1,6 +1,7 @@
 package me.dylan.wands.spell.util;
 
 import me.dylan.wands.WandsPlugin;
+import me.dylan.wands.commandhandler.Permissions;
 import me.dylan.wands.config.ConfigHandler;
 import me.dylan.wands.spell.BrowseParticle;
 import me.dylan.wands.spell.CooldownManager;
@@ -37,7 +38,7 @@ public final class SpellInteractionUtil {
 
     public static boolean canUseMagic(Player player) {
         if (config.doesCastingRequirePermission()) {
-            if (!player.hasPermission("wands.use")) {
+            if (!player.hasPermission(Permissions.USE)) {
                 PlayerUtil.sendActionBar(player, "§cinsufficient permissions");
                 return false;
             }
