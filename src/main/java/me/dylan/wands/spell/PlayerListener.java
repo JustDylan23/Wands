@@ -11,9 +11,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Statistic;
+import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -21,9 +19,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
 import org.jetbrains.annotations.NotNull;
@@ -122,6 +122,34 @@ public class PlayerListener implements Listener, LeftClickListener, RightClickLi
     private void onBlockBreak(BlockBreakEvent event) {
         if (ItemTag.IS_WAND.isTagged(event.getPlayer().getInventory().getItemInMainHand())) {
             event.setCancelled(true);
+        }
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    @EventHandler
+    private void onInventoryClickEvent(InventoryClickEvent event) {
+        Player player = (Player) event.getWhoClicked();
+        GameMode gameMode = player.getGameMode();
+        if (gameMode == GameMode.SURVIVAL || gameMode == GameMode.ADVENTURE) {
+            ItemStack clickedItem = event.getCurrentItem();
+            ItemStack cursorItem = event.getCursor();
+            if (clickedItem != null && clickedItem.getType() != Material.AIR
+                    && cursorItem.getType() != Material.AIR
+                    && ItemTag.IS_WAND.isTagged(clickedItem)
+            ) {
+                ItemUtil.getPersistentData(cursorItem, "spell", PersistentDataType.INTEGER).ifPresent(spellId -> {
+                    SpellType spellType = SpellType.getSpellById(spellId);
+                    if (spellType != null) {
+                        Set<@NotNull SpellType> compound = SpellCompound.getCompound(clickedItem);
+                        if (compound.add(spellType)) {
+                            event.setCancelled(true);
+                            player.setItemOnCursor(null);
+                            SpellCompound.apply(compound, clickedItem);
+                            player.playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1, 1);
+                        }
+                    }
+                });
+            }
         }
     }
 }

@@ -5,10 +5,12 @@ import me.dylan.wands.WandsPlugin;
 import me.dylan.wands.commandhandler.CommandUtils;
 import me.dylan.wands.commandhandler.Permissions;
 import me.dylan.wands.config.ConfigHandler;
+import me.dylan.wands.spell.ItemBuilder;
 import me.dylan.wands.spell.SpellCompound;
 import me.dylan.wands.spell.SpellType;
 import me.dylan.wands.spell.spellbuilders.Behavior;
 import me.dylan.wands.utils.ItemUtil;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -106,14 +108,30 @@ public class Wands implements CommandExecutor {
                 return false;
             case 2:
                 switch (args[0].toLowerCase()) {
-                    case "update":
-                        if ("download".equalsIgnoreCase(args[1])) {
-                            if (CommandUtils.checkPermOrNotify(sender, Permissions.UPDATE_DOWNLOAD)) {
-                                WandsPlugin.getInstance().getUpdater().checkForUpdates(sender, true);
+                    case "getscroll":
+                        if (CommandUtils.checkPermOrNotify(sender, Permissions.GET_SCROLL) && CommandUtils.isPlayerOrNotify(sender)) {
+                            SpellType spellType = SpellType.fromString(args[1]);
+                            if (spellType != null) {
+                                Player player = (Player) sender;
+                                ItemStack itemStack = ItemBuilder.from(Material.MOJANG_BANNER_PATTERN)
+                                        .named(spellType.name + " scroll")
+//                                        .withLore("When in survival click on this scroll", "and drag it over to a wand", "and click on the wand to apply", "the scroll")
+                                        .glowing()
+                                        .hideFlags()
+                                        .blockWandRegistration()
+                                        .build();
+                                ItemUtil.setPersistentData(itemStack, "spell", PersistentDataType.INTEGER, spellType.id);
+                                player.getInventory().addItem(itemStack);
+                            } else {
+                                sender.sendMessage(WandsPlugin.PREFIX + "Spell does not exist!");
                             }
-                            return true;
                         }
-                        return false;
+                        return true;
+                    case "update":
+                        if ("download".equalsIgnoreCase(args[1]) && CommandUtils.checkPermOrNotify(sender, Permissions.UPDATE_DOWNLOAD)) {
+                            WandsPlugin.getInstance().getUpdater().checkForUpdates(sender, true);
+                        }
+                        return true;
                     case "get":
                         if (CommandUtils.checkPermOrNotify(sender, Permissions.GET_WAND)) {
                             try {
@@ -128,21 +146,21 @@ public class Wands implements CommandExecutor {
                         return true;
                     case "spells":
                         if (CommandUtils.checkPermOrNotify(sender, Permissions.LIST_SPELLS)) {
-                            SpellType spellType;
-                            try {
-                                spellType = SpellType.valueOf(args[1].toUpperCase());
+                            SpellType spellType = SpellType.fromString(args[1]);
+                            if (spellType != null) {
                                 Behavior behavior = spellType.behavior;
                                 if (behavior == null) {
                                     sender.sendMessage(WandsPlugin.PREFIX + "Spell has no behaviour!");
                                 } else {
                                     sender.sendMessage("§e ---- §6" + args[1].toUpperCase() + "§e ----§r\n" + behavior);
                                 }
-                            } catch (IllegalArgumentException e) {
+                            } else {
                                 sender.sendMessage(WandsPlugin.PREFIX + "Spell does not exist!");
                             }
                         }
                         return true;
                 }
+                return false;
             case 3:
                 if ("settings".equalsIgnoreCase(args[0])) {
                     if ("cooldown".equalsIgnoreCase(args[1])) {
@@ -186,6 +204,7 @@ public class Wands implements CommandExecutor {
                         return true;
                     }
                 }
+                return false;
         }
         return false;
     }

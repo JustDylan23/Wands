@@ -1,7 +1,8 @@
 package me.dylan.wands.commandhandler;
 
 public final class Permissions {
-    public static final String GET_WAND = "wands.get";
+    public static final String GET_WAND = "wands.get.wand";
+    public static final String GET_SCROLL = "wands.get.scroll";
     public static final String USE = "wands.use";
 
     public static final String SETTINGS = "wands.settings";

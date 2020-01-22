@@ -27,24 +27,25 @@ public class WandsComplete implements TabCompleter {
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         String value = args[args.length - 1];
-        if (args.length == 1)
-            return CommandUtils.validCompletions(value, "enable", "disable", "get", "set", "info", "spells", "getconfig", "inspect", "update");
-        else if (args.length == 2) {
+        if (args.length == 1) {
+            return CommandUtils.validCompletions(value, "enable", "disable", "get", "getscroll", "set", "info", "spells", "settings", "inspect", "update");
+        }
+        if (args.length == 2) {
             if ("update".equalsIgnoreCase(args[0])) {
                 return CommandUtils.validCompletions(value, "download");
             }
-            if ("spells".equalsIgnoreCase(args[0])) {
+            if ("spells".equalsIgnoreCase(args[0]) || "getscroll".equalsIgnoreCase(args[0])) {
                 String[] completions = Arrays.stream(SpellType.values()).map(Enum::toString).toArray(String[]::new);
                 return CommandUtils.validCompletions(value, completions);
             }
-            if ("get".equalsIgnoreCase(args[0]))
+            if ("get".equalsIgnoreCase(args[0])) {
                 return CommandUtils.validCompletions(value, itemNames);
-            if ("set".equalsIgnoreCase(args[0]))
+            }
+            if ("settings".equalsIgnoreCase(args[0])) {
                 return CommandUtils.validCompletions(value, "cooldown", "restriction", "notifications");
-        } else if (args.length == 3) {
-            if ("set".equalsIgnoreCase(args[0]))
-                if ("restriction".equalsIgnoreCase(args[1]) || "notifications".equalsIgnoreCase(args[1]))
-                    return CommandUtils.validCompletions(value, "true", "false");
+            }
+        } else if (args.length == 3 && "set".equalsIgnoreCase(args[0]) && ("restriction".equalsIgnoreCase(args[1]) || "notifications".equalsIgnoreCase(args[1]))) {
+            return CommandUtils.validCompletions(value, "true", "false");
         }
         return Collections.emptyList();
     }
