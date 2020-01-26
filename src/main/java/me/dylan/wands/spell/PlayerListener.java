@@ -125,7 +125,6 @@ public class PlayerListener implements Listener, LeftClickListener, RightClickLi
         }
     }
 
-    @SuppressWarnings("ConstantConditions")
     @EventHandler
     private void onInventoryClickEvent(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
@@ -133,10 +132,11 @@ public class PlayerListener implements Listener, LeftClickListener, RightClickLi
         if (gameMode == GameMode.SURVIVAL || gameMode == GameMode.ADVENTURE) {
             ItemStack clickedItem = event.getCurrentItem();
             ItemStack cursorItem = event.getCursor();
-            if (clickedItem != null && clickedItem.getType() != Material.AIR
+            if (clickedItem != null
+                    && cursorItem != null
+                    && clickedItem.getType() != Material.AIR
                     && cursorItem.getType() != Material.AIR
-                    && ItemTag.IS_WAND.isTagged(clickedItem)
-            ) {
+                    && ItemTag.IS_WAND.isTagged(clickedItem)) {
                 ItemUtil.getPersistentData(cursorItem, "spell", PersistentDataType.INTEGER).ifPresent(spellId -> {
                     SpellType spellType = SpellType.getSpellById(spellId);
                     if (spellType != null) {
