@@ -29,7 +29,7 @@ public final class Aura extends BuildableBehaviour {
     private final AuraParticleType auraParticleType;
 
     private Aura(@NotNull Builder builder) {
-        super(builder.baseProps);
+        super(builder);
         this.effectFrequency = builder.effectFrequency;
         this.effectDuration = builder.effectDuration;
         this.auraUUID = UUID.randomUUID().toString();

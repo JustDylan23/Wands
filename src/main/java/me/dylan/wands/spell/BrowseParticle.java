@@ -1,6 +1,6 @@
 package me.dylan.wands.spell;
 
-import me.dylan.wands.spell.spells.BloodSpark;
+import me.dylan.wands.spell.spells.blood.BloodMagicConstants;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.World;
@@ -14,11 +14,11 @@ public enum BrowseParticle {
         world.spawnParticle(Particle.ENCHANTMENT_TABLE, loc, 15, 0.5, 0.5, 0.5, 1, null, true);
     }),
     MORTAL_BLADE((loc, world) -> {
-        world.spawnParticle(Particle.BLOCK_CRACK, loc, 10, 0.5, 0.5, 0.5, 1, BloodSpark.BLOCK_CRACK_REDSTONE, true);
+        world.spawnParticle(Particle.BLOCK_CRACK, loc, 10, 0.5, 0.5, 0.5, 1, BloodMagicConstants.BLOCK_CRACK_REDSTONE, true);
         world.spawnParticle(Particle.SMOKE_NORMAL, loc, 10, 0.5, 0.5, 0.5, 0.03, null, true);
     }),
     PARTICLE_BLOOD((loc, world) -> {
-        world.spawnParticle(Particle.BLOCK_CRACK, loc, 10, 0.5, 0.5, 0.5, 1, BloodSpark.BLOCK_CRACK_REDSTONE, true);
+        world.spawnParticle(Particle.BLOCK_CRACK, loc, 10, 0.5, 0.5, 0.5, 1, BloodMagicConstants.BLOCK_CRACK_REDSTONE, true);
         world.spawnParticle(Particle.ENCHANTMENT_TABLE, loc, 15, 0.5, 0.5, 0.5, 1, null, true);
     }),
     PARTICLE_CORRUPTED((loc, world) -> {

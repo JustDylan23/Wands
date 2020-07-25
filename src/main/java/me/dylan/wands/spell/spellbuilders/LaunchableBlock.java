@@ -49,7 +49,7 @@ public final class LaunchableBlock extends BuildableBehaviour implements Listene
     private final SoundEffect blockRelativeSounds;
 
     private LaunchableBlock(@NotNull Builder builder) {
-        super(builder.baseProps);
+        super(builder);
         ListenerRegistry.addListener(this);
         this.material = builder.material;
         this.hitEffects = builder.hitEffects;

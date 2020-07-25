@@ -24,7 +24,7 @@ public final class Spark extends BuildableBehaviour {
     private final Target target;
 
     private Spark(@NotNull Builder builder) {
-        super(builder.baseProps);
+        super(builder);
         this.effectDistance = builder.effectDistance;
         this.target = builder.target;
 

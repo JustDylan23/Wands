@@ -23,7 +23,7 @@ public final class ShockWave extends BuildableBehaviour {
     private final String tagShockWave;
 
     private ShockWave(@NotNull Builder builder) {
-        super(builder.baseProps);
+        super(builder);
         this.waveRadius = builder.waveRadius;
         this.delay = builder.delay;
         this.tagShockWave = UUID.randomUUID().toString();

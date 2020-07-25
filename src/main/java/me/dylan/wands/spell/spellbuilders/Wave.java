@@ -24,7 +24,7 @@ public final class Wave extends BuildableBehaviour {
     private final String tagWaveSpell;
 
     private Wave(@NotNull Builder builder) {
-        super(builder.baseProps);
+        super(builder);
         this.effectDistance = builder.effectDistance;
         this.tagWaveSpell = UUID.randomUUID().toString();
 

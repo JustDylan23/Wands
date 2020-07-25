@@ -29,7 +29,7 @@ public final class Ray extends BuildableBehaviour {
     private final BiConsumer<Location, SpellInfo> hitEffects;
 
     private Ray(@NotNull Builder builder) {
-        super(builder.baseProps);
+        super(builder);
         this.effectDistance = builder.effectDistance;
         this.speed = builder.speed;
         this.rayWidth = builder.rayWidth;

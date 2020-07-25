@@ -13,7 +13,6 @@ public final class KeyFactory {
     private KeyFactory() {
     }
 
-    @SuppressWarnings("deprecation")
     public static NamespacedKey getOrCreateKey(String key) {
         return namespacedKeyMap.computeIfAbsent(key, s -> new NamespacedKey(plugin, s));
     }

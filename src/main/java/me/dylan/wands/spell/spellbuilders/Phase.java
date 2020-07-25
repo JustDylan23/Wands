@@ -37,7 +37,7 @@ public final class Phase extends BuildableBehaviour {
     private final int effectDistance;
 
     private Phase(@NotNull Builder builder) {
-        super(builder.baseProps);
+        super(builder);
         this.target = builder.target;
         this.effectDistance = builder.effectDistance;
         this.condition = builder.condition;

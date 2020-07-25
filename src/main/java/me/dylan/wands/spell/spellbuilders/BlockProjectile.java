@@ -38,7 +38,7 @@ public final class BlockProjectile extends BuildableBehaviour implements Listene
     private final int amount, delay, metaTime;
 
     private BlockProjectile(@NotNull Builder builder) {
-        super(builder.baseProps);
+        super(builder);
         this.material = builder.material;
         this.speed = builder.speed;
         this.amount = builder.amount;
