@@ -44,7 +44,7 @@ public class WandsComplete implements TabCompleter {
             if ("settings".equalsIgnoreCase(args[0])) {
                 return CommandUtils.validCompletions(value, "cooldown", "restriction", "notifications");
             }
-        } else if (args.length == 3 && "set".equalsIgnoreCase(args[0]) && ("restriction".equalsIgnoreCase(args[1]) || "notifications".equalsIgnoreCase(args[1]))) {
+        } else if (args.length == 3 && "settings".equalsIgnoreCase(args[0]) && ("restriction".equalsIgnoreCase(args[1]) || "notifications".equalsIgnoreCase(args[1]))) {
             return CommandUtils.validCompletions(value, "true", "false");
         }
         return Collections.emptyList();

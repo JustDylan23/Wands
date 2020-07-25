@@ -4,7 +4,7 @@ main: me.dylan.wands.WandsPlugin
 prefix: Wands
 authors: [_JustDylan_, jetp250]
 description: ${project.description}
-api-version: "1.15"
+api-version: "1.16"
 commands:
   wands:
     aliases: [wd]

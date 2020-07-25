@@ -47,7 +47,7 @@ public final class MagicProjectile<T extends Projectile> extends BuildableBehavi
     private final String tagProjectileSpell;
 
     private MagicProjectile(@NotNull Builder<T> builder) {
-        super(builder.baseProps);
+        super(builder);
         this.projectile = builder.projectile;
         this.projectileProps = builder.projectileProps;
         this.hitEffects = builder.hitEffects;

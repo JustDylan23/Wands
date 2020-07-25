@@ -23,7 +23,7 @@ public final class Updater implements Listener {
     private static final String URL_VERSION = "https://api.spigotmc.org/legacy/update.php?resource=" + ID;
     private final WandsPlugin plugin;
     private final String updateFileName;
-    private ConfigHandler configHandler;
+    private final ConfigHandler configHandler;
     private BukkitTask bukkitTask = null;
 
     Updater(String updateFileName, WandsPlugin plugin, @NotNull ConfigHandler configHandler) {

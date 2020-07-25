@@ -87,14 +87,6 @@ public class Wands implements CommandExecutor {
                     case "info":
                         sender.sendMessage(WandsPlugin.PREFIX_TOP + "Created by: §e_JustDylan_§r\nContributor(s): §ejetp250§r\nCurrent version:§e v" + version);
                         return true;
-                    case "get":
-                        if (CommandUtils.checkPermOrNotify(sender, Permissions.GET_WAND)) {
-                            if (sender instanceof Player) {
-                                PreSetItem.openInventory((Player) sender);
-                            } else
-                                sender.sendMessage(WandsPlugin.PREFIX + "You must be a player in order to perform this action!");
-                        }
-                        return true;
                     case "settings":
                         if (CommandUtils.checkPermOrNotify(sender, Permissions.SETTINGS)) {
                             sender.sendMessage(WandsPlugin.PREFIX_TOP);

@@ -22,14 +22,14 @@ public abstract class BuildableBehaviour extends Behavior {
     final KnockBack knockBack;
     private final PotionEffect[] potionEffects;
 
-    BuildableBehaviour(@NotNull BaseProps baseProps) {
-        this.entityDamage = baseProps.entityDamage;
-        this.spellEffectRadius = baseProps.spellEffectRadius;
-        this.castSounds = baseProps.castSounds;
-        this.spellRelativeEffects = baseProps.spellRelativeEffects;
-        this.entityEffects = baseProps.entityEffects;
-        this.knockBack = baseProps.knockBack;
-        this.potionEffects = baseProps.potionEffects;
+    <T extends AbstractBuilder<T>> BuildableBehaviour(@NotNull AbstractBuilder<T> abstractBuilder) {
+        this.entityDamage = abstractBuilder.entityDamage;
+        this.spellEffectRadius = abstractBuilder.spellEffectRadius;
+        this.castSounds = abstractBuilder.castSounds;
+        this.spellRelativeEffects = abstractBuilder.spellRelativeEffects;
+        this.entityEffects = abstractBuilder.entityEffects;
+        this.knockBack = abstractBuilder.knockBack;
+        this.potionEffects = abstractBuilder.potionEffects;
 
         addPropertyInfo("Entity damage", entityDamage);
         addPropertyInfo("Effect radius", spellEffectRadius, "meters");
@@ -39,7 +39,7 @@ public abstract class BuildableBehaviour extends Behavior {
 
     public void applyPotionEffects(LivingEntity livingEntity) {
         for (PotionEffect potionEffect : potionEffects) {
-            livingEntity.addPotionEffect(potionEffect, true);
+            livingEntity.addPotionEffect(potionEffect);
         }
     }
 
@@ -55,7 +55,14 @@ public abstract class BuildableBehaviour extends Behavior {
 
     public abstract static class AbstractBuilder<T extends AbstractBuilder<T>> {
 
-        final BuildableBehaviour.BaseProps baseProps = new BuildableBehaviour.BaseProps();
+        private static final PotionEffect[] POTION_EFFECTS = new PotionEffect[0];
+        int entityDamage = 0;
+        float spellEffectRadius = 0.0F;
+        SoundEffect castSounds = SoundEffect.NONE;
+        BiConsumer<Location, SpellInfo> spellRelativeEffects = Common.emptyBiConsumer();
+        BiConsumer<LivingEntity, SpellInfo> entityEffects = Common.emptyBiConsumer();
+        KnockBack knockBack = KnockBack.NONE;
+        PotionEffect[] potionEffects = POTION_EFFECTS;
 
         AbstractBuilder() {
         }
@@ -65,70 +72,58 @@ public abstract class BuildableBehaviour extends Behavior {
         public abstract @NotNull Behavior build();
 
         public T setCastSound(SoundEffect soundPlayer) {
-            baseProps.castSounds = soundPlayer;
+            this.castSounds = soundPlayer;
             return self();
         }
 
         public T setCastSound(Sound sound) {
-            baseProps.castSounds = SingularSound.from(sound, 1);
+            this.castSounds = SingularSound.from(sound, 1);
             return self();
         }
 
         public T setCastSound(Sound sound, float pitch) {
-            baseProps.castSounds = SingularSound.from(sound, pitch);
+            this.castSounds = SingularSound.from(sound, pitch);
             return self();
         }
 
         public T setEntityDamage(int damage) {
-            baseProps.entityDamage = damage;
+            this.entityDamage = damage;
             return self();
         }
 
         public T setEntityEffects(BiConsumer<LivingEntity, SpellInfo> effects) {
-            baseProps.entityEffects = effects;
+            this.entityEffects = effects;
             return self();
         }
 
         public T setPotionEffects(PotionEffect... potionEffects) {
-            baseProps.potionEffects = potionEffects;
+            this.potionEffects = potionEffects;
             return self();
         }
 
         public T setSpellEffectRadius(float radius) {
-            baseProps.spellEffectRadius = radius;
+            this.spellEffectRadius = radius;
             return self();
         }
 
         public T setSpellRelativeEffects(BiConsumer<Location, SpellInfo> effects) {
-            baseProps.spellRelativeEffects = effects;
+            this.spellRelativeEffects = effects;
             return self();
         }
 
         public T setKnockBack(float xz, float y) {
-            baseProps.knockBack = KnockBack.from(xz, y);
+            this.knockBack = KnockBack.from(xz, y);
             return self();
         }
 
         public T setKnockBack(float xz) {
-            baseProps.knockBack = KnockBack.from(xz);
+            this.knockBack = KnockBack.from(xz);
             return self();
         }
 
         public T setKnockBack(KnockBack knockBack) {
-            baseProps.knockBack = knockBack;
+            this.knockBack = knockBack;
             return self();
         }
-
-    }
-
-    private static class BaseProps {
-        private static final PotionEffect[] POTION_EFFECTS = new PotionEffect[0];
-        int entityDamage = 0;
-        float spellEffectRadius = 0.0F;
-        SoundEffect castSounds = SoundEffect.NONE;
-        BiConsumer<Location, SpellInfo> spellRelativeEffects = Common.emptyBiConsumer();
-        BiConsumer<LivingEntity, SpellInfo> entityEffects = Common.emptyBiConsumer();
-        KnockBack knockBack = KnockBack.NONE;
-        PotionEffect[] potionEffects = POTION_EFFECTS;
     }
 }

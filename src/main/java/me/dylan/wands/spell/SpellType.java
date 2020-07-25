@@ -2,7 +2,15 @@ package me.dylan.wands.spell;
 
 import me.dylan.wands.WandsPlugin;
 import me.dylan.wands.spell.spellbuilders.Behavior;
-import me.dylan.wands.spell.spells.*;
+import me.dylan.wands.spell.spells.blood.*;
+import me.dylan.wands.spell.spells.corrupt.*;
+import me.dylan.wands.spell.spells.dark.*;
+import me.dylan.wands.spell.spells.fire.*;
+import me.dylan.wands.spell.spells.gravity.*;
+import me.dylan.wands.spell.spells.sky.*;
+import me.dylan.wands.spell.spells.shared.PoisonWave;
+import me.dylan.wands.spell.spells.sword.*;
+import me.dylan.wands.spell.spells.witch.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

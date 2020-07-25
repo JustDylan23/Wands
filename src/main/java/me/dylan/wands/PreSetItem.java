@@ -35,7 +35,7 @@ public enum PreSetItem {
                     .build()
     ),
     MORTAL_BLADE(
-            ItemBuilder.from(Material.IRON_SWORD)
+            ItemBuilder.from(Material.NETHERITE_SWORD)
                     .named("&0&k&l|| &cMortal Blade &0&k&l||")
                     .unbreakable()
                     .hideFlags()
@@ -159,18 +159,6 @@ public enum PreSetItem {
 
     PreSetItem(ItemStack itemStack) {
         this.itemStack = itemStack;
-    }
-
-    public static void openInventory(Player player) {
-        Inventory inventory = Bukkit.createInventory(null, InventoryType.SHULKER_BOX, WandsPlugin.PREFIX);
-        for (PreSetItem preSetItem : PreSetItem.values()) {
-            inventory.addItem(preSetItem.itemStack);
-        }
-        player.openInventory(inventory);
-    }
-
-    public static ItemStack getItemStack(@NotNull Supplier<ItemStack> stackSupplier) {
-        return stackSupplier.get();
     }
 
     public ItemStack getItemStack() {

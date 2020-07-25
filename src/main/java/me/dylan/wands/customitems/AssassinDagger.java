@@ -64,7 +64,7 @@ public class AssassinDagger implements Listener, RightClickListener {
                         World world = loc.getWorld();
                         world.spawnParticle(Particle.SMOKE_LARGE, loc, 1, 0.1, 0.1, 0.1, 0.1, null, true);
                         world.spawnParticle(Particle.SMOKE_NORMAL, loc, 1, 0.1, 0.1, 0.1, 0.1, null, true);
-                        player.addPotionEffect(speed, true);
+                        player.addPotionEffect(speed);
                     } else {
                         cancel();
                         Common.removeMetaData(player, tagSprint);
@@ -83,8 +83,8 @@ public class AssassinDagger implements Listener, RightClickListener {
             if (event.getEntity() instanceof LivingEntity) {
                 LivingEntity victim = (LivingEntity) event.getEntity();
                 if (hasDagger(player)) {
-                    victim.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 100, 0, false), true);
-                    victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 100, 5, true), true);
+                    victim.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 100, 0, false));
+                    victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 100, 5, true));
                     event.setDamage(8);
                     player.getWorld().playSound(player.getLocation(), Sound.ENTITY_GUARDIAN_HURT, SoundCategory.MASTER, 3.0F, 1.0F);
                     player.getWorld().playSound(player.getLocation(), Sound.ENTITY_GUARDIAN_HURT, SoundCategory.MASTER, 3.0F, 0.3F);
@@ -159,8 +159,8 @@ public class AssassinDagger implements Listener, RightClickListener {
             world.playSound(location, Sound.ENTITY_ZOMBIE_VILLAGER_CURE, 1.0f, 2.00f);
             world.spawnParticle(Particle.SMOKE_LARGE, location, 15, 0.5, 0.2, 0.5, 0.1, null, true);
             world.spawnParticle(Particle.ENCHANTMENT_TABLE, location, 20, 0.5, 0.5, 0.5, 0.1, null, true);
-            player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 6000, 0, true), true);
-            player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 6000, 0, true), false);
+            player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 6000, 0, true));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 6000, 0, true));
             PlayerUtil.sendActionBar(player, "§6You are §aInvisible");
         }
     }

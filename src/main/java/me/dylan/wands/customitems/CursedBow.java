@@ -153,7 +153,7 @@ public class CursedBow implements Listener, RightClickListener {
                 SpellEffectUtil.getNearbyLivingEntities((Player) projectile.getShooter(), location, 3)
                         .forEach(entity -> {
                             SpellEffectUtil.damageEffect((Player) projectile.getShooter(), entity, 8, projectile.getMetadata(cursedArrow).get(0).asString());
-                            entity.addPotionEffect(slow, true);
+                            entity.addPotionEffect(slow);
                         });
                 projectile.remove();
             }

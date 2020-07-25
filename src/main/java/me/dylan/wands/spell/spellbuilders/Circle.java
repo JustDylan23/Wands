@@ -24,7 +24,7 @@ public final class Circle extends BuildableBehaviour {
     private final CirclePlacement circlePlacement;
 
     private Circle(@NotNull Builder builder) {
-        super(builder.baseProps);
+        super(builder);
         this.speed = builder.speed;
         this.height = builder.height;
         this.effectDistance = builder.effectDistance;
