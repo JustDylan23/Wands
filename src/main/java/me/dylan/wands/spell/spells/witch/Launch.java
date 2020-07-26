@@ -4,11 +4,17 @@ import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.spellbuilders.Behavior;
 import me.dylan.wands.spell.spellbuilders.BuildableBehaviour.Target;
 import me.dylan.wands.spell.spellbuilders.Phase;
+import me.dylan.wands.spell.spells.AffinityType;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
 
 public class Launch implements Castable {
+    @Override
+    public AffinityType[] getAffinityTypes() {
+        return new AffinityType[]{AffinityType.WITCH_MAGIC};
+    }
+
     @Override
     public Behavior createBehaviour() {
         return Phase.newBuilder(Target.MULTI)

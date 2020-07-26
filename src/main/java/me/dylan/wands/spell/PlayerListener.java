@@ -3,10 +3,13 @@ package me.dylan.wands.spell;
 import me.dylan.wands.MouseClickListeners.ClickEvent;
 import me.dylan.wands.MouseClickListeners.LeftClickListener;
 import me.dylan.wands.MouseClickListeners.RightClickListener;
+import me.dylan.wands.WandsPlugin;
 import me.dylan.wands.events.MagicDamageEvent;
 import me.dylan.wands.spell.accessories.ItemTag;
+import me.dylan.wands.spell.spells.AffinityType;
 import me.dylan.wands.spell.util.SpellInteractionUtil;
 import me.dylan.wands.utils.ItemUtil;
+import me.dylan.wands.utils.PlayerUtil;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -28,10 +31,7 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 public class PlayerListener implements Listener, LeftClickListener, RightClickListener {
     private final Map<Player, MagicDamageEvent> playerMagicDamageEventMap = new HashMap<>();
@@ -138,14 +138,28 @@ public class PlayerListener implements Listener, LeftClickListener, RightClickLi
                     && cursorItem.getType() != Material.AIR
                     && ItemTag.IS_WAND.isTagged(clickedItem)) {
                 ItemUtil.getPersistentData(cursorItem, "spell", PersistentDataType.INTEGER).ifPresent(spellId -> {
+                    Optional<Integer> wandAffinityType = ItemUtil.getPersistentData(clickedItem, AffinityType.PERSISTENT_DATA_KEY_WAND, PersistentDataType.INTEGER);
+                    Optional<int[]> spellAffinityTypes = ItemUtil.getPersistentData(cursorItem, AffinityType.PERSISTENT_DATA_KEY_SCROLL, PersistentDataType.INTEGER_ARRAY);
+                    if (wandAffinityType.isPresent() && spellAffinityTypes.isPresent()) {
+                        int wandAffinityId = wandAffinityType.get();
+                        int[] scrollAffinityIdArray = spellAffinityTypes.get();
+                        boolean result = Arrays.stream(scrollAffinityIdArray).anyMatch(value -> value == wandAffinityId);
+                        if (!result) {
+                            player.sendMessage(WandsPlugin.PREFIX + "§cIncompatible!");
+                            event.setCancelled(true);
+                            return;
+                        }
+                    } else return;
                     SpellType spellType = SpellType.getSpellById(spellId);
                     if (spellType != null) {
                         Set<@NotNull SpellType> compound = SpellCompound.getCompound(clickedItem);
+                        event.setCancelled(true);
                         if (compound.add(spellType)) {
-                            event.setCancelled(true);
                             player.setItemOnCursor(null);
                             SpellCompound.apply(compound, clickedItem);
-                            player.playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1, 1);
+                            player.playSound(player.getLocation(), Sound.BLOCK_RESPAWN_ANCHOR_SET_SPAWN, 1, 1);
+                        } else {
+                            player.sendMessage(WandsPlugin.PREFIX + "§cAlready bound!");
                         }
                     }
                 });

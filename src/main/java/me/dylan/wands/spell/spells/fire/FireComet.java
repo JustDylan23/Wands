@@ -5,12 +5,18 @@ import me.dylan.wands.spell.accessories.KnockBack;
 import me.dylan.wands.spell.accessories.sound.CompoundSound;
 import me.dylan.wands.spell.spellbuilders.Behavior;
 import me.dylan.wands.spell.spellbuilders.MagicProjectile;
+import me.dylan.wands.spell.spells.AffinityType;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.SmallFireball;
 
 public class FireComet implements Castable {
+    @Override
+    public AffinityType[] getAffinityTypes() {
+        return new AffinityType[]{AffinityType.FIRE_MAGIC};
+    }
+
     @Override
     public Behavior createBehaviour() {
         return MagicProjectile.newBuilder(SmallFireball.class, 4)

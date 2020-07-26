@@ -5,6 +5,7 @@ import me.dylan.wands.spell.spellbuilders.Behavior;
 import me.dylan.wands.spell.spellbuilders.BuildableBehaviour.KnockBackDirection;
 import me.dylan.wands.spell.spellbuilders.BuildableBehaviour.Target;
 import me.dylan.wands.spell.spellbuilders.Phase;
+import me.dylan.wands.spell.spells.AffinityType;
 import me.dylan.wands.spell.util.SpellEffectUtil;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -16,6 +17,11 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class DarkPush implements Castable {
+    @Override
+    public AffinityType[] getAffinityTypes() {
+        return new AffinityType[]{AffinityType.DARK_MAGIC};
+    }
+
     @Override
     public Behavior createBehaviour() {
         return Phase.newBuilder(Target.SINGLE)

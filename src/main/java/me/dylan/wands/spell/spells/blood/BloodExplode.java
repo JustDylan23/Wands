@@ -5,9 +5,15 @@ import me.dylan.wands.spell.accessories.KnockBack;
 import me.dylan.wands.spell.spellbuilders.Behavior;
 import me.dylan.wands.spell.spellbuilders.Spark;
 import me.dylan.wands.spell.spellbuilders.Spark.Target;
+import me.dylan.wands.spell.spells.AffinityType;
 import org.bukkit.Sound;
 
 public class BloodExplode implements Castable {
+    @Override
+    public AffinityType[] getAffinityTypes() {
+        return new AffinityType[]{AffinityType.BLOOD_MAGIC};
+    }
+
     @Override
     public Behavior createBehaviour() {
         return Spark.newBuilder(Target.MULTI)

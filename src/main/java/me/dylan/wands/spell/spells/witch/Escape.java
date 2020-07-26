@@ -6,6 +6,7 @@ import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.accessories.sound.RepeatableSound;
 import me.dylan.wands.spell.accessories.sound.SoundEffect;
 import me.dylan.wands.spell.spellbuilders.Behavior;
+import me.dylan.wands.spell.spells.AffinityType;
 import me.dylan.wands.spell.util.SpellEffectUtil;
 import me.dylan.wands.utils.Common;
 import org.bukkit.*;
@@ -30,6 +31,11 @@ public class Escape extends Behavior implements Castable, Listener {
     public Escape() {
         ListenerRegistry.addListener(this);
         WandsPlugin.addDisableLogic(() -> leaping.forEach(e -> e.teleport(SpellEffectUtil.getFirstGroundBlockUnder(e.getLocation()))));
+    }
+
+    @Override
+    public AffinityType[] getAffinityTypes() {
+        return new AffinityType[]{AffinityType.WITCH_MAGIC};
     }
 
     @Override

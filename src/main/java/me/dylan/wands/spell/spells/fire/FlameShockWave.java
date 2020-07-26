@@ -3,10 +3,16 @@ package me.dylan.wands.spell.spells.fire;
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.spellbuilders.Behavior;
 import me.dylan.wands.spell.spellbuilders.ShockWave;
+import me.dylan.wands.spell.spells.AffinityType;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 
 public class FlameShockWave implements Castable {
+    @Override
+    public AffinityType[] getAffinityTypes() {
+        return new AffinityType[]{AffinityType.FIRE_MAGIC};
+    }
+
     @Override
     public Behavior createBehaviour() {
         return ShockWave.newBuilder()

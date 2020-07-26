@@ -5,6 +5,7 @@ import me.dylan.wands.spell.accessories.SpellInfo;
 import me.dylan.wands.spell.spellbuilders.Behavior;
 import me.dylan.wands.spell.spellbuilders.BuildableBehaviour.Target;
 import me.dylan.wands.spell.spellbuilders.Phase;
+import me.dylan.wands.spell.spells.AffinityType;
 import me.dylan.wands.utils.Common;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
@@ -15,6 +16,12 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 public class MephiChoke implements Castable {
+
+    @Override
+    public AffinityType[] getAffinityTypes() {
+        return new AffinityType[]{AffinityType.GRAVITY_MAGIC};
+    }
+
     public Behavior createBehaviour() {
         return Phase.newBuilder(Target.SINGLE)
                 .setCastSound(Sound.ENTITY_PHANTOM_BITE)

@@ -1,10 +1,11 @@
-package me.dylan.wands.spell.spells.sky;
+package me.dylan.wands.spell.spells.weather;
 
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.accessories.SpellInfo;
 import me.dylan.wands.spell.spellbuilders.Behavior;
 import me.dylan.wands.spell.spellbuilders.BuildableBehaviour.Target;
 import me.dylan.wands.spell.spellbuilders.Ray;
+import me.dylan.wands.spell.spells.AffinityType;
 import me.dylan.wands.utils.Common;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -16,6 +17,11 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class Freeze implements Castable {
+    @Override
+    public AffinityType[] getAffinityTypes() {
+        return new AffinityType[]{AffinityType.WEATHER_MAGIC};
+    }
+
     @Override
     public Behavior createBehaviour() {
         return Ray.newBuilder(Target.SINGLE)

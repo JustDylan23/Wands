@@ -5,11 +5,17 @@ import me.dylan.wands.spell.accessories.KnockBack;
 import me.dylan.wands.spell.spellbuilders.Behavior;
 import me.dylan.wands.spell.spellbuilders.Circle;
 import me.dylan.wands.spell.spellbuilders.Circle.CirclePlacement;
+import me.dylan.wands.spell.spells.AffinityType;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;
 
 public class FireTwister implements Castable {
+    @Override
+    public AffinityType[] getAffinityTypes() {
+        return new AffinityType[]{AffinityType.FIRE_MAGIC};
+    }
+
     @Override
     public Behavior createBehaviour() {
         return Circle.newBuilder(CirclePlacement.TARGET)

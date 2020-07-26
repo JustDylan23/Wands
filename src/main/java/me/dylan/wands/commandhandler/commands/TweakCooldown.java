@@ -33,7 +33,7 @@ public class TweakCooldown implements CommandExecutor {
                         sender.sendMessage(WandsPlugin.PREFIX + "Invalid number");
                     }
                 } else {
-                    int cooldown = spellType.behavior.getCooldown();
+                    int cooldown = spellType.getBehavior().getCooldown();
                     sender.sendMessage(WandsPlugin.PREFIX + "Cooldown of " + spellType.getDisplayName() + " is +" + cooldown + " second" + ((cooldown == 1) ? "" : "s"));
                 }
         } else return false;

@@ -5,6 +5,7 @@ import me.dylan.wands.spell.accessories.KnockBack;
 import me.dylan.wands.spell.spellbuilders.Behavior;
 import me.dylan.wands.spell.spellbuilders.BuildableBehaviour.Target;
 import me.dylan.wands.spell.spellbuilders.Ray;
+import me.dylan.wands.spell.spells.AffinityType;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
@@ -13,6 +14,11 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class DarkPulse implements Castable {
+    @Override
+    public AffinityType[] getAffinityTypes() {
+        return new AffinityType[]{AffinityType.DARK_MAGIC};
+    }
+
     @Override
     public Behavior createBehaviour() {
         return Ray.newBuilder(Target.MULTI)

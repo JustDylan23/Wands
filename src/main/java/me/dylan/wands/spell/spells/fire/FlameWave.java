@@ -4,11 +4,17 @@ import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.accessories.sound.CompoundSound;
 import me.dylan.wands.spell.spellbuilders.Behavior;
 import me.dylan.wands.spell.spellbuilders.Wave;
+import me.dylan.wands.spell.spells.AffinityType;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;
 
 public class FlameWave implements Castable {
+    @Override
+    public AffinityType[] getAffinityTypes() {
+        return new AffinityType[]{AffinityType.FIRE_MAGIC};
+    }
+
     @Override
     public Behavior createBehaviour() {
         return Wave.newBuilder()

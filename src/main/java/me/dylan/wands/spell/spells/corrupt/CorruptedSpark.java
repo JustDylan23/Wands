@@ -4,6 +4,7 @@ import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.spellbuilders.Behavior;
 import me.dylan.wands.spell.spellbuilders.Spark;
 import me.dylan.wands.spell.spellbuilders.Spark.Target;
+import me.dylan.wands.spell.spells.AffinityType;
 import me.dylan.wands.spell.spells.witch.MagicSpark;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -13,6 +14,11 @@ import org.bukkit.block.data.BlockData;
 
 public class CorruptedSpark implements Castable {
     private final BlockData obsidian = Material.OBSIDIAN.createBlockData();
+
+    @Override
+    public AffinityType[] getAffinityTypes() {
+        return new AffinityType[]{AffinityType.CORRUPTED_MAGIC};
+    }
 
     @Override
     public Behavior createBehaviour() {

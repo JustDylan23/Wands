@@ -5,6 +5,7 @@ import me.dylan.wands.spell.accessories.KnockBack;
 import me.dylan.wands.spell.spellbuilders.Behavior;
 import me.dylan.wands.spell.spellbuilders.Circle;
 import me.dylan.wands.spell.spellbuilders.Circle.CirclePlacement;
+import me.dylan.wands.spell.spells.AffinityType;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;
@@ -12,6 +13,11 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class DarkCircle implements Castable {
+    @Override
+    public AffinityType[] getAffinityTypes() {
+        return new AffinityType[]{AffinityType.DARK_MAGIC};
+    }
+
     @Override
     public Behavior createBehaviour() {
         return Circle.newBuilder(CirclePlacement.RELATIVE)

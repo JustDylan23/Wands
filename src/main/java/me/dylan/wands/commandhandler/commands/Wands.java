@@ -106,13 +106,15 @@ public class Wands implements CommandExecutor {
                             if (spellType != null) {
                                 Player player = (Player) sender;
                                 ItemStack itemStack = ItemBuilder.from(Material.MOJANG_BANNER_PATTERN)
-                                        .named(spellType.name + " scroll")
+                                        .named("§5§k#§r §f" + spellType.getCastType().getDisplayName() + " Scroll §5§k#")
+                                        .addLore("§7Contains: " + spellType.getDisplayName())
+                                        .withWandAffinity(spellType.getAffinityTypes())
 //                                        .withLore("When in survival click on this scroll", "and drag it over to a wand", "and click on the wand to apply", "the scroll")
                                         .glowing()
                                         .hideFlags()
                                         .blockWandRegistration()
                                         .build();
-                                ItemUtil.setPersistentData(itemStack, "spell", PersistentDataType.INTEGER, spellType.id);
+                                ItemUtil.setPersistentData(itemStack, "spell", PersistentDataType.INTEGER, spellType.getId());
                                 player.getInventory().addItem(itemStack);
                             } else {
                                 sender.sendMessage(WandsPlugin.PREFIX + "Spell does not exist!");
@@ -140,7 +142,7 @@ public class Wands implements CommandExecutor {
                         if (CommandUtils.checkPermOrNotify(sender, Permissions.LIST_SPELLS)) {
                             SpellType spellType = SpellType.fromString(args[1]);
                             if (spellType != null) {
-                                Behavior behavior = spellType.behavior;
+                                Behavior behavior = spellType.getBehavior();
                                 if (behavior == null) {
                                     sender.sendMessage(WandsPlugin.PREFIX + "Spell has no behaviour!");
                                 } else {

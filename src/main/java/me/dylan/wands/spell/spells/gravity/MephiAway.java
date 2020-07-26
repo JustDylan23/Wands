@@ -4,11 +4,17 @@ import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.spellbuilders.Behavior;
 import me.dylan.wands.spell.spellbuilders.Circle;
 import me.dylan.wands.spell.spellbuilders.Circle.CirclePlacement;
+import me.dylan.wands.spell.spells.AffinityType;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;
 
 public class MephiAway implements Castable {
+    @Override
+    public AffinityType[] getAffinityTypes() {
+        return new AffinityType[]{AffinityType.GRAVITY_MAGIC};
+    }
+
     @Override
     public Behavior createBehaviour() {
         return Circle.newBuilder(CirclePlacement.RELATIVE)

@@ -4,12 +4,18 @@ import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.accessories.sound.CompoundSound;
 import me.dylan.wands.spell.spellbuilders.Behavior;
 import me.dylan.wands.spell.spellbuilders.ShockWave;
+import me.dylan.wands.spell.spells.AffinityType;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class CorruptedShockWave implements Castable {
+    @Override
+    public AffinityType[] getAffinityTypes() {
+        return new AffinityType[]{AffinityType.CORRUPTED_MAGIC};
+    }
+
     @Override
     public Behavior createBehaviour() {
         return ShockWave.newBuilder()

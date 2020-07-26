@@ -5,12 +5,18 @@ import me.dylan.wands.spell.accessories.KnockBack;
 import me.dylan.wands.spell.accessories.sound.CompoundSound;
 import me.dylan.wands.spell.spellbuilders.Behavior;
 import me.dylan.wands.spell.spellbuilders.LaunchableBlock;
+import me.dylan.wands.spell.spells.AffinityType;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;
 
 public class DarkBlock implements Castable {
+    @Override
+    public AffinityType[] getAffinityTypes() {
+        return new AffinityType[]{AffinityType.DARK_MAGIC};
+    }
+
     @Override
     public Behavior createBehaviour() {
         return LaunchableBlock.newBuilder(Material.COAL_BLOCK)
