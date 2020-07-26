@@ -5,11 +5,17 @@ import me.dylan.wands.spell.spellbuilders.Aura;
 import me.dylan.wands.spell.spellbuilders.Aura.AuraParticleType;
 import me.dylan.wands.spell.spellbuilders.Aura.EffectFrequency;
 import me.dylan.wands.spell.spellbuilders.Behavior;
+import me.dylan.wands.spell.spells.AffinityType;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;
 
 public class MephiAura implements Castable {
+    @Override
+    public AffinityType[] getAffinityTypes() {
+        return new AffinityType[]{AffinityType.GRAVITY_MAGIC};
+    }
+
     @Override
     public Behavior createBehaviour() {
         return Aura.newBuilder(EffectFrequency.CONSTANT)

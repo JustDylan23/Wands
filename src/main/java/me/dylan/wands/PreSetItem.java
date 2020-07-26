@@ -4,16 +4,11 @@ import me.dylan.wands.spell.BrowseParticle;
 import me.dylan.wands.spell.ItemBuilder;
 import me.dylan.wands.spell.SpellType;
 import me.dylan.wands.spell.accessories.ItemTag;
-import org.bukkit.Bukkit;
+import me.dylan.wands.spell.spells.AffinityType;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.function.Supplier;
 
 public enum PreSetItem {
     ASSASSINS_DAGGER(
@@ -48,6 +43,7 @@ public enum PreSetItem {
                             SpellType.FLOATING_PASSAGE,
                             SpellType.SPIRAL_CLOUD_PASSAGE
                     )
+                    .withCastAffinity(AffinityType.SWORD_ARTS)
                     .withSpellBrowseParticles(BrowseParticle.MORTAL_BLADE)
                     .build()
     ),
@@ -63,6 +59,7 @@ public enum PreSetItem {
                             SpellType.ESCAPE,
                             SpellType.POISON_WAVE
                     )
+                    .withCastAffinity(AffinityType.WITCH_MAGIC)
                     .withSpellBrowseParticles(BrowseParticle.WITCH)
                     .build()
     ),
@@ -76,6 +73,7 @@ public enum PreSetItem {
                             SpellType.BLOOD_STUN,
                             SpellType.BLOOD_BLOCK
                     )
+                    .withCastAffinity(AffinityType.BLOOD_MAGIC)
                     .withSpellBrowseParticles(BrowseParticle.PARTICLE_BLOOD)
                     .build()
     ),
@@ -91,6 +89,7 @@ public enum PreSetItem {
                             SpellType.ICE_AURA,
                             SpellType.ZAP
                     )
+                    .withCastAffinity(AffinityType.WEATHER_MAGIC)
                     .withSpellBrowseParticles(BrowseParticle.PARTICLE_ICE)
                     .build()
     ),
@@ -105,6 +104,7 @@ public enum PreSetItem {
                             SpellType.DARK_AURA,
                             SpellType.DARK_SPARK
                     )
+                    .withCastAffinity(AffinityType.DARK_MAGIC)
                     .withSpellBrowseParticles(BrowseParticle.PARTICLE_DARK)
                     .build()
     ),
@@ -121,6 +121,7 @@ public enum PreSetItem {
                             SpellType.FLAME_THROWER,
                             SpellType.FIRE_SPARK
                     )
+                    .withCastAffinity(AffinityType.FIRE_MAGIC)
                     .withSpellBrowseParticles(BrowseParticle.PARTICLE_FIRE)
                     .build()
     ),
@@ -136,6 +137,7 @@ public enum PreSetItem {
                             SpellType.CORRUPTED_SPARK,
                             SpellType.POISON_WAVE
                     )
+                    .withCastAffinity(AffinityType.CORRUPTED_MAGIC)
                     .withSpellBrowseParticles(BrowseParticle.PARTICLE_CORRUPTED)
                     .build()
     ),
@@ -151,6 +153,7 @@ public enum PreSetItem {
                             SpellType.MEPHI_SPARK,
                             SpellType.POISON_WAVE
                     )
+                    .withCastAffinity(AffinityType.GRAVITY_MAGIC)
                     .withSpellBrowseParticles(BrowseParticle.PARTICLE_MEPHI)
                     .build()
     );

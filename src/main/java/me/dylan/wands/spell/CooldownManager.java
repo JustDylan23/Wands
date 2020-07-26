@@ -32,7 +32,7 @@ public class CooldownManager implements Listener {
     public boolean canCast(Player player, SpellType spellType) {
         int remainingTime = getRemainingTime(player);
         if (remainingTime == 0) return true;
-        remainingTime += spellType.behavior.getCooldown() * 1000;
+        remainingTime += spellType.getBehavior().getCooldown() * 1000;
         if (remainingTime <= 0) {
             return true;
         } else {

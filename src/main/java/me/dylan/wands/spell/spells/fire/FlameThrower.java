@@ -3,12 +3,18 @@ package me.dylan.wands.spell.spells.fire;
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.spellbuilders.Behavior;
 import me.dylan.wands.spell.spellbuilders.BlockProjectile;
+import me.dylan.wands.spell.spells.AffinityType;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;
 
 public class FlameThrower implements Castable {
+    @Override
+    public AffinityType[] getAffinityTypes() {
+        return new AffinityType[]{AffinityType.FIRE_MAGIC};
+    }
+
     @Override
     public Behavior createBehaviour() {
         return BlockProjectile.newBuilder(Material.FIRE, 2.0F)

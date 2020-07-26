@@ -107,7 +107,7 @@ public final class SpellInteractionUtil {
 
         if (spell != null) {
             player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.5F, 0.5F);
-            PlayerUtil.sendActionBar(player, "§6Current spell: §7§l" + spell.getDisplayName());
+            PlayerUtil.sendActionBar(player, "§6Selected " + spell.getCastType().getDisplayName() + ": §7§l" + spell.getDisplayName());
             getSpellBrowseParticle(itemStack).orElse(BrowseParticle.DEFAULT).displayAt(player.getLocation());
         }
     }
@@ -115,13 +115,13 @@ public final class SpellInteractionUtil {
     public static void showSelectedSpell(Player player, ItemStack itemStack) {
         SpellType spell = getSelectedSpell(itemStack);
         if (spell != null) {
-            PlayerUtil.sendActionBar(player, "§6Current spell: §7§l" + spell.getDisplayName());
+            PlayerUtil.sendActionBar(player, "§6Selected " + spell.getCastType().getDisplayName() + ": §7§l" + spell.getDisplayName());
         }
     }
 
     public static void castSpell(@NotNull Player caster, String wandDisplayName, @NotNull SpellType spell) {
         if (cooldownManager.canCast(caster, spell)) {
-            Behavior behavior = spell.behavior;
+            Behavior behavior = spell.getBehavior();
             if (behavior != null) {
                 if (behavior.cast(caster, wandDisplayName)) {
                     cooldownManager.updateLastUsed(caster);

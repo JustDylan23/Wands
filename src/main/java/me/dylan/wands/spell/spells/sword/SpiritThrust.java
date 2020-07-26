@@ -3,6 +3,7 @@ package me.dylan.wands.spell.spells.sword;
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.accessories.KnockBack;
 import me.dylan.wands.spell.spellbuilders.Behavior;
+import me.dylan.wands.spell.spells.AffinityType;
 import me.dylan.wands.spell.util.SpellEffectUtil;
 import me.dylan.wands.utils.Common;
 import org.bukkit.*;
@@ -17,6 +18,16 @@ public class SpiritThrust implements Castable {
     private static final DustOptions BLACK = new DustOptions(Color.BLACK, 1);
     private static final DustOptions RED = new DustOptions(Color.RED, 1);
     private static final KnockBack knockBack = KnockBack.from(1f, 0.25f);
+
+    @Override
+    public CastType getCastType() {
+        return CastType.SWORD_SKILL;
+    }
+
+    @Override
+    public AffinityType[] getAffinityTypes() {
+        return new AffinityType[]{AffinityType.SWORD_ARTS};
+    }
 
     @Override
     public Behavior createBehaviour() {

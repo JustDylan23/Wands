@@ -7,6 +7,7 @@ import me.dylan.wands.spell.accessories.sound.CompoundSound;
 import me.dylan.wands.spell.spellbuilders.Behavior;
 import me.dylan.wands.spell.spellbuilders.Spark;
 import me.dylan.wands.spell.spellbuilders.Spark.Target;
+import me.dylan.wands.spell.spells.AffinityType;
 import me.dylan.wands.spell.util.SpellEffectUtil;
 import me.dylan.wands.utils.Common;
 import org.bukkit.*;
@@ -33,6 +34,11 @@ public class CorruptedRain implements Castable, Listener {
 
     public CorruptedRain() {
         ListenerRegistry.addListener(this);
+    }
+
+    @Override
+    public AffinityType[] getAffinityTypes() {
+        return new AffinityType[]{AffinityType.CORRUPTED_MAGIC};
     }
 
     @Override

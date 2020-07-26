@@ -1,15 +1,21 @@
-package me.dylan.wands.spell.spells.sky;
+package me.dylan.wands.spell.spells.weather;
 
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.spellbuilders.Aura;
 import me.dylan.wands.spell.spellbuilders.Aura.EffectFrequency;
 import me.dylan.wands.spell.spellbuilders.Behavior;
+import me.dylan.wands.spell.spells.AffinityType;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class IceAura implements Castable {
+    @Override
+    public AffinityType[] getAffinityTypes() {
+        return new AffinityType[]{AffinityType.WEATHER_MAGIC};
+    }
+
     @Override
     public Behavior createBehaviour() {
         PotionEffect speed = new PotionEffect(PotionEffectType.SPEED, 40, 0, false);

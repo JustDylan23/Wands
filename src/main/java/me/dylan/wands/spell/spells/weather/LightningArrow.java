@@ -1,14 +1,20 @@
-package me.dylan.wands.spell.spells.sky;
+package me.dylan.wands.spell.spells.weather;
 
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.spellbuilders.Behavior;
 import me.dylan.wands.spell.spellbuilders.MagicProjectile;
+import me.dylan.wands.spell.spells.AffinityType;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.Arrow;
 
 public class LightningArrow implements Castable {
+    @Override
+    public AffinityType[] getAffinityTypes() {
+        return new AffinityType[]{AffinityType.WEATHER_MAGIC};
+    }
+
     @Override
     public Behavior createBehaviour() {
         return MagicProjectile.newBuilder(Arrow.class, 2.2F)

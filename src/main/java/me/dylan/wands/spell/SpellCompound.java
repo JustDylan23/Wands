@@ -54,7 +54,7 @@ public final class SpellCompound {
                     itemStack,
                     TAG_SPELLS_LIST,
                     PersistentDataType.INTEGER_ARRAY,
-                    spells.stream().filter(Objects::nonNull).mapToInt(spell -> spell.id).toArray()
+                    spells.stream().filter(Objects::nonNull).mapToInt(SpellType::getId).toArray()
             );
         }
     }

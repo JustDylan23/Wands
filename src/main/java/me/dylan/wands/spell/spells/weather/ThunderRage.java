@@ -1,7 +1,8 @@
-package me.dylan.wands.spell.spells.sky;
+package me.dylan.wands.spell.spells.weather;
 
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.spellbuilders.Behavior;
+import me.dylan.wands.spell.spells.AffinityType;
 import me.dylan.wands.spell.util.SpellEffectUtil;
 import me.dylan.wands.utils.Common;
 import org.bukkit.Location;
@@ -15,6 +16,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 public class ThunderRage implements Castable {
+    @Override
+    public AffinityType[] getAffinityTypes() {
+        return new AffinityType[]{AffinityType.WEATHER_MAGIC};
+    }
+
     private final PotionEffect wither = new PotionEffect(PotionEffectType.WITHER, 80, 1, false);
     private final PotionEffect slow = new PotionEffect(PotionEffectType.SLOW, 80, 3, false);
 

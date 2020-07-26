@@ -1,16 +1,19 @@
 package me.dylan.wands.spell;
 
 import me.dylan.wands.WandsPlugin;
+import me.dylan.wands.spell.Castable.CastType;
 import me.dylan.wands.spell.spellbuilders.Behavior;
+import me.dylan.wands.spell.spells.AffinityType;
 import me.dylan.wands.spell.spells.blood.*;
 import me.dylan.wands.spell.spells.corrupt.*;
 import me.dylan.wands.spell.spells.dark.*;
 import me.dylan.wands.spell.spells.fire.*;
 import me.dylan.wands.spell.spells.gravity.*;
-import me.dylan.wands.spell.spells.sky.*;
-import me.dylan.wands.spell.spells.shared.PoisonWave;
+import me.dylan.wands.spell.spells.weather.*;
+import me.dylan.wands.spell.spells.common.PoisonWave;
 import me.dylan.wands.spell.spells.sword.*;
 import me.dylan.wands.spell.spells.witch.*;
+import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -81,14 +84,20 @@ public enum SpellType {
         }
     }
 
-    public final Behavior behavior;
-    public final String name;
     public final int id;
+    private final Behavior behavior;
+    private final String name;
+    private final Material material;
+    private final CastType castType;
+    private final AffinityType[] affinityTypes;
 
     SpellType(int id, @NotNull Castable castable) {
         this.id = id;
         this.behavior = castable.createBehaviour();
         this.name = castable.getDisplayName();
+        this.material = castable.getMaterial();
+        this.castType = castable.getCastType();
+        this.affinityTypes = castable.getAffinityTypes();
     }
 
     @Nullable
@@ -105,7 +114,27 @@ public enum SpellType {
         }
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public Behavior getBehavior() {
+        return behavior;
+    }
+
     public String getDisplayName() {
         return name;
+    }
+
+    public Material getMaterial() {
+        return material;
+    }
+
+    public CastType getCastType() {
+        return castType;
+    }
+
+    public AffinityType[] getAffinityTypes() {
+        return affinityTypes;
     }
 }

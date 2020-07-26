@@ -1,8 +1,9 @@
-package me.dylan.wands.spell.spells.shared;
+package me.dylan.wands.spell.spells.common;
 
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.spellbuilders.Behavior;
 import me.dylan.wands.spell.spellbuilders.Wave;
+import me.dylan.wands.spell.spells.AffinityType;
 import me.dylan.wands.spell.util.SpellEffectUtil;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -11,6 +12,11 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class PoisonWave implements Castable {
+    @Override
+    public AffinityType[] getAffinityTypes() {
+        return new AffinityType[]{AffinityType.WITCH_MAGIC, AffinityType.CORRUPTED_MAGIC, AffinityType.GRAVITY_MAGIC};
+    }
+
     @Override
     public Behavior createBehaviour() {
         return Wave.newBuilder()

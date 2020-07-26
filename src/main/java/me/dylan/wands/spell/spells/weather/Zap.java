@@ -1,4 +1,4 @@
-package me.dylan.wands.spell.spells.sky;
+package me.dylan.wands.spell.spells.weather;
 
 import me.dylan.wands.spell.Castable;
 import me.dylan.wands.spell.accessories.KnockBack;
@@ -6,6 +6,7 @@ import me.dylan.wands.spell.accessories.SpellInfo;
 import me.dylan.wands.spell.spellbuilders.Behavior;
 import me.dylan.wands.spell.spellbuilders.BuildableBehaviour.Target;
 import me.dylan.wands.spell.spellbuilders.Ray;
+import me.dylan.wands.spell.spells.AffinityType;
 import me.dylan.wands.spell.util.SpellEffectUtil;
 import me.dylan.wands.utils.Common;
 import org.bukkit.Location;
@@ -27,13 +28,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Zap implements Castable {
-
     private static final PotionEffect SLOW_EFFECT = new PotionEffect(PotionEffectType.SLOW, 40, 3);
     private static final PotionEffect WEAK_EFFECT = new PotionEffect(PotionEffectType.WEAKNESS, 100, 3);
     private static final KnockBack knockBack = KnockBack.from(0, 1);
     private static final int TOTAL_RICOCHET = 5;
     private static final int RICOCHET_REACH = 5;
     private static final int DAMAGE = 7;
+
+    @Override
+    public AffinityType[] getAffinityTypes() {
+        return new AffinityType[]{AffinityType.WEATHER_MAGIC};
+    }
 
     @Override
     public Behavior createBehaviour() {

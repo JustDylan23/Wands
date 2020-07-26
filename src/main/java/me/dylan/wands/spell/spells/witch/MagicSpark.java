@@ -6,11 +6,17 @@ import me.dylan.wands.spell.accessories.sound.SoundEffect;
 import me.dylan.wands.spell.spellbuilders.Behavior;
 import me.dylan.wands.spell.spellbuilders.Spark;
 import me.dylan.wands.spell.spellbuilders.Spark.Target;
+import me.dylan.wands.spell.spells.AffinityType;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 
 public class MagicSpark implements Castable {
     public static final SoundEffect SPARK_SOUND = RepeatableSound.from(Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, 1, 10);
+
+    @Override
+    public AffinityType[] getAffinityTypes() {
+        return new AffinityType[]{AffinityType.WITCH_MAGIC};
+    }
 
     @Override
     public Behavior createBehaviour() {

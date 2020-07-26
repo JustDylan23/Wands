@@ -43,7 +43,7 @@ public final class ConfigHandler {
         config.getSpellConfigMap().forEach((id, spellConfig) -> {
             SpellType spellType = SpellType.getSpellById(id);
             if (spellType != null) {
-                spellType.behavior.setCooldown(spellConfig.getCooldown());
+                spellType.getBehavior().setCooldown(spellConfig.getCooldown());
             }
         });
     }
@@ -63,10 +63,10 @@ public final class ConfigHandler {
 
     public void setSpellCooldown(@NotNull SpellType spellType, int time) {
         Map<Integer, SpellConfig> spellConfigMap = config.getSpellConfigMap();
-        SpellConfig spellConfig = spellConfigMap.getOrDefault(spellType.id, new SpellConfig());
+        SpellConfig spellConfig = spellConfigMap.getOrDefault(spellType.getId(), new SpellConfig());
         spellConfig.setCooldown(time);
-        spellConfigMap.putIfAbsent(spellType.id, spellConfig);
-        spellType.behavior.setCooldown(time);
+        spellConfigMap.putIfAbsent(spellType.getId(), spellConfig);
+        spellType.getBehavior().setCooldown(time);
     }
 
     public boolean isMagicEnabled() {
