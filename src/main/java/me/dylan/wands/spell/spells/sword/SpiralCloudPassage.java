@@ -37,7 +37,7 @@ public class SpiralCloudPassage extends Behavior implements Castable {
                 if (count > 8) {
                     cancel();
                 } else {
-                    MortalDraw.draw(player,
+                    CutEffect.draw(player,
                             ThreadLocalRandom.current().nextInt(0, 360),
                             ThreadLocalRandom.current().nextInt(1, 4), 5,
                             ThreadLocalRandom.current().nextInt(0, 360), true);

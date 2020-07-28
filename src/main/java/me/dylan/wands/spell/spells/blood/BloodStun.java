@@ -14,7 +14,7 @@ import org.bukkit.potion.PotionEffectType;
 public class BloodStun implements Castable {
     @Override
     public AffinityType[] getAffinityTypes() {
-        return new AffinityType[]{AffinityType.BLOOD_MAGIC};
+        return new AffinityType[]{AffinityType.BLOOD_MAGIC, AffinityType.SWORD_ARTS};
     }
 
     @Override

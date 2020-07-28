@@ -46,7 +46,7 @@ public class OneMind extends Behavior implements Castable {
                         case 3:
                             degrees = 285;
                     }
-                    MortalDraw.draw(player, degrees, 2, 4, 0, false);
+                    CutEffect.draw(player, degrees, 2, 4, 0, false);
                 }
             }
         };
