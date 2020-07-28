@@ -6,6 +6,9 @@ import me.dylan.wands.spell.SpellType;
 import me.dylan.wands.spell.accessories.ItemTag;
 import me.dylan.wands.spell.spells.AffinityType;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.attribute.AttributeModifier.Operation;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -34,13 +37,13 @@ public enum PreSetItem {
                     .named("&0&k&l|| &cMortal Blade &0&k&l||")
                     .unbreakable()
                     .hideFlags()
+                    .withoutAttackDamage()
                     .withSpells(
+                            SpellType.MORTAL_CUT,
+                            SpellType.ICHIMONJI,
                             SpellType.ONE_MIND,
-                            SpellType.DUAL_DRAW,
                             SpellType.SPIRIT_THRUST,
                             SpellType.SPIRIT_FURY,
-                            SpellType.WHIRLWIND_SLASH,
-                            SpellType.FLOATING_PASSAGE,
                             SpellType.SPIRAL_CLOUD_PASSAGE
                     )
                     .withCastAffinity(AffinityType.SWORD_ARTS)
@@ -102,7 +105,8 @@ public enum PreSetItem {
                             SpellType.DARK_CIRCLE,
                             SpellType.DARK_PUSH,
                             SpellType.DARK_AURA,
-                            SpellType.DARK_SPARK
+                            SpellType.DARK_SPARK,
+                            SpellType.SOUL_HAUNT
                     )
                     .withCastAffinity(AffinityType.DARK_MAGIC)
                     .withSpellBrowseParticles(BrowseParticle.PARTICLE_DARK)

@@ -5,6 +5,7 @@ import me.dylan.wands.spell.Castable.CastType;
 import me.dylan.wands.spell.spellbuilders.Behavior;
 import me.dylan.wands.spell.spells.AffinityType;
 import me.dylan.wands.spell.spells.blood.*;
+import me.dylan.wands.spell.spells.common.SoulHaunt;
 import me.dylan.wands.spell.spells.corrupt.*;
 import me.dylan.wands.spell.spells.dark.*;
 import me.dylan.wands.spell.spells.fire.*;
@@ -62,15 +63,13 @@ public enum SpellType {
     THUNDER_STORM(39, new ThunderStorm()),
     THUNDER_STRIKE(40, new ThunderStrike()),
     ZAP(48, new Zap()),
-
     SPIRIT_THRUST(41, new SpiritThrust()),
     SPIRIT_FURY(42, new SpiritFury()),
-
     ONE_MIND(43, new OneMind()),
-    DUAL_DRAW(44, new DualDraw()),
-    WHIRLWIND_SLASH(45, new WhirlwindSlash()),
-    FLOATING_PASSAGE(46, new FloatingPassage()),
-    SPIRAL_CLOUD_PASSAGE(47, new SpiralCloudPassage());
+    MORTAL_CUT(44, new MortalDraw()),
+    ICHIMONJI(45, new Ichimonji()),
+    SPIRAL_CLOUD_PASSAGE(46, new SpiralCloudPassage()),
+    SOUL_HAUNT(47, new SoulHaunt());
 
     private static final Map<Integer, SpellType> SPELL_TYPE_MAP = new HashMap<>();
 

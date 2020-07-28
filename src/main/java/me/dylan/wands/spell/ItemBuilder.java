@@ -1,12 +1,13 @@
 package me.dylan.wands.spell;
 
-import me.dylan.wands.WandsPlugin;
-import me.dylan.wands.commandhandler.commands.Wands;
 import me.dylan.wands.spell.accessories.ItemTag;
 import me.dylan.wands.spell.spells.AffinityType;
 import me.dylan.wands.spell.util.SpellInteractionUtil;
 import me.dylan.wands.utils.ItemUtil;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.attribute.AttributeModifier.Operation;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -86,6 +87,13 @@ public final class ItemBuilder {
 
     public ItemBuilder unbreakable() {
         ItemUtil.setItemMeta(itemStack, meta -> meta.setUnbreakable(true));
+        return this;
+    }
+
+    public ItemBuilder withoutAttackDamage() {
+        ItemUtil.setItemMeta(itemStack, meta -> meta.addAttributeModifier(
+                Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier("generic.attackDamage", 0, Operation.MULTIPLY_SCALAR_1)
+        ));
         return this;
     }
 

@@ -50,7 +50,7 @@ public final class Spark extends BuildableBehaviour {
             if (!(entity instanceof LivingEntity)) {
                 PlayerUtil.sendActionBar(player, "§cselect an entity");
                 Location loc = PlayerUtil.getTargetLocation(player, 10);
-                loc.getWorld().spawnParticle(Particle.FIREWORKS_SPARK, loc, 5, 0, 0, 0, 0.1);
+                player.spawnParticle(Particle.FIREWORKS_SPARK, loc, 5, 0, 0, 0, 0.1);
                 return false;
             }
             LivingEntity livingEntity = (LivingEntity) entity;
