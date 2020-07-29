@@ -27,7 +27,7 @@ public final class SpellEffectUtil {
 
     public static @NotNull Location getSpellLocation(Player player, int effectDistance) {
         if (effectDistance == 0) return player.getLocation();
-        Entity entity = PlayerUtil.getTargetEntity(player, effectDistance, e -> true);
+        Entity entity = PlayerUtil.getTargetEntity(player, effectDistance);
         if (entity instanceof LivingEntity && !(entity instanceof ArmorStand)) {
             return entity.getLocation();
         }

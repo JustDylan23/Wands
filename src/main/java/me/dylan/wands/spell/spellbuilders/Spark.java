@@ -46,7 +46,7 @@ public final class Spark extends BuildableBehaviour {
                 applyEffects(entity, spellInfo, targetLoc, weapon);
             }
         } else {
-            Entity entity = PlayerUtil.getTargetEntity(player, effectDistance, e -> true);
+            Entity entity = PlayerUtil.getTargetEntity(player, effectDistance);
             if (!(entity instanceof LivingEntity)) {
                 PlayerUtil.sendActionBar(player, "§cselect an entity");
                 Location loc = PlayerUtil.getTargetLocation(player, 10);

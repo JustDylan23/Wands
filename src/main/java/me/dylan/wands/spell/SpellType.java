@@ -5,7 +5,7 @@ import me.dylan.wands.spell.Castable.CastType;
 import me.dylan.wands.spell.spellbuilders.Behavior;
 import me.dylan.wands.spell.spells.AffinityType;
 import me.dylan.wands.spell.spells.blood.*;
-import me.dylan.wands.spell.spells.common.SoulHaunt;
+import me.dylan.wands.spell.spells.common.SoulSeeker;
 import me.dylan.wands.spell.spells.corrupt.*;
 import me.dylan.wands.spell.spells.dark.*;
 import me.dylan.wands.spell.spells.fire.*;
@@ -69,7 +69,7 @@ public enum SpellType {
     MORTAL_CUT(44, new MortalDraw()),
     ICHIMONJI(45, new Ichimonji()),
     SPIRAL_CLOUD_PASSAGE(46, new SpiralCloudPassage()),
-    SOUL_HAUNT(47, new SoulHaunt());
+    SOUL_SEEKER(47, new SoulSeeker());
 
     private static final Map<Integer, SpellType> SPELL_TYPE_MAP = new HashMap<>();
 
