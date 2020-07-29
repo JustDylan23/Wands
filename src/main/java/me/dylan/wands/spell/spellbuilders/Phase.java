@@ -72,7 +72,7 @@ public final class Phase extends BuildableBehaviour {
                 @Override
                 public void run() {
                     lifetime++;
-                    if (lifetime > 200 && !entity.isValid() || condition.test(entity)) {
+                    if (lifetime > 200 || !entity.isValid() || condition.test(entity)) {
                         afterPhaseEffect.accept(entity, player);
                         Common.removeMetaData(entity, tagPhaseSpell);
                         cancel();
