@@ -106,7 +106,7 @@ public enum PreSetItem {
                             SpellType.DARK_PUSH,
                             SpellType.DARK_AURA,
                             SpellType.DARK_SPARK,
-                            SpellType.SOUL_HAUNT
+                            SpellType.SOUL_SEEKER
                     )
                     .withCastAffinity(AffinityType.DARK_MAGIC)
                     .withSpellBrowseParticles(BrowseParticle.PARTICLE_DARK)

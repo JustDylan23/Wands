@@ -68,9 +68,11 @@ public final class Phase extends BuildableBehaviour {
             applyPotionEffects(entity);
             SpellEffectUtil.damageEffect(player, entity, entityDamage, weapon);
             BukkitRunnable bukkitRunnable = new BukkitRunnable() {
+                int lifetime;
                 @Override
                 public void run() {
-                    if (!entity.isValid() || condition.test(entity)) {
+                    lifetime++;
+                    if (lifetime > 200 && !entity.isValid() || condition.test(entity)) {
                         afterPhaseEffect.accept(entity, player);
                         Common.removeMetaData(entity, tagPhaseSpell);
                         cancel();
