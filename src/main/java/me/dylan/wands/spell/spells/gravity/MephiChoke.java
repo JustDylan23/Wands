@@ -29,9 +29,9 @@ public class MephiChoke implements Castable {
                 .setSpellEffectRadius(2.8F)
                 .setSpellRelativeEffects((loc, spellInfo) -> {
                     World world = spellInfo.world();
-                    world.spawnParticle(Particle.SMOKE_NORMAL, loc, 5, 0.8, 0.8, 0.8, 0.1, null, true);
-                    world.spawnParticle(Particle.SMOKE_LARGE, loc, 3, 0.8, 0.8, 0.8, 0.1, null, true);
-                    world.spawnParticle(Particle.VILLAGER_HAPPY, loc, 5, 0.8, 0.8, 0.8, 0.1, null, true);
+                    world.spawnParticle(Particle.SMOKE, loc, 5, 0.8, 0.8, 0.8, 0.1, null, true);
+                    world.spawnParticle(Particle.LARGE_SMOKE, loc, 3, 0.8, 0.8, 0.8, 0.1, null, true);
+                    world.spawnParticle(Particle.HAPPY_VILLAGER, loc, 5, 0.8, 0.8, 0.8, 0.1, null, true);
                 })
                 .setStagePassCondition(Entity::isOnGround)
                 .setPotionEffects(new PotionEffect(PotionEffectType.WITHER, 100, 2))
@@ -53,9 +53,9 @@ public class MephiChoke implements Castable {
                 } else {
                     entity.setVelocity(vector);
                     Location loc = entity.getLocation();
-                    world.spawnParticle(Particle.SMOKE_NORMAL, loc, 1, 0.5, 0.5, 0.5, 0.1, null, true);
-                    world.spawnParticle(Particle.SMOKE_LARGE, loc, 1, 0.5, 0.5, 0.5, 0.1, null, true);
-                    world.spawnParticle(Particle.VILLAGER_HAPPY, loc, 1, 0.5, 0.5, 0.5, 0.1, null, true);
+                    world.spawnParticle(Particle.SMOKE, loc, 1, 0.5, 0.5, 0.5, 0.1, null, true);
+                    world.spawnParticle(Particle.LARGE_SMOKE, loc, 1, 0.5, 0.5, 0.5, 0.1, null, true);
+                    world.spawnParticle(Particle.HAPPY_VILLAGER, loc, 1, 0.5, 0.5, 0.5, 0.1, null, true);
                     if (i % 10 == 0) {
                         world.playSound(loc, Sound.ENTITY_PHANTOM_FLAP, SoundCategory.MASTER, 4, 1);
                     }

@@ -57,10 +57,10 @@ public class SpiritThrust implements Castable {
                                     length++;
                                 }
                                 for (int j = 0; j < 3; j++) {
-                                    world.spawnParticle(Particle.REDSTONE, points[6 * j + count].clone().add(incrementDistance), 1, 0, 0, 0, 0, BLACK, false);
+                                    world.spawnParticle(Particle.DUST, points[6 * j + count].clone().add(incrementDistance), 1, 0, 0, 0, 0, BLACK, false);
                                 }
 
-                                world.spawnParticle(Particle.REDSTONE, location, 1, 0.1, 0.1, 0.1, 0, RED, false);
+                                world.spawnParticle(Particle.DUST, location, 1, 0.1, 0.1, 0.1, 0, RED, false);
 
                                 for (LivingEntity livingEntity : SpellEffectUtil.getNearbyLivingEntities(player, location.add(increment), 0.7)) {
                                     SpellEffectUtil.damageEffect(player, livingEntity, 6, weapon);

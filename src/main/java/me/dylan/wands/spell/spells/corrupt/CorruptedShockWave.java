@@ -5,7 +5,7 @@ import me.dylan.wands.spell.accessories.sound.CompoundSound;
 import me.dylan.wands.spell.spellbuilders.Behavior;
 import me.dylan.wands.spell.spellbuilders.ShockWave;
 import me.dylan.wands.spell.spells.AffinityType;
-import org.bukkit.Particle;
+import me.dylan.wands.spell.util.SpellEffectUtil;
 import org.bukkit.Sound;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -24,9 +24,9 @@ public class CorruptedShockWave implements Castable {
                 .setEntityDamage(8)
                 .setPotionEffects(
                         new PotionEffect(PotionEffectType.WITHER, 60, 1, false),
-                        new PotionEffect(PotionEffectType.SLOW, 60, 2, false)
+                        new PotionEffect(PotionEffectType.SLOWNESS, 60, 2, false)
                 )
-                .setSpellRelativeEffects((loc, spellInfo) -> spellInfo.world().spawnParticle(Particle.SPELL_MOB, loc, 5, 0.2, 0.5, 0.2, 1, null, true))
+                .setSpellRelativeEffects((loc, spellInfo) -> SpellEffectUtil.spawnEntityEffect(loc, 5, 0.2, 0.5, 0.2))
                 .setExpansionDelay(3)
                 .build();
     }

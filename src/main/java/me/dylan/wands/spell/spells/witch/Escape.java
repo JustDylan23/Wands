@@ -69,9 +69,9 @@ public class Escape extends Behavior implements Castable, Listener {
                         Location loc = player.getLocation();
                         world.createExplosion(loc, 0.0f);
                         world.playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, SoundCategory.MASTER, 4.0F, 1.0F);
-                        world.spawnParticle(Particle.EXPLOSION_HUGE, loc, 0, 0.0, 0.0, 0.0, 0.0, null, true);
-                        world.spawnParticle(Particle.SPELL_WITCH, loc, 40, 1, 1, 1, 1, null, true);
-                        world.spawnParticle(Particle.SMOKE_LARGE, loc, 50, 2, 2, 2, 0.05, null, true);
+                        world.spawnParticle(Particle.EXPLOSION_EMITTER, loc, 0, 0.0, 0.0, 0.0, 0.0, null, true);
+                        world.spawnParticle(Particle.WITCH, loc, 40, 1, 1, 1, 1, null, true);
+                        world.spawnParticle(Particle.LARGE_SMOKE, loc, 50, 2, 2, 2, 0.05, null, true);
                         SpellEffectUtil.getNearbyLivingEntities(player, loc, 4).forEach(entity -> {
                             entity.damage(6);
                             entity.setFireTicks(40);
@@ -79,8 +79,8 @@ public class Escape extends Behavior implements Castable, Listener {
                         });
                     } else {
                         Location ploc = player.getLocation();
-                        world.spawnParticle(Particle.SPELL_WITCH, ploc, 10, 0.5, 0.5, 0.5, 0.15, null, true);
-                        world.spawnParticle(Particle.SMOKE_LARGE, ploc, 4, 0.2, 0.22, 0.2, 0.08, null, true);
+                        world.spawnParticle(Particle.WITCH, ploc, 10, 0.5, 0.5, 0.5, 0.15, null, true);
+                        world.spawnParticle(Particle.LARGE_SMOKE, ploc, 4, 0.2, 0.22, 0.2, 0.08, null, true);
                         if (count == 20) {
                             Vector newVelocity = ploc.getDirection().normalize().multiply(3);
                             player.setVelocity(newVelocity);

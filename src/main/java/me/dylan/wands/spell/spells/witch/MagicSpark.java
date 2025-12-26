@@ -24,8 +24,8 @@ public class MagicSpark implements Castable {
                 .setSpellEffectRadius(2.8F)
                 .setEntityDamage(12)
                 .setSpellRelativeEffects((loc, spellInfo) -> {
-                    spellInfo.world().spawnParticle(Particle.SPELL_WITCH, loc, 30, 0.6, 0.7, 0.6, 0.2, null, true);
-                    spellInfo.world().spawnParticle(Particle.SMOKE_LARGE, loc, 50, 0.2, 0.2, 0.2, 0.08, null, true);
+                    spellInfo.world().spawnParticle(Particle.WITCH, loc, 30, 0.6, 0.7, 0.6, 0.2, null, true);
+                    spellInfo.world().spawnParticle(Particle.LARGE_SMOKE, loc, 50, 0.2, 0.2, 0.2, 0.08, null, true);
                     SPARK_SOUND.play(loc);
                 })
                 .setCastSound(Sound.ENTITY_FIREWORK_ROCKET_BLAST)

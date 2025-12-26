@@ -29,10 +29,10 @@ public class DarkAura implements Castable {
                 .setPotionEffects(
                         new PotionEffect(PotionEffectType.WITHER, 60, 1),
                         new PotionEffect(PotionEffectType.WEAKNESS, 40, 2),
-                        new PotionEffect(PotionEffectType.SLOW, 40, 0)
+                        new PotionEffect(PotionEffectType.SLOWNESS, 40, 0)
                 )
                 .setSpellRelativeEffects((loc, spellInfo) -> spellInfo.world()
-                        .spawnParticle(Particle.SMOKE_LARGE, loc, 10, 4, -0.2, 4, 0, null, true))
+                        .spawnParticle(Particle.LARGE_SMOKE, loc, 10, 4, -0.2, 4, 0, null, true))
                 .build();
     }
 }

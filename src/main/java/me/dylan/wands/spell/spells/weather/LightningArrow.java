@@ -30,7 +30,7 @@ public class LightningArrow implements Castable {
                 .setSpellRelativeEffects((loc, spellInfo) -> {
                     World world = spellInfo.world();
                     world.spawnParticle(Particle.CLOUD, loc, 10, 0.2, 0.2, 0.2, 0.1, null, true);
-                    world.spawnParticle(Particle.ENCHANTMENT_TABLE, loc, 20, 0.5, 0.5, 0.5, 1, null, true);
+                    world.spawnParticle(Particle.ENCHANT, loc, 20, 0.5, 0.5, 0.5, 1, null, true);
                 })
                 .setEntityDamage(8)
                 .setEntityEffects((entity, spellInfo) -> entity.setFireTicks(80))

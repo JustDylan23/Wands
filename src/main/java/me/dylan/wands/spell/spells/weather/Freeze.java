@@ -31,10 +31,10 @@ public class Freeze implements Castable {
                 .setCastSound(Sound.ENTITY_LLAMA_SWAG)
                 .setSpellRelativeEffects((loc, spellInfo) -> {
                     World world = spellInfo.world();
-                    world.spawnParticle(Particle.EXPLOSION_NORMAL, loc, 8, 0.1, 0.1, 0.1, 0.02, null, true);
-                    world.spawnParticle(Particle.ENCHANTMENT_TABLE, loc, 10, 0.5, 0.5, 0.5, 1, null, true);
+                    world.spawnParticle(Particle.POOF, loc, 8, 0.1, 0.1, 0.1, 0.02, null, true);
+                    world.spawnParticle(Particle.ENCHANT, loc, 10, 0.5, 0.5, 0.5, 1, null, true);
                 })
-                .setPotionEffects(new PotionEffect(PotionEffectType.SLOW, 120, 4, false))
+                .setPotionEffects(new PotionEffect(PotionEffectType.SLOWNESS, 120, 4, false))
                 .setEffectDistance(25)
                 .setEntityEffects(this::freeze)
                 .build();
@@ -44,7 +44,7 @@ public class Freeze implements Castable {
         Location loc = entity.getLocation();
         World world = loc.getWorld();
         world.playSound(loc, Sound.ENTITY_EVOKER_FANGS_ATTACK, 4, 2);
-        if (entity.hasPotionEffect(PotionEffectType.SLOW)) return;
+        if (entity.hasPotionEffect(PotionEffectType.SLOWNESS)) return;
         BukkitRunnable bukkitRunnable = new BukkitRunnable() {
             int count = 0;
 
@@ -54,7 +54,7 @@ public class Freeze implements Castable {
                     cancel();
                 } else {
                     Location loc = entity.getLocation().add(0, 3.5, 0);
-                    world.spawnParticle(Particle.SNOW_SHOVEL, loc, 6, 0.5, 0.5, 0.5, 0.01, null, true);
+                    world.spawnParticle(Particle.ITEM_SNOWBALL, loc, 6, 0.5, 0.5, 0.5, 0.01, null, true);
                     world.spawnParticle(Particle.CLOUD, loc.add(0, 1, 0), 6, 0.5, 0.3, 0.5, 0, null, true);
                 }
             }

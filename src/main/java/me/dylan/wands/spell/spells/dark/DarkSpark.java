@@ -23,9 +23,9 @@ public class DarkSpark implements Castable {
                 .setEntityDamage(12)
                 .setSpellRelativeEffects((loc, spellInfo) -> {
                     World world = spellInfo.world();
-                    world.spawnParticle(Particle.SMOKE_LARGE, loc, 20, 0.4, 0.4, 0.4, 0.1, null, true);
-                    world.spawnParticle(Particle.SMOKE_NORMAL, loc, 20, 0.4, 0.4, 0.4, 0.1, null, true);
-                    world.spawnParticle(Particle.ENCHANTMENT_TABLE, loc, 40, 0.8, 0.8, 0.8, 0.3, null, true);
+                    world.spawnParticle(Particle.LARGE_SMOKE, loc, 20, 0.4, 0.4, 0.4, 0.1, null, true);
+                    world.spawnParticle(Particle.SMOKE, loc, 20, 0.4, 0.4, 0.4, 0.1, null, true);
+                    world.spawnParticle(Particle.ENCHANT, loc, 40, 0.8, 0.8, 0.8, 0.3, null, true);
                     MagicSpark.SPARK_SOUND.play(loc);
                 })
                 .setCastSound(Sound.ENTITY_FIREWORK_ROCKET_BLAST)

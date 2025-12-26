@@ -206,7 +206,7 @@ public final class LaunchableBlock extends BuildableBehaviour implements Listene
                 @Override
                 public void run() {
                     if (canRun) {
-                        world.spawnParticle(Particle.BLOCK_CRACK, originLoc, 10, 0.5, 0.5, 0.5, 0.15, blockData, true);
+                        world.spawnParticle(Particle.BLOCK, originLoc, 10, 0.5, 0.5, 0.5, 0.15, blockData, true);
                     } else cancel();
                 }
             };

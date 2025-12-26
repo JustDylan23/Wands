@@ -25,7 +25,7 @@ public class IceAura implements Castable {
                 .setPlayerEffects(player -> player.addPotionEffect(speed))
                 .setCastSound(Sound.ENTITY_PHANTOM_FLAP)
                 .setPotionEffects(
-                        new PotionEffect(PotionEffectType.SLOW, 80, 2, false),
+                        new PotionEffect(PotionEffectType.SLOWNESS, 80, 2, false),
                         new PotionEffect(PotionEffectType.WEAKNESS, 60, 0, false)
                 )
                 .setSpellRelativeEffects((loc, spellInfo) -> spellInfo.world()
