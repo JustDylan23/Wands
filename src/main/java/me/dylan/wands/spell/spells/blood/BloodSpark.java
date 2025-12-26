@@ -23,8 +23,8 @@ public class BloodSpark implements Castable {
                 .setEntityDamage(12)
                 .setSpellRelativeEffects((loc, spellInfo) -> {
                     World world = spellInfo.world();
-                    world.spawnParticle(Particle.SMOKE_LARGE, loc, 20, 0.2, 0.2, 0.2, 0.1, null, true);
-                    world.spawnParticle(Particle.BLOCK_CRACK, loc, 20, 0.6, 0.7, 0.6, 0.15, BloodMagicConstants.BLOCK_CRACK_REDSTONE, true);
+                    world.spawnParticle(Particle.LARGE_SMOKE, loc, 20, 0.2, 0.2, 0.2, 0.1, null, true);
+                    world.spawnParticle(Particle.BLOCK, loc, 20, 0.6, 0.7, 0.6, 0.15, BloodMagicConstants.BLOCK_CRACK_REDSTONE, true);
                     MagicSpark.SPARK_SOUND.play(loc);
                 })
                 .setCastSound(Sound.ENTITY_FIREWORK_ROCKET_BLAST)

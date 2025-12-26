@@ -3,10 +3,7 @@ package me.dylan.wands.spell.util;
 import me.dylan.wands.events.MagicDamageEvent;
 import me.dylan.wands.utils.Common;
 import me.dylan.wands.utils.PlayerUtil;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Particle;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.*;
@@ -118,16 +115,32 @@ public final class SpellEffectUtil {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public static void spawnColoredSpellMob(Location location, int count, double offsetX, double offsetY, double offsetZ, int red, int green, int blue, boolean rainbow) {
-        if (rainbow) {
-            location.getWorld().spawnParticle(Particle.SPELL_MOB, location, (count > 0) ? count : 1, offsetX, offsetY, offsetZ, 1, null, true);
-        } else {
-            float redR = Math.max(Float.MIN_NORMAL, red / 255.0F);
-            float greenG = Math.max(0, green / 255.0F);
-            float blueB = Math.max(0, blue / 255.0F);
-            for (int i = 0; count > i; i++) {
-                location.getWorld().spawnParticle(Particle.SPELL_MOB, randomizeLoc(location, offsetX, offsetY, offsetZ), 0, redR, greenG, blueB, 1, null, true);
-            }
+    public static void spawnEntityEffect(Location location, int count, double offsetX, double offsetY, double offsetZ, int red, int green, int blue) {
+        spawnEntityEffect(location, count, offsetX, offsetY, offsetZ,red, green, blue, true);
+    }
+
+    public static void spawnEntityEffect(Location location, int count, double offsetX, double offsetY, double offsetZ, int red, int green, int blue, boolean opaque) {
+        Color color = Color.fromARGB((opaque ? 255 : 51) << 24 | (red << 16) | (green << 8) | blue);
+        for (int i = 0; count > i; i++) {
+            location.getWorld().spawnParticle(Particle.ENTITY_EFFECT, randomizeLoc(location, offsetX, offsetY, offsetZ), 1, 0, 0,0, 1, color, true);
+        }
+    }
+
+    /**
+     * Spawns ENTITY_EFFECT particles with a random color
+     */
+    public static void spawnEntityEffect(Location location, int count, double offsetX, double offsetY, double offsetZ) {
+        spawnEntityEffect(location, count, offsetX, offsetY, offsetZ, true);
+    }
+
+    /**
+     * Spawns ENTITY_EFFECT particles with a random color
+     */
+    public static void spawnEntityEffect(Location location, int count, double offsetX, double offsetY, double offsetZ, boolean opaque) {
+        ThreadLocalRandom current = ThreadLocalRandom.current();
+        for (int i = 0; count > i; i++) {
+            Color color = Color.fromARGB((opaque ? 255 : 51) << 24 | current.nextInt(0x1000000));
+            location.getWorld().spawnParticle(Particle.ENTITY_EFFECT, randomizeLoc(location, offsetX, offsetY, offsetZ), count, offsetX, offsetY, offsetZ, 1, color, true);
         }
     }
 
@@ -144,7 +157,7 @@ public final class SpellEffectUtil {
         if (amount != 0) {
             if (victim instanceof Player) {
                 Player player = (Player) victim;
-                AttributeInstance atr = player.getAttribute(Attribute.GENERIC_ARMOR);
+                AttributeInstance atr = player.getAttribute(Attribute.ARMOR);
                 double armorDamageReduction = 1;
                 if (atr != null) {
                     armorDamageReduction = 1 - (1.75 * atr.getValue()) / 100.0D;

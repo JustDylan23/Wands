@@ -23,9 +23,9 @@ public class MephiSpark implements Castable {
                 .setEntityDamage(12)
                 .setSpellRelativeEffects((loc, spellInfo) -> {
                     World world = spellInfo.world();
-                    world.spawnParticle(Particle.SMOKE_LARGE, loc, 20, 0.4, 0.4, 0.4, 0.1, null, true);
-                    world.spawnParticle(Particle.SMOKE_NORMAL, loc, 20, 0.4, 0.4, 0.4, 0.1, null, true);
-                    world.spawnParticle(Particle.VILLAGER_HAPPY, loc, 5, 0.8, 0.8, 0.8, 0.1, null, true);
+                    world.spawnParticle(Particle.LARGE_SMOKE, loc, 20, 0.4, 0.4, 0.4, 0.1, null, true);
+                    world.spawnParticle(Particle.SMOKE, loc, 20, 0.4, 0.4, 0.4, 0.1, null, true);
+                    world.spawnParticle(Particle.HAPPY_VILLAGER, loc, 5, 0.8, 0.8, 0.8, 0.1, null, true);
                     MagicSpark.SPARK_SOUND.play(loc);
                 })
                 .setCastSound(Sound.ENTITY_FIREWORK_ROCKET_BLAST)

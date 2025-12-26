@@ -33,17 +33,17 @@ public class DarkPush implements Castable {
                 .knockBackFrom(KnockBackDirection.PLAYER)
                 .setSpellRelativeEffects((loc, spellInfo) -> {
                     World world = spellInfo.world();
-                    world.spawnParticle(Particle.SMOKE_LARGE, loc, 20, 0.4, 0.4, 0.4, 0.1, null, true);
-                    world.spawnParticle(Particle.SMOKE_NORMAL, loc, 20, 0.4, 0.4, 0.4, 0.1, null, true);
-                    world.spawnParticle(Particle.ENCHANTMENT_TABLE, loc, 40, 0.8, 0.8, 0.8, 0.3, null, true);
+                    world.spawnParticle(Particle.LARGE_SMOKE, loc, 20, 0.4, 0.4, 0.4, 0.1, null, true);
+                    world.spawnParticle(Particle.SMOKE, loc, 20, 0.4, 0.4, 0.4, 0.1, null, true);
+                    world.spawnParticle(Particle.ENCHANT, loc, 40, 0.8, 0.8, 0.8, 0.3, null, true);
                 })
                 .setPotionEffects(new PotionEffect(PotionEffectType.BLINDNESS, 40, 0, false))
                 .setStagePassCondition(Entity::isOnGround)
-                .setEffectsDuringPhase(entity -> entity.getWorld().spawnParticle(Particle.SMOKE_LARGE, entity.getLocation(), 5, 0.3, 0.3, 0.3, 0.05, null, true))
+                .setEffectsDuringPhase(entity -> entity.getWorld().spawnParticle(Particle.LARGE_SMOKE, entity.getLocation(), 5, 0.3, 0.3, 0.3, 0.05, null, true))
                 .setEffectsAfterPhase((entity, player) -> {
                     Location loc = entity.getLocation();
                     World world = loc.getWorld();
-                    loc.getWorld().spawnParticle(Particle.SMOKE_LARGE, loc, 15, 2, 0.2, 2, 0.05, null, true);
+                    loc.getWorld().spawnParticle(Particle.LARGE_SMOKE, loc, 15, 2, 0.2, 2, 0.05, null, true);
                     world.createExplosion(loc, 0.0f);
                     for (LivingEntity loopEntity : SpellEffectUtil.getNearbyLivingEntities(player, loc, 3)) {
                         loopEntity.damage(3);

@@ -43,8 +43,8 @@ public class CorruptedWolves implements Castable {
                 .setEffectDistance(30)
                 .setEntityEffects(this::accept)
                 .setSpellRelativeEffects((loc, spellInfo) -> {
-                    spellInfo.world().spawnParticle(Particle.SMOKE_LARGE, loc, 20, 0.4, 0.4, 0.4, 0.1, null, true);
-                    spellInfo.world().spawnParticle(Particle.SMOKE_NORMAL, loc, 20, 0.4, 0.4, 0.4, 0.1, null, true);
+                    spellInfo.world().spawnParticle(Particle.LARGE_SMOKE, loc, 20, 0.4, 0.4, 0.4, 0.1, null, true);
+                    spellInfo.world().spawnParticle(Particle.SMOKE, loc, 20, 0.4, 0.4, 0.4, 0.1, null, true);
                 })
                 .build();
     }
@@ -57,17 +57,17 @@ public class CorruptedWolves implements Castable {
             WOLVES.add(wolf);
             Location location = wolf.getLocation();
             world.playSound(location, Sound.BLOCK_CHORUS_FLOWER_GROW, SoundCategory.MASTER, 4.0F, 1.0F);
-            world.spawnParticle(Particle.SMOKE_LARGE, location, 2, 0.1, 0.1, 0.05, 0.1, null, true);
+            world.spawnParticle(Particle.LARGE_SMOKE, location, 2, 0.1, 0.1, 0.05, 0.1, null, true);
             wolf.addPotionEffect(SPEED);
             BukkitRunnable bukkitRunnable = new BukkitRunnable() {
                 @Override
                 public void run() {
                     if (wolf.isValid()) {
-                        world.spawnParticle(Particle.SMOKE_NORMAL, wolf.getLocation(), 1, 0.1, 0.1, 0.1, 0.05, null, true);
+                        world.spawnParticle(Particle.SMOKE, wolf.getLocation(), 1, 0.1, 0.1, 0.1, 0.05, null, true);
                     } else {
                         cancel();
                         WOLVES.remove(wolf);
-                        world.spawnParticle(Particle.SMOKE_LARGE, wolf.getLocation(), 3, 0, 0, 0, 0.1, null, true);
+                        world.spawnParticle(Particle.LARGE_SMOKE, wolf.getLocation(), 3, 0, 0, 0, 0.1, null, true);
                     }
                 }
             };

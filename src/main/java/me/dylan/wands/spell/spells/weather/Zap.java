@@ -28,7 +28,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Zap implements Castable {
-    private static final PotionEffect SLOW_EFFECT = new PotionEffect(PotionEffectType.SLOW, 40, 3);
+    private static final PotionEffect SLOW_EFFECT = new PotionEffect(PotionEffectType.SLOWNESS, 40, 3);
     private static final PotionEffect WEAK_EFFECT = new PotionEffect(PotionEffectType.WEAKNESS, 100, 3);
     private static final KnockBack knockBack = KnockBack.from(0, 1);
     private static final int TOTAL_RICOCHET = 5;
@@ -48,7 +48,7 @@ public class Zap implements Castable {
                 .setSpellRelativeEffects((loc, spellInfo) -> {
                     World world = spellInfo.world();
                     world.spawnParticle(Particle.END_ROD, loc, 5, 0.1, 0.1, 0.1, 0.02, null, true);
-                    world.spawnParticle(Particle.CRIT_MAGIC, loc, 5, 0.4, 0.4, 0.4, 1, null, true);
+                    world.spawnParticle(Particle.CRIT, loc, 5, 0.4, 0.4, 0.4, 1, null, true);
                 })
                 .setCastSound(Sound.ENTITY_EVOKER_CAST_SPELL, 2)
                 .setEffectDistance(30)

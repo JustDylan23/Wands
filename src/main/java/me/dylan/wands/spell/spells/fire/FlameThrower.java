@@ -27,7 +27,7 @@ public class FlameThrower implements Castable {
                 .setSpellRelativeEffects((loc, spellInfo) -> {
                     World world = spellInfo.world();
                     world.spawnParticle(Particle.FLAME, loc, 2, 0.8, 0.8, 0.8, 0.1, null, true);
-                    world.spawnParticle(Particle.SMOKE_LARGE, loc, 1, 0.3, 0.3, 0.3, 0.1, null, true);
+                    world.spawnParticle(Particle.LARGE_SMOKE, loc, 1, 0.3, 0.3, 0.3, 0.1, null, true);
                 })
                 .build();
     }

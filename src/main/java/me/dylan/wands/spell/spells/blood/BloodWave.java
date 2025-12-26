@@ -30,9 +30,9 @@ public class BloodWave implements Castable {
                 .setPotionEffects(new PotionEffect(PotionEffectType.WITHER, 80, 4, false))
                 .setSpellRelativeEffects((loc, spellInfo) -> {
                     World world = spellInfo.world();
-                    world.spawnParticle(Particle.SMOKE_NORMAL, loc, 10, 0.2, 0.2, 0.2, 0.1, null, true);
-                    world.spawnParticle(Particle.SMOKE_LARGE, loc, 10, 1, 1, 1, 0.1, null, true);
-                    world.spawnParticle(Particle.BLOCK_CRACK, loc, 12, 0.6, 0.6, 0.6, 0.15, BloodMagicConstants.BLOCK_CRACK_REDSTONE, true);
+                    world.spawnParticle(Particle.SMOKE, loc, 10, 0.2, 0.2, 0.2, 0.1, null, true);
+                    world.spawnParticle(Particle.LARGE_SMOKE, loc, 10, 1, 1, 1, 0.1, null, true);
+                    world.spawnParticle(Particle.BLOCK, loc, 12, 0.6, 0.6, 0.6, 0.15, BloodMagicConstants.BLOCK_CRACK_REDSTONE, true);
                 })
                 .build();
     }
