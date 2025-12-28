@@ -10,6 +10,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.attribute.AttributeModifier.Operation;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
@@ -93,7 +94,7 @@ public final class ItemBuilder {
 
     public ItemBuilder withoutAttackDamage() {
         ItemUtil.setItemMeta(itemStack, meta -> meta.addAttributeModifier(
-                Attribute.ATTACK_DAMAGE, new AttributeModifier(KeyFactory.getOrCreateKey("attack_damage"), 0, Operation.MULTIPLY_SCALAR_1)
+                Attribute.ATTACK_DAMAGE, new AttributeModifier(KeyFactory.getOrCreateKey("attack_damage"), 0, Operation.MULTIPLY_SCALAR_1, EquipmentSlotGroup.ANY)
         ));
         return this;
     }
