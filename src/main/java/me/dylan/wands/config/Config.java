@@ -5,60 +5,63 @@ import com.google.gson.annotations.SerializedName;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Config {
+class Config {
+    @SerializedName("spell_data")
+    private final Map<Integer, SpellConfig> spellConfigMap = new HashMap<>();
     @SerializedName("is_magic_enabled")
     private boolean isMagicEnabled = true;
-
     @SerializedName("spell_cooldown")
-    private int spellCooldown;
-
+    private int globalSpellCooldown = 0;
     @SerializedName("casting_requires_permission")
     private boolean castingRequiresPermission = true;
+    @SerializedName("send_updating_notifications")
+    private boolean sendUpdateNotifications = true;
 
-    @SerializedName("spell_data")
-    private Map<Integer, SpellConfig> spellConfigMap = new HashMap<>();
+    Map<Integer, SpellConfig> getSpellConfigMap() {
+        return spellConfigMap;
+    }
 
     boolean isMagicEnabled() {
         return isMagicEnabled;
     }
 
-    void setMagicEnabled(boolean magicEnabled) {
-        isMagicEnabled = magicEnabled;
+    void setMagicEnabled(boolean value) {
+        isMagicEnabled = value;
     }
 
-    int getSpellCooldown() {
-        return spellCooldown;
+    int getGlobalSpellCooldown() {
+        return globalSpellCooldown;
     }
 
-    void setSpellCooldown(int spellCooldown) {
-        this.spellCooldown = spellCooldown;
+    void setGlobalSpellCooldown(int seconds) {
+        this.globalSpellCooldown = seconds;
     }
 
     boolean doesCastingRequirePermission() {
         return castingRequiresPermission;
     }
 
-    void setCastingRequiresPermission(boolean doesCastingRequirePermission) {
-        this.castingRequiresPermission = doesCastingRequirePermission;
+    void setCastingRequiresPermission(boolean value) {
+        this.castingRequiresPermission = value;
     }
 
-    public Map<Integer, SpellConfig> getSpellConfigMap() {
-        return spellConfigMap;
+    boolean areNotificationsEnabled() {
+        return sendUpdateNotifications;
     }
 
-    public void setSpellConfigMap(Map<Integer, SpellConfig> spellConfigMap) {
-        this.spellConfigMap = spellConfigMap;
+    void enableNotifications(boolean value) {
+        this.sendUpdateNotifications = value;
     }
 
-    public static class SpellConfig {
-        private int cooldown;
+    static class SpellConfig {
+        private int cooldown = 0;
 
         int getCooldown() {
             return cooldown;
         }
 
-        void setCooldown(int cooldown) {
-            this.cooldown = cooldown;
+        void setCooldown(int seconds) {
+            this.cooldown = seconds;
         }
     }
 }

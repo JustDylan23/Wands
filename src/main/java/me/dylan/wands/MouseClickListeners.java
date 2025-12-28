@@ -1,17 +1,26 @@
 package me.dylan.wands;
 
+import me.dylan.wands.utils.Common;
 import org.bukkit.GameMode;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerAnimationEvent;
+import org.bukkit.event.player.PlayerAnimationType;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class MouseClickListeners implements Listener {
@@ -38,19 +47,49 @@ public class MouseClickListeners implements Listener {
         GameMode gameMode = player.getGameMode();
         if (action == Action.PHYSICAL || gameMode == GameMode.SPECTATOR || event.getHand() == EquipmentSlot.OFF_HAND)
             return;
+        Collection<Entity> nearbyEntities = player.getLocation().getWorld().getNearbyEntities(player.getEyeLocation(), 0.2, 0.2, 0.2, Item.class::isInstance);
+        for (Entity nearbyEntity : nearbyEntities) {
+            Item item = (Item) nearbyEntity;
+            if (item.getTicksLived() == 0 && item.hasMetadata("origin")) {
+                Object origin = item.getMetadata("origin").get(0).value();
+                if (origin != null) {
+                    if (origin.equals(event.getItem())) {
+                        return;
+                    }
+                }
+            }
+        }
         if (gameMode != GameMode.ADVENTURE && (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK)) {
+            WandsPlugin.debug("interact left click event");
             ClickEvent clickEvent = new ClickEvent(player, event);
             leftClickListeners.forEach(listener -> listener.onLeftClick(clickEvent));
         } else if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) {
             ClickEvent clickEvent = new ClickEvent(player, event);
+            WandsPlugin.debug("interact right click event");
             rightClickListeners.forEach(listener -> listener.onRightClick(clickEvent));
         }
     }
 
+    @EventHandler(priority = EventPriority.HIGHEST)
+    private void onDrop(PlayerDropItemEvent event) {
+        event.getItemDrop().setMetadata("origin", Common.metadataValue(event.getPlayer().getInventory().getItemInMainHand()));
+        Common.runTaskLater(() -> Common.removeMetaData(event.getItemDrop(), "origin"), 1L);
+    }
+
     @EventHandler
-    private void onLeftClick(@NotNull PlayerAnimationEvent event) {
+    private void onEntityDamageEntityEvent(EntityDamageByEntityEvent event) {
+        if (event.getDamager() instanceof Player player && event.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
+            ClickEvent clickEvent = new ClickEvent(player, event);
+            WandsPlugin.debug("damage left event click");
+            leftClickListeners.forEach(listener -> listener.onLeftClick(clickEvent));
+        }
+    }
+
+    @EventHandler
+    private void onPlayerAnimation(@NotNull PlayerAnimationEvent event) {
         Player player = event.getPlayer();
-        if (player.getGameMode() == GameMode.ADVENTURE) {
+        if (player.getGameMode() == GameMode.ADVENTURE && event.getAnimationType() == PlayerAnimationType.ARM_SWING) {
+            WandsPlugin.debug("animation left event click");
             ClickEvent clickEvent = new ClickEvent(player, event);
             leftClickListeners.forEach(listener -> listener.onLeftClick(clickEvent));
         }

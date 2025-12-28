@@ -1,17 +1,21 @@
 package me.dylan.wands.spell;
 
 import me.dylan.wands.spell.accessories.ItemTag;
+import me.dylan.wands.spell.spells.AffinityType;
 import me.dylan.wands.spell.util.SpellInteractionUtil;
 import me.dylan.wands.utils.ItemUtil;
+import me.dylan.wands.utils.KeyFactory;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.attribute.AttributeModifier.Operation;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.Set;
+import java.util.*;
 
 public final class ItemBuilder {
     private final ItemStack itemStack;
@@ -39,8 +43,15 @@ public final class ItemBuilder {
         return this;
     }
 
-    public ItemBuilder withLore(String... text) {
-        ItemUtil.setItemMeta(itemStack, meta -> meta.setLore(Arrays.asList(text)));
+    public ItemBuilder addLore(String... text) {
+        ItemUtil.setItemMeta(itemStack, meta -> {
+            List<String> lore = meta.getLore();
+            if (lore == null) {
+                lore = new ArrayList<>();
+            }
+            Collections.addAll(lore, text);
+            meta.setLore(lore);
+        });
         return this;
     }
 
@@ -80,7 +91,43 @@ public final class ItemBuilder {
         return this;
     }
 
+    public ItemBuilder withoutAttackDamage() {
+        ItemUtil.setItemMeta(itemStack, meta -> meta.addAttributeModifier(
+                Attribute.ATTACK_DAMAGE, new AttributeModifier(KeyFactory.getOrCreateKey("attack_damage"), 0, Operation.MULTIPLY_SCALAR_1)
+        ));
+        return this;
+    }
+
     public ItemStack build() {
         return itemStack;
     }
+
+    /**
+     * Intended for use on wands
+     * @param affinityType type of scrolls that can be applied to wand
+     * @return self
+     */
+    public ItemBuilder withCastAffinity(AffinityType affinityType) {
+        addLore("", "§7Combat class: " + affinityType.getDisplayName());
+        ItemUtil.setPersistentData(itemStack, AffinityType.PERSISTENT_DATA_KEY_WAND, PersistentDataType.INTEGER, affinityType.getId());
+        return this;
+    }
+
+    /**
+     * Intended for use on scrolls
+     * @param affinityType types of wand scroll can be used on
+     * @return self
+     */
+    public ItemBuilder withWandAffinity(AffinityType... affinityType) {
+        int[] intArray = new int[affinityType.length];
+        addLore("", "§7Affinity for classes:");
+        for (int i = 0; i < affinityType.length; i++) {
+            AffinityType type = affinityType[i];
+            intArray[i] = type.getId();
+            addLore("§7- " + type.getDisplayName());
+        }
+        ItemUtil.setPersistentData(itemStack, AffinityType.PERSISTENT_DATA_KEY_SCROLL, PersistentDataType.INTEGER_ARRAY, intArray);
+        return this;
+    }
+
 }

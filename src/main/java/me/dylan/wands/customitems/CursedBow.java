@@ -6,6 +6,7 @@ import me.dylan.wands.spell.accessories.ItemTag;
 import me.dylan.wands.spell.util.SpellEffectUtil;
 import me.dylan.wands.spell.util.SpellInteractionUtil;
 import me.dylan.wands.utils.Common;
+import me.dylan.wands.utils.ItemUtil;
 import me.dylan.wands.utils.PlayerUtil;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
@@ -34,7 +35,7 @@ public class CursedBow implements Listener, RightClickListener {
     private final String cursedArrow = UUID.randomUUID().toString();
     private final Set<Player> drawing = new HashSet<>();
     private final Set<Player> hasDrawn = new HashSet<>();
-    private final PotionEffect slow = new PotionEffect(PotionEffectType.SLOW, 60, 3, false);
+    private final PotionEffect slow = new PotionEffect(PotionEffectType.SLOWNESS, 60, 3, false);
 
     private int hasBow(Player player) {
         PlayerInventory inventory = player.getInventory();
@@ -59,7 +60,7 @@ public class CursedBow implements Listener, RightClickListener {
             drawing.add(player);
             PlayerUtil.sendActionBar(player, "§6Charging [§a|§6|||]");
             BukkitRunnable bukkitRunnable = new BukkitRunnable() {
-                int count;
+                int count = 0;
 
                 @Override
                 public void run() {
@@ -96,17 +97,17 @@ public class CursedBow implements Listener, RightClickListener {
             } else if (hasDrawn.contains(player)) {
                 hasDrawn.remove(player);
                 Entity projectile = event.getProjectile();
-                projectile.setMetadata(cursedArrow, Common.metadataValue(player.getInventory().getItemInMainHand().getItemMeta().getDisplayName()));
+                projectile.setMetadata(cursedArrow, Common.metadataValue(ItemUtil.getName(player.getInventory().getItemInMainHand())));
                 Location location = player.getLocation();
                 World world = location.getWorld();
                 world.playSound(location, Sound.ENTITY_ENDER_DRAGON_FLAP, SoundCategory.MASTER, 4.0F, 1.0F);
                 world.playSound(player.getLocation(), Sound.ENTITY_EVOKER_CAST_SPELL, SoundCategory.MASTER, 4.0F, 0.1F);
-                world.spawnParticle(Particle.SPELL_WITCH, location.add(0, 1, 0), 30, 1, 1, 1, 0.0F, null, true);
-                world.spawnParticle(Particle.ENCHANTMENT_TABLE, location.add(0, 1, 0), 100, 1, 1, 1, 0.0F, null, true);
+                world.spawnParticle(Particle.WITCH, location.add(0, 1, 0), 30, 1, 1, 1, 0.0F, null, true);
+                world.spawnParticle(Particle.ENCHANT, location.add(0, 1, 0), 100, 1, 1, 1, 0.0F, null, true);
                 trail(projectile, loc -> {
                     World world1 = loc.getWorld();
-                    world1.spawnParticle(Particle.SPELL_WITCH, loc, 10, 0.5, 0.5, 0.5, 0.05, null, true);
-                    world1.spawnParticle(Particle.ENCHANTMENT_TABLE, loc, 10, 0.5, 0.5, 0.5, 0.15, null, true);
+                    world1.spawnParticle(Particle.WITCH, loc, 10, 0.5, 0.5, 0.5, 0.05, null, true);
+                    world1.spawnParticle(Particle.ENCHANT, loc, 10, 0.5, 0.5, 0.5, 0.15, null, true);
                 });
             }
         }
@@ -148,11 +149,11 @@ public class CursedBow implements Listener, RightClickListener {
                 Location location = projectile.getLocation();
                 location.getWorld().playSound(location, Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, SoundCategory.MASTER, 5.0F, 1.0F);
                 location.getWorld().playSound(location, Sound.ITEM_TRIDENT_RETURN, SoundCategory.MASTER, 5.0F, 1.0F);
-                location.getWorld().spawnParticle(Particle.SMOKE_NORMAL, location, 30, 0.4, 0.4, 0.4, 0.2, null, true);
+                location.getWorld().spawnParticle(Particle.SMOKE, location, 30, 0.4, 0.4, 0.4, 0.2, null, true);
                 SpellEffectUtil.getNearbyLivingEntities((Player) projectile.getShooter(), location, 3)
                         .forEach(entity -> {
                             SpellEffectUtil.damageEffect((Player) projectile.getShooter(), entity, 8, projectile.getMetadata(cursedArrow).get(0).asString());
-                            entity.addPotionEffect(slow, true);
+                            entity.addPotionEffect(slow);
                         });
                 projectile.remove();
             }

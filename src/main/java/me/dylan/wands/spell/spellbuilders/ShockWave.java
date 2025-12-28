@@ -6,7 +6,6 @@ import me.dylan.wands.utils.Common;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,7 +23,7 @@ public final class ShockWave extends BuildableBehaviour {
     private final String tagShockWave;
 
     private ShockWave(@NotNull Builder builder) {
-        super(builder.baseProps);
+        super(builder);
         this.waveRadius = builder.waveRadius;
         this.delay = builder.delay;
         this.tagShockWave = UUID.randomUUID().toString();
@@ -42,7 +41,7 @@ public final class ShockWave extends BuildableBehaviour {
         Location waveCenter = player.getLocation();
         SpellInfo spellInfo = new SpellInfo(player, waveCenter, waveCenter);
         BukkitRunnable bukkitRunnable = new BukkitRunnable() {
-            float currentRadius;
+            float currentRadius = 0.0F;
 
             @Override
             public void run() {
@@ -59,9 +58,7 @@ public final class ShockWave extends BuildableBehaviour {
                         entity.setMetadata(tagShockWave, Common.getMetadataValueTrue());
                         SpellEffectUtil.damageEffect(player, entity, entityDamage, weapon);
                         entityEffects.accept(entity, spellInfo);
-                        for (PotionEffect potionEffect : potionEffects) {
-                            entity.addPotionEffect(potionEffect, true);
-                        }
+                        applyPotionEffects(entity);
                         knockBack.apply(entity, waveCenter);
                         Common.runTaskLater(() -> Common.removeMetaData(entity, tagShockWave), cooldownTime);
                     }
@@ -73,7 +70,7 @@ public final class ShockWave extends BuildableBehaviour {
     }
 
     public static final class Builder extends AbstractBuilder<Builder> {
-        private int waveRadius, delay = 1;
+        private int waveRadius = 1, delay = 1;
 
         private Builder() {
         }

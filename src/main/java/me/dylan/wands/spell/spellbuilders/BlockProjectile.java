@@ -13,7 +13,6 @@ import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
@@ -38,16 +37,14 @@ public final class BlockProjectile extends BuildableBehaviour implements Listene
     private final String tagBlockProjectile;
     private final int amount, delay, metaTime;
 
-
     private BlockProjectile(@NotNull Builder builder) {
-        super(builder.baseProps);
+        super(builder);
         this.material = builder.material;
         this.speed = builder.speed;
         this.amount = builder.amount;
         this.delay = builder.delay;
         this.metaTime = amount * delay;
         this.tagBlockProjectile = UUID.randomUUID().toString();
-
 
         ListenerRegistry.addListener(this);
 
@@ -67,7 +64,7 @@ public final class BlockProjectile extends BuildableBehaviour implements Listene
     @Override
     public boolean cast(@NotNull Player player, @NotNull String weapon) {
         BukkitRunnable bukkitRunnable = new BukkitRunnable() {
-            int count;
+            int count = 0;
 
             @Override
             public void run() {
@@ -110,9 +107,7 @@ public final class BlockProjectile extends BuildableBehaviour implements Listene
                                         entity.setMetadata(tagBlockProjectile, Common.getMetadataValueTrue());
                                         Common.runTaskLater(() -> Common.removeMetaData(entity, tagBlockProjectile), metaTime);
                                         entityEffects.accept(entity, spellInfo);
-                                        for (PotionEffect potionEffect : potionEffects) {
-                                            entity.addPotionEffect(potionEffect, true);
-                                        }
+                                        applyPotionEffects(entity);
                                         knockBack.apply(entity, LocationUtil.toCenterLocation(location));
                                         SpellEffectUtil.damageEffect(player, entity, entityDamage, wandDisplayName);
                                     });
@@ -138,7 +133,8 @@ public final class BlockProjectile extends BuildableBehaviour implements Listene
     public static final class Builder extends AbstractBuilder<Builder> {
         private final float speed;
         private final Material material;
-        private int delay, amount = 1;
+
+        private int delay = 1, amount = 1;
 
         private Builder(Material material, float speed) {
             this.material = material;

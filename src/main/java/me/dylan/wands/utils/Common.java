@@ -2,10 +2,8 @@ package me.dylan.wands.utils;
 
 import me.dylan.wands.WandsPlugin;
 import org.bukkit.Bukkit;
-import org.bukkit.NamespacedKey;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.Metadatable;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,9 +12,8 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 @SuppressWarnings("WeakerAccess")
-public final class
-Common {
-    private static final WandsPlugin plugin = JavaPlugin.getPlugin(WandsPlugin.class);
+public final class Common {
+    private static final WandsPlugin plugin = WandsPlugin.getInstance();
     private static final FixedMetadataValue METADATA_VALUE_TRUE = new FixedMetadataValue(plugin, true);
     private static final Consumer<?> EMPTY_CONSUMER = t -> {
     };
@@ -25,10 +22,10 @@ Common {
     private static final Predicate<?> EMPTY_PREDICATE = t -> true;
 
     private Common() {
-        throw new UnsupportedOperationException("Instantiating Util Class");
     }
 
-    public static String pascalCaseToWords(String input) {
+    @NotNull
+    public static String pascalCaseToWords(@NotNull String input) {
         return input.replaceAll("[A-Z]", " $0").trim();
     }
 
@@ -45,10 +42,6 @@ Common {
     @SuppressWarnings("unchecked")
     public static <T> Predicate<T> emptyPredicate() {
         return (Predicate<T>) EMPTY_PREDICATE;
-    }
-
-    public static int getIntInRange(int min, int max, int in) {
-        return Math.max(min, Math.min(max, in));
     }
 
     public static void runTaskLater(Runnable runnable, long delay) {
@@ -77,9 +70,5 @@ Common {
 
     public static void removeMetaData(@NotNull Metadatable metadatable, String metaKey) {
         metadatable.removeMetadata(metaKey, plugin);
-    }
-
-    public static NamespacedKey newNamespacedKey(String key) {
-        return new NamespacedKey(plugin, key);
     }
 }

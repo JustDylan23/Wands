@@ -6,7 +6,6 @@ import me.dylan.wands.utils.Common;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
@@ -38,7 +37,7 @@ public final class Phase extends BuildableBehaviour {
     private final int effectDistance;
 
     private Phase(@NotNull Builder builder) {
-        super(builder.baseProps);
+        super(builder);
         this.target = builder.target;
         this.effectDistance = builder.effectDistance;
         this.condition = builder.condition;
@@ -66,14 +65,14 @@ public final class Phase extends BuildableBehaviour {
             entity.setMetadata(tagPhaseSpell, Common.getMetadataValueTrue());
             knockBack.apply(entity, pushFrom);
             entityEffects.accept(entity, spellInfo);
-            for (PotionEffect potionEffect : potionEffects) {
-                entity.addPotionEffect(potionEffect, true);
-            }
+            applyPotionEffects(entity);
             SpellEffectUtil.damageEffect(player, entity, entityDamage, weapon);
             BukkitRunnable bukkitRunnable = new BukkitRunnable() {
+                int lifetime;
                 @Override
                 public void run() {
-                    if (!entity.isValid() || condition.test(entity)) {
+                    lifetime++;
+                    if (lifetime > 200 || !entity.isValid() || condition.test(entity)) {
                         afterPhaseEffect.accept(entity, player);
                         Common.removeMetaData(entity, tagPhaseSpell);
                         cancel();
@@ -91,7 +90,8 @@ public final class Phase extends BuildableBehaviour {
 
     public static final class Builder extends AbstractBuilder<Builder> {
         private final Target target;
-        private int effectDistance;
+
+        private int effectDistance = 25;
         private Predicate<LivingEntity> condition = Common.emptyPredicate();
         private Consumer<LivingEntity> duringPhaseEffect = Common.emptyConsumer();
         private BiConsumer<LivingEntity, Player> afterPhaseEffect = Common.emptyBiConsumer();
