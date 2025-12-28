@@ -29,9 +29,9 @@ public class Comet implements Castable {
                 .setCastSound(Sound.ENTITY_FIREWORK_ROCKET_BLAST)
                 .setSpellRelativeEffects((loc, spellInfo) -> {
                     World world = spellInfo.world();
-                    world.spawnParticle(Particle.SPELL_WITCH, loc, 40, 0.8, 0.8, 0.8, 0.15, null, true);
-                    world.spawnParticle(Particle.SMOKE_LARGE, loc, 10, 0.6, 0.6, 0.6, 0.1, null, true);
-                    world.spawnParticle(Particle.SMOKE_LARGE, loc, 10, 1.0, 1.0, 1.0, 0.1, null, true);
+                    world.spawnParticle(Particle.WITCH, loc, 40, 0.8, 0.8, 0.8, 0.15, null, true);
+                    world.spawnParticle(Particle.LARGE_SMOKE, loc, 10, 0.6, 0.6, 0.6, 0.1, null, true);
+                    world.spawnParticle(Particle.LARGE_SMOKE, loc, 10, 1.0, 1.0, 1.0, 0.1, null, true);
                 })
                 .setProjectileProps(projectile -> {
                     projectile.setIsIncendiary(false);
@@ -41,8 +41,8 @@ public class Comet implements Castable {
                 .setHitEffects((loc, spellInfo) -> {
                     World world = spellInfo.world();
                     world.createExplosion(loc, 0.0f);
-                    world.spawnParticle(Particle.EXPLOSION_HUGE, loc, 0, 0.0, 0.0, 0.0, 0.0, null, true);
-                    world.spawnParticle(Particle.SMOKE_LARGE, loc, 50, 2.0, 2.0, 2.0, 0.05, null, true);
+                    world.spawnParticle(Particle.EXPLOSION_EMITTER, loc, 0, 0.0, 0.0, 0.0, 0.0, null, true);
+                    world.spawnParticle(Particle.LARGE_SMOKE, loc, 50, 2.0, 2.0, 2.0, 0.05, null, true);
                     soundEffect.play(loc);
                 })
                 .build();

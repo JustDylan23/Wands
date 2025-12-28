@@ -14,9 +14,9 @@ public class BloodMagicConstants {
 
     static final BiConsumer<Location, SpellInfo> BLOOD_EXPLOSION_EFFECTS = (loc, spellInfo) -> {
         World world = spellInfo.world();
-        world.spawnParticle(Particle.SMOKE_LARGE, loc, 20, 1, 1, 1, 0.1, null, true);
-        world.spawnParticle(Particle.BLOCK_CRACK, loc, 15, 1, 1, 1, 0.15, BLOCK_CRACK_REDSTONE, true);
-        world.spawnParticle(Particle.EXPLOSION_HUGE, loc, 0, 0.0, 0.0, 0.0, 0.0, null, true);
+        world.spawnParticle(Particle.LARGE_SMOKE, loc, 20, 1, 1, 1, 0.1, null, true);
+        world.spawnParticle(Particle.BLOCK, loc, 15, 1, 1, 1, 0.15, BLOCK_CRACK_REDSTONE, true);
+        world.spawnParticle(Particle.EXPLOSION_EMITTER, loc, 0, 0.0, 0.0, 0.0, 0.0, null, true);
         world.createExplosion(loc, 0.0f);
     };
 }

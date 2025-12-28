@@ -30,8 +30,8 @@ public class DarkCircle implements Castable {
                 .setCastSound(Sound.ENTITY_ENDER_DRAGON_FLAP)
                 .setSpellRelativeEffects((loc, spellInfo) -> {
                     World world = spellInfo.world();
-                    world.spawnParticle(Particle.SMOKE_LARGE, loc, 10, 0.3, 0.3, 0.3, 0.1, null, true);
-                    world.spawnParticle(Particle.ENCHANTMENT_TABLE, loc, 8, 0.3, 0.3, 0.3, 0.1, null, true);
+                    world.spawnParticle(Particle.LARGE_SMOKE, loc, 10, 0.3, 0.3, 0.3, 0.1, null, true);
+                    world.spawnParticle(Particle.ENCHANT, loc, 8, 0.3, 0.3, 0.3, 0.1, null, true);
                 })
                 .setKnockBack(KnockBack.SIDEWAYS)
                 .setCircleHeight(1)

@@ -23,8 +23,8 @@ public class Launch implements Castable {
                 .setEntityEffects((entity, spellInfo) -> entity.setVelocity(new Vector(0, 1.2, 0)))
                 .setSpellRelativeEffects((loc, spellInfo) -> {
                     World world = spellInfo.world();
-                    world.spawnParticle(Particle.SPELL_WITCH, loc, 30, 0.6, 0.7, 0.6, 0.4, null, true);
-                    world.spawnParticle(Particle.SMOKE_LARGE, loc, 20, 0.2, 0.2, 0.2, 0.2, null, true);
+                    world.spawnParticle(Particle.WITCH, loc, 30, 0.6, 0.7, 0.6, 0.4, null, true);
+                    world.spawnParticle(Particle.LARGE_SMOKE, loc, 20, 0.2, 0.2, 0.2, 0.2, null, true);
                     world.playSound(loc, Sound.ENTITY_FIREWORK_ROCKET_BLAST, SoundCategory.MASTER, 4.0F, 1.0F);
                     MagicSpark.SPARK_SOUND.play(loc);
                 })
@@ -32,7 +32,7 @@ public class Launch implements Castable {
                 .setEffectsDuringPhase(entity -> {
                     World world = entity.getWorld();
                     Location location = entity.getLocation();
-                    world.spawnParticle(Particle.SMOKE_LARGE, location, 1, 0, 0, 0, 0.3, null, true);
+                    world.spawnParticle(Particle.LARGE_SMOKE, location, 1, 0, 0, 0, 0.3, null, true);
                     world.spawnParticle(Particle.PORTAL, location, 10, 0.4, 0.4, 0.4, 0, null, true);
                 })
                 .setEffectDistance(30)

@@ -4,6 +4,7 @@ import me.dylan.wands.spell.accessories.ItemTag;
 import me.dylan.wands.spell.spells.AffinityType;
 import me.dylan.wands.spell.util.SpellInteractionUtil;
 import me.dylan.wands.utils.ItemUtil;
+import me.dylan.wands.utils.KeyFactory;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -92,7 +93,7 @@ public final class ItemBuilder {
 
     public ItemBuilder withoutAttackDamage() {
         ItemUtil.setItemMeta(itemStack, meta -> meta.addAttributeModifier(
-                Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier("generic.attackDamage", 0, Operation.MULTIPLY_SCALAR_1)
+                Attribute.ATTACK_DAMAGE, new AttributeModifier(KeyFactory.getOrCreateKey("attack_damage"), 0, Operation.MULTIPLY_SCALAR_1)
         ));
         return this;
     }

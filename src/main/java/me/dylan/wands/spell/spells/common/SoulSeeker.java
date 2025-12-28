@@ -108,7 +108,7 @@ public class SoulSeeker extends Behavior implements Castable {
                 projectileLoc.getWorld().playSound(projectileLoc, Sound.BLOCK_RESPAWN_ANCHOR_DEPLETE, 5, 1);
                 SpellEffectUtil.damageEffect(player, target, 3, weapon);
                 target.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 100, 1));
-                target.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 100, 2));
+                target.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 100, 2));
                 target.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 100, 1));
                 cancel();
             }

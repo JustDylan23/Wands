@@ -6,9 +6,6 @@ import me.dylan.wands.spell.SpellType;
 import me.dylan.wands.spell.accessories.ItemTag;
 import me.dylan.wands.spell.spells.AffinityType;
 import org.bukkit.Material;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeModifier;
-import org.bukkit.attribute.AttributeModifier.Operation;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -27,7 +24,7 @@ public enum PreSetItem {
                     .named("&cCursed Bow")
                     .unbreakable()
                     .hideFlags()
-                    .enchant(Enchantment.ARROW_INFINITE, 1, true)
+                    .enchant(Enchantment.INFINITY, 1, true)
                     .tag(ItemTag.IS_CURSED_BOW)
                     .blockWandRegistration()
                     .build()

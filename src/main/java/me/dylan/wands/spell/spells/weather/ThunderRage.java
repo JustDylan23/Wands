@@ -22,7 +22,7 @@ public class ThunderRage implements Castable {
     }
 
     private final PotionEffect wither = new PotionEffect(PotionEffectType.WITHER, 80, 1, false);
-    private final PotionEffect slow = new PotionEffect(PotionEffectType.SLOW, 80, 3, false);
+    private final PotionEffect slow = new PotionEffect(PotionEffectType.SLOWNESS, 80, 3, false);
 
     @Override
     public Behavior createBehaviour() {
@@ -42,9 +42,9 @@ public class ThunderRage implements Castable {
                             cancel();
                         }
                         Location currentLoc = player.getLocation();
-                        world.spawnParticle(Particle.EXPLOSION_NORMAL, currentLoc, 1, 0.4, 0.3, 0.4, 0.1, null, true);
-                        world.spawnParticle(Particle.SMOKE_LARGE, currentLoc, 1, 0.4, 0.3, 0.4, 0.1, null, true);
-                        world.spawnParticle(Particle.SMOKE_NORMAL, currentLoc, 1, 0.4, 0.3, 0.4, 0.1, null, true);
+                        world.spawnParticle(Particle.POOF, currentLoc, 1, 0.4, 0.3, 0.4, 0.1, null, true);
+                        world.spawnParticle(Particle.LARGE_SMOKE, currentLoc, 1, 0.4, 0.3, 0.4, 0.1, null, true);
+                        world.spawnParticle(Particle.SMOKE, currentLoc, 1, 0.4, 0.3, 0.4, 0.1, null, true);
                         world.spawnParticle(Particle.FLAME, currentLoc, 1, 0.4, 0.2, 0.4, 0.1, null, true);
                         strikeRandomLightning(player, weapon);
                     }

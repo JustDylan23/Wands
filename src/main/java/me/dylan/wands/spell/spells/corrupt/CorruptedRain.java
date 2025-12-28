@@ -58,9 +58,9 @@ public class CorruptedRain implements Castable, Listener {
         location.add(0, 5, 0);
         World world = location.getWorld();
         Location particleLoc = location.clone().add(0, 2, 0);
-        world.spawnParticle(Particle.SPELL_MOB, particleLoc, 50, 1, 1, 1, 1, null, true);
-        world.spawnParticle(Particle.BLOCK_CRACK, particleLoc, 50, 0.8, 0.3, 0.8, 0, obsidian, true);
-        world.spawnParticle(Particle.SMOKE_NORMAL, particleLoc, 70, 1, 1, 1, 0, null, true);
+        SpellEffectUtil.spawnEntityEffect(particleLoc, 20, 1, 0.5, 1);
+        world.spawnParticle(Particle.BLOCK, particleLoc, 50, 0.8, 0.3, 0.8, 0, obsidian, true);
+        world.spawnParticle(Particle.SMOKE, particleLoc, 70, 1, 1, 1, 0, null, true);
         List<Arrow> arrows = new ArrayList<>();
         BukkitRunnable bukkitRunnable = new BukkitRunnable() {
             int count = 0;

@@ -70,7 +70,7 @@ final class CutEffect {
                     vector.normalize().multiply(0.2);
                     dustLoc.add(vector);
                     world.spawnParticle(
-                            Particle.REDSTONE,
+                            Particle.DUST,
                             dustLoc.clone().add(vector.clone().multiply(4)),
                             1, 0, 0, 0, 0,
                             RED,
@@ -79,9 +79,9 @@ final class CutEffect {
                     for (int j = 0; j < 10; j++) {
                         dustLoc.add(vector);
                         if (j == 3) {
-                            world.spawnParticle(Particle.REDSTONE, dustLoc, 1, 0, 0, 0, 0, RED, false);
+                            world.spawnParticle(Particle.DUST, dustLoc, 1, 0, 0, 0, 0, RED, false);
                         } else if (i % 2 == 0) {
-                            world.spawnParticle(Particle.REDSTONE, dustLoc, 1, 0.1, 0.1, 0.1, 0, BLACK, false);
+                            world.spawnParticle(Particle.DUST, dustLoc, 1, 0.1, 0.1, 0.1, 0, BLACK, false);
                             if (j == 4 && damage != 0) {
                                 SpellEffectUtil.getNearbyLivingEntities(player, dustLoc, entity -> !entity.hasMetadata(uuid), 1).forEach(
                                         entity -> {

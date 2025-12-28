@@ -25,8 +25,8 @@ public class MephiAura implements Castable {
                 .setCastSound(Sound.ENTITY_ENDER_DRAGON_FLAP)
                 .setSpellRelativeEffects((loc, spellInfo) -> {
                     World world = spellInfo.world();
-                    world.spawnParticle(Particle.SMOKE_NORMAL, loc.add(0, 4, 0), 1, 0.3, 0.3, 0.3, 0.1, null, true);
-                    world.spawnParticle(Particle.VILLAGER_HAPPY, loc, 1, 0.3, 0.3, 0.3, 0.1, null, true);
+                    world.spawnParticle(Particle.SMOKE, loc.add(0, 4, 0), 1, 0.3, 0.3, 0.3, 0.1, null, true);
+                    world.spawnParticle(Particle.HAPPY_VILLAGER, loc, 1, 0.3, 0.3, 0.3, 0.1, null, true);
                 })
                 .setKnockBack(0.3f)
                 .build();

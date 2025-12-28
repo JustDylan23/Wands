@@ -62,8 +62,8 @@ public class AssassinDagger implements Listener, RightClickListener {
                     if (player.isSprinting()) {
                         Location loc = player.getLocation();
                         World world = loc.getWorld();
-                        world.spawnParticle(Particle.SMOKE_LARGE, loc, 1, 0.1, 0.1, 0.1, 0.1, null, true);
-                        world.spawnParticle(Particle.SMOKE_NORMAL, loc, 1, 0.1, 0.1, 0.1, 0.1, null, true);
+                        world.spawnParticle(Particle.LARGE_SMOKE, loc, 1, 0.1, 0.1, 0.1, 0.1, null, true);
+                        world.spawnParticle(Particle.SMOKE, loc, 1, 0.1, 0.1, 0.1, 0.1, null, true);
                         player.addPotionEffect(speed);
                     } else {
                         cancel();
@@ -84,7 +84,7 @@ public class AssassinDagger implements Listener, RightClickListener {
                 LivingEntity victim = (LivingEntity) event.getEntity();
                 if (hasDagger(player)) {
                     victim.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 100, 0, false));
-                    victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 100, 5, true));
+                    victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 100, 5, true));
                     event.setDamage(8);
                     player.getWorld().playSound(player.getLocation(), Sound.ENTITY_GUARDIAN_HURT, SoundCategory.MASTER, 3.0F, 1.0F);
                     player.getWorld().playSound(player.getLocation(), Sound.ENTITY_GUARDIAN_HURT, SoundCategory.MASTER, 3.0F, 0.3F);
@@ -145,7 +145,7 @@ public class AssassinDagger implements Listener, RightClickListener {
             if (player.hasMetadata(tagSneak)) {
                 uncover(player, "§6You have been §cUncovered");
                 Location location = player.getLocation();
-                location.getWorld().spawnParticle(Particle.VILLAGER_ANGRY, location, 5, 1, 1, 1, 1, null, true);
+                location.getWorld().spawnParticle(Particle.ANGRY_VILLAGER, location, 5, 1, 1, 1, 1, null, true);
 
             }
         }
@@ -157,8 +157,8 @@ public class AssassinDagger implements Listener, RightClickListener {
             Location location = player.getLocation();
             World world = location.getWorld();
             world.playSound(location, Sound.ENTITY_ZOMBIE_VILLAGER_CURE, 1.0f, 2.00f);
-            world.spawnParticle(Particle.SMOKE_LARGE, location, 15, 0.5, 0.2, 0.5, 0.1, null, true);
-            world.spawnParticle(Particle.ENCHANTMENT_TABLE, location, 20, 0.5, 0.5, 0.5, 0.1, null, true);
+            world.spawnParticle(Particle.LARGE_SMOKE, location, 15, 0.5, 0.2, 0.5, 0.1, null, true);
+            world.spawnParticle(Particle.ENCHANT, location, 20, 0.5, 0.5, 0.5, 0.1, null, true);
             player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 6000, 0, true));
             player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 6000, 0, true));
             PlayerUtil.sendActionBar(player, "§6You are §aInvisible");

@@ -35,7 +35,7 @@ public class CursedBow implements Listener, RightClickListener {
     private final String cursedArrow = UUID.randomUUID().toString();
     private final Set<Player> drawing = new HashSet<>();
     private final Set<Player> hasDrawn = new HashSet<>();
-    private final PotionEffect slow = new PotionEffect(PotionEffectType.SLOW, 60, 3, false);
+    private final PotionEffect slow = new PotionEffect(PotionEffectType.SLOWNESS, 60, 3, false);
 
     private int hasBow(Player player) {
         PlayerInventory inventory = player.getInventory();
@@ -102,12 +102,12 @@ public class CursedBow implements Listener, RightClickListener {
                 World world = location.getWorld();
                 world.playSound(location, Sound.ENTITY_ENDER_DRAGON_FLAP, SoundCategory.MASTER, 4.0F, 1.0F);
                 world.playSound(player.getLocation(), Sound.ENTITY_EVOKER_CAST_SPELL, SoundCategory.MASTER, 4.0F, 0.1F);
-                world.spawnParticle(Particle.SPELL_WITCH, location.add(0, 1, 0), 30, 1, 1, 1, 0.0F, null, true);
-                world.spawnParticle(Particle.ENCHANTMENT_TABLE, location.add(0, 1, 0), 100, 1, 1, 1, 0.0F, null, true);
+                world.spawnParticle(Particle.WITCH, location.add(0, 1, 0), 30, 1, 1, 1, 0.0F, null, true);
+                world.spawnParticle(Particle.ENCHANT, location.add(0, 1, 0), 100, 1, 1, 1, 0.0F, null, true);
                 trail(projectile, loc -> {
                     World world1 = loc.getWorld();
-                    world1.spawnParticle(Particle.SPELL_WITCH, loc, 10, 0.5, 0.5, 0.5, 0.05, null, true);
-                    world1.spawnParticle(Particle.ENCHANTMENT_TABLE, loc, 10, 0.5, 0.5, 0.5, 0.15, null, true);
+                    world1.spawnParticle(Particle.WITCH, loc, 10, 0.5, 0.5, 0.5, 0.05, null, true);
+                    world1.spawnParticle(Particle.ENCHANT, loc, 10, 0.5, 0.5, 0.5, 0.15, null, true);
                 });
             }
         }
@@ -149,7 +149,7 @@ public class CursedBow implements Listener, RightClickListener {
                 Location location = projectile.getLocation();
                 location.getWorld().playSound(location, Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, SoundCategory.MASTER, 5.0F, 1.0F);
                 location.getWorld().playSound(location, Sound.ITEM_TRIDENT_RETURN, SoundCategory.MASTER, 5.0F, 1.0F);
-                location.getWorld().spawnParticle(Particle.SMOKE_NORMAL, location, 30, 0.4, 0.4, 0.4, 0.2, null, true);
+                location.getWorld().spawnParticle(Particle.SMOKE, location, 30, 0.4, 0.4, 0.4, 0.2, null, true);
                 SpellEffectUtil.getNearbyLivingEntities((Player) projectile.getShooter(), location, 3)
                         .forEach(entity -> {
                             SpellEffectUtil.damageEffect((Player) projectile.getShooter(), entity, 8, projectile.getMetadata(cursedArrow).get(0).asString());

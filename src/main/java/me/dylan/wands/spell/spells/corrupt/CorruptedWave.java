@@ -5,7 +5,7 @@ import me.dylan.wands.spell.accessories.sound.CompoundSound;
 import me.dylan.wands.spell.spellbuilders.Behavior;
 import me.dylan.wands.spell.spellbuilders.Wave;
 import me.dylan.wands.spell.spells.AffinityType;
-import org.bukkit.Particle;
+import me.dylan.wands.spell.util.SpellEffectUtil;
 import org.bukkit.Sound;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -27,7 +27,7 @@ public class CorruptedWave implements Castable {
                 .setEntityDamage(7)
                 .setEffectDistance(20)
                 .setPotionEffects(new PotionEffect(PotionEffectType.WITHER, 80, 1, false))
-                .setSpellRelativeEffects((loc, spellInfo) -> spellInfo.world().spawnParticle(Particle.SPELL_MOB, loc, 20, 1, 1, 1, 1, null, true))
+                .setSpellRelativeEffects((loc, spellInfo) -> SpellEffectUtil.spawnEntityEffect(loc, 10, 1, 1, 1))
                 .build();
     }
 }
