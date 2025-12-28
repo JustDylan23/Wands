@@ -2,26 +2,28 @@ package me.dylan.wands.commandhandler.commands;
 
 import me.dylan.wands.PreSetItem;
 import me.dylan.wands.WandsPlugin;
-import me.dylan.wands.commandhandler.BaseCommand;
+import me.dylan.wands.commandhandler.CommandUtils;
+import me.dylan.wands.commandhandler.Permissions;
 import me.dylan.wands.config.ConfigHandler;
+import me.dylan.wands.spell.ItemBuilder;
 import me.dylan.wands.spell.SpellCompound;
 import me.dylan.wands.spell.SpellType;
 import me.dylan.wands.spell.spellbuilders.Behavior;
 import me.dylan.wands.utils.ItemUtil;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.StringJoiner;
 
-public class Wands extends BaseCommand {
+public class Wands implements CommandExecutor {
     private final ConfigHandler configHandler;
     private final String version;
 
@@ -34,117 +36,133 @@ public class Wands extends BaseCommand {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         switch (args.length) {
             case 1:
-                switch (args[0]) {
+                switch (args[0].toLowerCase()) {
+                    case "update":
+                        if (CommandUtils.checkPermOrNotify(sender, Permissions.UPDATE)) {
+                            WandsPlugin.getInstance().getUpdater().checkForUpdates(sender, false);
+                        }
+                        return true;
                     case "inspect":
-                        if (isPlayer(sender)) {
+                        if (CommandUtils.isPlayerOrNotify(sender)) {
                             Player player = (Player) sender;
                             ItemStack itemStack = player.getInventory().getItemInMainHand();
-                            player.sendMessage(WandsPlugin.PREFIX + "\nLegacy Spells: [" + (ItemUtil.getPersistentData(itemStack, SpellCompound.TAG_SPELLS_LIST, PersistentDataType.STRING).orElse("empty")) + "]");
-                            player.sendMessage("\nSpells: " + (Arrays.toString(ItemUtil.getPersistentData(itemStack, SpellCompound.TAG_SPELLS_LIST, PersistentDataType.INTEGER_ARRAY).orElse(new int[0]))));
+                            if (CommandUtils.isWandOrNotify(sender, itemStack)) {
+                                if (ItemUtil.hasPersistentData(itemStack, SpellCompound.TAG_SPELLS_LIST, PersistentDataType.STRING)) {
+                                    player.sendMessage(WandsPlugin.PREFIX_TOP + "Legacy Spells: [" + (ItemUtil.getPersistentData(itemStack, SpellCompound.TAG_SPELLS_LIST, PersistentDataType.STRING).orElse("none")) + "]");
+                                }
+                                if (ItemUtil.hasPersistentData(itemStack, SpellCompound.TAG_SPELLS_LIST, PersistentDataType.INTEGER_ARRAY)) {
+                                    player.sendMessage("Spells: " + (Arrays.toString(ItemUtil.getPersistentData(itemStack, SpellCompound.TAG_SPELLS_LIST, PersistentDataType.INTEGER_ARRAY).orElse(new int[0]))));
+                                }
+                            }
                         }
                         return true;
                     case "disable":
-                        if (checkPerm(sender, "toggle")) {
-                            configHandler.enableMagic(false);
-                            sender.sendMessage(WandsPlugin.PREFIX + "All wands are now disabled.");
+                        if (CommandUtils.checkPermOrNotify(sender, Permissions.DISABLE_PLUGIN)) {
+                            if (configHandler.enableMagic(false)) {
+                                sender.sendMessage(WandsPlugin.PREFIX + "All wands are now disabled.");
+                            } else {
+                                sender.sendMessage(WandsPlugin.PREFIX + "All wands are alreadt disabled.");
+                            }
                         }
                         return true;
                     case "enable":
-                        if (checkPerm(sender, "toggle")) {
-                            configHandler.enableMagic(true);
-                            sender.sendMessage(WandsPlugin.PREFIX + "All wands are now enabled.");
+                        if (CommandUtils.checkPermOrNotify(sender, Permissions.ENABLE_PLUGIN)) {
+                            if (configHandler.enableMagic(true)) {
+                                sender.sendMessage(WandsPlugin.PREFIX + "All wands are now enabled.");
+                            } else {
+                                sender.sendMessage(WandsPlugin.PREFIX + "All wands are already enabled.");
+                            }
                         }
                         return true;
                     case "spells":
-                        if (checkPerm(sender, "list")) {
+                        if (CommandUtils.checkPermOrNotify(sender, Permissions.LIST_SPELLS)) {
                             SpellType[] spellTypes = SpellType.values();
                             StringJoiner stringJoiner = new StringJoiner(", ");
                             for (SpellType spellType : spellTypes) {
-                                stringJoiner.add(spellType.name);
+                                stringJoiner.add(spellType.getDisplayName());
                             }
                             sender.sendMessage("§6Spells (" + spellTypes.length + "):§r " + stringJoiner);
                         }
                         return true;
                     case "info":
-                        sender.sendMessage("§e---- §6Wands§e ----");
-                        sender.sendMessage("§6Created by: §e_JustDylan_");
-                        sender.sendMessage("§6Current version:§e " + version);
+                        sender.sendMessage(WandsPlugin.PREFIX_TOP + "Created by: §e_JustDylan_§r\nContributor(s): §ejetp250§r\nCurrent version:§e v" + version);
                         return true;
-                    case "get":
-                        if (checkPerm(sender, "get")) {
-                            if (sender instanceof Player) {
-                                PreSetItem.openInventory((Player) sender);
-                            } else
-                                sender.sendMessage(WandsPlugin.PREFIX + "You must be a player in order to perform this action!");
+                    case "settings":
+                        if (CommandUtils.checkPermOrNotify(sender, Permissions.SETTINGS)) {
+                            sender.sendMessage(WandsPlugin.PREFIX_TOP);
+                            sender.sendMessage("magic cooldown time:§r " + (configHandler.getGlobalSpellCooldown()) + " seconds");
+                            sender.sendMessage("allow magic use:§r " + (configHandler.isMagicEnabled() ? "§atrue" : "§cfalse"));
+                            sender.sendMessage("wands usage requires permission:§r " + (configHandler.doesCastingRequirePermission() ? "§atrue" : "§cfalse"));
+                            sender.sendMessage("send update notifications:§r " + (configHandler.areNotificationsEnabled() ? "§atrue" : "§cfalse"));
                         }
                         return true;
-                    case "getconfig":
-                        if (checkPerm(sender, "viewconfig")) {
-                            ConfigHandler cd = configHandler;
-                            sender.sendMessage("§6magic cooldown time:§r " + (cd.getSpellCooldown() / 1000) + " seconds");
-                            sender.sendMessage("§6allow magic use:§r " + (cd.isMagicEnabled() ? "§a" : "§c") + cd.isMagicEnabled());
-                            sender.sendMessage("§6wands usage requires permissoin:§r " + (cd.doesCastingRequirePermission() ? "§a" : "§c") + cd.doesCastingRequirePermission());
-                        }
-                        return true;
-                    case "getcdwands":
-                        if (checkPerm(sender, "getcdwands") && isPlayer(sender)) {
-                            InventoryHolder player = (InventoryHolder) sender;
-                            ItemStack item = PreSetItem.MAGIC_WAND.getItemStack();
-                            ItemMeta meta = item.getItemMeta();
-                            item = new ItemStack(Material.BLAZE_ROD);
-                            item.setItemMeta(meta);
-                            ItemUtil.setName(item, "&cEmpire Wand");
-                            player.getInventory().addItem(item);
-                            item = PreSetItem.CURSED_BOW.getItemStack();
-                            ItemUtil.setName(item, "&cEmpire Bow");
-                            player.getInventory().addItem(item);
-                            return true;
-                        }
-                        return false;
                 }
                 return false;
             case 2:
-                if ("get".equalsIgnoreCase(args[0])) {
-                    if (checkPerm(sender, "get")) {
-                        try {
-                            PreSetItem value = PreSetItem.valueOf(args[1].toUpperCase());
-                            if (sender instanceof Player)
-                                ((InventoryHolder) sender).getInventory().addItem(value.getItemStack());
-                            else {
-                                sender.sendMessage(WandsPlugin.PREFIX + "You must be a player in order to perform this action!");
-                            }
-                        } catch (IllegalArgumentException e) {
-                            sender.sendMessage(WandsPlugin.PREFIX + "Wand does not exist!");
-                        }
-                    }
-                    return true;
-                }
-                if ("spells".equalsIgnoreCase(args[0])) {
-                    if (checkPerm(sender, "list")) {
-                        SpellType spellType;
-                        try {
-                            spellType = SpellType.valueOf(args[1].toUpperCase());
-                            Behavior behavior = spellType.behavior;
-                            if (behavior == null) {
-                                sender.sendMessage(WandsPlugin.PREFIX + "Spell has no behaviour!");
+                switch (args[0].toLowerCase()) {
+                    case "getscroll":
+                        if (CommandUtils.checkPermOrNotify(sender, Permissions.GET_SCROLL) && CommandUtils.isPlayerOrNotify(sender)) {
+                            SpellType spellType = SpellType.fromString(args[1]);
+                            if (spellType != null) {
+                                Player player = (Player) sender;
+                                ItemStack itemStack = ItemBuilder.from(Material.MOJANG_BANNER_PATTERN)
+                                        .named("§5§k#§r §f" + spellType.getCastType().getDisplayName() + " Scroll §5§k#")
+                                        .addLore("§7Contains: " + spellType.getDisplayName())
+                                        .withWandAffinity(spellType.getAffinityTypes())
+//                                        .withLore("When in survival click on this scroll", "and drag it over to a wand", "and click on the wand to apply", "the scroll")
+                                        .glowing()
+                                        .hideFlags()
+                                        .blockWandRegistration()
+                                        .build();
+                                ItemUtil.setPersistentData(itemStack, "spell", PersistentDataType.INTEGER, spellType.getId());
+                                player.getInventory().addItem(itemStack);
                             } else {
-                                sender.sendMessage("§e ---- §6" + args[1].toUpperCase() + "§e ----§r\n" + behavior);
+                                sender.sendMessage(WandsPlugin.PREFIX + "Spell does not exist!");
                             }
-                        } catch (IllegalArgumentException e) {
-                            sender.sendMessage(WandsPlugin.PREFIX + "Spell does not exist!");
                         }
-                    }
-                    return true;
+                        return true;
+                    case "update":
+                        if ("download".equalsIgnoreCase(args[1]) && CommandUtils.checkPermOrNotify(sender, Permissions.UPDATE_DOWNLOAD)) {
+                            WandsPlugin.getInstance().getUpdater().checkForUpdates(sender, true);
+                        }
+                        return true;
+                    case "get":
+                        if (CommandUtils.checkPermOrNotify(sender, Permissions.GET_WAND)) {
+                            try {
+                                PreSetItem value = PreSetItem.valueOf(args[1].toUpperCase());
+                                if (CommandUtils.isPlayerOrNotify(sender)) {
+                                    ((InventoryHolder) sender).getInventory().addItem(value.getItemStack());
+                                }
+                            } catch (IllegalArgumentException e) {
+                                sender.sendMessage(WandsPlugin.PREFIX + "Wand does not exist!");
+                            }
+                        }
+                        return true;
+                    case "spells":
+                        if (CommandUtils.checkPermOrNotify(sender, Permissions.LIST_SPELLS)) {
+                            SpellType spellType = SpellType.fromString(args[1]);
+                            if (spellType != null) {
+                                Behavior behavior = spellType.getBehavior();
+                                if (behavior == null) {
+                                    sender.sendMessage(WandsPlugin.PREFIX + "Spell has no behaviour!");
+                                } else {
+                                    sender.sendMessage("§e ---- §6" + args[1].toUpperCase() + "§e ----§r\n" + behavior);
+                                }
+                            } else {
+                                sender.sendMessage(WandsPlugin.PREFIX + "Spell does not exist!");
+                            }
+                        }
+                        return true;
                 }
                 return false;
             case 3:
-                if ("set".equalsIgnoreCase(args[0])) {
+                if ("settings".equalsIgnoreCase(args[0])) {
                     if ("cooldown".equalsIgnoreCase(args[1])) {
-                        if (checkPerm(sender, "setcooldown")) {
+                        if (CommandUtils.checkPermOrNotify(sender, Permissions.SETTINGS_COOLDOWN)) {
                             try {
                                 int in = Integer.parseInt(args[2]);
-                                if (args[2].length() <= 2 && isInRange(sender, 0, 99, in)) {
-                                    configHandler.setSpellCooldown(in);
+                                if (args[2].length() <= 2 && CommandUtils.isInRangeOrNotify(sender, in)) {
+                                    configHandler.setGlobalSpellCooldown(in);
                                     sender.sendMessage(WandsPlugin.PREFIX + "Cooldown has been set to " + in + " second" + ((in != 1) ? "s" : ""));
                                 }
                             } catch (NumberFormatException e) {
@@ -153,18 +171,34 @@ public class Wands extends BaseCommand {
                         }
                         return true;
                     } else if ("restriction".equalsIgnoreCase(args[1])) {
-                        if (checkPerm(sender, "restrict")) {
+                        if (CommandUtils.checkPermOrNotify(sender, Permissions.SETTINGS_RESTRICT)) {
                             boolean result = Boolean.parseBoolean(args[2]);
                             if (result) {
-                                sender.sendMessage(WandsPlugin.PREFIX + "Only players with §7wands.use §rcan use wands now");
+                                sender.sendMessage(WandsPlugin.PREFIX + "Only players with §7" + Permissions.USE + " §rcan use wands now");
                             } else {
                                 sender.sendMessage(WandsPlugin.PREFIX + "All players can use wands now");
                             }
                             configHandler.requirePermissionForCasting(result);
                         }
                         return true;
+                    } else if ("notifications".equalsIgnoreCase(args[1])) {
+                        if (CommandUtils.checkPermOrNotify(sender, Permissions.SETTINGS_NOTIFICATIONS)) {
+                            boolean result = Boolean.parseBoolean(args[2]);
+
+                            if (configHandler.enableNotifications(result)) {
+                                sender.sendMessage(WandsPlugin.PREFIX + (result ? "Enabled" : "Disabled") + " update notifications");
+                            } else {
+                                if (result) {
+                                    sender.sendMessage(WandsPlugin.PREFIX + "Notifications are already enabled");
+                                } else {
+                                    sender.sendMessage(WandsPlugin.PREFIX + "Notifications are already disabled");
+                                }
+                            }
+                        }
+                        return true;
                     }
                 }
+                return false;
         }
         return false;
     }

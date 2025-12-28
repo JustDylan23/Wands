@@ -6,7 +6,6 @@ import me.dylan.wands.utils.Common;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,16 +25,15 @@ public final class Aura extends BuildableBehaviour {
     private final EffectFrequency effectFrequency;
     private final int effectDuration;
     private final String auraUUID;
-    private final Consumer<LivingEntity> playerEffects, reverseAuraEffects;
+    private final Consumer<LivingEntity> playerEffects;
     private final AuraParticleType auraParticleType;
 
     private Aura(@NotNull Builder builder) {
-        super(builder.baseProps);
+        super(builder);
         this.effectFrequency = builder.effectFrequency;
         this.effectDuration = builder.effectDuration;
         this.auraUUID = UUID.randomUUID().toString();
         this.playerEffects = builder.playerEffects;
-        this.reverseAuraEffects = builder.reverseAuraEffects;
         this.auraParticleType = builder.auraParticleType;
 
         addPropertyInfo("Aura duration", effectDuration, "ticks");
@@ -64,9 +62,8 @@ public final class Aura extends BuildableBehaviour {
         };
 
         BukkitRunnable bukkitRunnable = new BukkitRunnable() {
-            int count;
+            int count = 0;
             boolean repeat = true;
-            boolean hasAffected;
 
             @Override
             public void run() {
@@ -74,12 +71,9 @@ public final class Aura extends BuildableBehaviour {
                 if (count > effectDuration) {
                     cancel();
                     Common.removeMetaData(player, auraUUID);
-                    if (!hasAffected) {
-                        reverseAuraEffects.accept(player);
-                    }
                 } else {
                     Location loc = player.getLocation();
-                    if (auraParticleType == AuraParticleType.CENTER) {
+                    if (auraParticleType == AuraParticleType.EMIT_AROUND_CENTER) {
                         spellRelativeEffects.accept(loc, spellInfo);
                     } else {
                         for (Location location : SpellEffectUtil.getHorizontalCircleFrom(loc, spellEffectRadius, 0, 1)) {
@@ -93,11 +87,8 @@ public final class Aura extends BuildableBehaviour {
                             }
                             knockBack.apply(livingEntity, loc);
                             SpellEffectUtil.damageEffect(player, livingEntity, entityDamage, weapon);
-                            hasAffected = true;
                             entityEffects.accept(livingEntity, spellInfo);
-                            for (PotionEffect potionEffect : potionEffects) {
-                                livingEntity.addPotionEffect(potionEffect, true);
-                            }
+                            applyPotionEffects(livingEntity);
                         }
                     }
                 }
@@ -113,16 +104,16 @@ public final class Aura extends BuildableBehaviour {
     }
 
     public enum AuraParticleType {
-        CENTER,
-        CIRCLE
+        EMIT_AROUND_CENTER,
+        EMIT_AS_CIRCLE
     }
 
     public static final class Builder extends AbstractBuilder<Builder> {
         private final EffectFrequency effectFrequency;
-        private Consumer<LivingEntity> reverseAuraEffects = Common.emptyConsumer();
+
         private Consumer<LivingEntity> playerEffects = Common.emptyConsumer();
-        private int effectDuration;
-        private AuraParticleType auraParticleType = AuraParticleType.CENTER;
+        private int effectDuration = 20;
+        private AuraParticleType auraParticleType = AuraParticleType.EMIT_AROUND_CENTER;
 
         private Builder(EffectFrequency effectFrequency) {
             this.effectFrequency = effectFrequency;
@@ -145,11 +136,6 @@ public final class Aura extends BuildableBehaviour {
 
         public Builder setPlayerEffects(Consumer<LivingEntity> playerEffects) {
             this.playerEffects = playerEffects;
-            return this;
-        }
-
-        public Builder setReverseAuraEffects(Consumer<LivingEntity> playerEffects) {
-            this.reverseAuraEffects = playerEffects;
             return this;
         }
 

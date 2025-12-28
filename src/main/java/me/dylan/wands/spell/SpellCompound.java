@@ -10,8 +10,11 @@ import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 
-public class SpellCompound {
-    public static final String TAG_SPELLS_LIST = "Spells";
+public final class SpellCompound {
+    public static final String TAG_SPELLS_LIST = "spells";
+
+    private SpellCompound() {
+    }
 
     public static int[] getIndices(ItemStack itemStack) {
         return ItemUtil.getPersistentData(itemStack, TAG_SPELLS_LIST, PersistentDataType.INTEGER_ARRAY).orElse(new int[0]);
@@ -51,7 +54,7 @@ public class SpellCompound {
                     itemStack,
                     TAG_SPELLS_LIST,
                     PersistentDataType.INTEGER_ARRAY,
-                    spells.stream().filter(Objects::nonNull).mapToInt(spell -> spell.id).toArray()
+                    spells.stream().filter(Objects::nonNull).mapToInt(SpellType::getId).toArray()
             );
         }
     }

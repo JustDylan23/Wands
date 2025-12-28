@@ -4,18 +4,12 @@ import me.dylan.wands.spell.BrowseParticle;
 import me.dylan.wands.spell.ItemBuilder;
 import me.dylan.wands.spell.SpellType;
 import me.dylan.wands.spell.accessories.ItemTag;
-import org.bukkit.Bukkit;
+import me.dylan.wands.spell.spells.AffinityType;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.function.Supplier;
-
-@SuppressWarnings("unused")
 public enum PreSetItem {
     ASSASSINS_DAGGER(
             ItemBuilder.from(Material.MUSIC_DISC_MALL)
@@ -30,29 +24,30 @@ public enum PreSetItem {
                     .named("&cCursed Bow")
                     .unbreakable()
                     .hideFlags()
-                    .enchant(Enchantment.ARROW_INFINITE, 1, true)
+                    .enchant(Enchantment.INFINITY, 1, true)
                     .tag(ItemTag.IS_CURSED_BOW)
                     .blockWandRegistration()
                     .build()
     ),
     MORTAL_BLADE(
-            ItemBuilder.from(Material.IRON_SWORD)
+            ItemBuilder.from(Material.NETHERITE_SWORD)
                     .named("&0&k&l|| &cMortal Blade &0&k&l||")
                     .unbreakable()
                     .hideFlags()
+                    .withoutAttackDamage()
                     .withSpells(
+                            SpellType.MORTAL_CUT,
+                            SpellType.ICHIMONJI,
                             SpellType.ONE_MIND,
-                            SpellType.DUAL_DRAW,
                             SpellType.SPIRIT_THRUST,
                             SpellType.SPIRIT_FURY,
-                            SpellType.WHIRLWIND_SLASH,
-                            SpellType.FLOATING_PASSAGE,
                             SpellType.SPIRAL_CLOUD_PASSAGE
                     )
+                    .withCastAffinity(AffinityType.SWORD_ARTS)
                     .withSpellBrowseParticles(BrowseParticle.MORTAL_BLADE)
                     .build()
     ),
-    MAGIC_WAND(
+    BEWITCHED_WAND(
             ItemBuilder.from(Material.BLAZE_ROD)
                     .named("&5Bewitched Wand")
                     .glowing()
@@ -64,6 +59,7 @@ public enum PreSetItem {
                             SpellType.ESCAPE,
                             SpellType.POISON_WAVE
                     )
+                    .withCastAffinity(AffinityType.WITCH_MAGIC)
                     .withSpellBrowseParticles(BrowseParticle.WITCH)
                     .build()
     ),
@@ -77,6 +73,7 @@ public enum PreSetItem {
                             SpellType.BLOOD_STUN,
                             SpellType.BLOOD_BLOCK
                     )
+                    .withCastAffinity(AffinityType.BLOOD_MAGIC)
                     .withSpellBrowseParticles(BrowseParticle.PARTICLE_BLOOD)
                     .build()
     ),
@@ -84,13 +81,15 @@ public enum PreSetItem {
             ItemBuilder.from(Material.BLAZE_ROD)
                     .named("&rIce Wand")
                     .withSpells(
-                            SpellType.THUNDER_ARROW,
+                            SpellType.LIGHTNING_ARROW,
                             SpellType.THUNDER_STRIKE,
                             SpellType.THUNDER_STORM,
                             SpellType.THUNDER_RAGE,
                             SpellType.ICE_FREEZE,
-                            SpellType.ICE_AURA
+                            SpellType.ICE_AURA,
+                            SpellType.ZAP
                     )
+                    .withCastAffinity(AffinityType.WEATHER_MAGIC)
                     .withSpellBrowseParticles(BrowseParticle.PARTICLE_ICE)
                     .build()
     ),
@@ -103,8 +102,10 @@ public enum PreSetItem {
                             SpellType.DARK_CIRCLE,
                             SpellType.DARK_PUSH,
                             SpellType.DARK_AURA,
-                            SpellType.DARK_SPARK
+                            SpellType.DARK_SPARK,
+                            SpellType.SOUL_SEEKER
                     )
+                    .withCastAffinity(AffinityType.DARK_MAGIC)
                     .withSpellBrowseParticles(BrowseParticle.PARTICLE_DARK)
                     .build()
     ),
@@ -121,6 +122,7 @@ public enum PreSetItem {
                             SpellType.FLAME_THROWER,
                             SpellType.FIRE_SPARK
                     )
+                    .withCastAffinity(AffinityType.FIRE_MAGIC)
                     .withSpellBrowseParticles(BrowseParticle.PARTICLE_FIRE)
                     .build()
     ),
@@ -136,6 +138,7 @@ public enum PreSetItem {
                             SpellType.CORRUPTED_SPARK,
                             SpellType.POISON_WAVE
                     )
+                    .withCastAffinity(AffinityType.CORRUPTED_MAGIC)
                     .withSpellBrowseParticles(BrowseParticle.PARTICLE_CORRUPTED)
                     .build()
     ),
@@ -151,6 +154,7 @@ public enum PreSetItem {
                             SpellType.MEPHI_SPARK,
                             SpellType.POISON_WAVE
                     )
+                    .withCastAffinity(AffinityType.GRAVITY_MAGIC)
                     .withSpellBrowseParticles(BrowseParticle.PARTICLE_MEPHI)
                     .build()
     );
@@ -159,18 +163,6 @@ public enum PreSetItem {
 
     PreSetItem(ItemStack itemStack) {
         this.itemStack = itemStack;
-    }
-
-    public static void openInventory(Player player) {
-        Inventory inventory = Bukkit.createInventory(null, InventoryType.SHULKER_BOX, WandsPlugin.PREFIX);
-        for (PreSetItem preSetItem : PreSetItem.values()) {
-            inventory.addItem(preSetItem.itemStack);
-        }
-        player.openInventory(inventory);
-    }
-
-    public static ItemStack getItemStack(@NotNull Supplier<ItemStack> stackSupplier) {
-        return stackSupplier.get();
     }
 
     public ItemStack getItemStack() {

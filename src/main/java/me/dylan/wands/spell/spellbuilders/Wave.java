@@ -6,7 +6,6 @@ import me.dylan.wands.utils.Common;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
@@ -25,7 +24,7 @@ public final class Wave extends BuildableBehaviour {
     private final String tagWaveSpell;
 
     private Wave(@NotNull Builder builder) {
-        super(builder.baseProps);
+        super(builder);
         this.effectDistance = builder.effectDistance;
         this.tagWaveSpell = UUID.randomUUID().toString();
 
@@ -44,7 +43,7 @@ public final class Wave extends BuildableBehaviour {
         Location spellLoc = origin.clone();
         SpellInfo spellInfo = new SpellInfo(player, origin, spellLoc);
         BukkitRunnable bukkitRunnable = new BukkitRunnable() {
-            private int count;
+            private int count = 0;
 
             @Override
             public void run() {
@@ -60,9 +59,7 @@ public final class Wave extends BuildableBehaviour {
                     livingEntity.setMetadata(tagWaveSpell, Common.getMetadataValueTrue());
                     SpellEffectUtil.damageEffect(player, livingEntity, entityDamage, weapon);
                     entityEffects.accept(livingEntity, spellInfo);
-                    for (PotionEffect potionEffect : potionEffects) {
-                        livingEntity.addPotionEffect(potionEffect, true);
-                    }
+                    applyPotionEffects(livingEntity);
                     Common.runTaskLater(() -> {
                         if (livingEntity.isValid())
                             Common.removeMetaData(livingEntity, tagWaveSpell);
@@ -75,7 +72,7 @@ public final class Wave extends BuildableBehaviour {
     }
 
     public static final class Builder extends AbstractBuilder<Builder> {
-        private int effectDistance;
+        private int effectDistance = 25;
 
         private Builder() {
         }

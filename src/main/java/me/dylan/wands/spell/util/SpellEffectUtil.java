@@ -1,51 +1,34 @@
 package me.dylan.wands.spell.util;
 
-import me.dylan.wands.WandsPlugin;
-import me.dylan.wands.config.ConfigHandler;
 import me.dylan.wands.events.MagicDamageEvent;
 import me.dylan.wands.utils.Common;
-import me.dylan.wands.utils.LocationUtil;
 import me.dylan.wands.utils.PlayerUtil;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Particle;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.*;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public final class SpellEffectUtil {
-    public static final String CAN_DAMAGE_WITH_WANDS = UUID.randomUUID().toString();
-    private static final WandsPlugin plugin = JavaPlugin.getPlugin(WandsPlugin.class);
-    private static final ConfigHandler CONFIGURABLE_DATA = plugin.getConfigHandler();
-
     private SpellEffectUtil() {
-        throw new UnsupportedOperationException("Instantiating util class");
     }
 
     public static @NotNull Location getSpellLocation(Player player, int effectDistance) {
         if (effectDistance == 0) return player.getLocation();
-        Entity entity = PlayerUtil.getTargetEntity(player, effectDistance, e -> true);
+        Entity entity = PlayerUtil.getTargetEntity(player, effectDistance);
         if (entity instanceof LivingEntity && !(entity instanceof ArmorStand)) {
-            return LocationUtil.toCenterLocation(entity.getLocation());
+            return entity.getLocation();
         }
-        Location exactLoc = PlayerUtil.getTargetLocation(player, effectDistance);
-        if (exactLoc == null) {
-            Location playerLocation = player.getLocation();
-            return LocationUtil.toCenterLocation(playerLocation.add(playerLocation.getDirection().multiply(effectDistance)));
-        }
-        return exactLoc;
+        return PlayerUtil.getTargetLocation(player, effectDistance);
     }
 
     public static @NotNull Location[] getHorizontalCircleFrom(@NotNull Location location, float radius, float angleOffset, float pointsMultiplier) {
@@ -103,7 +86,7 @@ public final class SpellEffectUtil {
     }
 
     public static boolean checkFriendlyFireOption(@NotNull Entity attacker, Entity victim) {
-        Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
+        Scoreboard scoreboard = Objects.requireNonNull(Bukkit.getScoreboardManager()).getMainScoreboard();
         Team team = scoreboard.getEntryTeam(attacker.getName());
         String entry = (victim instanceof Player)
                 ? victim.getName()
@@ -122,7 +105,8 @@ public final class SpellEffectUtil {
     public static List<LivingEntity> getNearbyLivingEntities(Player player, @NotNull Location loc, Predicate<LivingEntity> predicate, double rx, double ry, double rz) {
         return loc.getWorld()
                 .getNearbyEntities(loc, rx, ry, rz).stream()
-                .filter(entity -> entity instanceof LivingEntity)
+                .filter(Entity::isValid)
+                .filter(LivingEntity.class::isInstance)
                 .filter(entity -> !(entity instanceof ArmorStand))
                 .filter(entity -> !entity.equals(player))
                 .filter(entity -> checkFriendlyFireOption(player, entity))
@@ -131,29 +115,41 @@ public final class SpellEffectUtil {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public static void spawnColoredParticle(@NotNull Particle particle, Location location, int count, double offsetX, double offsetY, double offsetZ, int red, int green, int blue, boolean rainbow) {
-        switch (particle) {
-            case REDSTONE:
-            case SPELL_MOB:
-            case SPELL_MOB_AMBIENT:
-                if (rainbow) {
-                    location.getWorld().spawnParticle(particle, location, (count > 0) ? count : 1, offsetX, offsetY, offsetZ, 1, null, true);
-                } else {
-                    float redR = Math.max(Float.MIN_NORMAL, red / 255.0F);
-                    float greenG = Math.max(0, green / 255.0F);
-                    float blueB = Math.max(0, blue / 255.0F);
-                    for (int i = 0; count > i; i++) {
-                        location.getWorld().spawnParticle(particle, randomizeLoc(location, offsetX, offsetY, offsetZ), 0, redR, greenG, blueB, 1, null, true);
-                    }
-                }
+    public static void spawnEntityEffect(Location location, int count, double offsetX, double offsetY, double offsetZ, int red, int green, int blue) {
+        spawnEntityEffect(location, count, offsetX, offsetY, offsetZ,red, green, blue, true);
+    }
+
+    public static void spawnEntityEffect(Location location, int count, double offsetX, double offsetY, double offsetZ, int red, int green, int blue, boolean opaque) {
+        Color color = Color.fromARGB((opaque ? 255 : 51) << 24 | (red << 16) | (green << 8) | blue);
+        for (int i = 0; count > i; i++) {
+            location.getWorld().spawnParticle(Particle.ENTITY_EFFECT, randomizeLoc(location, offsetX, offsetY, offsetZ), 1, 0, 0,0, 1, color, true);
         }
     }
 
-    public static @NotNull Location randomizeLoc(@NotNull Location location, double x, double y, double z) {
-        return location.clone().add(randomize(x), randomize(y), randomize(z));
+    /**
+     * Spawns ENTITY_EFFECT particles with a random color
+     */
+    public static void spawnEntityEffect(Location location, int count, double offsetX, double offsetY, double offsetZ) {
+        spawnEntityEffect(location, count, offsetX, offsetY, offsetZ, true);
+    }
+
+    /**
+     * Spawns ENTITY_EFFECT particles with a random color
+     */
+    public static void spawnEntityEffect(Location location, int count, double offsetX, double offsetY, double offsetZ, boolean opaque) {
+        ThreadLocalRandom current = ThreadLocalRandom.current();
+        for (int i = 0; count > i; i++) {
+            Color color = Color.fromARGB((opaque ? 255 : 51) << 24 | current.nextInt(0x1000000));
+            location.getWorld().spawnParticle(Particle.ENTITY_EFFECT, randomizeLoc(location, offsetX, offsetY, offsetZ), count, offsetX, offsetY, offsetZ, 1, color, true);
+        }
+    }
+
+    public static @NotNull Location randomizeLoc(@NotNull Location location, double rx, double ry, double rz) {
+        return location.clone().add(randomize(rx), randomize(ry), randomize(rz));
     }
 
     public static double randomize(double d) {
+        if (d == 0) return 0;
         return ThreadLocalRandom.current().nextDouble() * d * 2.0 - d;
     }
 
@@ -161,7 +157,7 @@ public final class SpellEffectUtil {
         if (amount != 0) {
             if (victim instanceof Player) {
                 Player player = (Player) victim;
-                AttributeInstance atr = player.getAttribute(Attribute.GENERIC_ARMOR);
+                AttributeInstance atr = player.getAttribute(Attribute.ARMOR);
                 double armorDamageReduction = 1;
                 if (atr != null) {
                     armorDamageReduction = 1 - (1.75 * atr.getValue()) / 100.0D;
@@ -172,7 +168,6 @@ public final class SpellEffectUtil {
             } else victim.damage(amount);
         }
     }
-
 
     public static @NotNull Location getFirstPassableBlockAbove(@NotNull Location location) {
         if (location.getBlock().isPassable()) return location;

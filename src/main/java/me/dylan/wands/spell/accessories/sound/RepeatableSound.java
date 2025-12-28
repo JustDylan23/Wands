@@ -26,12 +26,12 @@ public final class RepeatableSound implements SoundEffect {
     @Override
     public void play(@NotNull Location location) {
         World world = location.getWorld();
-        Common.runRepeatableTaskLater(() -> world.playSound(location, sound, SoundCategory.MASTER, 4, pitch), repeat);
+        Common.runRepeatableTaskLater(() -> world.playSound(location, sound, SoundCategory.MASTER, 4.0F, pitch), repeat);
     }
 
     @Override
     public void play(@NotNull Entity entity) {
         World world = entity.getLocation().getWorld();
-        Common.runRepeatableTaskLater(() -> world.playSound(entity.getLocation(), sound, SoundCategory.MASTER, 4, pitch), repeat);
+        Common.runRepeatableTaskLater(() -> world.playSound(entity.getLocation(), sound, SoundCategory.MASTER, 4.0F, pitch), repeat);
     }
 }

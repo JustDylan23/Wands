@@ -6,7 +6,6 @@ import me.dylan.wands.utils.Common;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
@@ -30,7 +29,7 @@ public final class Ray extends BuildableBehaviour {
     private final BiConsumer<Location, SpellInfo> hitEffects;
 
     private Ray(@NotNull Builder builder) {
-        super(builder.baseProps);
+        super(builder);
         this.effectDistance = builder.effectDistance;
         this.speed = builder.speed;
         this.rayWidth = builder.rayWidth;
@@ -55,7 +54,7 @@ public final class Ray extends BuildableBehaviour {
         Location spellLoc = origin.clone();
         SpellInfo spellInfo = new SpellInfo(player, origin, spellLoc);
         BukkitRunnable bukkitRunnable = new BukkitRunnable() {
-            int count;
+            int count = 0;
 
             @Override
             public void run() {
@@ -85,9 +84,7 @@ public final class Ray extends BuildableBehaviour {
                 for (LivingEntity entity : SpellEffectUtil.getNearbyLivingEntities(spellInfo.caster(), spellLocation, (target == Target.SINGLE) ? rayWidth : spellEffectRadius)) {
                     knockBack.apply(entity, spellLocation);
                     entityEffects.accept(entity, spellInfo);
-                    for (PotionEffect potionEffect : potionEffects) {
-                        entity.addPotionEffect(potionEffect, true);
-                    }
+                    applyPotionEffects(entity);
                     SpellEffectUtil.damageEffect(spellInfo.caster(), entity, entityDamage, wandDisplayName);
                     if (target == Target.SINGLE) break;
                 }
@@ -99,9 +96,9 @@ public final class Ray extends BuildableBehaviour {
 
     public static final class Builder extends AbstractBuilder<Builder> {
         private final Target target;
-        private int effectDistance = 30;
+        private int effectDistance = 0;
         private int speed = 1;
-        private float rayWidth = 1;
+        private float rayWidth = 0.0F;
         private BiConsumer<Location, SpellInfo> hitEffects = Common.emptyBiConsumer();
 
         private Builder(Target target) {

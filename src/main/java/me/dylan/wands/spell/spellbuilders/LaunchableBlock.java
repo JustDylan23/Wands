@@ -6,6 +6,7 @@ import me.dylan.wands.spell.accessories.SpellInfo;
 import me.dylan.wands.spell.accessories.sound.SoundEffect;
 import me.dylan.wands.spell.util.SpellEffectUtil;
 import me.dylan.wands.utils.Common;
+import me.dylan.wands.utils.ItemUtil;
 import me.dylan.wands.utils.LocationUtil;
 import me.dylan.wands.utils.PlayerUtil;
 import org.bukkit.*;
@@ -21,7 +22,6 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
@@ -49,7 +49,7 @@ public final class LaunchableBlock extends BuildableBehaviour implements Listene
     private final SoundEffect blockRelativeSounds;
 
     private LaunchableBlock(@NotNull Builder builder) {
-        super(builder.baseProps);
+        super(builder);
         ListenerRegistry.addListener(this);
         this.material = builder.material;
         this.hitEffects = builder.hitEffects;
@@ -68,7 +68,10 @@ public final class LaunchableBlock extends BuildableBehaviour implements Listene
 
     @Override
     public boolean cast(@NotNull Player player, @NotNull String weapon) {
-        return selectedBlock.containsKey(player) ? launchBlock(player) : prepareBlock(player);
+        if (selectedBlock.containsKey(player)) {
+            launchBlock(player);
+            return true;
+        } else return prepareBlock(player);
     }
 
     @SuppressWarnings("SameReturnValue")
@@ -105,14 +108,14 @@ public final class LaunchableBlock extends BuildableBehaviour implements Listene
         return false;
     }
 
-    private boolean launchBlock(Player player) {
+    private void launchBlock(Player player) {
         castSounds.play(player);
         BlockRestorer blockRestorer = selectedBlock.get(player);
         blockRestorer.earlyRun();
         Location blockLoc = blockRestorer.originLoc;
         FallingBlock fallingBlock = blockLoc.getWorld().spawnFallingBlock(blockLoc, Bukkit.createBlockData(material));
         fallingBlock.setVelocity(new Vector(0, 1, 0));
-        fallingBlock.setMetadata(tagFallingBlock, Common.metadataValue(player.getInventory().getItemInMainHand().getItemMeta().getDisplayName()));
+        fallingBlock.setMetadata(tagFallingBlock, Common.metadataValue(ItemUtil.getName(player.getInventory().getItemInMainHand())));
         fallingBlock.setDropItem(false);
         blockRelativeSounds.play(fallingBlock);
         caster.put(fallingBlock, new SpellInfo(player, blockLoc, null) {
@@ -130,7 +133,6 @@ public final class LaunchableBlock extends BuildableBehaviour implements Listene
                 );
             }
         }, 20L);
-        return true;
     }
 
     private void blockLand(FallingBlock fallingBlock) {
@@ -146,9 +148,7 @@ public final class LaunchableBlock extends BuildableBehaviour implements Listene
                 knockBack.apply(entity, loc);
                 SpellEffectUtil.damageEffect(player, entity, entityDamage, weaponName);
                 entityEffects.accept(entity, spellInfo);
-                for (PotionEffect potionEffect : potionEffects) {
-                    entity.addPotionEffect(potionEffect, true);
-                }
+                applyPotionEffects(entity);
             }
         }
     }
@@ -206,7 +206,7 @@ public final class LaunchableBlock extends BuildableBehaviour implements Listene
                 @Override
                 public void run() {
                     if (canRun) {
-                        world.spawnParticle(Particle.BLOCK_CRACK, originLoc, 10, 0.5, 0.5, 0.5, 0.15, blockData, true);
+                        world.spawnParticle(Particle.BLOCK, originLoc, 10, 0.5, 0.5, 0.5, 0.15, blockData, true);
                     } else cancel();
                 }
             };
@@ -239,6 +239,7 @@ public final class LaunchableBlock extends BuildableBehaviour implements Listene
     public static final class Builder extends AbstractBuilder<Builder> {
 
         private final Material material;
+
         private BiConsumer<Location, SpellInfo> hitEffects = Common.emptyBiConsumer();
         private SoundEffect blockRelativeSounds = SoundEffect.NONE;
 

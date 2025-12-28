@@ -32,7 +32,7 @@ public class CooldownManager implements Listener {
     public boolean canCast(Player player, SpellType spellType) {
         int remainingTime = getRemainingTime(player);
         if (remainingTime == 0) return true;
-        remainingTime += spellType.behavior.getCooldown() * 1000;
+        remainingTime += spellType.getBehavior().getCooldown() * 1000;
         if (remainingTime <= 0) {
             return true;
         } else {
@@ -50,7 +50,7 @@ public class CooldownManager implements Listener {
      * @return Amount of time since last updated cooldown {@link #updateLastUsed(Player)}.
      */
     private int getRemainingTime(Player player) {
-        int cooldown = configHandler.getSpellCooldown() * 1000;
+        int cooldown = configHandler.getGlobalSpellCooldown() * 1000;
         Long lastUsed = playerCooldownHashMap.get(player);
         if (lastUsed != null) {
             if (cooldown == 0) return 0;

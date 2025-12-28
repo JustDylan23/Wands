@@ -1,6 +1,7 @@
 package me.dylan.wands.spell.util;
 
 import me.dylan.wands.WandsPlugin;
+import me.dylan.wands.commandhandler.Permissions;
 import me.dylan.wands.config.ConfigHandler;
 import me.dylan.wands.spell.BrowseParticle;
 import me.dylan.wands.spell.CooldownManager;
@@ -15,7 +16,6 @@ import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,18 +28,17 @@ public final class SpellInteractionUtil {
     private static final String TAG_SPELL_INDEX = "SpellIndex";
 
     static {
-        WandsPlugin wandsPlugin = JavaPlugin.getPlugin(WandsPlugin.class);
+        WandsPlugin wandsPlugin = WandsPlugin.getInstance();
         config = wandsPlugin.getConfigHandler();
         cooldownManager = wandsPlugin.getCooldownManager();
     }
 
     private SpellInteractionUtil() {
-        throw new UnsupportedOperationException("Instantiating util class");
     }
 
     public static boolean canUseMagic(Player player) {
         if (config.doesCastingRequirePermission()) {
-            if (!player.hasPermission("wands.use")) {
+            if (!player.hasPermission(Permissions.USE)) {
                 PlayerUtil.sendActionBar(player, "§cinsufficient permissions");
                 return false;
             }
@@ -108,7 +107,7 @@ public final class SpellInteractionUtil {
 
         if (spell != null) {
             player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.5F, 0.5F);
-            PlayerUtil.sendActionBar(player, "§6Current spell: §7§l" + spell.name);
+            PlayerUtil.sendActionBar(player, "§6Selected " + spell.getCastType().getDisplayName() + ": §7§l" + spell.getDisplayName());
             getSpellBrowseParticle(itemStack).orElse(BrowseParticle.DEFAULT).displayAt(player.getLocation());
         }
     }
@@ -116,13 +115,13 @@ public final class SpellInteractionUtil {
     public static void showSelectedSpell(Player player, ItemStack itemStack) {
         SpellType spell = getSelectedSpell(itemStack);
         if (spell != null) {
-            PlayerUtil.sendActionBar(player, "§6Current spell: §7§l" + spell.name);
+            PlayerUtil.sendActionBar(player, "§6Selected " + spell.getCastType().getDisplayName() + ": §7§l" + spell.getDisplayName());
         }
     }
 
     public static void castSpell(@NotNull Player caster, String wandDisplayName, @NotNull SpellType spell) {
         if (cooldownManager.canCast(caster, spell)) {
-            Behavior behavior = spell.behavior;
+            Behavior behavior = spell.getBehavior();
             if (behavior != null) {
                 if (behavior.cast(caster, wandDisplayName)) {
                     cooldownManager.updateLastUsed(caster);
