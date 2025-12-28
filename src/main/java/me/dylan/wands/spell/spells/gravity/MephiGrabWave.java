@@ -26,19 +26,19 @@ public class MephiGrabWave implements Castable {
                 .setSpellEffectRadius(2)
                 .setSpellRelativeEffects((location, spellInfo) -> {
                     World world = spellInfo.world();
-                    world.spawnParticle(Particle.VILLAGER_HAPPY, location, 4, 0.4, 0.4, 0.4, 0.1, null, true);
-                    world.spawnParticle(Particle.SMOKE_LARGE, location, 4, 0.3, 0.3, 0.3, 0.1, null, true);
-                    world.spawnParticle(Particle.SMOKE_LARGE, location, 4, 1, 1, 1, 0.05, null, true);
+                    world.spawnParticle(Particle.HAPPY_VILLAGER, location, 4, 0.4, 0.4, 0.4, 0.1, null, true);
+                    world.spawnParticle(Particle.LARGE_SMOKE, location, 4, 0.3, 0.3, 0.3, 0.1, null, true);
+                    world.spawnParticle(Particle.LARGE_SMOKE, location, 4, 1, 1, 1, 0.05, null, true);
                 })
                 .setHitEffects((location, spellInfo) -> {
                     World world = spellInfo.world();
-                    world.spawnParticle(Particle.VILLAGER_HAPPY, location, 6, 3, 3, 3, 0.4, null, true);
-                    world.spawnParticle(Particle.SMOKE_LARGE, location, 10, 0.3, 0.3, 0.3, 0.4, null, true);
+                    world.spawnParticle(Particle.HAPPY_VILLAGER, location, 6, 3, 3, 3, 0.4, null, true);
+                    world.spawnParticle(Particle.LARGE_SMOKE, location, 10, 0.3, 0.3, 0.3, 0.4, null, true);
                     world.playSound(location, Sound.ENTITY_ILLUSIONER_MIRROR_MOVE, SoundCategory.MASTER, 4, 1);
                 })
                 .setEffectDistance(30)
                 .setPotionEffects(
-                        new PotionEffect(PotionEffectType.SLOW, 60, 2, false),
+                        new PotionEffect(PotionEffectType.SLOWNESS, 60, 2, false),
                         new PotionEffect(PotionEffectType.BLINDNESS, 60, 2, false)
                 )
                 .setEntityEffects((livingEntity, spellInfo) -> {

@@ -11,6 +11,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerAnimationEvent;
 import org.bukkit.event.player.PlayerAnimationType;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -77,13 +78,10 @@ public class MouseClickListeners implements Listener {
 
     @EventHandler
     private void onEntityDamageEntityEvent(EntityDamageByEntityEvent event) {
-        if (event.getDamager() instanceof Player) {
-            Player player = (Player) event.getDamager();
-            if (player.rayTraceBlocks(5) != null) {
-                ClickEvent clickEvent = new ClickEvent(player, event);
-                WandsPlugin.debug("damage left event click");
-                leftClickListeners.forEach(listener -> listener.onLeftClick(clickEvent));
-            }
+        if (event.getDamager() instanceof Player player && event.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
+            ClickEvent clickEvent = new ClickEvent(player, event);
+            WandsPlugin.debug("damage left event click");
+            leftClickListeners.forEach(listener -> listener.onLeftClick(clickEvent));
         }
     }
 

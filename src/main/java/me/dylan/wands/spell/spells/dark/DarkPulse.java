@@ -28,21 +28,21 @@ public class DarkPulse implements Castable {
                 .setKnockBack(KnockBack.EXPLOSION)
                 .setPotionEffects(
                         new PotionEffect(PotionEffectType.BLINDNESS, 40, 0, false),
-                        new PotionEffect(PotionEffectType.SLOW, 40, 2, false),
+                        new PotionEffect(PotionEffectType.SLOWNESS, 40, 2, false),
                         new PotionEffect(PotionEffectType.WITHER, 40, 2, false)
                 )
                 .setEntityDamage(8)
                 .setCastSound(Sound.ENTITY_WITHER_SHOOT)
                 .setSpellRelativeEffects((loc, spellInfo) -> {
                     World world = spellInfo.world();
-                    world.spawnParticle(Particle.SMOKE_LARGE, loc, 3, 0.4, 0.4, 0.4, 0.1, null, true);
-                    world.spawnParticle(Particle.SMOKE_NORMAL, loc, 13, 0.8, 0.8, 0.8, 0.1, null, true);
-                    world.spawnParticle(Particle.ENCHANTMENT_TABLE, loc, 10, 0.8, 0.8, 0.8, 0.1, null, true);
+                    world.spawnParticle(Particle.LARGE_SMOKE, loc, 3, 0.4, 0.4, 0.4, 0.1, null, true);
+                    world.spawnParticle(Particle.SMOKE, loc, 13, 0.8, 0.8, 0.8, 0.1, null, true);
+                    world.spawnParticle(Particle.ENCHANT, loc, 10, 0.8, 0.8, 0.8, 0.1, null, true);
                 })
                 .setEffectDistance(30)
                 .setHitEffects((loc, spellInfo) -> {
                     World world = spellInfo.world();
-                    world.spawnParticle(Particle.EXPLOSION_HUGE, loc, 0, 0.0, 0.0, 0.0, 0.0, null, true);
+                    world.spawnParticle(Particle.EXPLOSION_EMITTER, loc, 0, 0.0, 0.0, 0.0, 0.0, null, true);
                     world.createExplosion(loc, 0.0f);
                     world.playSound(loc, Sound.ENTITY_WITHER_HURT, SoundCategory.MASTER, 4.0F, 1.0F);
                 })

@@ -26,9 +26,9 @@ public class MephiAway implements Castable {
                 .setCastSound(Sound.ENTITY_ENDER_DRAGON_FLAP)
                 .setSpellRelativeEffects((loc, spellInfo) -> {
                     World world = spellInfo.world();
-                    world.spawnParticle(Particle.SMOKE_NORMAL, loc, 5, 0.3, 0.3, 0.3, 0.1, null, true);
-                    world.spawnParticle(Particle.SMOKE_LARGE, loc, 3, 0.3, 0.3, 0.3, 0.1, null, true);
-                    world.spawnParticle(Particle.VILLAGER_HAPPY, loc, 2, 0.3, 0.3, 0.3, 0.1, null, true);
+                    world.spawnParticle(Particle.SMOKE, loc, 5, 0.3, 0.3, 0.3, 0.1, null, true);
+                    world.spawnParticle(Particle.LARGE_SMOKE, loc, 3, 0.3, 0.3, 0.3, 0.1, null, true);
+                    world.spawnParticle(Particle.HAPPY_VILLAGER, loc, 2, 0.3, 0.3, 0.3, 0.1, null, true);
                 })
                 .setKnockBack(1.3F, 0.5F)
                 .setCircleHeight(1)

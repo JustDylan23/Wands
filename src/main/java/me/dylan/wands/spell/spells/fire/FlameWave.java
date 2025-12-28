@@ -29,9 +29,9 @@ public class FlameWave implements Castable {
                 .setSpellRelativeEffects((loc, spellInfo) -> {
                     World world = spellInfo.world();
                     world.spawnParticle(Particle.FLAME, loc, 10, 0.8, 0.8, 0.8, 0.1, null, true);
-                    world.spawnParticle(Particle.LAVA, loc, 1, 0.8, 0.8, 0.8, 0, null, true);
-                    world.spawnParticle(Particle.SMOKE_LARGE, loc, 7, 0.6, 0.6, 0.6, 0.1, null, true);
-                    world.spawnParticle(Particle.SMOKE_NORMAL, loc, 7, 1, 1, 1, 0.05, null, true);
+                    world.spawnParticle(Particle.DRIPPING_LAVA, loc, 1, 0.8, 0.8, 0.8, 0, null, true);
+                    world.spawnParticle(Particle.LARGE_SMOKE, loc, 7, 0.6, 0.6, 0.6, 0.1, null, true);
+                    world.spawnParticle(Particle.SMOKE, loc, 7, 1, 1, 1, 0.05, null, true);
                 })
                 .build();
     }

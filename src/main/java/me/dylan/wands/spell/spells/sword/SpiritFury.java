@@ -69,11 +69,11 @@ public class SpiritFury extends Behavior implements Castable {
                                 }
                                 if (count % 5 == 0) {
                                     for (Location point : points) {
-                                        world.spawnParticle(Particle.REDSTONE, point.add(incrementFull), 1, 0, 0, 0, 0, BLACK, false);
+                                        world.spawnParticle(Particle.DUST, point.add(incrementFull), 1, 0, 0, 0, 0, BLACK, false);
                                     }
                                 }
                                 location.add(increment);
-                                world.spawnParticle(Particle.REDSTONE, location, 1, 0, 0, 0, 0, RED, false);
+                                world.spawnParticle(Particle.DUST, location, 1, 0, 0, 0, 0, RED, false);
 
                                 for (LivingEntity livingEntity : SpellEffectUtil.getNearbyLivingEntities(player, location, 0.7)) {
                                     SpellEffectUtil.damageEffect(player, livingEntity, 6, weapon);

@@ -37,13 +37,13 @@ public class FireComet implements Castable {
                 .setSpellRelativeEffects((loc, spellInfo) -> {
                     World world = spellInfo.world();
                     world.spawnParticle(Particle.FLAME, loc, 6, 0.8, 0.8, 0.8, 0.1, null, true);
-                    world.spawnParticle(Particle.SMOKE_NORMAL, loc, 10, 1, 1, 1, 0.05, null, true);
-                    world.spawnParticle(Particle.SMOKE_LARGE, loc, 10, 0.6, 0.6, 0.6, 0.15, null, true);
-                    world.spawnParticle(Particle.LAVA, loc, 5, 1, 1, 1, 0, null, true);
+                    world.spawnParticle(Particle.SMOKE, loc, 10, 1, 1, 1, 0.05, null, true);
+                    world.spawnParticle(Particle.LARGE_SMOKE, loc, 10, 0.6, 0.6, 0.6, 0.15, null, true);
+                    world.spawnParticle(Particle.DRIPPING_LAVA, loc, 5, 1, 1, 1, 0, null, true);
                 })
                 .setHitEffects((loc, spellInfo) -> {
                     World world = spellInfo.world();
-                    world.spawnParticle(Particle.EXPLOSION_HUGE, loc, 0, 0.0, 0.0, 0.0, 0.0, null, true);
+                    world.spawnParticle(Particle.EXPLOSION_EMITTER, loc, 0, 0.0, 0.0, 0.0, 0.0, null, true);
                     world.createExplosion(loc, 0.0f);
                 })
                 .build();

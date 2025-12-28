@@ -40,6 +40,7 @@ public class PlayerListener implements Listener, LeftClickListener, RightClickLi
         Player player = event.getPlayer();
         ItemStack itemStack = player.getInventory().getItemInMainHand();
         if (ItemTag.IS_WAND.isTagged(itemStack) && SpellInteractionUtil.canUseMagic(player)) {
+            event.cancel();
             SpellType spell = SpellInteractionUtil.getSelectedSpell(itemStack);
             if (spell != null) {
                 SpellInteractionUtil.castSpell(player, ItemUtil.getName(itemStack), spell);
@@ -52,6 +53,7 @@ public class PlayerListener implements Listener, LeftClickListener, RightClickLi
         Player player = event.getPlayer();
         ItemStack itemStack = player.getInventory().getItemInMainHand();
         if (ItemTag.IS_WAND.isTagged(itemStack) && SpellInteractionUtil.canUseMagic(player)) {
+            event.cancel();
             SpellInteractionUtil.nextSpell(player, itemStack);
             if (player.getGameMode() != GameMode.ADVENTURE) {
                 event.cancel();
