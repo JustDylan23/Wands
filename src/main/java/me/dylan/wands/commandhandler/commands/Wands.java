@@ -10,11 +10,14 @@ import me.dylan.wands.spell.SpellCompound;
 import me.dylan.wands.spell.SpellType;
 import me.dylan.wands.spell.spellbuilders.Behavior;
 import me.dylan.wands.utils.ItemUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
@@ -94,6 +97,20 @@ public class Wands implements CommandExecutor {
                             sender.sendMessage("allow magic use:§r " + (configHandler.isMagicEnabled() ? "§atrue" : "§cfalse"));
                             sender.sendMessage("wands usage requires permission:§r " + (configHandler.doesCastingRequirePermission() ? "§atrue" : "§cfalse"));
                             sender.sendMessage("send update notifications:§r " + (configHandler.areNotificationsEnabled() ? "§atrue" : "§cfalse"));
+                        }
+                        return true;
+                    case "get":
+                        if (CommandUtils.checkPermOrNotify(sender, Permissions.GET_WAND)) {
+                            try {
+                                PreSetItem[] value = PreSetItem.values();
+                                if (CommandUtils.isPlayerOrNotify(sender)) {
+                                    Inventory inventory = Bukkit.createInventory(((InventoryHolder) sender), InventoryType.CHEST, "Wands");
+                                    inventory.addItem(Arrays.stream(value).map(PreSetItem::getItemStack).toArray(ItemStack[]::new));
+                                    ((Player) sender).openInventory(inventory);
+                                }
+                            } catch (IllegalArgumentException e) {
+                                sender.sendMessage(WandsPlugin.PREFIX + "Wand does not exist!");
+                            }
                         }
                         return true;
                 }
