@@ -10,6 +10,7 @@ import me.dylan.wands.customitems.AssassinDagger;
 import me.dylan.wands.customitems.CursedBow;
 import me.dylan.wands.spell.CooldownManager;
 import me.dylan.wands.spell.PlayerListener;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
@@ -101,7 +102,7 @@ public final class WandsPlugin extends JavaPlugin {
         loadListeners(listenerRegistry, configHandler);
         loadCommands(configHandler, this);
         this.updater = new Updater(getFile().getName(), this, configHandler);
-        new MetricsLite(this);
+        new Metrics(this, 6274);
         log("Enabled successfully");
     }
 
