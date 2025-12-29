@@ -1,4 +1,4 @@
-package me.dylan.wands.commandhandler;
+package me.dylan.wands.command;
 
 import me.dylan.wands.WandsPlugin;
 import me.dylan.wands.spell.SpellType;

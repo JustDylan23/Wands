@@ -1,7 +1,7 @@
 package me.dylan.wands.spell.util;
 
 import me.dylan.wands.WandsPlugin;
-import me.dylan.wands.commandhandler.Permissions;
+import me.dylan.wands.command.Permissions;
 import me.dylan.wands.config.ConfigHandler;
 import me.dylan.wands.spell.BrowseParticle;
 import me.dylan.wands.spell.CooldownManager;
