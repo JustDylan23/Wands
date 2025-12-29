@@ -71,4 +71,8 @@ public final class Common {
     public static void removeMetaData(@NotNull Metadatable metadatable, String metaKey) {
         metadatable.removeMetadata(metaKey, plugin);
     }
+
+    public static String quantify(int count, String string) {
+        return count + " " + string + ((count == 1) ? "" : "s");
+    }
 }
