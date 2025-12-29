@@ -1,10 +1,8 @@
 package me.dylan.wands;
 
-import me.dylan.wands.commandhandler.commands.*;
-import me.dylan.wands.commandhandler.tabcompleters.BindComplete;
-import me.dylan.wands.commandhandler.tabcompleters.TweakSpellComplete;
-import me.dylan.wands.commandhandler.tabcompleters.UnbindComplete;
-import me.dylan.wands.commandhandler.tabcompleters.WandsComplete;
+import co.aikar.commands.PaperCommandManager;
+import me.dylan.wands.command.BindComplete;
+import me.dylan.wands.command.WandsCommand;
 import me.dylan.wands.config.ConfigHandler;
 import me.dylan.wands.customitems.AssassinDagger;
 import me.dylan.wands.customitems.CursedBow;
@@ -81,15 +79,11 @@ public final class WandsPlugin extends JavaPlugin {
         );
     }
 
-    private static void loadCommands(ConfigHandler configHandler, WandsPlugin plugin) {
-        plugin.addCommand("wands", new Wands(configHandler, plugin.getDescription().getVersion()), new WandsComplete());
-        plugin.addCommand("createwand", new CreateWand(), null);
-        plugin.addCommand("clearwand", new ClearWand(), null);
-        plugin.addCommand("bind", new Bind(), new BindComplete());
-        plugin.addCommand("unbind", new Unbind(), new UnbindComplete());
-        plugin.addCommand("bindall", new BindAll(), null);
-        plugin.addCommand("unbindall", new UnbindAll(), null);
-        plugin.addCommand("tweakcooldown", new TweakCooldown(configHandler), new TweakSpellComplete());
+    private void loadCommands(ConfigHandler configHandler) {
+        PaperCommandManager manager = new PaperCommandManager(this);
+        manager.registerCommand(new WandsCommand(configHandler));
+        manager.getCommandCompletions().registerCompletion("bound_spells", BindComplete::getBoundSpells);
+        manager.getCommandCompletions().registerCompletion("unbound_spells", BindComplete::getUnboundSpells);
     }
 
     @Override
@@ -100,7 +94,7 @@ public final class WandsPlugin extends JavaPlugin {
         this.configHandler = ConfigHandler.load(configFile, listenerRegistry);
         this.cooldownManager = new CooldownManager(configHandler);
         loadListeners(listenerRegistry, configHandler);
-        loadCommands(configHandler, this);
+        loadCommands(configHandler);
         this.updater = new Updater(getFile().getName(), this, configHandler);
         new Metrics(this, 6274);
         log("Enabled successfully");
