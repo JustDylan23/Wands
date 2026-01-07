@@ -1,6 +1,6 @@
 package me.dylan.wands;
 
-import me.dylan.wands.commandhandler.Permissions;
+import me.dylan.wands.command.Permissions;
 import me.dylan.wands.config.ConfigHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
