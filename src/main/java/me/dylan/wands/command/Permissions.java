@@ -1,4 +1,4 @@
-package me.dylan.wands.commandhandler;
+package me.dylan.wands.command;
 
 public final class Permissions {
     public static final String GET_WAND = "wands.get.wand";
@@ -13,8 +13,10 @@ public final class Permissions {
     public static final String SETTINGS_NOTIFICATIONS = "wands.settings.notifications";
 
     public static final String LIST_SPELLS = "wands.list.spells";
+    public static final String MANAGE_SPELLS = "wands.bind";
+    public static final String CREATE_WAND = "wands.create";
 
-    public static final String UPDATE = "wands.update";
+    public static final String UPDATE_CHECK = "wands.update.check";
     public static final String UPDATE_DOWNLOAD = "wands.update.download";
 
     private Permissions() {
