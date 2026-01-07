@@ -74,9 +74,9 @@ public final class Updater implements Listener {
     }
 
     private void checkForUpdates() {
-        String currentVersion = WandsPlugin.getInstance().getDescription().getVersion();
+        String currentVersion = plugin.getDescription().getVersion();
         getLatestVersionString().whenComplete((fetchedVersion, throwable) -> {
-            if (throwable == null && !currentVersion.equals(fetchedVersion)) {
+            if (throwable == null && isNewer(fetchedVersion)) {
                 bukkitTask.cancel();
                 String message = WandsPlugin.PREFIX_TOP + getNewVersionMessage(currentVersion, fetchedVersion) + getDownloadInstructionMessage(true);
                 Bukkit.getOnlinePlayers().stream().filter(p -> p.hasPermission(Permissions.UPDATE_DOWNLOAD)).forEach(p -> p.sendMessage(message));
@@ -86,11 +86,11 @@ public final class Updater implements Listener {
     }
 
     public void checkForUpdates(@NotNull CommandSender sender, boolean install) {
-        String currentVersion = WandsPlugin.getInstance().getDescription().getVersion();
+        String currentVersion = plugin.getDescription().getVersion();
         getLatestVersionString().whenComplete((fetchedVersion, throwable) -> {
             if (throwable != null) {
                 sender.sendMessage(WandsPlugin.PREFIX + "Failed to check for updates");
-            } else if (currentVersion.equals(fetchedVersion)) {
+            } else if (!isNewer(fetchedVersion)) {
                 sender.sendMessage(WandsPlugin.PREFIX + "Already up to date!");
             } else {
                 if (install) {
@@ -125,9 +125,9 @@ public final class Updater implements Listener {
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         if (configHandler.areNotificationsEnabled() && player.hasPermission(Permissions.UPDATE_DOWNLOAD)) {
-            String currentVersion = WandsPlugin.getInstance().getDescription().getVersion();
+            String currentVersion = plugin.getDescription().getVersion();
             getLatestVersionString().whenComplete((fetchedVersion, throwable) -> {
-                if (throwable == null && !currentVersion.equals(fetchedVersion)) {
+                if (throwable == null && isNewer(fetchedVersion)) {
                     player.sendMessage(WandsPlugin.PREFIX_TOP + getNewVersionMessage(currentVersion, fetchedVersion) + getDownloadInstructionMessage(true));
                 }
             });
@@ -140,5 +140,30 @@ public final class Updater implements Listener {
 
     private String getDownloadInstructionMessage(boolean newLine) {
         return (newLine ? "\n" : "") + "Run \"/wands update download\" to download the update";
+    }
+
+    public boolean isNewer(String version) {
+        String[] parts1 = plugin.getDescription().getVersion().split("\\.");
+        String[] parts2 = version.split("\\.");
+
+        int length = Math.max(parts1.length, parts2.length);
+
+        for (int i = 0; i < length; i++) {
+            int p1 = i < parts1.length ? parsePart(parts1[i]) : 0;
+            int p2 = i < parts2.length ? parsePart(parts2[i]) : 0;
+
+            if (p1 != p2) {
+                return p2 > p1;
+            }
+        }
+        return false;
+    }
+
+    private static int parsePart(String s) {
+        try {
+            return Integer.parseInt(s);
+        } catch (NumberFormatException e) {
+            return 0;
+        }
     }
 }
