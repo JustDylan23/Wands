@@ -78,8 +78,8 @@ public enum PreSetItem {
                     .build()
     ),
     ICE_WAND(
-            ItemBuilder.from(Material.BLAZE_ROD)
-                    .named("&rIce Wand")
+            ItemBuilder.from(Material.BREEZE_ROD)
+                    .named("&rThunder Wand")
                     .withSpells(
                             SpellType.LIGHTNING_ARROW,
                             SpellType.THUNDER_STRIKE,
