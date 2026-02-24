@@ -20,7 +20,6 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.plugin.Plugin;
 
 import java.util.Arrays;
 import java.util.Set;
@@ -32,9 +31,6 @@ import static me.dylan.wands.utils.Common.quantify;
 @Description("The main command for the wands plugin.")
 public class WandsCommand extends BaseCommand {
     private final ConfigHandler configHandler;
-
-    @Dependency
-    private Plugin plugin;
 
     public WandsCommand(ConfigHandler configHandler) {
         this.configHandler = configHandler;
@@ -59,7 +55,7 @@ public class WandsCommand extends BaseCommand {
         if (configHandler.enableMagic(false)) {
             sender.sendMessage(WandsPlugin.PREFIX + "All wands are now disabled.");
         } else {
-            sender.sendMessage(WandsPlugin.PREFIX + "All wands are alreadt disabled.");
+            sender.sendMessage(WandsPlugin.PREFIX + "All wands are already disabled.");
         }
     }
 

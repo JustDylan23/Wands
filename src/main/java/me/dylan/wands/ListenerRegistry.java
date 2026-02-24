@@ -27,20 +27,17 @@ public class ListenerRegistry {
      * @return whether enabling or disabling had any effect
      */
     public boolean enableListeners(boolean value) {
+        if (isEnabled == value) return false;
+        isEnabled = value;
         if (isEnabled) {
-            if (!value) {
-                toggleableListeners.forEach(HandlerList::unregisterAll);
-            }
-            return !value;
+            toggleableListeners.forEach(listener ->
+                    Bukkit.getServer().getPluginManager().registerEvents(listener, plugin)
+            );
         } else {
-            if (value) {
-                for (Listener listener : toggleableListeners) {
-                    Bukkit.getServer().getPluginManager().registerEvents(listener, plugin);
-                }
-                isEnabled = true;
-            }
-            return value;
+            toggleableListeners.forEach(HandlerList::unregisterAll);
         }
+
+        return true;
     }
 
     void addToggleableListenerAndEnable(Listener... listeners) {
