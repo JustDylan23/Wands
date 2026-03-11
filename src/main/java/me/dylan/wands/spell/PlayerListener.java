@@ -14,11 +14,13 @@ import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
+import org.bukkit.entity.AreaEffectCloud;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -111,6 +113,14 @@ public class PlayerListener implements Listener, LeftClickListener, RightClickLi
             } else {
                 playerMagicDamageEventMap.remove(victim);
             }
+        }
+    }
+
+
+    @EventHandler
+    private void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+        if (event.getDamager() instanceof AreaEffectCloud cloud && cloud.hasMetadata("noDamageExplosion")) {
+            event.setCancelled(true);
         }
     }
 

@@ -6,6 +6,7 @@ import me.dylan.wands.spell.accessories.sound.CompoundSound;
 import me.dylan.wands.spell.spellbuilders.Behavior;
 import me.dylan.wands.spell.spellbuilders.MagicProjectile;
 import me.dylan.wands.spell.spells.AffinityType;
+import me.dylan.wands.spell.util.SpellEffectUtil;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;
@@ -43,8 +44,7 @@ public class FireComet implements Castable {
                 })
                 .setHitEffects((loc, spellInfo) -> {
                     World world = spellInfo.world();
-                    world.spawnParticle(Particle.EXPLOSION_EMITTER, loc, 0, 0.0, 0.0, 0.0, 0.0, null, true);
-                    world.createExplosion(loc, 0.0f);
+                    SpellEffectUtil.noDamageExplosion(loc, 5.0f, true);
                 })
                 .build();
     }

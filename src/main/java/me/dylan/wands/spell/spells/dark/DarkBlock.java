@@ -6,6 +6,7 @@ import me.dylan.wands.spell.accessories.sound.CompoundSound;
 import me.dylan.wands.spell.spellbuilders.Behavior;
 import me.dylan.wands.spell.spellbuilders.LaunchableBlock;
 import me.dylan.wands.spell.spells.AffinityType;
+import me.dylan.wands.spell.util.SpellEffectUtil;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -30,8 +31,7 @@ public class DarkBlock implements Castable {
                     World world = spellInfo.world();
                     world.spawnParticle(Particle.LARGE_SMOKE, loc, 20, 1, 1, 1, 0.1, null, true);
                     world.spawnParticle(Particle.BLOCK, loc, 15, 1, 1, 1, 0.15, Material.COAL_BLOCK.createBlockData(), true);
-                    world.spawnParticle(Particle.EXPLOSION_EMITTER, loc, 0, 0.0, 0.0, 0.0, 0.0, null, true);
-                    world.createExplosion(loc, 0.0f);
+                    SpellEffectUtil.noDamageExplosion(loc, 4.0f, true);
                 }))
                 .setSpellRelativeEffects((loc, spellInfo) -> {
                     World world = spellInfo.world();

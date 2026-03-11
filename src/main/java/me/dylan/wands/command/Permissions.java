@@ -9,6 +9,7 @@ public final class Permissions {
     public static final String ENABLE_PLUGIN = "wands.settings.enable";
     public static final String DISABLE_PLUGIN = "wands.settings.disable";
     public static final String SETTINGS_COOLDOWN = "wands.settings.cooldown";
+    public static final String SETTINGS_BLOCK_DAMAGE = "wands.settings.block_damage";
     public static final String SETTINGS_RESTRICT = "wands.settings.restrict";
     public static final String SETTINGS_NOTIFICATIONS = "wands.settings.notifications";
 
