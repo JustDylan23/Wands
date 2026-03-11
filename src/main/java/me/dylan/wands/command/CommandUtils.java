@@ -1,18 +1,10 @@
 package me.dylan.wands.command;
 
 import me.dylan.wands.WandsPlugin;
-import me.dylan.wands.spell.SpellType;
 import me.dylan.wands.spell.accessories.ItemTag;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public final class CommandUtils {
 

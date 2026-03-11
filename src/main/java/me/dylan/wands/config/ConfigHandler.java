@@ -102,5 +102,13 @@ public final class ConfigHandler {
         config.enableNotifications(value);
         return WandsPlugin.getInstance().getUpdater().enableNotifications(value);
     }
+
+    public boolean isBlockDamageEnabled() {
+        return config.isBlockDamageEnabled();
+    }
+
+    public void setBlockDamageEnabled(boolean value) {
+        config.setBlockDamageEnabled(value);
+    }
 }
 

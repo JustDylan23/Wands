@@ -271,6 +271,21 @@ public class WandsCommand extends BaseCommand {
             sender.sendMessage("send update notifications:§r " + (configHandler.areNotificationsEnabled() ? "§atrue" : "§cfalse"));
         }
 
+        @Subcommand("block_damage")
+        @CommandPermission(Permissions.SETTINGS_BLOCK_DAMAGE)
+        public void onBlockDamage(CommandSender sender) {
+            boolean enabled = configHandler.isBlockDamageEnabled();
+            sender.sendMessage(WandsPlugin.PREFIX + "Block damage is " + (enabled ? "enabled" : "disabled"));
+        }
+
+        @Subcommand("block_damage")
+        @CommandPermission(Permissions.SETTINGS_BLOCK_DAMAGE)
+        @CommandCompletion("true|false")
+        public void onBlockDamage(CommandSender sender, boolean enabled) {
+            configHandler.setBlockDamageEnabled(enabled);
+            sender.sendMessage(WandsPlugin.PREFIX + "Block damage set to " + (enabled ? "enabled" : "disabled"));
+        }
+
         @Subcommand("cooldown_global")
         @CommandPermission(Permissions.SETTINGS_COOLDOWN)
         public void onCooldown(CommandSender sender) {

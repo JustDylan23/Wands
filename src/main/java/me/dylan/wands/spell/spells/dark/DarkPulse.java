@@ -6,6 +6,7 @@ import me.dylan.wands.spell.spellbuilders.Behavior;
 import me.dylan.wands.spell.spellbuilders.BuildableBehaviour.Target;
 import me.dylan.wands.spell.spellbuilders.Ray;
 import me.dylan.wands.spell.spells.AffinityType;
+import me.dylan.wands.spell.util.SpellEffectUtil;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
@@ -42,8 +43,7 @@ public class DarkPulse implements Castable {
                 .setEffectDistance(30)
                 .setHitEffects((loc, spellInfo) -> {
                     World world = spellInfo.world();
-                    world.spawnParticle(Particle.EXPLOSION_EMITTER, loc, 0, 0.0, 0.0, 0.0, 0.0, null, true);
-                    world.createExplosion(loc, 0.0f);
+                    SpellEffectUtil.noDamageExplosion(loc, 4.0f, true);
                     world.playSound(loc, Sound.ENTITY_WITHER_HURT, SoundCategory.MASTER, 4.0F, 1.0F);
                 })
                 .build();

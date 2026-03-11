@@ -1,5 +1,6 @@
 package me.dylan.wands.spell.util;
 
+import me.dylan.wands.WandsPlugin;
 import me.dylan.wands.events.MagicDamageEvent;
 import me.dylan.wands.utils.Common;
 import me.dylan.wands.utils.PlayerUtil;
@@ -186,5 +187,22 @@ public final class SpellEffectUtil {
             if (!loc.getBlock().isPassable()) return loc.add(0, 1, 0);
         }
         return loc;
+    }
+
+    public static void noDamageExplosion(@NotNull Location loc, float power, boolean setFire) {
+        var world = loc.getWorld();
+        if (WandsPlugin.getInstance().getConfigHandler().isBlockDamageEnabled()) {
+            AreaEffectCloud entity = world.spawn(loc, AreaEffectCloud.class, (cloud -> {
+                cloud.setDuration(1);
+                cloud.setRadius(0);
+                cloud.setWaitTime(0);
+                cloud.setParticle(Particle.ENTITY_EFFECT, Color.fromARGB(0, 1, 1, 1));
+                cloud.setMetadata("noDamageExplosion", Common.getMetadataValueTrue());
+            }));
+            world.createExplosion(loc, power, setFire, true, entity);
+        } else {
+            world.spawnParticle(Particle.EXPLOSION_EMITTER, loc, 0, 0.0, 0.0, 0.0, 0.0, null, true);
+            world.createExplosion(loc, 0.0F);
+        }
     }
 }

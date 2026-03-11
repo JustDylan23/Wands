@@ -7,6 +7,7 @@ import me.dylan.wands.spell.accessories.sound.SoundEffect;
 import me.dylan.wands.spell.spellbuilders.Behavior;
 import me.dylan.wands.spell.spellbuilders.MagicProjectile;
 import me.dylan.wands.spell.spells.AffinityType;
+import me.dylan.wands.spell.util.SpellEffectUtil;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;
@@ -40,8 +41,7 @@ public class Comet implements Castable {
                 .setLifeTime(20)
                 .setHitEffects((loc, spellInfo) -> {
                     World world = spellInfo.world();
-                    world.createExplosion(loc, 0.0f);
-                    world.spawnParticle(Particle.EXPLOSION_EMITTER, loc, 0, 0.0, 0.0, 0.0, 0.0, null, true);
+                    SpellEffectUtil.noDamageExplosion(loc, 5.0f, true);
                     world.spawnParticle(Particle.LARGE_SMOKE, loc, 50, 2.0, 2.0, 2.0, 0.05, null, true);
                     soundEffect.play(loc);
                 })

@@ -16,6 +16,8 @@ class Config {
     private boolean castingRequiresPermission = true;
     @SerializedName("send_updating_notifications")
     private boolean sendUpdateNotifications = true;
+    @SerializedName("block_damage")
+    private boolean blockDamageEnabled = false;
 
     Map<Integer, SpellConfig> getSpellConfigMap() {
         return spellConfigMap;
@@ -51,6 +53,14 @@ class Config {
 
     void enableNotifications(boolean value) {
         this.sendUpdateNotifications = value;
+    }
+
+    public boolean isBlockDamageEnabled() {
+        return blockDamageEnabled;
+    }
+
+    public void setBlockDamageEnabled(boolean blockDamageEnabled) {
+        this.blockDamageEnabled = blockDamageEnabled;
     }
 
     static class SpellConfig {
